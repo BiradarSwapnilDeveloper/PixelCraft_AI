@@ -18,6 +18,34 @@ const UserSchema = new mongoose.Schema({
   avatar: {
     type: String
   },
+  country: {
+    type: String, 
+    default: 'Unknown'
+  },
+  city: {
+    type: String,
+    default: 'Unknown'
+  },
+  isp: {
+    type: String,
+    default: 'Unknown'
+  },
+  lastLoginIp: {
+    type: String,
+    default: 'Unknown'
+  },
+  deviceType: {
+    type: String,
+    default: 'Unknown'
+  },
+  os: {
+    type: String,
+    default: 'Unknown'
+  },
+  browser: {
+    type: String,
+    default: 'Unknown'
+  },
   toolsUsedCount: {
     type: Number,
     default: 0
@@ -46,10 +74,38 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  loginHistory: [{
+    loginAt: { type: Date, default: Date.now },
+    ip: String,
+    deviceType: String,
+    os: String,
+    browser: String,
+    city: String,
+    country: String,
+    isp: String
+  }],
+  lastLogout: {
+    type: Date
+  },
+  logoutCount: {
+    type: Number,
+    default: 0
+  },
+  totalTimeSpentSeconds: {
+    type: Number,
+    default: 0
+  },
   toolUsageHistory: [{
     toolName: String,
     usedAt: { type: Date, default: Date.now },
     durationSeconds: Number
+  }],
+  sessionBehaviors: [{
+    sessionAt: { type: Date, default: Date.now },
+    scrollDepthPercent: { type: Number, default: 0 },
+    engagementType: { type: String, default: 'Scroll Only' }, // 'No Interaction', 'Scroll Only', 'Tool Used', 'Deep User'
+    toolsOpenedCount: { type: Number, default: 0 },
+    timeOnSiteSeconds: { type: Number, default: 0 }
   }]
 });
 

@@ -316,6 +316,30 @@ passport.use(new GoogleStrategy({
 },
   async (req, accessToken, refreshToken, profile, done) => {
     try {
+      // Parse User-Agent
+      const ua = req.headers['user-agent'] || '';
+      let deviceType = 'Desktop';
+      if (/mobile/i.test(ua)) deviceType = 'Mobile';
+      if (/tablet|ipad|playbook|silk/i.test(ua)) deviceType = 'Tablet';
+      
+      let os = 'Unknown';
+      if (/windows/i.test(ua)) os = 'Windows';
+      else if (/mac/i.test(ua)) os = 'MacOS';
+      else if (/linux/i.test(ua)) os = 'Linux';
+      else if (/android/i.test(ua)) os = 'Android';
+      else if (/ios|iphone|ipad/i.test(ua)) os = 'iOS';
+
+      let browser = 'Unknown';
+      if (/chrome|crios|crmo/i.test(ua)) browser = 'Chrome';
+      else if (/firefox|fxios/i.test(ua)) browser = 'Firefox';
+      else if (/safari/i.test(ua)) browser = 'Safari';
+      else if (/opr\//i.test(ua)) browser = 'Opera';
+      else if (/edg/i.test(ua)) browser = 'Edge';
+
+      // Parse IP
+      let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown';
+      if (ip && ip.includes(',')) ip = ip.split(',')[0].trim();
+
       // Find or create user
       let user = await User.findOne({ googleId: profile.id });
       if (!user) {
@@ -334,6 +358,45 @@ passport.use(new GoogleStrategy({
       // Update tracking data on every login
       user.lastLogin = Date.now();
       user.loginCount = (user.loginCount || 0) + 1;
+      user.lastLoginIp = ip;
+      user.deviceType = deviceType;
+      user.os = os;
+      user.browser = browser;
+
+      let sessionLocation = { country: 'Unknown', city: 'Unknown', isp: 'Unknown' };
+
+      // Async fetch location
+      if (ip && ip !== 'Unknown' && ip !== '::1' && ip !== '127.0.0.1') {
+        try {
+            const locRes = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,city,isp`);
+            const locData = await locRes.json();
+            if (locData.status === 'success') {
+                user.country = locData.country || 'Unknown';
+                user.city = locData.city || 'Unknown';
+                user.isp = locData.isp || 'Unknown';
+                sessionLocation = { country: user.country, city: user.city, isp: user.isp };
+            }
+        } catch (e) {
+            console.error("IP Lookup failed:", e.message);
+        }
+      } else if (ip === '::1' || ip === '127.0.0.1') {
+          user.country = 'Localhost';
+          user.city = 'Local';
+          user.isp = 'Local Network';
+          sessionLocation = { country: 'Localhost', city: 'Local', isp: 'Local Network' };
+      }
+
+      // Add to login history
+      user.loginHistory.push({
+          loginAt: Date.now(),
+          ip: ip,
+          deviceType: deviceType,
+          os: os,
+          browser: browser,
+          city: sessionLocation.city,
+          country: sessionLocation.country,
+          isp: sessionLocation.isp
+      });
 
       await user.save();
       return done(null, user);
@@ -458,13 +521,14 @@ app.get('/api/auth/status', (req, res) => {
   }
 });
 
-// Telemetry endpoint to track tool usage
+// Telemetry endpoint to track tool usage and active time
 app.post('/api/user/track', async (req, res) => {
   if (req.isAuthenticated()) {
     const { toolName, durationSeconds } = req.body;
     try {
       const user = await User.findById(req.user.id);
-      if (user) {
+      if (user && durationSeconds) {
+        user.totalTimeSpentSeconds += durationSeconds;
         if (toolName && toolName !== 'Home') {
           user.toolUsageHistory.push({ toolName, durationSeconds });
           user.toolsUsedCount += 1;
@@ -481,9 +545,45 @@ app.post('/api/user/track', async (req, res) => {
   }
 });
 
-// Session Behavior Tracking (Disabled for privacy)
+// Session Behavior Tracking (Scroll Depth + Engagement Type)
 app.post('/api/user/track-behavior', async (req, res) => {
-  res.sendStatus(200); // Silently ignore
+  if (req.isAuthenticated()) {
+    const { scrollDepthPercent, toolsOpenedCount, timeOnSiteSeconds } = req.body;
+    try {
+      const user = await User.findById(req.user.id);
+      if (user) {
+        let engagementType = 'No Interaction';
+        if (toolsOpenedCount >= 3 && scrollDepthPercent >= 60) {
+          engagementType = 'Deep User';
+        } else if (toolsOpenedCount >= 1) {
+          engagementType = 'Tool Used';
+        } else if (scrollDepthPercent >= 20) {
+          engagementType = 'Scroll Only';
+        }
+        
+        user.sessionBehaviors.push({
+          sessionAt: Date.now(),
+          scrollDepthPercent: Math.round(scrollDepthPercent),
+          engagementType,
+          toolsOpenedCount: toolsOpenedCount || 0,
+          timeOnSiteSeconds: timeOnSiteSeconds || 0
+        });
+        
+        // Keep only last 50 session behaviors to avoid data bloat
+        if (user.sessionBehaviors.length > 50) {
+          user.sessionBehaviors = user.sessionBehaviors.slice(-50);
+        }
+        
+        await user.save();
+      }
+      res.sendStatus(200);
+    } catch (err) {
+      console.error('Behavior Tracking Error:', err);
+      res.sendStatus(500);
+    }
+  } else {
+    res.sendStatus(200); // Silently ignore for guests
+  }
 });
 
 // Route to start Google Auth
@@ -527,6 +627,18 @@ app.get('/auth/google/callback',
 
 // Logout Route
 app.get('/logout', async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    try {
+      const user = await User.findById(req.user.id);
+      if (user) {
+        user.lastLogout = Date.now();
+        user.logoutCount += 1;
+        await user.save();
+      }
+    } catch (err) {
+      console.error('Logout tracking error:', err);
+    }
+  }
   req.logout((err) => {
     if (err) { return next(err); }
     res.redirect('/');
