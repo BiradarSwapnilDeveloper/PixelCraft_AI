@@ -256,12 +256,55 @@ jobs:
 
 
   # ============================================================
+  # JOB 3.5: DAST - Dynamic Application Security Testing
+  # ============================================================
+  dast-scan:
+    name: "🕷️ OWASP ZAP DAST Scan"
+    runs-on: ubuntu-latest
+    needs: verify-after-fix
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: "📦 Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: "📥 Install Dependencies"
+        run: npm ci || npm install
+
+      - name: "🚀 Start Application in Background"
+        run: |
+          export NODE_ENV=development 
+          export PORT=8080
+          npm start &
+          echo "Waiting for server to start on port 8080..."
+          sleep 15
+          curl -s http://localhost:8080 > /dev/null || echo "Server might not be fully up, but proceeding..."
+
+      - name: "🕷️ Run OWASP ZAP Baseline Scan"
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'http://localhost:8080'
+          fail_action: 'false'
+          cmd_options: '-a'
+
+      - name: "📊 Generate ZAP Markdown Report"
+        if: always()
+        run: |
+          echo "## 🕷️ OWASP ZAP DAST Report" >> $GITHUB_STEP_SUMMARY
+          echo "The dynamic scan has completed. Please check the 'ZAP Scan' workflow artifacts for the detailed HTML/JSON reports." >> $GITHUB_STEP_SUMMARY
+
+
+  # ============================================================
   # JOB 4: Manual Deployment (Continuous Delivery)
   # ============================================================
   deploy-to-production:
     name: "🚀 Deploy to Production"
     runs-on: ubuntu-latest
-    needs: verify-after-fix
+    needs: dast-scan
     permissions:
       issues: write
     environment: 
