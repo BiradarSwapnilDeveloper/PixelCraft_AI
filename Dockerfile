@@ -8,7 +8,7 @@ WORKDIR /home/node/deps
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci --ignore-scripts
+RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 npm ci --ignore-scripts
 
 WORKDIR /home/node/app
 
@@ -29,7 +29,7 @@ WORKDIR /home/node/deps
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
+RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 npm ci --omit=dev --ignore-scripts
 
 FROM node:20.18.1-alpine3.20 AS runner
 
