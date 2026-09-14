@@ -305,10 +305,16 @@ jobs:
     needs: dast-scan
     permissions:
       issues: write
+      contents: write
     environment: 
       name: production
       url: https://pixelcraft-ai-94y5.onrender.com/
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: "⏳ Requesting Multi-User Manual Approval"
         uses: trstringer/manual-approval@v1
         with:
