@@ -9,7 +9,6 @@ WORKDIR /home/node/deps
 COPY --chown=node:node package*.json ./
 
 RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 npm ci --ignore-scripts
-
 WORKDIR /home/node/app
 
 COPY --chown=node:node . .
@@ -38,7 +37,8 @@ ENV PORT=3000
 
 RUN apk upgrade --no-cache && \
     apk add --no-cache tini && \
-    rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn*
+    rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn* && \
+    find / -xdev -perm /6000 -type f -exec chmod a-s {} \; 2>/dev/null || true
 
 WORKDIR /usr/src/app
 
