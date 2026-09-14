@@ -2,29 +2,30 @@ FROM node:20.18.1-alpine3.20 AS builder
 
 RUN apk upgrade --no-cache
 
-RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
-
-WORKDIR /home/node/app
-
 USER node
+
+WORKDIR /home/node/deps
 
 COPY --chown=node:node package*.json ./
 
 RUN npm ci --ignore-scripts
 
+WORKDIR /home/node/app
+
 COPY --chown=node:node . .
 
-RUN npm run build --if-present && rm -rf node_modules
+RUN rm -rf node_modules && \
+    cp -r /home/node/deps/node_modules ./node_modules && \
+    npm run build --if-present && \
+    rm -rf node_modules
 
 FROM node:20.18.1-alpine3.20 AS prod-deps
 
 RUN apk upgrade --no-cache
 
-RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
-
-WORKDIR /home/node/app
-
 USER node
+
+WORKDIR /home/node/deps
 
 COPY --chown=node:node package*.json ./
 
@@ -42,7 +43,7 @@ RUN apk upgrade --no-cache && \
 WORKDIR /usr/src/app
 
 COPY --from=builder --chown=root:node /home/node/app ./
-COPY --from=prod-deps --chown=root:node /home/node/app/node_modules ./node_modules
+COPY --from=prod-deps --chown=root:node /home/node/deps/node_modules ./node_modules
 
 RUN chown -R root:node /usr/src/app && \
     chmod -R 440 /usr/src/app && \
