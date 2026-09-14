@@ -487,7 +487,6 @@
                 <thead>
                     <tr>
                         <th>Identity</th>
-                        <th>Latest Device Vector</th>
                         <th>Latest Geolocation</th>
                         <th>Status</th>
                     </tr>
@@ -619,8 +618,6 @@
         <div class="modal-tabs">
             <button class="tab-btn active" onclick="switchTab('tab-overview', this)">📊 Overview</button>
             <button class="tab-btn" onclick="switchTab('tab-tools', this)">🔧 Tool History</button>
-            <button class="tab-btn" onclick="switchTab('tab-behavior', this)">📈 Behavior</button>
-            <button class="tab-btn" onclick="switchTab('tab-sessions', this)">🕐 Sessions</button>
             <button class="tab-btn" onclick="switchTab('tab-actions', this)">⚡ Actions</button>
         </div>
 
@@ -641,7 +638,6 @@
                 <div class="data-group">
                     <div class="data-title">Latest Known Vector</div>
                     <div class="data-row"><span class="data-label">IP Address</span><span class="data-val" id="m-ip">Unknown</span></div>
-                    <div class="data-row"><span class="data-label">Device / OS</span><span class="data-val" id="m-device">Unknown</span></div>
                     <div class="data-row"><span class="data-label">Browser</span><span class="data-val" id="m-browser">Unknown</span></div>
                     <div class="data-row"><span class="data-label">📍 Location</span><span class="data-val" id="m-loc">Unknown</span></div>
                     <div class="data-row"><span class="data-label">ISP</span><span class="data-val" id="m-isp">Unknown</span></div>
@@ -656,24 +652,6 @@
                 <span id="tool-summary-badge" style="font-size:12px; color:var(--text-muted);"></span>
             </div>
             <div id="tool-history-list"></div>
-        </div>
-
-        <!-- Tab: Behavior -->
-        <div class="tab-content" id="tab-behavior">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                <div class="data-title" style="margin:0;">Session Engagement Analysis</div>
-                <span id="behavior-summary-badge" style="font-size:12px; color:var(--text-muted);"></span>
-            </div>
-            <!-- Avg Scroll Stats -->
-            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px;" id="behavior-stats-row">
-            </div>
-            <div id="behavior-list"></div>
-        </div>
-
-        <!-- Tab: Sessions -->
-        <div class="tab-content" id="tab-sessions">
-            <div class="data-title" style="margin-bottom:16px;">Complete Session Login History</div>
-            <div class="timeline" id="m-timeline"></div>
         </div>
 
         <!-- Tab: Actions -->
@@ -1469,7 +1447,6 @@ inSxPwWk6OXcfLjWnE/xatI=
         };
 
         document.getElementById('m-ip').textContent = u.lastLoginIp || 'Unknown';
-        document.getElementById('m-device').textContent = (u.deviceType || 'Unknown') + ' / ' + (u.os || 'Unknown');
         document.getElementById('m-browser').textContent = u.browser || 'Unknown';
         document.getElementById('m-loc').textContent = (u.city || 'Unknown') + ', ' + (u.country || 'Unknown');
         document.getElementById('m-isp').textContent = u.isp || 'Unknown';
@@ -1503,79 +1480,6 @@ inSxPwWk6OXcfLjWnE/xatI=
             });
         }
 
-        // TAB 3: Behavior / Scroll Depth
-        const behaviorList = document.getElementById('behavior-list');
-        behaviorList.innerHTML = '';
-        const statsRow = document.getElementById('behavior-stats-row');
-        statsRow.innerHTML = '';
-        const behaviors = u.sessionBehaviors || [];
-        document.getElementById('behavior-summary-badge').textContent = `${behaviors.length} sessions tracked`;
-        
-        if (behaviors.length > 0) {
-            const avgScroll = Math.round(behaviors.reduce((s,b) => s + b.scrollDepthPercent, 0) / behaviors.length);
-            const avgTools = (behaviors.reduce((s,b) => s + b.toolsOpenedCount, 0) / behaviors.length).toFixed(1);
-            const deepCount = behaviors.filter(b => b.engagementType === 'Deep User').length;
-            
-            const statCards = [
-                { label: 'Avg Scroll Depth', value: avgScroll + '%', color: '#10b981' },
-                { label: 'Avg Tools/Session', value: avgTools, color: '#00f2fe' },
-                { label: 'Deep Sessions', value: deepCount, color: '#f59e0b' }
-            ];
-            statCards.forEach(sc => {
-                statsRow.innerHTML += `<div style="background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center;">
-                    <div style="font-size:24px; font-weight:700; color:${sc.color}; font-family:'JetBrains Mono',monospace;">${sc.value}</div>
-                    <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${sc.label}</div>
-                </div>`;
-            });
-        }
-
-        if (behaviors.length === 0) {
-            behaviorList.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px; font-size:14px;">No behavior data recorded yet. Data will appear after user's next visit.</div>`;
-        } else {
-            const sortedBehaviors = [...behaviors].sort((a,b) => new Date(b.sessionAt) - new Date(a.sessionAt));
-            sortedBehaviors.forEach(b => {
-                const badgeClass = b.engagementType === 'Deep User' ? 'badge-deep' : b.engagementType === 'Tool Used' ? 'badge-tool' : b.engagementType === 'Scroll Only' ? 'badge-scroll' : 'badge-none';
-                const timeStr = new Date(b.sessionAt).toLocaleDateString() + ' ' + new Date(b.sessionAt).toLocaleTimeString();
-                const timeSecs = b.timeOnSiteSeconds || 0;
-                const timeOnSite = timeSecs >= 60 ? `${Math.floor(timeSecs/60)}m ${timeSecs%60}s` : `${timeSecs}s`;
-                const card = document.createElement('div');
-                card.className = 'behavior-card';
-                card.innerHTML = `
-                    <span class="behavior-badge ${badgeClass}">${b.engagementType || 'Unknown'}</span>
-                    <div class="scroll-bar-wrap">
-                        <div class="scroll-bar-label"><span>Scroll Depth</span><span>${b.scrollDepthPercent || 0}%</span></div>
-                        <div class="scroll-bar-bg"><div class="scroll-bar-fill" style="width:${b.scrollDepthPercent || 0}%;"></div></div>
-                    </div>
-                    <div class="behavior-info">
-                        <div>🔧 ${b.toolsOpenedCount || 0} tools</div>
-                        <div>⏱ ${timeOnSite}</div>
-                        <div style="margin-top:4px; font-size:10px;">${timeStr}</div>
-                    </div>
-                `;
-                behaviorList.appendChild(card);
-            });
-        }
-
-        // TAB 4: Sessions Timeline
-        const timeline = document.getElementById('m-timeline');
-        timeline.innerHTML = '';
-        if (u.loginHistory && u.loginHistory.length > 0) {
-            const history = [...u.loginHistory].sort((a,b) => new Date(b.loginAt) - new Date(a.loginAt));
-            history.forEach(session => {
-                const dateObj = new Date(session.loginAt);
-                const item = document.createElement('div');
-                item.className = 'timeline-item';
-                item.innerHTML = `
-                    <div class="time-date">${dateObj.toLocaleDateString('en-IN')} ${dateObj.toLocaleTimeString()}</div>
-                    <div class="time-details">
-                        <span><b style="color:var(--accent);">IP:</b> ${session.ip || 'Unknown'} | <b style="color:var(--accent);">ISP:</b> ${session.isp || 'Unknown'}</span>
-                        <span><b style="color:var(--accent);">📍 Loc:</b> ${session.city || 'Unknown'}, ${session.country || 'Unknown'}</span>
-                        <span><b style="color:var(--accent);">Sys:</b> ${session.deviceType || 'Unknown'} / ${session.os || 'Unknown'} / ${session.browser || 'Unknown'}</span>
-                    </div>
-                `;
-                timeline.appendChild(item);
-            });
-        } else {
             timeline.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px; font-size:14px;">No session history yet.</div>`;
         }
 
