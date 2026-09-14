@@ -1,37 +1,26 @@
-FROM node:20.18.1-alpine3.20 AS builder
-
+FROM node:20.18.1-alpine3.20 AS base
 RUN apk upgrade --no-cache
 
-USER node
-
-WORKDIR /home/node/deps
-
+FROM base AS dependencies
+WORKDIR /usr/src/app
 COPY --chown=node:node package*.json ./
+RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
+    npm ci --ignore-scripts
 
-RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 npm ci --ignore-scripts
-WORKDIR /home/node/app
-
+FROM base AS builder
+WORKDIR /usr/src/app
+COPY --chown=node:node package*.json ./
+COPY --from=dependencies --chown=node:node /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node . .
+RUN npm run build --if-present
 
-RUN rm -rf node_modules && \
-    cp -r /home/node/deps/node_modules ./node_modules && \
-    npm run build --if-present && \
-    rm -rf node_modules
-
-FROM node:20.18.1-alpine3.20 AS prod-deps
-
-RUN apk upgrade --no-cache
-
-USER node
-
-WORKDIR /home/node/deps
-
+FROM base AS prod-dependencies
+WORKDIR /usr/src/app
 COPY --chown=node:node package*.json ./
-
-RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 npm ci --omit=dev --ignore-scripts
+RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
+    npm ci --omit=dev --ignore-scripts
 
 FROM node:20.18.1-alpine3.20 AS runner
-
 ENV NODE_ENV=production
 ENV PORT=3000
 
@@ -42,17 +31,13 @@ RUN apk upgrade --no-cache && \
 
 WORKDIR /usr/src/app
 
-COPY --from=builder --chown=root:node /home/node/app ./
-COPY --from=prod-deps --chown=root:node /home/node/deps/node_modules ./node_modules
+COPY --from=builder --chown=root:node /usr/src/app ./
+COPY --from=prod-dependencies --chown=root:node /usr/src/app/node_modules ./node_modules
 
-RUN chown -R root:node /usr/src/app && \
-    chmod -R 440 /usr/src/app && \
+RUN chmod -R 440 /usr/src/app && \
     find /usr/src/app -type d -exec chmod 550 {} +
 
 USER node
-
 EXPOSE 3000
-
 ENTRYPOINT ["/sbin/tini", "--"]
-
 CMD ["node", "."]
