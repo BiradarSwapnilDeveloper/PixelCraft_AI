@@ -1,5 +1,6 @@
 FROM node:20.18.1-alpine3.20 AS base
-RUN apk upgrade --no-cache
+RUN apk upgrade --no-cache && \
+    apk add --no-cache tini
 
 FROM base AS dependencies
 WORKDIR /usr/src/app
@@ -20,13 +21,11 @@ COPY --chown=node:node package*.json ./
 RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
     npm ci --omit=dev --ignore-scripts
 
-FROM node:20.18.1-alpine3.20 AS runner
+FROM base AS runner
 ENV NODE_ENV=production
 ENV PORT=3000
 
-RUN apk upgrade --no-cache && \
-    apk add --no-cache tini && \
-    rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn* && \
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn* && \
     find / -xdev -perm /6000 -type f -exec chmod a-s {} \; 2>/dev/null || true
 
 WORKDIR /usr/src/app
