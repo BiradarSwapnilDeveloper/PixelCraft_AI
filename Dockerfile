@@ -8,7 +8,7 @@ USER node
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci --ignore-scripts
+RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 npm ci --ignore-scripts
 
 COPY --chown=node:node . .
 
@@ -26,7 +26,7 @@ USER node
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
+RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 npm ci --omit=dev --ignore-scripts
 
 FROM node:20.18.1-alpine3.20 AS runner
 
@@ -34,7 +34,8 @@ ENV NODE_ENV=production
 ENV PORT=3000
 
 RUN apk upgrade --no-cache && \
-    apk add --no-cache tini
+    apk add --no-cache tini && \
+    find / -xdev -perm /6000 -type f -exec chmod a-s {} \; 2>/dev/null || true
 
 WORKDIR /home/node/app
 
