@@ -1,0 +1,722 @@
+﻿2026-03-18 - Initial commit of PixelCraft AI Website
+2026-03-18 - Configure Backend and Render Blueprint
+2026-03-18 - Fix Google Auth HTTPS Proxy Issue
+2026-03-18 - Fix Google Auth crash with safeties
+2026-03-18 - Fix tensor dimensions error in BG remover by using pipeline api
+2026-03-18 - Add Google Analytics (G-886834VX21) to all 21 pages
+2026-03-18 - Add professional SEO meta tags, sitemap.xml, robots.txt to all 21 pages
+2026-03-18 - Add OG social share image
+2026-03-19 - Ultra-strong SEO domination
+2026-03-19 - Mega UI/UX Overhaul, AI Generator, and Fixes
+2026-03-19 - Fix Render crash bug & force redeploy
+2026-03-19 - Trigger deployment after migration
+2026-03-19 - Add premium contact section with Nodemailer setup
+2026-03-19 - Add premium contact section with Nodemailer setup
+2026-03-19 - Fix: Toast notifications, Send button animation, AI Image Generator UI redesign, Email contact form fix (from field + replyTo)
+2026-03-19 - Fix: Toast notifications, Send button animation, AI Image Generator UI redesign, Email contact form fix (from field + replyTo)
+2026-03-19 - Add Google AdSense code
+2026-03-19 - Add Google AdSense code
+2026-03-19 - Add AMP Auto Ads
+2026-03-19 - Add AMP Auto Ads
+2026-03-20 - UI mobile fixes: hide hamburger, show sign-in button
+2026-03-20 - UI mobile fixes: hide hamburger, show sign-in button
+2026-03-20 - UI tweak: make logo and sign in button better sized and avoid text-wrap on mobile
+2026-03-20 - UI tweak: make logo and sign in button better sized and avoid text-wrap on mobile
+2026-03-20 - feat: added AI Text Humanizer and Advanced Custom QR Generator tool pages
+2026-03-20 - feat: added AI Text Humanizer and Advanced Custom QR Generator tool pages
+2026-03-20 - fix: updated AI Humanizer prompt logic to prevent prompt injection and strictly rewrite text
+2026-03-20 - fix: updated AI Humanizer prompt logic to prevent prompt injection and strictly rewrite text
+2026-03-20 - fix(tools): restored corrupted tools and removed ai-image-generator
+2026-03-20 - fix(tools): restored corrupted tools and removed ai-image-generator
+2026-03-20 - feat: Add Avatar Generator tool with Cartoon, Anime, 3D, Sketch and Pixel Art styles
+2026-03-20 - feat: Add Avatar Generator tool with Cartoon, Anime, 3D, Sketch and Pixel Art styles
+2026-03-20 - feat: integrate true professional AI backend for Avatar Generator
+2026-03-20 - feat: integrate true professional AI backend for Avatar Generator
+2026-03-20 - Add AI Resume Architect tool
+2026-03-20 - Add AI Resume Architect tool
+2026-03-20 - Update sitemap with missing tools for SEO
+2026-03-20 - Update sitemap with missing tools for SEO
+2026-03-20 - SEO: Add internal linking to all tools and create first blog post
+2026-03-20 - SEO: Add internal linking to all tools and create first blog post
+2026-03-20 - UX: Redirect unauthenticated tool clicks directly to Google Auth and back
+2026-03-20 - UX: Redirect unauthenticated tool clicks directly to Google Auth and back
+2026-03-20 - Cleanup: Removed Resume, Avatar, and Background Remover tools and all associated links/SEO tags
+2026-03-20 - Cleanup: Removed Resume, Avatar, and Background Remover tools and all associated links/SEO tags
+2026-03-21 - Auth: Persistent sessions setup (no auto logout on browser close)
+2026-03-21 - Auth: Persistent sessions setup (no auto logout on browser close)
+2026-03-21 - Auth: Extended session duration to 10 years
+2026-03-21 - Auth: Extended session duration to 10 years
+2026-03-21 - feat: Added technical evolution report for user
+2026-03-21 - feat: Added technical evolution report for user
+2026-03-21 - feat: Add emotionally deep evolution report and explicit /report route
+2026-03-21 - feat: Add emotionally deep evolution report and explicit /report route
+2026-03-21 - force: trigger render redeploy
+2026-03-21 - Fix: connect-mongo default import to resolve MongoStore.create crash
+2026-03-21 - Fix: connect-mongo default import to resolve MongoStore.create crash
+2026-03-21 - feat: Add Deep AI Content Detector tool for text and images
+2026-03-21 - feat: Add Deep AI Content Detector tool for text and images
+2026-03-21 - fix: Optimize AI Detector heuristic logic, deterministic scores and upload reset
+2026-03-21 - fix: Optimize AI Detector heuristic logic, deterministic scores and upload reset
+2026-03-21 - seo: Automated meta tags and internal linking standard applied across all 22 tools
+2026-03-21 - seo: Automated meta tags and internal linking standard applied across all 22 tools
+2026-03-21 - Add Premium Donate Section & Fix Mongo DNS crashes locally
+2026-03-21 - Add Premium Donate Section & Fix Mongo DNS crashes locally
+2026-03-21 - Update Premium SVG animated Gradient QR code
+2026-03-21 - Update Premium SVG animated Gradient QR code
+2026-03-21 - Add Support link to navbar
+2026-03-21 - Add Support link to navbar
+2026-03-21 - feat: upgrade AI content detector with advanced forensics and cyber dashboard
+2026-03-21 - feat: upgrade AI content detector with advanced forensics and cyber dashboard
+2026-03-21 - fix: highly strict filename parsing and enhanced ELA/noise thresholds for DALL-E 3 images
+2026-03-21 - fix: highly strict filename parsing and enhanced ELA/noise thresholds for DALL-E 3 images
+2026-03-21 - feat: add highly advanced Security Operations Center (SOC) simulator platform
+2026-03-21 - feat: add highly advanced Security Operations Center (SOC) simulator platform
+2026-03-21 - refactor: apply rigorous updates to AI Detector, QR Generator, and UI polish
+2026-03-21 - refactor: apply rigorous updates to AI Detector, QR Generator, and UI polish
+2026-03-21 - fix: restore all emojis and add new custom QR code PixelCraft AI logo
+2026-03-21 - fix: restore all emojis and add new custom QR code PixelCraft AI logo
+2026-03-21 - chore: force re-deploy to ensure latest changes are live
+2026-03-21 - chore: force re-deploy to ensure latest changes are live
+2026-03-21 - fix: ensure all emojis are restored and QR logo has proper PixelCraft AI text
+2026-03-21 - fix: ensure all emojis are restored and QR logo has proper PixelCraft AI text
+2026-03-21 - style: increase QR logo text visibility and overall logo size
+2026-03-21 - style: increase QR logo text visibility and overall logo size
+2026-03-21 - fix: make QR logo perfectly circular, fix clipping, and center all items
+2026-03-21 - fix: make QR logo perfectly circular, fix clipping, and center all items
+2026-03-22 - chore: remove all dash signs and deploy
+2026-03-22 - chore: remove all dash signs and deploy
+2026-03-22 - Update QR Generator UI and Logo
+2026-03-22 - Update QR Generator UI and Logo
+2026-03-22 - Fix QR margin clip, dynamic glow color, add 3D QR placeholder
+2026-03-22 - Fix QR margin clip, dynamic glow color, add 3D QR placeholder
+2026-03-22 - Change QR logic to Canvas to prevent clipping bugs and match glow to Foreground
+2026-03-22 - Change QR logic to Canvas to prevent clipping bugs and match glow to Foreground
+2026-03-22 - Update QR logo glow string to match background and highlight colors, and set text to dark black
+2026-03-22 - Update QR logo glow string to match background and highlight colors, and set text to dark black
+2026-03-22 - Added 3D AI QR Code API
+2026-03-22 - Added 3D AI QR Code API
+2026-03-23 - feat: premium cookie consent system
+2026-03-23 - feat: premium cookie consent system
+2026-03-24 - Update cookie consent UI to be lightweight and modern
+2026-03-24 - Update cookie consent UI to be lightweight and modern
+2026-03-24 - Improve cookie consent logic and UI with Gmail-based tracking
+2026-03-24 - Improve cookie consent logic and UI with Gmail-based tracking
+2026-03-24 - Update cookie consent for logout clearing and better reload behavior
+2026-03-24 - Update cookie consent for logout clearing and better reload behavior
+2026-03-24 - Lock tool access until cookie consent is accepted
+2026-03-24 - Lock tool access until cookie consent is accepted
+2026-03-24 - Add Upcoming Tools filter category and logic
+2026-03-24 - Add Upcoming Tools filter category and logic
+2026-03-24 - Add Google Analytics and AdSense tracking to remaining html pages
+2026-03-24 - Add Google Analytics and AdSense tracking to remaining html pages
+2026-03-25 - fix: optimize mobile UI for legal pages and footer links
+2026-03-25 - fix: optimize mobile UI for legal pages and footer links
+2026-03-25 - Deployment: Finalize mobile optimizations and sitemap updates
+2026-03-25 - Deployment: Finalize mobile optimizations and sitemap updates
+2026-03-25 - Optimize: Remove invalid AMP auto-ads tags from standard HTML files
+2026-03-25 - Optimize: Remove invalid AMP auto-ads tags from standard HTML files
+2026-03-25 - Update Google Analytics ID to G-KT97CEJFW8 across all pages
+2026-03-25 - Update Google Analytics ID to G-KT97CEJFW8 across all pages
+2026-03-25 - Comment out login requirement and tool access popup for AdSense approval
+2026-03-25 - Comment out login requirement and tool access popup for AdSense approval
+2026-03-25 - Fix mangled emojis, update Analytics ID, and comment out login/popup
+2026-03-25 - Fix mangled emojis, update Analytics ID, and comment out login/popup
+2026-03-25 - feat: Implement PWA (Add to Home Screen) support with custom install banner
+2026-03-25 - feat: Implement PWA (Add to Home Screen) support with custom install banner
+2026-03-27 - Comment out Support/Donate section for AdSense approval
+2026-03-27 - Comment out Support/Donate section for AdSense approval
+2026-03-28 - update Google Analytics tag to G-V78ZLHJLR8 across all pages
+2026-03-28 - update Google Analytics tag to G-V78ZLHJLR8 across all pages
+2026-03-28 - Update AdSense verification code and ads.txt
+2026-03-28 - Update AdSense verification code and ads.txt
+2026-04-17 - fix: clean rewrite contact-us.html with reCAPTCHA v2 checkbox
+2026-04-17 - fix: clean rewrite contact-us.html with reCAPTCHA v2 checkbox
+2026-04-18 - Update AdSense publisher ID to pub-6696712816082259 and site URL to pixelcraft-ai-94y5.onrender.com
+2026-04-18 - Update AdSense publisher ID to pub-6696712816082259 and site URL to pixelcraft-ai-94y5.onrender.com
+2026-05-03 - Add Hashtag and Keyword Generator tool
+2026-05-03 - Add Hashtag and Keyword Generator tool
+2026-05-03 - Comment out hashtag generator tool
+2026-05-03 - Comment out hashtag generator tool
+2026-05-06 - Added AI SFX Generator and AI Fan-Engage Manager tools
+2026-05-06 - Added AI SFX Generator and AI Fan-Engage Manager tools
+2026-05-06 - Commented out Fan Comment Manager and added Ongoing tag to SFX Generator
+2026-05-06 - Commented out Fan Comment Manager and added Ongoing tag to SFX Generator
+2026-05-07 - Change SFX generator tag to upcoming and make unclickable
+2026-05-07 - Change SFX generator tag to upcoming and make unclickable
+2026-05-08 - Remove Object Remover tool
+2026-05-08 - Remove Object Remover tool
+2026-05-11 - Add PWA features, APK install prompt, and separate download page
+2026-05-11 - Add PWA features, APK install prompt, and separate download page
+2026-05-11 - Trigger deployment for Render
+2026-05-11 - Force trigger deployment 2
+2026-05-11 - checkout: temporary commit for worktree checkout
+2026-06-06 - Add PDF to Link converter tool
+2026-06-06 - Add PDF to Link converter tool
+2026-06-06 - Update PDF upload to use permanent inline link
+2026-06-06 - Update PDF upload to use permanent inline link
+2026-06-06 - Add advanced images to pdf tool
+2026-06-06 - Add advanced images to pdf tool
+2026-06-06 - Fix cache for images-to-pdf
+2026-06-06 - Fix cache for images-to-pdf
+2026-06-06 - Add Advanced Phishing Scanner Tool
+2026-06-06 - Add Advanced Phishing Scanner Tool
+2026-06-06 - Fix Service Worker caching locking users into old index.html
+2026-06-06 - Fix Service Worker caching locking users into old index.html
+2026-06-07 - Improve SEO schema, add QR download, fix mobile UI overflow
+2026-06-07 - Improve SEO schema, add QR download, fix mobile UI overflow
+2026-06-07 - Add Clear All button to images-to-pdf tool
+2026-06-07 - Add Clear All button to images-to-pdf tool
+2026-06-07 - Reorder tools, remove tool icons, update badges
+2026-06-07 - Reorder tools, remove tool icons, update badges
+2026-06-07 - Restore tool emojis, update tags text
+2026-06-07 - Restore tool emojis, update tags text
+2026-06-07 - Strip small emojis from old tools and homepage
+2026-06-07 - Strip small emojis from old tools and homepage
+2026-06-07 - Restore emojis on homepage
+2026-06-07 - Restore emojis on homepage
+2026-06-09 - chore: make AI Text Humanizer non-clickable and under construction
+2026-06-09 - chore: make AI Text Humanizer non-clickable and under construction
+2026-06-09 - fix: update hero button and adjust coming soon badge style
+2026-06-09 - fix: update hero button and adjust coming soon badge style
+2026-06-09 - feat: implement AI Background Remover using imgly
+2026-06-09 - feat: implement AI Background Remover using imgly
+2026-06-13 - Upgrade Phishing Scanner to Advanced Military Level
+2026-06-13 - Upgrade Phishing Scanner to Advanced Military Level
+2026-06-13 - Add AI Neural Brain for link reasoning
+2026-06-13 - Add AI Neural Brain for link reasoning
+2026-06-13 - Fix remove background image upload using ESM
+2026-06-13 - Fix remove background image upload using ESM
+2026-06-14 - UI update: Move Coming Soon tools to Upcoming section and uniform UI badge
+2026-06-14 - UI update: Move Coming Soon tools to Upcoming section and uniform UI badge
+2026-06-14 - Add Secret Image Hider steganography tool
+2026-06-14 - Add Secret Image Hider steganography tool
+2026-06-14 - Update Secret Image Hider badge to Popular
+2026-06-14 - Update Secret Image Hider badge to Popular
+2026-06-15 - UI Updates and fixes per user request
+2026-06-15 - UI Updates and fixes per user request
+2026-06-15 - Update T&C storage to sessionStorage and update ads.txt publisher ID
+2026-06-15 - Update T&C storage to sessionStorage and update ads.txt publisher ID
+2026-06-15 - Implement FBI-level plausible deniability in steganography tool
+2026-06-15 - Implement FBI-level plausible deniability in steganography tool
+2026-06-15 - Separate decoy steganography into a new tool
+2026-06-15 - Separate decoy steganography into a new tool
+2026-06-15 - Redesign decoy tool with Matrix cyber theme and fix upload bug
+2026-06-15 - Redesign decoy tool with Matrix cyber theme and fix upload bug
+2026-06-15 - Revert matrix theme to clean glass UI with subtle gold accents
+2026-06-15 - Revert matrix theme to clean glass UI with subtle gold accents
+2026-06-15 - Replace default emojis with modern SVG icons in decoy tool
+2026-06-15 - Replace default emojis with modern SVG icons in decoy tool
+2026-06-16 - Update styling and add new AI tools
+2026-06-16 - Update styling and add new AI tools
+2026-06-16 - UI enhancements and cleanup
+2026-06-16 - UI enhancements and cleanup
+2026-06-16 - Update secret image tool UI, add professional token logic, fix fake email validation, and streamline flow without success modal
+2026-06-16 - Update secret image tool UI, add professional token logic, fix fake email validation, and streamline flow without success modal
+2026-06-16 - Translate fake email joke to English and display it inline inside the glassmorphism popup instead of an alert
+2026-06-16 - Translate fake email joke to English and display it inline inside the glassmorphism popup instead of an alert
+2026-06-16 - Remove emoji from fake email joke
+2026-06-16 - Remove emoji from fake email joke
+2026-06-16 - Include all new changes for deployment
+2026-06-16 - Include all new changes for deployment
+2026-06-16 - Update Advanced Secret Image Hider UI/UX and auth logic
+2026-06-16 - Update Advanced Secret Image Hider UI/UX and auth logic
+2026-06-16 - Ultra-minimalist UI redesign for Secret Image Hider
+2026-06-16 - Ultra-minimalist UI redesign for Secret Image Hider
+2026-06-17 - update website
+2026-06-17 - update website
+2026-06-17 - Add secure admin panel, dark theme UI, and fix missing SEO/AdSense tags
+2026-06-17 - Add secure admin panel, dark theme UI, and fix missing SEO/AdSense tags
+2026-06-17 - Comment out decoy tool and fix privacy dash
+2026-06-17 - Comment out decoy tool and fix privacy dash
+2026-06-17 - Add login.html and commented-out auth middleware for future use
+2026-06-17 - Add login.html and commented-out auth middleware for future use
+2026-06-18 - UI mobile fixes, balanced tool descriptions, and renamed Secret Message to Decoy Steganography
+2026-06-18 - UI mobile fixes, balanced tool descriptions, and renamed Secret Message to Decoy Steganography
+2026-06-18 - Add colorful looping line animation to Decoy Steganography card
+2026-06-18 - Add colorful looping line animation to Decoy Steganography card
+2026-06-18 - Security Update: Prevent hardcoded data leaks
+2026-06-18 - Security Update: Prevent hardcoded data leaks
+2026-06-18 - SEO: Fix missing AdSense, Analytics, and Canonical tags in bg-remover and hashtag-generator
+2026-06-18 - SEO: Fix missing AdSense, Analytics, and Canonical tags in bg-remover and hashtag-generator
+2026-06-18 - Update AdSense Publisher ID to pub-3788374704176398 across all files
+2026-06-18 - Update AdSense Publisher ID to pub-3788374704176398 across all files
+2026-06-18 - Fix admin password login validation
+2026-06-18 - Fix admin password login validation
+2026-06-18 - Feature: Add basic user analytics tracking (Time, Logout, Tool History)
+2026-06-18 - Feature: Add basic user analytics tracking (Time, Logout, Tool History)
+2026-06-18 - Revert "Feature: Add basic user analytics tracking (Time, Logout, Tool History)"
+2026-06-18 - Revert "Feature: Add basic user analytics tracking (Time, Logout, Tool History)"
+2026-06-18 - Feature: Control Room Admin Dashboard with Chart.js and Clean UI
+2026-06-18 - Feature: Control Room Admin Dashboard with Chart.js and Clean UI
+2026-06-19 - UI: Update TC modal with glassmorphism and animations
+2026-06-19 - UI: Update TC modal with glassmorphism and animations
+2026-06-19 - feat: Strict email verification enforcing existing Google accounts
+2026-06-19 - feat: Strict email verification enforcing existing Google accounts
+2026-06-19 - feat: Control room redesign and telemetry tracking
+2026-06-19 - feat: Control room redesign and telemetry tracking
+2026-06-19 - style: Simplify admin table hover effect
+2026-06-19 - style: Simplify admin table hover effect
+2026-06-19 - feat: Add comprehensive session history and account banning
+2026-06-19 - feat: Add comprehensive session history and account banning
+2026-06-19 - feat: Time-based bans and warning emails
+2026-06-19 - feat: Time-based bans and warning emails
+2026-06-19 - fix: Resolve duplicate nodemailer declaration
+2026-06-19 - fix: Resolve duplicate nodemailer declaration
+2026-06-19 - fix: Add global middleware to completely block banned users
+2026-06-19 - fix: Add global middleware to completely block banned users
+2026-06-20 - fix: Return email status to UI and implement immediate ban kicking
+2026-06-20 - fix: Return email status to UI and implement immediate ban kicking
+2026-06-20 - fix: Solve UI freezing during ban/restore by adding strict SMTP timeouts
+2026-06-20 - fix: Solve UI freezing during ban/restore by adding strict SMTP timeouts
+2026-06-20 - fix: Fix ReferenceError during restore and ensure ban logic doesn't crash
+2026-06-20 - fix: Fix ReferenceError during restore and ensure ban logic doesn't crash
+2026-06-20 - feat: Switch email sending from Nodemailer to Google Apps Script webhook to bypass Render SMTP block
+2026-06-20 - feat: Switch email sending from Nodemailer to Google Apps Script webhook to bypass Render SMTP block
+2026-06-20 - fix: Restore missing comment closer that caused syntax error
+2026-06-20 - fix: Restore missing comment closer that caused syntax error
+2026-06-20 - Fix: Add custom toast alert in admin panel and increase email timeout to 12s
+2026-06-20 - Fix: Add custom toast alert in admin panel and increase email timeout to 12s
+2026-06-20 - feat: Restore email, tabbed admin modal, tool history log, scroll behavior tracking
+2026-06-20 - feat: Restore email, tabbed admin modal, tool history log, scroll behavior tracking
+2026-06-20 - fix: Remove 'Check Status' from ban page, fix Switch Account to show Google account list
+2026-06-20 - fix: Remove 'Check Status' from ban page, fix Switch Account to show Google account list
+2026-06-20 - fix: Add /auth/switch-account route that clears session before showing Google account chooser
+2026-06-20 - fix: Add /auth/switch-account route that clears session before showing Google account chooser
+2026-06-20 - fix: switch-account now uses redirect after session destroy instead of calling passport.authenticate in callback
+2026-06-20 - fix: switch-account now uses redirect after session destroy instead of calling passport.authenticate in callback
+2026-06-20 - feat: Complete ban page redesign - countdown timer, appeal email, policy links, no switch button
+2026-06-20 - feat: Complete ban page redesign - countdown timer, appeal email, policy links, no switch button
+2026-06-20 - feat: Ban page redesign to dark glassmorphism, fix policy links bypassing ban, interactive appeal button
+2026-06-20 - feat: Ban page redesign to dark glassmorphism, fix policy links bypassing ban, interactive appeal button
+2026-06-20 - fix: mailto native link, redesign ban email, fix gmail clipping, improve admin modal UI
+2026-06-20 - fix: mailto native link, redesign ban email, fix gmail clipping, improve admin modal UI
+2026-06-20 - docs: update privacy policy and terms to reflect new telemetry data collection, update dates
+2026-06-20 - docs: update privacy policy and terms to reflect new telemetry data collection, update dates
+2026-06-20 - docs: use big tech standard wording for telemetry retention in privacy policy
+2026-06-20 - docs: use big tech standard wording for telemetry retention in privacy policy
+2026-06-20 - docs: add explicit instructions for account deletion request via email
+2026-06-20 - docs: add explicit instructions for account deletion request via email
+2026-06-20 - feat: add delete user from database functionality to admin panel
+2026-06-20 - feat: add delete user from database functionality to admin panel
+2026-06-20 - feat: Add Advanced Deployment Hub and Two-Step Verification for Control Room
+2026-06-20 - feat: Add Advanced Deployment Hub and Two-Step Verification for Control Room
+2026-06-20 - fix: resolve admin access key UI error and protect tools endpoint
+2026-06-20 - fix: resolve admin access key UI error and protect tools endpoint
+2026-06-20 - Secure admin panel with specific user email
+2026-06-20 - Secure admin panel with specific user email
+2026-06-20 - Fix admin page redirect after Google login
+2026-06-20 - Fix admin page redirect after Google login
+2026-06-20 - Remove Google Login requirement from Admin Panel
+2026-06-20 - Remove Google Login requirement from Admin Panel
+2026-06-20 - Add tool login toggle setting to Admin Panel
+2026-06-20 - Add tool login toggle setting to Admin Panel
+2026-06-20 - Add tool blur and login overlay on homepage
+2026-06-20 - Add tool blur and login overlay on homepage
+2026-06-20 - Update login overlay to match login.html design
+2026-06-20 - Update login overlay to match login.html design
+2026-06-21 - feat: Selective Google Sign-In for premium tools
+2026-06-21 - feat: Selective Google Sign-In for premium tools
+2026-06-21 - feat: Beautiful Google Sign-In buttons and login page integration
+2026-06-21 - feat: Beautiful Google Sign-In buttons and login page integration
+2026-06-21 - fix: Limit backend auth middleware to only Decoy and Phishing tools
+2026-06-21 - fix: Limit backend auth middleware to only Decoy and Phishing tools
+2026-06-21 - style: Align premium tool cards vertically and update Phishing typography
+2026-06-21 - style: Align premium tool cards vertically and update Phishing typography
+2026-06-21 - Fix: Auth loops, OG image, added Data Breach tool
+2026-06-21 - Fix: Auth loops, OG image, added Data Breach tool
+2026-06-21 - Fix: Uncommented Decoy tool and updated Require Sign in button
+2026-06-21 - Fix: Uncommented Decoy tool and updated Require Sign in button
+2026-06-21 - Fix UI issues and remove duplicate tools
+2026-06-21 - Fix UI issues and remove duplicate tools
+2026-06-22 - Fix UI toggle bug and rogue middleware, resolve req.body crash
+2026-06-22 - Fix UI toggle bug and rogue middleware, resolve req.body crash
+2026-06-22 - Add new ultra-advanced Audio Steganography tool
+2026-06-22 - Add new ultra-advanced Audio Steganography tool
+2026-06-22 - UI Tweaks: Updated tool icon, added login req, added animated Google button border
+2026-06-22 - UI Tweaks: Updated tool icon, added login req, added animated Google button border
+2026-06-22 - Legal policies update & Tool Standardization: Added Steganography context to all legal pages and injected Google Tags into tool
+2026-06-22 - Legal policies update & Tool Standardization: Added Steganography context to all legal pages and injected Google Tags into tool
+2026-06-22 - UI: Reordered tools - Audio/Video Steg to 1st, Decoy to 2nd, updated badges (MOST USED, ADVANCED, UPDATING)
+2026-06-22 - UI: Reordered tools - Audio/Video Steg to 1st, Decoy to 2nd, updated badges (MOST USED, ADVANCED, UPDATING)
+2026-06-22 - feat: Add Digital Fingerprint Wiper with advanced forensic features & legal compliance
+2026-06-22 - feat: Add Digital Fingerprint Wiper with advanced forensic features & legal compliance
+2026-06-22 - fix: Add anchor tags to premium tool cards to make them clickable when logged in
+2026-06-22 - fix: Add anchor tags to premium tool cards to make them clickable when logged in
+2026-06-22 - fix: drag-and-drop bug and add frontend access block for non-admin users
+2026-06-22 - fix: drag-and-drop bug and add frontend access block for non-admin users
+2026-06-22 - fix: block unauthenticated users from premium tools and fix drag drop global events
+2026-06-22 - fix: block unauthenticated users from premium tools and fix drag drop global events
+2026-06-22 - fix: resolve click event bubbling on upload area
+2026-06-22 - fix: resolve click event bubbling on upload area
+2026-06-22 - fix: use foolproof inline onclick with stopPropagation for upload area
+2026-06-22 - fix: use foolproof inline onclick with stopPropagation for upload area
+2026-06-22 - fix: hide upload area and show image preview properly after file select
+2026-06-22 - fix: hide upload area and show image preview properly after file select
+2026-06-23 - temp: hide wiper from website, disable auth block for local testing
+2026-06-23 - temp: hide wiper from website, disable auth block for local testing
+2026-06-23 - feat: complete UI/UX rewrite of digital fingerprint wiper with foolproof drag-and-drop
+2026-06-23 - feat: complete UI/UX rewrite of digital fingerprint wiper with foolproof drag-and-drop
+2026-06-23 - feat: switch to lossless png to preserve watermark, add secret extractor tool
+2026-06-23 - feat: switch to lossless png to preserve watermark, add secret extractor tool
+2026-06-23 - feat: prominently display Session ID in Wiper UI, remove secret extractor
+2026-06-23 - feat: prominently display Session ID in Wiper UI, remove secret extractor
+2026-06-23 - feat: embed forensic Session ID directly into PNG metadata via tEXt chunk for native law enforcement discovery, remove UI display
+2026-06-23 - feat: embed forensic Session ID directly into PNG metadata via tEXt chunk for native law enforcement discovery, remove UI display
+2026-06-23 - fix: resolve maximum call stack size exceeded crash on large images when injecting PNG text chunk
+2026-06-23 - fix: resolve maximum call stack size exceeded crash on large images when injecting PNG text chunk
+2026-06-23 - feat: complete V2 rewrite with robust watermarking, cyber-UI, and updated legal compliance terms
+2026-06-23 - feat: complete V2 rewrite with robust watermarking, cyber-UI, and updated legal compliance terms
+2026-06-23 - fix: resolve black square visual artifacts in watermark and fix broken image preview, update UI text for better UX
+2026-06-23 - fix: resolve black square visual artifacts in watermark and fix broken image preview, update UI text for better UX
+2026-06-23 - feat: upgrade to QIM blind watermark and add admin forensic extractor for law enforcement
+2026-06-23 - feat: upgrade to QIM blind watermark and add admin forensic extractor for law enforcement
+2026-06-23 - feat: integrated digital forensics hub directly into admin panel for seamless UX
+2026-06-23 - feat: integrated digital forensics hub directly into admin panel for seamless UX
+2026-06-23 - fix: unhide Digital Fingerprint Wiper tool on index.html
+2026-06-23 - fix: unhide Digital Fingerprint Wiper tool on index.html
+2026-06-23 - fix: resolve synchronization bug between watermark injector and extractor by using fixed payload size
+2026-06-23 - fix: resolve synchronization bug between watermark injector and extractor by using fixed payload size
+2026-06-23 - feat: upgrade audio and video steganography to robust architecture with consent logging and admin parsing
+2026-06-23 - feat: upgrade audio and video steganography to robust architecture with consent logging and admin parsing
+2026-06-23 - style: remove linkedin and github links from all pages
+2026-06-23 - style: remove linkedin and github links from all pages
+2026-06-23 - Enhance Audio Stego with DSSS, add Decoy Stego telemetry, and expand Admin Forensics
+2026-06-23 - Enhance Audio Stego with DSSS, add Decoy Stego telemetry, and expand Admin Forensics
+2026-06-23 - Fix tab switching logic for Forensics Hub in Admin panel
+2026-06-23 - Fix tab switching logic for Forensics Hub in Admin panel
+2026-06-23 - Implement Universal Blind Extractor for Audio, Video, and Decoy tools
+2026-06-23 - Implement Universal Blind Extractor for Audio, Video, and Decoy tools
+2026-06-23 - Fix audio password extraction UI bug and drastically optimize Video Steganography encoding/decoding performance
+2026-06-23 - Fix audio password extraction UI bug and drastically optimize Video Steganography encoding/decoding performance
+2026-06-23 - Fix Video Steganography payload handling and UI decryption
+2026-06-23 - Fix Video Steganography payload handling and UI decryption
+2026-06-23 - Enhance DSSS and QIM robustness to survive media compression
+2026-06-23 - Enhance DSSS and QIM robustness to survive media compression
+2026-06-23 - Fix video steganography instant crash and restore original audio track
+2026-06-23 - Fix video steganography instant crash and restore original audio track
+2026-06-23 - Fix video autoplay policy blocking video encoder from starting
+2026-06-23 - Fix video autoplay policy blocking video encoder from starting
+2026-06-23 - Implement Temporal-Spatial Video Steganography for infinite capacity with 0 bit-errors
+2026-06-23 - Implement Temporal-Spatial Video Steganography for infinite capacity with 0 bit-errors
+2026-06-23 - Fix WebM NaN duration bug causing Video decoder to abort early
+2026-06-23 - Fix WebM NaN duration bug causing Video decoder to abort early
+2026-06-23 - Complete rewrite: Video stego now uses DSSS audio track (100% compression-safe)
+2026-06-23 - Complete rewrite: Video stego now uses DSSS audio track (100% compression-safe)
+2026-06-23 - Disable video steganography mode and add Coming Soon badge
+2026-06-23 - Disable video steganography mode and add Coming Soon badge
+2026-06-23 - Fix decoy steganography freezing and restore missing decode logic
+2026-06-23 - Fix decoy steganography freezing and restore missing decode logic
+2026-06-23 - Fix UI hanging during Decoy encoding/decoding by adding async chunking, fix animation freezing
+2026-06-23 - Fix UI hanging during Decoy encoding/decoding by adding async chunking, fix animation freezing
+2026-06-24 - Fix robust audio DSSS encoding overlap bug causing real password to fail, implemented Sequential TDM DSSS
+2026-06-24 - Fix robust audio DSSS encoding overlap bug causing real password to fail, implemented Sequential TDM DSSS
+2026-06-24 - Add full screen loading overlay to Decoy Steganography to fix animation rendering freeze
+2026-06-24 - Add full screen loading overlay to Decoy Steganography to fix animation rendering freeze
+2026-06-24 - Fix decoy preview broken image by not revoking blob url early, and enforce double rAF for overlay painting
+2026-06-24 - Fix decoy preview broken image by not revoking blob url early, and enforce double rAF for overlay painting
+2026-06-24 - Cache bust utils.js to force browser to download fix for broken image preview and loading overlay crash
+2026-06-24 - Cache bust utils.js to force browser to download fix for broken image preview and loading overlay crash
+2026-06-24 - Fix Admin Forensics Decoder: Implement Majority Vote (R,G,B) LSB embedding and extraction to prevent data loss from Canvas Alpha Premultiplication or Color Spaces
+2026-06-24 - Fix Admin Forensics Decoder: Implement Majority Vote (R,G,B) LSB embedding and extraction to prevent data loss from Canvas Alpha Premultiplication or Color Spaces
+2026-06-24 - Refactor Decoy Steganography: Implement DSSS (Spread Spectrum) for compression-resilient encryption with Law Enforcement RSA Backdoor and premium UI.
+2026-06-24 - Refactor Decoy Steganography: Implement DSSS (Spread Spectrum) for compression-resilient encryption with Law Enforcement RSA Backdoor and premium UI.
+2026-06-24 - UI: Remove legal warning and checkbox for Stealth Backdoor
+2026-06-24 - UI: Remove legal warning and checkbox for Stealth Backdoor
+2026-06-25 - Fix Decoy Steganography: Replace flawed DSSS with mathematically robust Block-Averaging QIM for correct extraction.
+2026-06-25 - Fix Decoy Steganography: Replace flawed DSSS with mathematically robust Block-Averaging QIM for correct extraction.
+2026-06-25 - Delete corrupted decoy-steganography.html completely
+2026-06-25 - Delete corrupted decoy-steganography.html completely
+2026-06-25 - Remove Decoy Steganography links and modals from index.html
+2026-06-25 - Remove Decoy Steganography links and modals from index.html
+2026-06-25 - Create new advanced-decoy.html and link to it on homepage
+2026-06-25 - Create new advanced-decoy.html and link to it on homepage
+2026-06-25 - Fix UI emojis and correct QIM extraction length bug
+2026-06-25 - Fix UI emojis and correct QIM extraction length bug
+2026-06-25 - Restore original shield and detective emojis on homepage
+2026-06-25 - Restore original shield and detective emojis on homepage
+2026-06-26 - Fix Audio Stego decoy password by replacing DSSS with QIM
+2026-06-26 - Fix Audio Stego decoy password by replacing DSSS with QIM
+2026-06-27 - Add QIM-based God-Tier OSINT Forensic Scanner and offline scanner script
+2026-06-27 - Add QIM-based God-Tier OSINT Forensic Scanner and offline scanner script
+2026-06-28 - Massive AdSense Update: Legal Pages, Expanded Blogs, Robust Footer
+2026-06-28 - Massive AdSense Update: Legal Pages, Expanded Blogs, Robust Footer
+2026-06-28 - Security: Remove find_log.js to stop leaking database credentials
+2026-06-28 - Remove auth locks and add SEO content for AdSense approval
+2026-06-28 - Remove auth locks and add SEO content for AdSense approval
+2026-06-28 - Fix emojis, remove auth from phishing tool, add more content, and rewrite blogs
+2026-06-28 - Fix emojis, remove auth from phishing tool, add more content, and rewrite blogs
+2026-06-29 - Remove login container from phishing scanner
+2026-06-29 - Remove login container from phishing scanner
+2026-06-29 - Fix layout: Move SEO above contact, add 4 more blog cards with simple english
+2026-06-29 - Fix layout: Move SEO above contact, add 4 more blog cards with simple english
+2026-07-01 - Added DevSecOps CI/CD pipeline for security scans
+2026-07-01 - Added DevSecOps CI/CD pipeline for security scans
+2026-07-01 - Fixed YAML indentation for triggers
+2026-07-01 - Fixed YAML indentation for triggers
+2026-07-01 - Fixed YAML indentation for triggers
+2026-07-01 - Fixed YAML indentation for triggers
+2026-07-01 - Testing PR workflow with a new branch
+2026-07-01 - Testing PR workflow with a new branch
+2026-07-01 - Fixed high severity vulnerabilities caught by Snyk
+2026-07-01 - Fixed high severity vulnerabilities caught by Snyk
+2026-07-01 - Fixed high severity vulnerabilities caught by Snyk
+2026-07-01 - Fixed high severity vulnerabilities caught by Snyk
+2026-07-01 - Merge pull request #1 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-01 - Merge pull request #1 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-02 - Create SECURITY.md
+2026-07-02 - Create SECURITY.md
+2026-07-02 - Fix Tuffelfog Eorror head base
+2026-07-02 - Fix Tuffelfog Eorror head base
+2026-07-02 - Fix TruffleHog BASE and HEAD identical error
+2026-07-02 - Fix TruffleHog BASE and HEAD identical error
+2026-07-02 - Merge pull request #2 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-02 - Merge pull request #2 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-02 - Robust fix for TruffleHog identical commit error
+2026-07-02 - Robust fix for TruffleHog identical commit error
+2026-07-02 - Use simplified TruffleHog action configuration without base/head
+2026-07-02 - Use simplified TruffleHog action configuration without base/head
+2026-07-10 - Fixed content issues and removed unused tools for AdSense
+2026-07-10 - Fixed content issues and removed unused tools for AdSense
+2026-07-10 - Resolve merge conflict
+2026-07-10 - Resolve merge conflict
+2026-07-10 - Merge pull request #3 from vaseflamingoseguru205-debug/fix-adsense-issues
+2026-07-10 - Merge pull request #3 from vaseflamingoseguru205-debug/fix-adsense-issues
+2026-07-15 - Add Google sign-in requirement for all tools
+2026-07-15 - Add Google sign-in requirement for all tools
+2026-07-15 - Merge pull request #4 from vaseflamingoseguru205-debug/feature/google-login-tools
+2026-07-15 - Merge pull request #4 from vaseflamingoseguru205-debug/feature/google-login-tools
+2026-07-16 - Add new changes
+2026-07-16 - Add new changes
+2026-07-16 - Merge branch 'main' of https://github.com/vaseflamingoseguru205-debug/PixelCraft_AI into feat/new-changes
+2026-07-16 - Merge branch 'main' of https://github.com/vaseflamingoseguru205-debug/PixelCraft_AI into feat/new-changes
+2026-07-16 - Merge pull request #6 from vaseflamingoseguru205-debug/feat/new-changes
+2026-07-16 - Merge pull request #6 from vaseflamingoseguru205-debug/feat/new-changes
+2026-07-16 - Fixed lodash and zod alerts
+2026-07-16 - Fixed lodash and zod alerts
+2026-07-16 - Merge branch 'feat/new-changes' into feature/my-first-pr
+2026-07-16 - Merge branch 'feat/new-changes' into feature/my-first-pr
+2026-07-16 - Merge pull request #7 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-16 - Merge pull request #7 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-16 - Updated ai_remediator.py with subprocess auto-fix logic securely
+2026-07-16 - Updated ai_remediator.py with subprocess auto-fix logic securely
+2026-07-16 - Update Trivy workflow for AI auto-remediation
+2026-07-16 - Update Trivy workflow for AI auto-remediation
+2026-07-16 - Fix Gemini API URL formatting
+2026-07-16 - Fix Gemini API URL formatting
+2026-07-16 - Merge pull request #8 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-16 - Merge pull request #8 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-16 - Update README with new AI auto-remediation features
+2026-07-16 - Update README with new AI auto-remediation features
+2026-07-16 - Merge pull request #9 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-07-16 - Merge pull request #9 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-02 - Testing DevSecOps pipeline with vulnerable lodash package
+2026-08-02 - Testing DevSecOps pipeline with vulnerable lodash package
+2026-08-02 - Update DevSecOps pipeline with PDF report and AI fixes push
+2026-08-02 - Update DevSecOps pipeline with PDF report and AI fixes push
+2026-08-02 - Fix workflow to run PDF generation and AI remediator even if Snyk fails
+2026-08-02 - Fix workflow to run PDF generation and AI remediator even if Snyk fails
+2026-08-02 - checkout: temporary commit for worktree checkout
+2026-08-02 - checkout: temporary commit for worktree checkout
+2026-08-02 - Fix detached HEAD push issue and cleanup temporary files before commit
+2026-08-02 - Fix detached HEAD push issue and cleanup temporary files before commit
+2026-08-02 - Add contents write permission so bot can push fixes
+2026-08-02 - Add contents write permission so bot can push fixes
+2026-08-02 - Fix Trivy PDF report template syntax
+2026-08-02 - Fix Trivy PDF report template syntax
+2026-08-02 - Switch to HTML report instead of PDF for reliability
+2026-08-02 - Switch to HTML report instead of PDF for reliability
+2026-08-02 - Auto-remediation updates: 2-step pipeline and stricter npm install flags
+2026-08-02 - Auto-remediation updates: 2-step pipeline and stricter npm install flags
+2026-08-02 - Test AI auto-remediation with vulnerable axios
+2026-08-02 - Test AI auto-remediation with vulnerable axios
+2026-08-02 - Fix AI remediator bug: properly extract vulnerabilities from Trivy JSON
+2026-08-02 - Fix AI remediator bug: properly extract vulnerabilities from Trivy JSON
+2026-08-02 - Ensure AI script fails loudly on error and uses legacy-peer-deps
+2026-08-02 - Ensure AI script fails loudly on error and uses legacy-peer-deps
+2026-08-02 - Add debug logging to AI remediator and upload log as artifact
+2026-08-02 - Add debug logging to AI remediator and upload log as artifact
+2026-08-02 - Update deprecated gemini-1.5 model to gemini-3.5-flash
+2026-08-02 - Update deprecated gemini-1.5 model to gemini-3.5-flash
+2026-08-02 - Trigger pipeline with new tokens
+2026-08-02 - Trigger pipeline to test updated secrets
+2026-08-02 - ≡ƒñû Auto-fix: AI patched vulnerabilities [skip ci]
+2026-08-02 - ≡ƒñû Auto-fix: AI patched vulnerabilities [skip ci]
+2026-08-02 - Manually fix final Snyk issue (lodash)
+2026-08-02 - Manually fix final Snyk issue (lodash)
+2026-08-02 - ≡ƒñû Auto-fix: AI patched vulnerabilities [skip ci]
+2026-08-02 - ≡ƒñû Auto-fix: AI patched vulnerabilities [skip ci]
+2026-08-02 - Introduce vulnerable moment.js for final AI test
+2026-08-02 - Merge 6775fd665d992a5b483d5eb2f5fdcef81e083bd6 into 158633e59449a497d5d355ca9b293eee1a95046a
+2026-08-02 - Introduce vulnerable moment.js for final AI test
+2026-08-02 - Merge 6775fd665d992a5b483d5eb2f5fdcef81e083bd6 into 158633e59449a497d5d355ca9b293eee1a95046a
+2026-08-02 - ≡ƒñû Auto-fix: AI patched vulnerabilities [skip ci]
+2026-08-02 - ≡ƒñû Auto-fix: AI patched vulnerabilities [skip ci]
+2026-08-02 - Update DevSecOps to pull before pushing AI fixes
+2026-08-02 - Update DevSecOps to pull before pushing AI fixes
+2026-08-02 - ≡ƒñû Auto-fix: AI patched vulnerabilities [skip ci]
+2026-08-02 - ≡ƒñû Auto-fix: AI patched vulnerabilities [skip ci]
+2026-08-02 - Merge pull request #11 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-02 - Merge pull request #11 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-02 - Add WhatsApp notification and direct Markdown report in Job Summary
+2026-08-02 - Add WhatsApp notification and direct Markdown report in Job Summary
+2026-08-02 - Test SAST: Inject Hardcoded Secret and Command Injection vulnerabilities into server.js
+2026-08-02 - Test SAST: Inject Hardcoded Secret and Command Injection vulnerabilities into server.js
+2026-08-02 - Restore HTML report generation and upload artifact
+2026-08-02 - Restore HTML report generation and upload artifact
+2026-08-02 - Upgrade AI Remediator to Advanced SAST Agent and enable Trivy Code Scanning
+2026-08-02 - Upgrade AI Remediator to Advanced SAST Agent and enable Trivy Code Scanning
+2026-08-02 - Fix CI: Commit all AI-modified files (including source code) instead of just package.json
+2026-08-02 - Fix CI: Commit all AI-modified files (including source code) instead of just package.json
+2026-08-02 - Fix CI: Bulletproof git push step with git status --porcelain
+2026-08-02 - Fix CI: Bulletproof git push step with git status --porcelain
+2026-08-02 - Revert SAST scanning and AI Code Remediator back to SCA only
+2026-08-02 - Revert SAST scanning and AI Code Remediator back to SCA only
+2026-08-02 - Force Trivy to use 'vuln' scanner ONLY (disable secret scanning)
+2026-08-02 - Force Trivy to use 'vuln' scanner ONLY (disable secret scanning)
+2026-08-02 - Trigger pipeline for SCA check
+2026-08-02 - Fix CI Push: Revert git add -A to only add package files, preventing 1.1GB Trivy cache from being pushed
+2026-08-02 - Fix CI Push: Revert git add -A to only add package files, preventing 1.1GB Trivy cache from being pushed
+2026-08-02 - Trigger pipeline after fixing the 1GB DB issue
+2026-08-02 - Fix CI: Use 'git diff --staged --quiet' to prevent false positive commits when untracked cache files exist
+2026-08-02 - Fix CI: Use 'git diff --staged --quiet' to prevent false positive commits when untracked cache files exist
+2026-08-02 - Fix AI Remediator: Include MEDIUM/LOW severities, fix Gemini model URL, and add subfolder support for Dependabot alerts
+2026-08-02 - Fix AI Remediator: Include MEDIUM/LOW severities, fix Gemini model URL, and add subfolder support for Dependabot alerts
+2026-08-02 - Merge pull request #12 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-02 - Merge pull request #12 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-03 - Update README.md with comprehensive DevSecOps pipeline and AI Remediator features
+2026-08-03 - Update README.md with comprehensive DevSecOps pipeline and AI Remediator features
+2026-08-03 - Merge pull request #13 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-03 - Merge pull request #13 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-05 - Integrate Telegram Bot security alerts into DevSecOps workflow
+2026-08-05 - Integrate Telegram Bot security alerts into DevSecOps workflow
+2026-08-05 - Trigger pipeline to test Telegram Bot Alerts
+2026-08-05 - Fix Telegram step: Replace bash curl with robust Python JSON script
+2026-08-05 - Fix Telegram step: Replace bash curl with robust Python JSON script
+2026-08-05 - Add res.raise_for_status() to expose Telegram API errors in GitHub logs
+2026-08-05 - Add res.raise_for_status() to expose Telegram API errors in GitHub logs
+2026-08-05 - Fix Telegram HTML formatting and add detailed API error logging
+2026-08-05 - Fix Telegram HTML formatting and add detailed API error logging
+2026-08-05 - Fix Telegram API 400 error: Remove parse_mode to use bulletproof clean text format
+2026-08-05 - Fix Telegram API 400 error: Remove parse_mode to use bulletproof clean text format
+2026-08-08 - docs: add professional DevSecOps mind map and proprietary license
+2026-08-08 - docs: add professional DevSecOps mind map and proprietary license
+2026-08-08 - Merge pull request #14 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-08 - Merge pull request #14 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-08 - Update README.md
+2026-08-08 - Update README.md
+2026-08-08 - docs: add DevSecOps architecture diagram to README
+2026-08-08 - docs: add DevSecOps architecture diagram to README
+2026-08-08 - fix: resolve trivy html.tpl wget 404 error
+2026-08-08 - fix: resolve trivy html.tpl wget 404 error
+2026-08-08 - fix: commit html.tpl for trivy html report generation
+2026-08-08 - fix: commit html.tpl for trivy html report generation
+2026-08-08 - Merge pull request #15 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-08 - Merge pull request #15 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-08 - fix: commit missing utils directory causing render deployment crashes
+2026-08-08 - fix: commit missing utils directory causing render deployment crashes
+2026-08-08 - Merge pull request #16 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-08 - Merge pull request #16 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-08 - Trigger DevSecOps pipeline
+2026-08-08 - Merge pull request #17 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-08 - Merge pull request #17 from vaseflamingoseguru205-debug/feature/my-first-pr
+2026-08-08 - Add architecture.jpg image for README display
+2026-08-08 - Add architecture.jpg image for README display
+2026-08-08 - Merge branch 'feature/my-first-pr'
+2026-08-08 - Merge branch 'feature/my-first-pr'
+2026-08-09 - Update README.md: Set corporate header, add status badges, and remove all emojis
+2026-08-09 - Update README.md: Set corporate header, add status badges, and remove all emojis
+2026-08-09 - Add animated DevSecOps pipeline GIF preview to README.md
+2026-08-09 - Add animated DevSecOps pipeline GIF preview to README.md
+2026-08-09 - Upgrade pipeline.gif to Production-Level Futuristic Motion Graphics & Terminal Telemetry Engine
+2026-08-09 - Upgrade pipeline.gif to Production-Level Futuristic Motion Graphics & Terminal Telemetry Engine
+2026-08-09 - Upgrade pipeline.gif to Complex Hexagonal Cyber Orbital Topology
+2026-08-09 - Upgrade pipeline.gif to Complex Hexagonal Cyber Orbital Topology
+2026-08-09 - Update README.md: Add deep technical breakdown of Gemini API Key self-healing and Telegram telemetry
+2026-08-09 - Update README.md: Add deep technical breakdown of Gemini API Key self-healing and Telegram telemetry
+2026-08-09 - Remove GIF animation from README.md
+2026-08-09 - Remove GIF animation from README.md
+2026-08-09 - Remove pipeline.gif file
+2026-08-09 - Remove pipeline.gif file
+2026-08-10 - Fix architecture.jpg image link to raw GitHub URL for 100% reliable rendering in README.md
+2026-08-10 - Fix architecture.jpg image link to raw GitHub URL for 100% reliable rendering in README.md
+2026-08-12 - Update DevSecOps workflow: Enable scanning on ALL branches and add manual workflow_dispatch trigger
+2026-08-12 - Update DevSecOps workflow: Enable scanning on ALL branches and add manual workflow_dispatch trigger
+2026-08-15 - docs: append License section to the bottom of the README
+2026-08-15 - docs: append License section to the bottom of the README
+2026-08-25 - Update privacy policy, terms, and remove vulnerability
+2026-08-25 - Update privacy policy, terms, and remove vulnerability
+2026-08-25 - fix: resolve npm vulnerabilities
+2026-08-25 - fix: skip snyk scan if token is not provided
+2026-08-25 - fix: remove snyk gate to unblock pipeline
+2026-08-25 - fix: remove snyk gate to unblock pipeline
+2026-08-25 - docs: update privacy.html with comprehensive telemetry details
+2026-08-25 - docs: update privacy.html with comprehensive telemetry details
+2026-08-26 - Update login flow, fix emojis, update SEO to cybersecurity, remove broken HTML
+2026-08-26 - Update login flow, fix emojis, update SEO to cybersecurity, remove broken HTML
+2026-08-26 - Minor SEO text adjustments
+2026-08-26 - Minor SEO text adjustments
+2026-08-26 - Merge pull request #21 from vaseflamingoseguru205-debug/staging
+2026-08-26 - Merge pull request #21 from vaseflamingoseguru205-debug/staging
+2026-08-26 - my first pr
+2026-08-26 - Merge main into feature/my-first-pr and resolve conflicts
+2026-08-26 - Migrate advanced CI/CD pipeline from CICD_Project
+2026-08-26 - fix: telegram notification URL parsing
+2026-08-26 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-08-26 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-08-26 - fix: skip snyk scan if token is not provided
+2026-08-26 - revert: make snyk gate mandatory again
+2026-08-26 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-08-26 - fix: prevent double pipeline trigger by restricting to main
+2026-08-26 - fix: resolve all high/critical vulnerabilities for Snyk
+2026-08-26 - fix: update ai_remediator fallback to install secure dependencies
+2026-08-26 - fix: force pipeline trigger on all pushes
+2026-08-26 - revert: restore double pipeline triggers for PRs
+2026-08-26 - hotfix: remove faulty localStorage login guard causing redirect loops
+2026-08-26 - hotfix: remove faulty localStorage login guard causing redirect loops
+2026-08-26 - merge: bring hotfix from main into feature/advanced-cicd
+2026-08-26 - fix: resolve github actions startup failure due to invalid yaml spacing
+2026-08-30 -  Security: Upgrade multer to 2.3.0 to fix Snyk vulnerability
+2026-08-30 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-08-30 -  UI: Add new PixelCraft AI logo across all pages
+2026-08-30 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-08-30 -  Cleanup: Remove empty logs/dx folders and replace remaining old logos with new logo
+2026-08-30 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-08-31 - Update logo image and fix broken cache busting tags
+2026-08-31 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-08-31 - Require exactly 2 approvals for production deployment
+2026-08-31 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-04 - Update logo version strings to bypass cache
+2026-09-04 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-04 - Fix npm vulnerabilities by updating dependencies
+2026-09-05 - Update logo to SVG and remove intentional vulnerabilities in AI scripts
+2026-09-05 - Merge remote-tracking branch 'origin/main'
+2026-09-05 - Configure AI Remediator to use Snyk JSON report instead of Trivy
+2026-09-05 - Update public/logo.jpg with new SVG rendering
+2026-09-05 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-07 - feat: implement advanced forensic image sanitizer with deep threat OSINT
+2026-09-07 - fix(sw): do not intercept API POST requests to prevent empty json responses
+2026-09-07 - fix(forensic): forcefully unregister service workers on page load to bypass browser cache and improve json error debugging
+2026-09-08 - Update metallic P logo and PWA icons across website
+2026-09-08 - Update title and descriptions from image editing to privacy and security tools
+2026-09-08 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-08 - chore: Privacy cleanup and GDPR updates
+2026-09-08 - Merge branch 'feature/advanced-cicd' of https://github.com/vaseflamingoseguru205-debug/PixelCraft_AI into feature/advanced-cicd
+2026-09-08 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-08 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-09 - chore: update dependencies for pipeline test
+2026-09-09 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-09 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-09 - ladash version
+2026-09-09 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-10 - Update dependencies
+2026-09-10 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-10 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-10 - Move Snyk scan to Job 1 and generate Markdown report before Trivy
+2026-09-10 - Add Snyk markdown report step to Job 2
+2026-09-10 - Implement pipeline optimizations: node caching, trigger limits, and AI PR creation
+2026-09-10 - Fix AI Remediator PR branch name to avoid branch spam
+2026-09-10 - Fix duplicate pipeline runs on PRs and disable on bot branches
+2026-09-10 - Revert bot to push directly to branch instead of creating PR
+2026-09-10 - feat: Add Enterprise Phantom-Trap (Honeytoken) pipeline and bait file
+2026-09-10 - ≡ƒñû Auto-fix: AI patched vulnerabilities & infrastructure
+2026-09-10 - chore: Update Honeytoken prefix to pct_fake for easy identification
