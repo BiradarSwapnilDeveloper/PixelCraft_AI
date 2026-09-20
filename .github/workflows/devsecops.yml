@@ -82,6 +82,14 @@ jobs:
           name: trivy-report-json
           path: trivy-results.json
 
+      # Gate 4: SBOM Generation
+      - name: "📦 Generate SBOM (Software Bill of Materials)"
+        uses: anchore/sbom-action@v0
+        with:
+          path: ./
+          format: spdx-json
+          artifact-name: sbom.spdx.json
+
   # ============================================================
   # JOB 2: Snyk Scan aur AI Remediation
   # ============================================================
@@ -213,6 +221,14 @@ jobs:
           name: ai-debug-log
           path: ai_debug.log
           retention-days: 1
+
+      - name: "🤖 AI Code Governance Scanner"
+        if: always()
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          pip install google-genai --quiet
+          python scripts/ai_code_governance.py
 
       - name: "🚀 Push Fixes to Branch"
         if: always()
