@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- ===== SEO META TAGS ===== -->
+  <title>Free AI Video & Audio Dubbing Tool | PixelCraft AI | Multi-language Translator</title>
+  <meta name="description" content="Dub any audio or video into multiple languages instantly using advanced AI voice cloning and translation. No signup required, 100% free."/>
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
+  <meta name="author" content="PixelCraft AI"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <link rel="stylesheet" href="../css/style.css"/>
+
+  <style>
+    .loading-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 100;
+        border-radius: 12px;
+    }
+    
+    .spinner {
+        width: 50px; height: 50px;
+        border: 4px solid rgba(236, 72, 153, 0.2);
+        border-top-color: #ec4899;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 16px;
+    }
+
+    @keyframes spin { 
+        to { transform: rotate(360deg); } 
+    }
+  </style>
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<nav class="navbar">
+  <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=3" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
+      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
+  </a>
+  <ul class="nav-links"><li><a href="../index.html#tools">All Tools</a></li></ul>
+</nav>
+
+<div class="tool-page">
+  <div class="tool-page-header">
+    <a href="../index.html" class="back-link">← Back to All Tools</a>
+    <div style="font-size:2.5rem;margin-bottom:12px;">🎙️</div>
+    <h1>AI Audio & Video Dubbing</h1>
+    <p>Upload a short audio or video clip and instantly dub it into a different language while preserving the original voice tone using advanced AI.</p>
+  </div>
+  
+  <div class="tool-workspace" style="position: relative;">
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <h3 style="color: white;">Processing AI Dubbing...</h3>
+        <p style="color: #94a3b8; font-size: 0.9rem;">Translating and synthesizing voice (This might take a minute)</p>
+    </div>
+
+    <!-- UPLOAD SECTION -->
+    <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+      <input type="file" id="file-input" accept="video/*,audio/*" style="display:none"/>
+      <div class="upload-icon" style="font-size: 48px;">🎬</div>
+      <h3>Drop your media file here</h3>
+      <p>Supports MP4, MP3, WAV (Max 20MB)</p>
+      <div class="upload-formats">
+        <span class="format-tag">MP4</span><span class="format-tag">MP3</span><span class="format-tag">WAV</span>
+      </div>
+    </div>
+    
+    <!-- EDITOR SECTION -->
+    <div id="editor" style="display:none;">
+      <div class="result-area show" style="margin-top:0;">
+        <div class="result-header">
+          <span class="result-header-title">Configure Dubbing</span>
+          <button class="btn btn-gray" onclick="resetTool()">New File</button>
+        </div>
+        <div class="result-body">
+          <div style="margin-bottom:20px; text-align: left;">
+            <p style="color: var(--text-light); margin-bottom: 10px;">Selected File: <strong id="file-name" style="color: white;"></strong></p>
+            
+            <label style="display: block; font-weight: bold; color: var(--text-main); margin-bottom: 8px;">Target Language:</label>
+            <select id="target-language" style="width: 100%; padding: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; margin-bottom: 20px;">
+              <option value="Hindi">Hindi 🇮🇳</option>
+              <option value="Spanish">Spanish 🇪🇸</option>
+              <option value="French">French 🇫🇷</option>
+              <option value="German">German 🇩🇪</option>
+              <option value="Japanese">Japanese 🇯🇵</option>
+              <option value="Korean">Korean 🇰🇷</option>
+              <option value="Arabic">Arabic 🇦🇪</option>
+            </select>
+
+            <button class="btn" style="width: 100%; background: linear-gradient(135deg, #ec4899, #8b5cf6); border: none; padding: 16px; font-size: 1.1rem;" onclick="processDubbing()">Start AI Dubbing 🪄</button>
+          </div>
+          
+          <div id="result-section" style="display:none; text-align: left;">
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 24px 0;" />
+            <h3 style="color: var(--success); margin-bottom: 12px;">✅ Dubbing Complete!</h3>
+            
+            <div id="media-container" style="background: var(--bg2); padding: 16px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 16px; text-align: center;">
+              <!-- Video/Audio element injected here -->
+            </div>
+            
+            <button class="btn btn-green" id="btn-download" style="width: 100%;">Download Dubbed Media</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" style="background: #0f172a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
+  <p style="color: #64748b; font-size: 0.95rem;">
+    &copy; 2026 PixelCraft AI. All rights reserved.
+  </p>
+</footer>
+
+<script src="../js/utils.js"></script>
+<script>
+let currentFile = null;
+const fileInput = document.getElementById('file-input');
+const uploadArea = document.getElementById('upload-area');
+const editor = document.getElementById('editor');
+const fileNameDisplay = document.getElementById('file-name');
+const overlay = document.getElementById('loading-overlay');
+let dubbedMediaUrl = null;
+
+setupDragDrop(uploadArea, handleFile);
+fileInput.addEventListener('change', e => { 
+    if(e.target.files[0]) handleFile(e.target.files[0]); 
+});
+
+function handleFile(file) {
+    // Validate type
+    if(!file.type.startsWith('video/') && !file.type.startsWith('audio/')) {
+        showToast("Please upload a valid audio or video file.", "error");
+        return;
+    }
+    
+    // Validate size (e.g. max 50MB)
+    if(file.size > 50 * 1024 * 1024) {
+        showToast("File is too large. Max size is 50MB.", "error");
+        return;
+    }
+
+    currentFile = file;
+    fileNameDisplay.textContent = file.name;
+    uploadArea.style.display = 'none';
+    editor.style.display = 'block';
+}
+
+async function processDubbing() {
+    if(!currentFile) return;
+    
+    const targetLang = document.getElementById('target-language').value;
+    
+    overlay.style.display = 'flex';
+    document.getElementById('result-section').style.display = 'none';
+
+    try {
+        const formData = new FormData();
+        formData.append('file', currentFile);
+        formData.append('targetLanguage', targetLang);
+
+        const res = await fetch('/api/dub-media', {
+            method: 'POST',
+            body: formData
+        });
+
+        if(!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || "Dubbing failed");
+        }
+
+        const data = await res.json();
+        
+        dubbedMediaUrl = data.mediaUrl;
+        const mediaContainer = document.getElementById('media-container');
+        mediaContainer.innerHTML = '';
+        
+        if (currentFile.type.startsWith('video/')) {
+            mediaContainer.innerHTML = `<video controls style="max-width: 100%; max-height: 400px; border-radius: 8px;"><source src="${dubbedMediaUrl}" type="${currentFile.type}">Your browser does not support the video tag.</video>`;
+        } else {
+            mediaContainer.innerHTML = `<audio controls style="width: 100%;"><source src="${dubbedMediaUrl}" type="${currentFile.type}">Your browser does not support the audio element.</audio>`;
+        }
+        
+        overlay.style.display = 'none';
+        document.getElementById('result-section').style.display = 'block';
+        showToast(`Success! Dubbed into ${targetLang}`, "success");
+
+    } catch (err) {
+        overlay.style.display = 'none';
+        showToast(err.message, "error");
+    }
+}
+
+document.getElementById('btn-download').addEventListener('click', () => {
+    if (!dubbedMediaUrl) return;
+    
+    const origName = currentFile.name.replace(/\.[^/.]+$/, '');
+    const lang = document.getElementById('target-language').value;
+    const ext = currentFile.name.split('.').pop();
+    
+    downloadFile(dubbedMediaUrl, `${origName}_${lang}_dubbed.${ext}`);
+});
+
+function resetTool() {
+    currentFile = null;
+    dubbedMediaUrl = null;
+    document.getElementById('result-section').style.display = 'none';
+    uploadArea.style.display = 'block'; 
+    editor.style.display = 'none'; 
+    fileInput.value = '';
+}
+</script>
+</body>
+</html>

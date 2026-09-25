@@ -538,6 +538,49 @@ app.get('/logout', async (req, res, next) => {
   });
 });
 
+
+// ===== AI VIDEO/AUDIO DUBBING ENDPOINT (MOCKUP FOR NOW) =====
+const dubUpload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for video/audio
+});
+
+app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+        
+        const { targetLanguage } = req.body;
+        if (!targetLanguage) {
+            return res.status(400).json({ error: "Target language is required" });
+        }
+
+        console.log(`Received dubbing request for file: ${req.file.originalname} to ${targetLanguage}`);
+        
+        // TODO: Integrate actual API here (e.g. ElevenLabs / HuggingFace SeamlessM4T)
+        // using req.file.buffer
+        
+        // Mock processing delay
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        // For this mockup, we'll just return the original file as the "dubbed" file
+        // In reality, you'd return the processed audio/video buffer from the API
+        const base64Media = req.file.buffer.toString('base64');
+        const mimeType = req.file.mimetype;
+        
+        res.json({ 
+            success: true, 
+            message: `Successfully dubbed into ${targetLanguage}`,
+            mediaUrl: `data:${mimeType};base64,${base64Media}` 
+        });
+
+    } catch (err) {
+        console.error("AI Dubbing Error:", err.message);
+        res.status(500).json({ error: "Failed to process media dubbing" });
+    }
+});
+
 // Technical Evolution Report Routes
 app.get('/website-evolution-report.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'website-evolution-report.html'));
