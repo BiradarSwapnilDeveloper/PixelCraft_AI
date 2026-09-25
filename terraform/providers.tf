@@ -9,5 +9,5 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-northeast-1" # Tokyo Region (Japan)
+  region = var.aws_region
 }
