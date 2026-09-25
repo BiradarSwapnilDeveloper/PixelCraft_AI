@@ -44,7 +44,7 @@
   },
   "overrides": {
     "proxy-addr": "^2.0.8",
-    "axios": "^1.7.0"
+    "axios": "$axios"
   },
   "devDependencies": {
     "husky": "^9.1.7",
