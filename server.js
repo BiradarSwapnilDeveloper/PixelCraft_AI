@@ -542,9 +542,8 @@ app.get('/logout', async (req, res, next) => {
 // ===== AI VIDEO/AUDIO DUBBING ENDPOINT (REAL IMPLEMENTATION) =====
 const googleTTS = require('google-tts-api');
 const { execSync } = require('child_process');
-const fs = require('fs');
+// fs and path are already declared at the top of server.js
 const os = require('os');
-const path = require('path');
 const crypto = require('crypto');
 
 const dubUpload = multer({ 
