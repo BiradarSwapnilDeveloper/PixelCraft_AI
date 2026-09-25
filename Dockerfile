@@ -1,6 +1,6 @@
 FROM node:20.18.1-alpine3.20 AS base
 RUN apk upgrade --no-cache && \
-    apk add --no-cache tini
+    apk add --no-cache tini ffmpeg
 
 FROM base AS dependencies
 RUN mkdir -p /home/node/app && chown -R node:node /home/node/app

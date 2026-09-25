@@ -539,10 +539,145 @@ app.get('/logout', async (req, res, next) => {
 });
 
 
-// ===== AI VIDEO/AUDIO DUBBING ENDPOINT (MOCKUP FOR NOW) =====
+// ===== AI VIDEO/AUDIO DUBBING ENDPOINT (REAL IMPLEMENTATION) =====
+const googleTTS = require('google-tts-api');
+const { execSync } = require('child_process');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const crypto = require('crypto');
+
 const dubUpload = multer({ 
     storage: multer.memoryStorage(),
-    limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for video/audio
+    limits: { fileSize: 20 * 1024 * 1024 } // 20MB limit for inline Gemini processing
+});
+
+app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+        
+        const { targetLanguage } = req.body;
+        if (!targetLanguage) {
+            return res.status(400).json({ error: "Target language is required" });
+        }
+
+        console.log(`[Dubbing] Received file: ${req.file.originalname} (${req.file.mimetype}) to ${targetLanguage}`);
+        
+        const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+        if (!GEMINI_API_KEY) {
+            throw new Error("GEMINI_API_KEY is not configured on the server.");
+        }
+        
+        // 2. Transcribe and Translate using Gemini 1.5 Flash via REST API
+        const base64Media = req.file.buffer.toString('base64');
+        const mimeType = req.file.mimetype;
+        
+        const geminiPayload = {
+            contents: [{
+                parts: [
+                    { text: `Listen to this media file carefully. Transcribe the spoken speech and translate it into ${targetLanguage}. Return ONLY the translated text in ${targetLanguage}. Do not include any introductions, quotes, or original text. If there is no speech, return an empty string.` },
+                    { inline_data: { mime_type: mimeType, data: base64Media } }
+                ]
+            }]
+        };
+
+        const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(geminiPayload)
+        });
+
+        if (!geminiRes.ok) {
+            const errText = await geminiRes.text();
+            console.error("[Dubbing] Gemini API Error:", errText);
+            throw new Error("Failed to transcribe/translate media with AI.");
+        }
+
+        const geminiData = await geminiRes.json();
+        const translatedText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+        
+        if (!translatedText) {
+            throw new Error("No speech detected or translation failed.");
+        }
+        
+        console.log(`[Dubbing] Translated Text: ${translatedText}`);
+
+        // 3. Convert Translated Text to Speech (TTS) using free google-tts-api
+        // Map common languages to TTS language codes
+        const langMap = {
+            'Hindi': 'hi', 'Spanish': 'es', 'French': 'fr', 'German': 'de', 
+            'Japanese': 'ja', 'Korean': 'ko', 'Arabic': 'ar', 'English': 'en'
+        };
+        const ttsLang = langMap[targetLanguage] || 'en';
+
+        // google-tts-api has a 200 char limit, but getAllAudioBase64 handles splitting automatically
+        const ttsResults = await googleTTS.getAllAudioBase64(translatedText, {
+            lang: ttsLang,
+            slow: false,
+            host: 'https://translate.google.com',
+            timeout: 10000,
+        });
+
+        // Combine the base64 chunks into a single audio buffer
+        const audioBuffers = ttsResults.map(res => Buffer.from(res.base64, 'base64'));
+        const finalAudioBuffer = Buffer.concat(audioBuffers);
+
+        // 4. Mux audio back to video (if original was video)
+        if (mimeType.startsWith('video/')) {
+            const tempDir = os.tmpdir();
+            const uniqueId = crypto.randomBytes(8).toString('hex');
+            const origVideoPath = path.join(tempDir, `orig_${uniqueId}.mp4`);
+            const newAudioPath = path.join(tempDir, `audio_${uniqueId}.mp3`);
+            const outputVideoPath = path.join(tempDir, `out_${uniqueId}.mp4`);
+
+            try {
+                fs.writeFileSync(origVideoPath, req.file.buffer);
+                fs.writeFileSync(newAudioPath, finalAudioBuffer);
+
+                // Run ffmpeg to replace audio
+                // -map 0:v:0 (take video from first input)
+                // -map 1:a:0 (take audio from second input)
+                // -c:v copy (don't re-encode video)
+                // -shortest (finish encoding when the shortest input stream ends)
+                execSync(`ffmpeg -y -i "${origVideoPath}" -i "${newAudioPath}" -c:v copy -map 0:v:0 -map 1:a:0 -shortest "${outputVideoPath}"`, { stdio: 'ignore' });
+
+                const finalVideoBuffer = fs.readFileSync(outputVideoPath);
+                const finalBase64 = finalVideoBuffer.toString('base64');
+
+                // Cleanup temp files
+                fs.unlinkSync(origVideoPath);
+                fs.unlinkSync(newAudioPath);
+                fs.unlinkSync(outputVideoPath);
+
+                return res.json({ 
+                    success: true, 
+                    message: `Successfully dubbed into ${targetLanguage}`,
+                    mediaUrl: `data:video/mp4;base64,${finalBase64}` 
+                });
+            } catch (ffmpegErr) {
+                console.error("[Dubbing] FFmpeg Error:", ffmpegErr.message);
+                // If ffmpeg fails (maybe not installed), fallback to returning just the audio
+                return res.json({ 
+                    success: true, 
+                    message: `Video muxing failed (FFmpeg missing). Returning dubbed audio instead.`,
+                    mediaUrl: `data:audio/mp3;base64,${finalAudioBuffer.toString('base64')}` 
+                });
+            }
+        } else {
+            // If it was just audio, return the new audio directly
+            res.json({ 
+                success: true, 
+                message: `Successfully dubbed into ${targetLanguage}`,
+                mediaUrl: `data:audio/mp3;base64,${finalAudioBuffer.toString('base64')}` 
+            });
+        }
+
+    } catch (err) {
+        console.error("AI Dubbing Error:", err.message);
+        res.status(500).json({ error: err.message || "Failed to process media dubbing" });
+    }
 });
 
 app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
