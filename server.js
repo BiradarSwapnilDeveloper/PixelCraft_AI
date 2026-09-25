@@ -73,43 +73,43 @@ passport.deserializeUser(async (id, done) => {
 
 // GLOBAL BAN ENFORCEMENT MIDDLEWARE
 app.use(async (req, res, next) => {
-    if (req.isAuthenticated() && req.user) {
-        if (req.user.isBanned) {
-            // Check if temporary ban has expired
-            if (req.user.banUntil && req.user.banUntil <= Date.now()) {
-                try {
-                    req.user.isBanned = false;
-                    req.user.banUntil = null;
-                    req.user.banReason = '';
-                    await req.user.save();
-                    return next();
-                } catch(e) { console.error("Error auto-unbanning:", e); }
-            } else {
-                // User is still banned. Block them!
-                if (req.path.startsWith('/api/admin/')) {
-                    return next(); // Don't block admin routes just in case
-                }
-                
-                // Allow static assets so the page doesn't look completely broken, but block HTML and APIs
-                if (req.path.endsWith('.css') || req.path.endsWith('.js') || req.path.endsWith('.png') || req.path.endsWith('.svg') || req.path.endsWith('.ico')) {
-                    return next();
-                }
+  if (req.isAuthenticated() && req.user) {
+    if (req.user.isBanned) {
+      // Check if temporary ban has expired
+      if (req.user.banUntil && req.user.banUntil <= Date.now()) {
+        try {
+          req.user.isBanned = false;
+          req.user.banUntil = null;
+          req.user.banReason = '';
+          await req.user.save();
+          return next();
+        } catch (e) { console.error("Error auto-unbanning:", e); }
+      } else {
+        // User is still banned. Block them!
+        if (req.path.startsWith('/api/admin/')) {
+          return next(); // Don't block admin routes just in case
+        }
 
-                if (req.path.startsWith('/api/')) {
-                    return res.status(403).json({ error: "Your account is suspended." });
-                }
-                
-                if (req.path === '/admin.html' || 
-                    req.path === '/terms-conditions.html' || 
-                    req.path === '/privacy-policy.html' || 
-                    req.path === '/contact-us.html' || 
-                    req.path === '/disclaimer.html') {
-                    return next(); 
-                }
+        // Allow static assets so the page doesn't look completely broken, but block HTML and APIs
+        if (req.path.endsWith('.css') || req.path.endsWith('.js') || req.path.endsWith('.png') || req.path.endsWith('.svg') || req.path.endsWith('.ico')) {
+          return next();
+        }
 
-                const untilStr = req.user.banUntil ? req.user.banUntil.toLocaleString() : 'Permanent';
-                const reason = req.user.banReason || 'Violation of Guidelines';
-                return res.send(`
+        if (req.path.startsWith('/api/')) {
+          return res.status(403).json({ error: "Your account is suspended." });
+        }
+
+        if (req.path === '/admin.html' ||
+          req.path === '/terms-conditions.html' ||
+          req.path === '/privacy-policy.html' ||
+          req.path === '/contact-us.html' ||
+          req.path === '/disclaimer.html') {
+          return next();
+        }
+
+        const untilStr = req.user.banUntil ? req.user.banUntil.toLocaleString() : 'Permanent';
+        const reason = req.user.banReason || 'Violation of Guidelines';
+        return res.send(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -303,10 +303,10 @@ app.use(async (req, res, next) => {
 </body>
 </html>
                 `);
-            }
-        }
+      }
     }
-    next();
+  }
+  next();
 });
 
 
@@ -331,11 +331,11 @@ passport.use(new GoogleStrategy({
           avatar: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : ''
         });
         console.log("New user registered:", user.email);
-        
+
         // Telegram Alert for new signups
         sendTelegramAlert(`🎉 <b>New User Registration!</b>\n\n<b>Name:</b> ${user.name}\n<b>Email:</b> ${user.email}`);
       }
-      
+
       // Update tracking data on every login
       user.lastLogin = Date.now();
       user.loginCount = (user.loginCount || 0) + 1;
@@ -373,7 +373,7 @@ app.get('/api/admin/files', requireAdminAuth, (req, res) => {
   try {
     const publicDir = path.join(__dirname, 'public');
     const rootDir = __dirname;
-    
+
     // Read root files (like server.js) and public directory
     const getFiles = (dir, prefix = '') => {
       let results = [];
@@ -384,7 +384,7 @@ app.get('/api/admin/files', requireAdminAuth, (req, res) => {
         if (stat && stat.isDirectory()) {
           // Exclude node_modules, .git, etc.
           if (!file.startsWith('.') && file !== 'node_modules' && file !== 'models' && file !== 'scratch_imgly') {
-             results = results.concat(getFiles(filePath, prefix + file + '/'));
+            results = results.concat(getFiles(filePath, prefix + file + '/'));
           }
         } else {
           // Allow editing .html, .css, .js, .json
@@ -398,7 +398,7 @@ app.get('/api/admin/files', requireAdminAuth, (req, res) => {
 
     const publicFiles = getFiles(publicDir, 'public/');
     const rootFiles = getFiles(rootDir, '').filter(f => !f.path.startsWith('public/')); // Exclude duplicates
-    
+
     res.json({ files: [...rootFiles, ...publicFiles] });
   } catch (err) {
     res.status(500).json({ error: 'Failed to read directory' });
@@ -410,7 +410,7 @@ app.get('/api/admin/file/read', requireAdminAuth, (req, res) => {
   try {
     const targetPath = req.query.path;
     if (!targetPath || targetPath.includes('..')) return res.status(400).json({ error: 'Invalid path' });
-    
+
     const absolutePath = path.join(__dirname, targetPath);
     if (!fs.existsSync(absolutePath)) return res.status(404).json({ error: 'File not found' });
 
@@ -546,174 +546,140 @@ const { execSync } = require('child_process');
 const os = require('os');
 const crypto = require('crypto');
 
-const dubUpload = multer({ 
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 20 * 1024 * 1024 } // 20MB limit for inline Gemini processing
+const dubUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 20 * 1024 * 1024 } // 20MB limit for inline Gemini processing
 });
 
 app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: "No file uploaded" });
-        }
-        
-        const { targetLanguage } = req.body;
-        if (!targetLanguage) {
-            return res.status(400).json({ error: "Target language is required" });
-        }
-
-        console.log(`[Dubbing] Received file: ${req.file.originalname} (${req.file.mimetype}) to ${targetLanguage}`);
-        
-        const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-        if (!GEMINI_API_KEY) {
-            throw new Error("GEMINI_API_KEY is not configured on the server.");
-        }
-        
-        // 2. Transcribe and Translate using Gemini 1.5 Flash via REST API
-        const base64Media = req.file.buffer.toString('base64');
-        const mimeType = req.file.mimetype;
-        
-        const geminiPayload = {
-            contents: [{
-                parts: [
-                    { text: `Listen to this media file carefully. Transcribe the spoken speech and translate it into ${targetLanguage}. Return ONLY the translated text in ${targetLanguage}. Do not include any introductions, quotes, or original text. If there is no speech, return an empty string.` },
-                    { inline_data: { mime_type: mimeType, data: base64Media } }
-                ]
-            }]
-        };
-
-        const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(geminiPayload)
-        });
-
-        if (!geminiRes.ok) {
-            const errText = await geminiRes.text();
-            console.error("[Dubbing] Gemini API Error:", errText);
-            throw new Error("Failed to transcribe/translate media with AI.");
-        }
-
-        const geminiData = await geminiRes.json();
-        const translatedText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
-        
-        if (!translatedText) {
-            throw new Error("No speech detected or translation failed.");
-        }
-        
-        console.log(`[Dubbing] Translated Text: ${translatedText}`);
-
-        // 3. Convert Translated Text to Speech (TTS) using free google-tts-api
-        // Map common languages to TTS language codes
-        const langMap = {
-            'Hindi': 'hi', 'Spanish': 'es', 'French': 'fr', 'German': 'de', 
-            'Japanese': 'ja', 'Korean': 'ko', 'Arabic': 'ar', 'English': 'en'
-        };
-        const ttsLang = langMap[targetLanguage] || 'en';
-
-        // google-tts-api has a 200 char limit, but getAllAudioBase64 handles splitting automatically
-        const ttsResults = await googleTTS.getAllAudioBase64(translatedText, {
-            lang: ttsLang,
-            slow: false,
-            host: 'https://translate.google.com',
-            timeout: 10000,
-        });
-
-        // Combine the base64 chunks into a single audio buffer
-        const audioBuffers = ttsResults.map(res => Buffer.from(res.base64, 'base64'));
-        const finalAudioBuffer = Buffer.concat(audioBuffers);
-
-        // 4. Mux audio back to video (if original was video)
-        if (mimeType.startsWith('video/')) {
-            const tempDir = os.tmpdir();
-            const uniqueId = crypto.randomBytes(8).toString('hex');
-            const origVideoPath = path.join(tempDir, `orig_${uniqueId}.mp4`);
-            const newAudioPath = path.join(tempDir, `audio_${uniqueId}.mp3`);
-            const outputVideoPath = path.join(tempDir, `out_${uniqueId}.mp4`);
-
-            try {
-                fs.writeFileSync(origVideoPath, req.file.buffer);
-                fs.writeFileSync(newAudioPath, finalAudioBuffer);
-
-                // Run ffmpeg to replace audio
-                // -map 0:v:0 (take video from first input)
-                // -map 1:a:0 (take audio from second input)
-                // -c:v copy (don't re-encode video)
-                // -shortest (finish encoding when the shortest input stream ends)
-                execSync(`ffmpeg -y -i "${origVideoPath}" -i "${newAudioPath}" -c:v copy -map 0:v:0 -map 1:a:0 -shortest "${outputVideoPath}"`, { stdio: 'ignore' });
-
-                const finalVideoBuffer = fs.readFileSync(outputVideoPath);
-                const finalBase64 = finalVideoBuffer.toString('base64');
-
-                // Cleanup temp files
-                fs.unlinkSync(origVideoPath);
-                fs.unlinkSync(newAudioPath);
-                fs.unlinkSync(outputVideoPath);
-
-                return res.json({ 
-                    success: true, 
-                    message: `Successfully dubbed into ${targetLanguage}`,
-                    mediaUrl: `data:video/mp4;base64,${finalBase64}` 
-                });
-            } catch (ffmpegErr) {
-                console.error("[Dubbing] FFmpeg Error:", ffmpegErr.message);
-                // If ffmpeg fails (maybe not installed), fallback to returning just the audio
-                return res.json({ 
-                    success: true, 
-                    message: `Video muxing failed (FFmpeg missing). Returning dubbed audio instead.`,
-                    mediaUrl: `data:audio/mp3;base64,${finalAudioBuffer.toString('base64')}` 
-                });
-            }
-        } else {
-            // If it was just audio, return the new audio directly
-            res.json({ 
-                success: true, 
-                message: `Successfully dubbed into ${targetLanguage}`,
-                mediaUrl: `data:audio/mp3;base64,${finalAudioBuffer.toString('base64')}` 
-            });
-        }
-
-    } catch (err) {
-        console.error("AI Dubbing Error:", err.message);
-        res.status(500).json({ error: err.message || "Failed to process media dubbing" });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
     }
+
+    const { targetLanguage } = req.body;
+    if (!targetLanguage) {
+      return res.status(400).json({ error: "Target language is required" });
+    }
+
+    console.log(`[Dubbing] Received file: ${req.file.originalname} (${req.file.mimetype}) to ${targetLanguage}`);
+
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+    if (!GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY is not configured on the server.");
+    }
+
+    // 2. Transcribe and Translate using Gemini 1.5 Flash via REST API
+    const base64Media = req.file.buffer.toString('base64');
+    const mimeType = req.file.mimetype;
+
+    const geminiPayload = {
+      contents: [{
+        parts: [
+          { text: `Listen to this media file carefully. Transcribe the spoken speech and translate it into ${targetLanguage}. Return ONLY the translated text in ${targetLanguage}. Do not include any introductions, quotes, or original text. If there is no speech, return an empty string.` },
+          { inline_data: { mime_type: mimeType, data: base64Media } }
+        ]
+      }]
+    };
+
+    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(geminiPayload)
+    });
+
+    if (!geminiRes.ok) {
+      const errText = await geminiRes.text();
+      console.error("[Dubbing] Gemini API Error:", errText);
+      throw new Error("Failed to transcribe/translate media with AI.");
+    }
+
+    const geminiData = await geminiRes.json();
+    const translatedText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+
+    if (!translatedText) {
+      throw new Error("No speech detected or translation failed.");
+    }
+
+    console.log(`[Dubbing] Translated Text: ${translatedText}`);
+
+    // 3. Convert Translated Text to Speech (TTS) using free google-tts-api
+    // Map common languages to TTS language codes
+    const langMap = {
+      'Hindi': 'hi', 'Spanish': 'es', 'French': 'fr', 'German': 'de',
+      'Japanese': 'ja', 'Korean': 'ko', 'Arabic': 'ar', 'English': 'en'
+    };
+    const ttsLang = langMap[targetLanguage] || 'en';
+
+    // google-tts-api has a 200 char limit, but getAllAudioBase64 handles splitting automatically
+    const ttsResults = await googleTTS.getAllAudioBase64(translatedText, {
+      lang: ttsLang,
+      slow: false,
+      host: 'https://translate.google.com',
+      timeout: 10000,
+    });
+
+    // Combine the base64 chunks into a single audio buffer
+    const audioBuffers = ttsResults.map(res => Buffer.from(res.base64, 'base64'));
+    const finalAudioBuffer = Buffer.concat(audioBuffers);
+
+    // 4. Mux audio back to video (if original was video)
+    if (mimeType.startsWith('video/')) {
+      const tempDir = os.tmpdir();
+      const uniqueId = crypto.randomBytes(8).toString('hex');
+      const origVideoPath = path.join(tempDir, `orig_${uniqueId}.mp4`);
+      const newAudioPath = path.join(tempDir, `audio_${uniqueId}.mp3`);
+      const outputVideoPath = path.join(tempDir, `out_${uniqueId}.mp4`);
+
+      try {
+        fs.writeFileSync(origVideoPath, req.file.buffer);
+        fs.writeFileSync(newAudioPath, finalAudioBuffer);
+
+        // Run ffmpeg to replace audio
+        // -map 0:v:0 (take video from first input)
+        // -map 1:a:0 (take audio from second input)
+        // -c:v copy (don't re-encode video)
+        // -shortest (finish encoding when the shortest input stream ends)
+        execSync(`ffmpeg -y -i "${origVideoPath}" -i "${newAudioPath}" -c:v copy -map 0:v:0 -map 1:a:0 -shortest "${outputVideoPath}"`, { stdio: 'ignore' });
+
+        const finalVideoBuffer = fs.readFileSync(outputVideoPath);
+        const finalBase64 = finalVideoBuffer.toString('base64');
+
+        // Cleanup temp files
+        fs.unlinkSync(origVideoPath);
+        fs.unlinkSync(newAudioPath);
+        fs.unlinkSync(outputVideoPath);
+
+        return res.json({
+          success: true,
+          message: `Successfully dubbed into ${targetLanguage}`,
+          mediaUrl: `data:video/mp4;base64,${finalBase64}`
+        });
+      } catch (ffmpegErr) {
+        console.error("[Dubbing] FFmpeg Error:", ffmpegErr.message);
+        // If ffmpeg fails (maybe not installed), fallback to returning just the audio
+        return res.json({
+          success: true,
+          message: `Video muxing failed (FFmpeg missing). Returning dubbed audio instead.`,
+          mediaUrl: `data:audio/mp3;base64,${finalAudioBuffer.toString('base64')}`
+        });
+      }
+    } else {
+      // If it was just audio, return the new audio directly
+      res.json({
+        success: true,
+        message: `Successfully dubbed into ${targetLanguage}`,
+        mediaUrl: `data:audio/mp3;base64,${finalAudioBuffer.toString('base64')}`
+      });
+    }
+
+  } catch (err) {
+    console.error("AI Dubbing Error:", err.message);
+    res.status(500).json({ error: err.message || "Failed to process media dubbing" });
+  }
 });
 
-app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: "No file uploaded" });
-        }
-        
-        const { targetLanguage } = req.body;
-        if (!targetLanguage) {
-            return res.status(400).json({ error: "Target language is required" });
-        }
 
-        console.log(`Received dubbing request for file: ${req.file.originalname} to ${targetLanguage}`);
-        
-        // TODO: Integrate actual API here (e.g. ElevenLabs / HuggingFace SeamlessM4T)
-        // using req.file.buffer
-        
-        // Mock processing delay
-        await new Promise(resolve => setTimeout(resolve, 3000));
-
-        // For this mockup, we'll just return the original file as the "dubbed" file
-        // In reality, you'd return the processed audio/video buffer from the API
-        const base64Media = req.file.buffer.toString('base64');
-        const mimeType = req.file.mimetype;
-        
-        res.json({ 
-            success: true, 
-            message: `Successfully dubbed into ${targetLanguage}`,
-            mediaUrl: `data:${mimeType};base64,${base64Media}` 
-        });
-
-    } catch (err) {
-        console.error("AI Dubbing Error:", err.message);
-        res.status(500).json({ error: "Failed to process media dubbing" });
-    }
-});
 
 // Technical Evolution Report Routes
 app.get('/website-evolution-report.html', (req, res) => {
@@ -727,7 +693,7 @@ app.get('/report', (req, res) => {
 app.post('/api/generate-image', async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "Missing prompt" });
-  
+
   if (!process.env.HF_API_KEY) {
     return res.status(500).json({ error: "HF_API_KEY not configured" });
   }
@@ -744,16 +710,16 @@ app.post('/api/generate-image', async (req, res) => {
         body: JSON.stringify({ inputs: prompt }),
       }
     );
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`HF API Error: ${errorText}`);
     }
-    
+
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     const base64 = buffer.toString('base64');
-    
+
     res.json({ image: `data:image/jpeg;base64,${base64}` });
   } catch (err) {
     console.error("AI Generation Error:", err.message);
@@ -764,7 +730,7 @@ app.post('/api/generate-image', async (req, res) => {
 let appSettings = { requireLoginForTools: false };
 try {
   appSettings = JSON.parse(fs.readFileSync(path.join(__dirname, 'settings.json')));
-} catch(e) {}
+} catch (e) { }
 
 // API to get settings
 app.get('/api/admin/settings', requireAdminAuth, (req, res) => {
@@ -786,7 +752,7 @@ app.use('/tools', (req, res, next) => {
   if (req.originalUrl.toLowerCase().includes('forensic-sanitizer')) {
     return next();
   }
-  
+
   if (req.isAuthenticated()) {
     // Allow tool access
     return next();
@@ -799,7 +765,7 @@ app.use('/tools', (req, res, next) => {
 app.post('/api/generate-sfx', async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "Missing prompt" });
-  
+
   if (!process.env.HF_API_KEY) {
     return res.status(500).json({ error: "HF_API_KEY not configured" });
   }
@@ -816,7 +782,7 @@ app.post('/api/generate-sfx', async (req, res) => {
         body: JSON.stringify({ inputs: prompt }),
       }
     );
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       // Handle model loading error gracefully
@@ -825,11 +791,11 @@ app.post('/api/generate-sfx', async (req, res) => {
       }
       throw new Error(`HF API Error: ${errorText}`);
     }
-    
+
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     const base64 = buffer.toString('base64');
-    
+
     res.json({ audio: `data:audio/wav;base64,${base64}` });
   } catch (err) {
     console.error("AI SFX Generation Error:", err.message);
@@ -841,7 +807,7 @@ app.post('/api/generate-sfx', async (req, res) => {
 app.post('/api/generate-comment', async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "Missing prompt" });
-  
+
   if (!process.env.HF_API_KEY) {
     return res.status(500).json({ error: "HF_API_KEY not configured" });
   }
@@ -855,7 +821,7 @@ app.post('/api/generate-comment', async (req, res) => {
           "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           inputs: prompt,
           parameters: {
             max_new_tokens: 150,
@@ -866,15 +832,15 @@ app.post('/api/generate-comment', async (req, res) => {
         }),
       }
     );
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`HF API Error: ${errorText}`);
     }
-    
+
     const data = await response.json();
     let generatedText = data[0]?.generated_text || "Could not generate response.";
-    
+
     res.json({ text: generatedText });
   } catch (err) {
     console.error("AI Comment Generation Error:", err.message);
@@ -957,13 +923,13 @@ app.post('/api/scan-link', async (req, res) => {
     if (!target.startsWith('http')) target = 'http://' + target;
     const parsed = new URL(target);
     const domain = parsed.hostname.toLowerCase();
-    
+
     // Advanced Military-Grade Heuristics
     // Advanced Military-Grade Heuristics
     const heuristics = {
       homograph: /[а-яА-Я\u0400-\u04FF\u0500-\u052F\u2DE0-\u2DFF\uA640-\uA69F]/.test(domain) || domain.includes('xn--') || /[^\x00-\x7F]/.test(domain),
       deepSubdomains: domain.split('.').length > 3,
-      typosquatting: /(?:faceb00k|g00gle|app1e|paypa1|micr0s0ft|netf1ix|amaz0n|b1nance|c0inbase)/i.test(domain) || (domain.replace(/[01345@]/g, c => ({'0':'o','1':'l','3':'e','4':'a','5':'s','@':'a'})[c] || c).match(/(facebook|google|apple|paypal|microsoft|netflix|amazon|binance|coinbase)/) && !/(facebook|google|apple|paypal|microsoft|netflix|amazon|binance|coinbase)/i.test(domain)),
+      typosquatting: /(?:faceb00k|g00gle|app1e|paypa1|micr0s0ft|netf1ix|amaz0n|b1nance|c0inbase)/i.test(domain) || (domain.replace(/[01345@]/g, c => ({ '0': 'o', '1': 'l', '3': 'e', '4': 'a', '5': 's', '@': 'a' })[c] || c).match(/(facebook|google|apple|paypal|microsoft|netflix|amazon|binance|coinbase)/) && !/(facebook|google|apple|paypal|microsoft|netflix|amazon|binance|coinbase)/i.test(domain)),
       suspiciousPath: /login|verify|update|secure|banking|account|billing|auth|recover|password|admin|wallet|crypto/i.test(parsed.pathname) || parsed.pathname.length > 50,
       isShortener: /bit\.ly|t\.co|goo\.gl|tinyurl|is\.gd|ow\.ly|buff\.ly|bit\.do|shorturl\.at|cutt\.ly|shorte\.st|adf\.ly/i.test(domain),
       hasIpAddress: /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(domain),
@@ -975,7 +941,7 @@ app.post('/api/scan-link', async (req, res) => {
       try {
         const r = await fetch(target, { redirect: 'follow', method: 'HEAD', timeout: 3000 });
         finalUrl = r.url;
-      } catch(e) {}
+      } catch (e) { }
     }
 
     let riskScore = 0;
@@ -993,7 +959,7 @@ app.post('/api/scan-link', async (req, res) => {
 
     // Additional check for IP
     if (heuristics.hasIpAddress && heuristics.suspiciousPath) {
-       riskScore += 50; 
+      riskScore += 50;
     }
 
     riskScore = Math.min(100, riskScore);
@@ -1026,7 +992,7 @@ Analyze the URL and output the JSON.
               "Content-Type": "application/json",
             },
             method: "POST",
-            body: JSON.stringify({ 
+            body: JSON.stringify({
               inputs: prompt,
               parameters: {
                 max_new_tokens: 100,
@@ -1080,10 +1046,10 @@ app.post('/api/upload-pdf', upload.single('file'), async (req, res) => {
       method: 'POST',
       body: formData
     });
-    
+
     if (!response.ok) throw new Error("Catbox upload failed");
     const url = await response.text();
-    
+
     res.json({ success: true, url: url.trim() });
   } catch (err) {
     console.error("PDF Upload Error:", err.message);
@@ -1127,59 +1093,59 @@ app.use((req, res, next) => {
 
 // Endpoint to verify if an email is registered (used for strict email validation)
 app.post('/api/verify-registered-email', async (req, res) => {
-    try {
-        const { email } = req.body;
-        if (!email) return res.json({ exists: false });
-        
-        // Find user by email in MongoDB (exact match)
-        const user = await User.findOne({ email: email.toLowerCase() });
-        if (user) {
-            if (user.isBanned) {
-                // Check if temporary ban has expired
-                if (user.banUntil && user.banUntil <= Date.now()) {
-                    user.isBanned = false;
-                    user.banUntil = null;
-                    user.banReason = '';
-                    await user.save();
-                    return res.json({ exists: true });
-                }
-                return res.json({ exists: false, banned: true }); // Treat as not existing if banned, to trigger access denied
-            }
-            res.json({ exists: true });
-        } else {
-            res.json({ exists: false });
+  try {
+    const { email } = req.body;
+    if (!email) return res.json({ exists: false });
+
+    // Find user by email in MongoDB (exact match)
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (user) {
+      if (user.isBanned) {
+        // Check if temporary ban has expired
+        if (user.banUntil && user.banUntil <= Date.now()) {
+          user.isBanned = false;
+          user.banUntil = null;
+          user.banReason = '';
+          await user.save();
+          return res.json({ exists: true });
         }
-    } catch (err) {
-        console.error("Error verifying email:", err);
-        res.json({ exists: false });
+        return res.json({ exists: false, banned: true }); // Treat as not existing if banned, to trigger access denied
+      }
+      res.json({ exists: true });
+    } else {
+      res.json({ exists: false });
     }
+  } catch (err) {
+    console.error("Error verifying email:", err);
+    res.json({ exists: false });
+  }
 });
 
 // Admin Route to Ban/Unban users
 app.post('/api/admin/ban', requireAdminAuth, async (req, res) => {
   const { userId, isBanned, durationStr, reason } = req.body;
-  
+
   try {
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({error: 'User not found'});
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.isBanned = isBanned;
     let emailStatus = 'Not Attempted';
-    
+
     if (isBanned) {
-        user.banReason = reason || 'Violation of Terms of Service';
-        if (durationStr === '1day') user.banUntil = new Date(Date.now() + 24*60*60*1000);
-        else if (durationStr === '5days') user.banUntil = new Date(Date.now() + 5*24*60*60*1000);
-        else if (durationStr === '10days') user.banUntil = new Date(Date.now() + 10*24*60*60*1000);
-        else if (durationStr === '1month') user.banUntil = new Date(Date.now() + 30*24*60*60*1000);
-        else user.banUntil = new Date(Date.now() + 100*365*24*60*60*1000); // permanent
-        
-        await user.save();
-        
-        // Send Ban Email using Google Apps Script Webhook
-        const untilDate = (durationStr === 'permanent' || !durationStr) ? 'Permanent' : user.banUntil.toLocaleDateString();
-        const dur = durationStr ? durationStr.toUpperCase() : 'PERMANENT';
-        const htmlBody = `
+      user.banReason = reason || 'Violation of Terms of Service';
+      if (durationStr === '1day') user.banUntil = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      else if (durationStr === '5days') user.banUntil = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000);
+      else if (durationStr === '10days') user.banUntil = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000);
+      else if (durationStr === '1month') user.banUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+      else user.banUntil = new Date(Date.now() + 100 * 365 * 24 * 60 * 60 * 1000); // permanent
+
+      await user.save();
+
+      // Send Ban Email using Google Apps Script Webhook
+      const untilDate = (durationStr === 'permanent' || !durationStr) ? 'Permanent' : user.banUntil.toLocaleDateString();
+      const dur = durationStr ? durationStr.toUpperCase() : 'PERMANENT';
+      const htmlBody = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ef4444; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
             <div style="background: linear-gradient(135deg, #7f1d1d, #ef4444); color: white; padding: 30px; text-align: center;">
                 <div style="font-size: 48px; margin-bottom: 10px;">🛡️</div>
@@ -1209,46 +1175,46 @@ app.post('/api/admin/ban', requireAdminAuth, async (req, res) => {
                     <a href="https://pixelcraft-ai-94y5.onrender.com/privacy-policy.html" style="color: #ef4444; text-decoration: none;">Privacy Policy</a>
                 </p>
                 
-                <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #2a1111; padding-top: 15px; text-align: center;">PixelCraft AI Security — Ref: ${Date.now()}-${Math.floor(Math.random()*1000)}</p>
+                <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #2a1111; padding-top: 15px; text-align: center;">PixelCraft AI Security — Ref: ${Date.now()}-${Math.floor(Math.random() * 1000)}</p>
             </div>
         </div>`;
 
-        try {
-            const sendPromise = fetch('https://script.google.com/macros/s/AKfycbzoAyBCCB3XS153lCTFmbuV83GrrjuxLJbaq4pMcgtEln7Db02lr2ayvKIB-Ejjbw5W/exec', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    pass: "PixelCraft_Secret_Key_9988",
-                    to: user.email,
-                    subject: '🚨 URGENT: Your Account Has Been Suspended',
-                    html: htmlBody
-                })
-            }).then(r => r.json());
-            
-            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 12000));
-            const result = await Promise.race([sendPromise, timeoutPromise]);
-            
-            if (result && result.success) {
-                emailStatus = 'Success';
-            } else {
-                emailStatus = 'Error: ' + (result ? result.error : 'Unknown App Script Error');
-            }
-        } catch(e) {
-            if (e.message === 'Timeout') {
-                emailStatus = 'Sent in background (SMTP is slow)';
-            } else {
-                emailStatus = 'Error: ' + e.message;
-                console.error("Email send failed:", e);
-            }
+      try {
+        const sendPromise = fetch('https://script.google.com/macros/s/AKfycbzoAyBCCB3XS153lCTFmbuV83GrrjuxLJbaq4pMcgtEln7Db02lr2ayvKIB-Ejjbw5W/exec', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pass: "PixelCraft_Secret_Key_9988",
+            to: user.email,
+            subject: '🚨 URGENT: Your Account Has Been Suspended',
+            html: htmlBody
+          })
+        }).then(r => r.json());
+
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 12000));
+        const result = await Promise.race([sendPromise, timeoutPromise]);
+
+        if (result && result.success) {
+          emailStatus = 'Success';
+        } else {
+          emailStatus = 'Error: ' + (result ? result.error : 'Unknown App Script Error');
         }
+      } catch (e) {
+        if (e.message === 'Timeout') {
+          emailStatus = 'Sent in background (SMTP is slow)';
+        } else {
+          emailStatus = 'Error: ' + e.message;
+          console.error("Email send failed:", e);
+        }
+      }
     } else {
-        // RESTORE ACCOUNT - Send a satisfying welcome back email
-        user.isBanned = false;
-        user.banUntil = null;
-        user.banReason = '';
-        await user.save();
-        
-        const restoreHtmlBody = `
+      // RESTORE ACCOUNT - Send a satisfying welcome back email
+      user.isBanned = false;
+      user.banUntil = null;
+      user.banReason = '';
+      await user.save();
+
+      const restoreHtmlBody = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #10b981; border-radius: 10px; overflow: hidden;">
             <div style="background: linear-gradient(135deg, #064e3b, #10b981); color: white; padding: 30px; text-align: center;">
                 <div style="font-size: 48px; margin-bottom: 10px;">✅</div>
@@ -1273,31 +1239,31 @@ app.post('/api/admin/ban', requireAdminAuth, async (req, res) => {
                     </a>
                 </div>
                 
-                <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #1e3a2f; padding-top: 15px; text-align: center;">PixelCraft AI Security — Ref: ${Date.now()}-${Math.floor(Math.random()*1000)}</p>
+                <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #1e3a2f; padding-top: 15px; text-align: center;">PixelCraft AI Security — Ref: ${Date.now()}-${Math.floor(Math.random() * 1000)}</p>
             </div>
         </div>`;
-        
-        try {
-            const sendPromise = fetch('https://script.google.com/macros/s/AKfycbzoAyBCCB3XS153lCTFmbuV83GrrjuxLJbaq4pMcgtEln7Db02lr2ayvKIB-Ejjbw5W/exec', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    pass: "PixelCraft_Secret_Key_9988",
-                    to: user.email,
-                    subject: '✅ Great News! Your PixelCraft AI Account Has Been Restored',
-                    html: restoreHtmlBody
-                })
-            }).then(r => r.json());
-            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 12000));
-            const result = await Promise.race([sendPromise, timeoutPromise]);
-            if (result && result.success) {
-                emailStatus = 'Restore Email Sent Successfully';
-            } else {
-                emailStatus = 'Restore Email Error: ' + (result ? result.error : 'Unknown');
-            }
-        } catch(e) {
-            emailStatus = e.message === 'Timeout' ? 'Restore Email Sent (background)' : 'Restore Email Error: ' + e.message;
+
+      try {
+        const sendPromise = fetch('https://script.google.com/macros/s/AKfycbzoAyBCCB3XS153lCTFmbuV83GrrjuxLJbaq4pMcgtEln7Db02lr2ayvKIB-Ejjbw5W/exec', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pass: "PixelCraft_Secret_Key_9988",
+            to: user.email,
+            subject: '✅ Great News! Your PixelCraft AI Account Has Been Restored',
+            html: restoreHtmlBody
+          })
+        }).then(r => r.json());
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 12000));
+        const result = await Promise.race([sendPromise, timeoutPromise]);
+        if (result && result.success) {
+          emailStatus = 'Restore Email Sent Successfully';
+        } else {
+          emailStatus = 'Restore Email Error: ' + (result ? result.error : 'Unknown');
         }
+      } catch (e) {
+        emailStatus = e.message === 'Timeout' ? 'Restore Email Sent (background)' : 'Restore Email Error: ' + e.message;
+      }
     }
     res.json({ success: true, emailStatus });
   } catch (err) {
@@ -1309,10 +1275,10 @@ app.post('/api/admin/ban', requireAdminAuth, async (req, res) => {
 // Admin Route to Send Warning Email
 app.post('/api/admin/warn', requireAdminAuth, async (req, res) => {
   const { userId, reason } = req.body;
-  
+
   try {
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({error: 'User not found'});
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
     let emailStatus = 'Not Attempted';
     const htmlBody = `
@@ -1333,34 +1299,34 @@ app.post('/api/admin/warn', requireAdminAuth, async (req, res) => {
     </div>`;
 
     try {
-        const sendPromise = fetch('https://script.google.com/macros/s/AKfycbzoAyBCCB3XS153lCTFmbuV83GrrjuxLJbaq4pMcgtEln7Db02lr2ayvKIB-Ejjbw5W/exec', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                pass: "PixelCraft_Secret_Key_9988",
-                to: user.email,
-                subject: '⚠️ WARNING: Suspicious Activity Detected',
-                html: htmlBody
-            })
-        }).then(r => r.json());
-        
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 12000));
-        const result = await Promise.race([sendPromise, timeoutPromise]);
-        
-        if (result && result.success) {
-            emailStatus = 'Success';
-        } else {
-            emailStatus = 'Error: ' + (result ? result.error : 'Unknown App Script Error');
-        }
-    } catch(e) {
-        if (e.message === 'Timeout') {
-            emailStatus = 'Sent in background (SMTP is slow)';
-        } else {
-            emailStatus = 'Error: ' + e.message;
-            console.error("Email send failed:", e);
-        }
+      const sendPromise = fetch('https://script.google.com/macros/s/AKfycbzoAyBCCB3XS153lCTFmbuV83GrrjuxLJbaq4pMcgtEln7Db02lr2ayvKIB-Ejjbw5W/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pass: "PixelCraft_Secret_Key_9988",
+          to: user.email,
+          subject: '⚠️ WARNING: Suspicious Activity Detected',
+          html: htmlBody
+        })
+      }).then(r => r.json());
+
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 12000));
+      const result = await Promise.race([sendPromise, timeoutPromise]);
+
+      if (result && result.success) {
+        emailStatus = 'Success';
+      } else {
+        emailStatus = 'Error: ' + (result ? result.error : 'Unknown App Script Error');
+      }
+    } catch (e) {
+      if (e.message === 'Timeout') {
+        emailStatus = 'Sent in background (SMTP is slow)';
+      } else {
+        emailStatus = 'Error: ' + e.message;
+        console.error("Email send failed:", e);
+      }
     }
-    
+
     res.json({ success: true, emailStatus });
   } catch (err) {
     res.status(500).json({ error: 'Failed to send warning' });
@@ -1370,10 +1336,10 @@ app.post('/api/admin/warn', requireAdminAuth, async (req, res) => {
 // Delete User Route
 app.post('/api/admin/delete-user', requireAdminAuth, async (req, res) => {
   const { userId } = req.body;
-  
+
   try {
     const deletedUser = await User.findByIdAndDelete(userId);
-    if (!deletedUser) return res.status(404).json({error: 'User not found'});
+    if (!deletedUser) return res.status(404).json({ error: 'User not found' });
     res.json({ success: true, message: 'User permanently deleted from database' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete user' });
@@ -1401,7 +1367,7 @@ app.post('/api/forensic/log', async (req, res) => {
       action: action || 'Fingerprint Wipe & Anonymize',
       legalConsentGranted: true
     });
-    
+
     await newLog.save();
     res.json({ success: true, message: 'Forensic session logged securely.' });
   } catch (err) {
@@ -1424,144 +1390,144 @@ const uploadMemory = multer({ storage: multer.memoryStorage(), limits: { fileSiz
 
 // Forensic Image Sanitizer Endpoint
 app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (req, res) => {
-    if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
-    
-    try {
-        const crypto = require('crypto');
-        const sharp = require('sharp');
-        const ExifReader = require('exifreader');
-        
-        const buffer = req.file.buffer;
-        let threats = [];
-        let locationData = null;
-        
-        // 1. Hex Analysis / Steganography Check
-        let hasMalware = false;
-        const hex = buffer.toString('hex');
-        const jpegEOF = 'ffd9';
-        const pngEOF = '49454e44ae426082'; // IEND chunk + CRC
-        
-        if (req.file.mimetype === 'image/jpeg') {
-            const lastIndex = hex.lastIndexOf(jpegEOF);
-            // Allow some padding bytes like 00 or 0A (up to 10 bytes)
-            if (lastIndex !== -1 && lastIndex < hex.length - 20) {
-                hasMalware = true;
-                threats.push({ type: 'Malware/Steganography', status: 'Found', alert: '⚠️ Alert: Hidden payload detected after image EOF!' });
-            }
-        } else if (req.file.mimetype === 'image/png') {
-            const lastIndex = hex.lastIndexOf(pngEOF);
-            if (lastIndex !== -1 && lastIndex < hex.length - 20) {
-                hasMalware = true;
-                threats.push({ type: 'Malware/Steganography', status: 'Found', alert: '⚠️ Alert: Hidden payload detected after image EOF!' });
-            }
-        }
-        
-        if (!hasMalware) {
-            threats.push({ type: 'Malware/Steganography', status: 'Clean', alert: 'No hidden binary payloads detected.' });
-        }
-        
-        // 2. EXIF & OSINT Extraction
-        try {
-            const tags = ExifReader.load(buffer);
-            
-            // Extract Device Info
-            let device = 'Unknown';
-            if (tags['Model'] && tags['Model'].description) {
-                device = tags['Model'].description;
-                threats.push({ type: 'Camera/Device', status: 'Found', alert: `⚠️ Alert: Image exposes your device: ${device}` });
-            }
-            
-            // Extract GPS
-            if (tags['GPSLatitude'] && tags['GPSLongitude']) {
-                const lat = tags['GPSLatitude'].description;
-                const lon = tags['GPSLongitude'].description;
-                
-                // Reverse Geocoding via Nominatim OpenStreetMap
-                try {
-                    const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`, {
-                        headers: {
-                            'User-Agent': 'PixelCraft-AI-Sanitizer/1.0'
-                        }
-                    });
-                    const geoData = await geoRes.json();
-                    if (geoData && geoData.display_name) {
-                        locationData = geoData.display_name;
-                        threats.push({ type: 'GPS Location', status: 'Found', alert: `⚠️ Alert: Image reveals you were at [${locationData}]. Exact coordinates: ${lat}, ${lon}` });
-                    }
-                } catch (e) {
-                    console.error("Geocoding error", e);
-                    threats.push({ type: 'GPS Location', status: 'Found', alert: `⚠️ Alert: Image reveals exact coordinates: ${lat}, ${lon}` });
-                }
-            }
-            
-            if (threats.filter(t => t.status === 'Found').length === 0 && !hasMalware) {
-                threats.push({ type: 'Metadata', status: 'Clean', alert: 'No sensitive EXIF metadata found.' });
-            }
-            
-        } catch (exifErr) {
-            console.error("Exif parsing error", exifErr);
-        }
-        
-        // 3. Deep Scrubbing & Cryptographic Seal
-        const sealSecret = 'Pixelcraft_Sanitizer_V1';
-        const fileHash = crypto.createHash('sha256').update(buffer).digest('hex');
-        const sealHash = crypto.createHash('sha256').update(fileHash + sealSecret).digest('hex');
-        const sealMessage = `Pixelcraft_Verified_${sealHash}`;
-        
-        let sanitizedBuffer;
-        try {
-            sanitizedBuffer = await sharp(buffer)
-                .withMetadata({
-                    exif: {
-                        IFD0: {
-                            ImageDescription: sealMessage
-                        }
-                    }
-                })
-                .toBuffer();
-        } catch (sharpErr) {
-            console.error("Sharp processing error:", sharpErr);
-            sanitizedBuffer = buffer; // fallback to original if sharp fails
-        }
-            
-        res.json({
-            success: true,
-            threats,
-            sealHash,
-            sanitizedImageBase64: `data:${req.file.mimetype};base64,${sanitizedBuffer.toString('base64')}`
-        });
-        
-    } catch (err) {
-        console.error("Sanitizer error", err);
-        res.status(500).json({ error: 'Failed to process and sanitize image.' });
+  if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+
+  try {
+    const crypto = require('crypto');
+    const sharp = require('sharp');
+    const ExifReader = require('exifreader');
+
+    const buffer = req.file.buffer;
+    let threats = [];
+    let locationData = null;
+
+    // 1. Hex Analysis / Steganography Check
+    let hasMalware = false;
+    const hex = buffer.toString('hex');
+    const jpegEOF = 'ffd9';
+    const pngEOF = '49454e44ae426082'; // IEND chunk + CRC
+
+    if (req.file.mimetype === 'image/jpeg') {
+      const lastIndex = hex.lastIndexOf(jpegEOF);
+      // Allow some padding bytes like 00 or 0A (up to 10 bytes)
+      if (lastIndex !== -1 && lastIndex < hex.length - 20) {
+        hasMalware = true;
+        threats.push({ type: 'Malware/Steganography', status: 'Found', alert: '⚠️ Alert: Hidden payload detected after image EOF!' });
+      }
+    } else if (req.file.mimetype === 'image/png') {
+      const lastIndex = hex.lastIndexOf(pngEOF);
+      if (lastIndex !== -1 && lastIndex < hex.length - 20) {
+        hasMalware = true;
+        threats.push({ type: 'Malware/Steganography', status: 'Found', alert: '⚠️ Alert: Hidden payload detected after image EOF!' });
+      }
     }
+
+    if (!hasMalware) {
+      threats.push({ type: 'Malware/Steganography', status: 'Clean', alert: 'No hidden binary payloads detected.' });
+    }
+
+    // 2. EXIF & OSINT Extraction
+    try {
+      const tags = ExifReader.load(buffer);
+
+      // Extract Device Info
+      let device = 'Unknown';
+      if (tags['Model'] && tags['Model'].description) {
+        device = tags['Model'].description;
+        threats.push({ type: 'Camera/Device', status: 'Found', alert: `⚠️ Alert: Image exposes your device: ${device}` });
+      }
+
+      // Extract GPS
+      if (tags['GPSLatitude'] && tags['GPSLongitude']) {
+        const lat = tags['GPSLatitude'].description;
+        const lon = tags['GPSLongitude'].description;
+
+        // Reverse Geocoding via Nominatim OpenStreetMap
+        try {
+          const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`, {
+            headers: {
+              'User-Agent': 'PixelCraft-AI-Sanitizer/1.0'
+            }
+          });
+          const geoData = await geoRes.json();
+          if (geoData && geoData.display_name) {
+            locationData = geoData.display_name;
+            threats.push({ type: 'GPS Location', status: 'Found', alert: `⚠️ Alert: Image reveals you were at [${locationData}]. Exact coordinates: ${lat}, ${lon}` });
+          }
+        } catch (e) {
+          console.error("Geocoding error", e);
+          threats.push({ type: 'GPS Location', status: 'Found', alert: `⚠️ Alert: Image reveals exact coordinates: ${lat}, ${lon}` });
+        }
+      }
+
+      if (threats.filter(t => t.status === 'Found').length === 0 && !hasMalware) {
+        threats.push({ type: 'Metadata', status: 'Clean', alert: 'No sensitive EXIF metadata found.' });
+      }
+
+    } catch (exifErr) {
+      console.error("Exif parsing error", exifErr);
+    }
+
+    // 3. Deep Scrubbing & Cryptographic Seal
+    const sealSecret = 'Pixelcraft_Sanitizer_V1';
+    const fileHash = crypto.createHash('sha256').update(buffer).digest('hex');
+    const sealHash = crypto.createHash('sha256').update(fileHash + sealSecret).digest('hex');
+    const sealMessage = `Pixelcraft_Verified_${sealHash}`;
+
+    let sanitizedBuffer;
+    try {
+      sanitizedBuffer = await sharp(buffer)
+        .withMetadata({
+          exif: {
+            IFD0: {
+              ImageDescription: sealMessage
+            }
+          }
+        })
+        .toBuffer();
+    } catch (sharpErr) {
+      console.error("Sharp processing error:", sharpErr);
+      sanitizedBuffer = buffer; // fallback to original if sharp fails
+    }
+
+    res.json({
+      success: true,
+      threats,
+      sealHash,
+      sanitizedImageBase64: `data:${req.file.mimetype};base64,${sanitizedBuffer.toString('base64')}`
+    });
+
+  } catch (err) {
+    console.error("Sanitizer error", err);
+    res.status(500).json({ error: 'Failed to process and sanitize image.' });
+  }
 });
 
 app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res) => {
-    if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
-    try {
-        const ExifReader = require('exifreader');
-        const tags = ExifReader.load(req.file.buffer);
-        let sealFound = false;
-        let sealHash = '';
-        
-        if (tags['ImageDescription'] && tags['ImageDescription'].description) {
-            const desc = tags['ImageDescription'].description;
-            if (desc.startsWith('Pixelcraft_Verified_')) {
-                sealFound = true;
-                sealHash = desc.replace('Pixelcraft_Verified_', '');
-            }
-        }
-        
-        if (sealFound) {
-            res.json({ success: true, verified: true, message: `✅ This image is verified and heavily sanitized by Pixelcraft AI. Seal: ${sealHash.substring(0,8)}...` });
-        } else {
-            res.json({ success: true, verified: false, message: `❌ No Pixelcraft Cryptographic Seal found. This image may not be sanitized or has been modified.` });
-        }
-    } catch (err) {
-        console.error("Seal verification error", err);
-        res.status(500).json({ error: 'Failed to verify image seal.' });
+  if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+  try {
+    const ExifReader = require('exifreader');
+    const tags = ExifReader.load(req.file.buffer);
+    let sealFound = false;
+    let sealHash = '';
+
+    if (tags['ImageDescription'] && tags['ImageDescription'].description) {
+      const desc = tags['ImageDescription'].description;
+      if (desc.startsWith('Pixelcraft_Verified_')) {
+        sealFound = true;
+        sealHash = desc.replace('Pixelcraft_Verified_', '');
+      }
     }
+
+    if (sealFound) {
+      res.json({ success: true, verified: true, message: `✅ This image is verified and heavily sanitized by Pixelcraft AI. Seal: ${sealHash.substring(0, 8)}...` });
+    } else {
+      res.json({ success: true, verified: false, message: `❌ No Pixelcraft Cryptographic Seal found. This image may not be sanitized or has been modified.` });
+    }
+  } catch (err) {
+    console.error("Seal verification error", err);
+    res.status(500).json({ error: 'Failed to verify image seal.' });
+  }
 });
 
 // Serve all static files (HTML, CSS, JS) from the 'public' folder
