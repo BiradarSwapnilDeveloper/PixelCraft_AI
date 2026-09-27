@@ -31,17 +31,16 @@ FROM base AS runner
 ENV NODE_ENV=production
 ENV PORT=3000
 
-RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn* && \
-    find / -xdev -type f \( -perm -4000 -o -perm -2000 \) -exec chmod a-s {} \; 2>/dev/null || true
-
 WORKDIR /home/node/app
-RUN chown root:node /home/node/app
 
 COPY --from=builder --chown=root:node /home/node/app ./
 COPY --from=prod-dependencies --chown=root:node /home/node/app/node_modules ./node_modules
 
-RUN chmod -R 440 /home/node/app && \
-    find /home/node/app -type d -exec chmod 550 {} +
+RUN sed -i '/^node:/s|/bin/.*sh|/sbin/nologin|' /etc/passwd && \
+    chmod -R 440 /home/node/app && \
+    find /home/node/app -type d -exec chmod 550 {} + && \
+    find / -xdev -type f \( -perm -4000 -o -perm -2000 \) -exec chmod a-s {} \; 2>/dev/null || true && \
+    rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn* /sbin/apk /lib/apk /var/cache/apk /etc/apk
 
 USER node
 EXPOSE 3000
