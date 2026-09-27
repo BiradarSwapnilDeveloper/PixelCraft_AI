@@ -1,6 +1,6 @@
 FROM node:20.18.1-alpine3.20 AS base
 RUN apk upgrade --no-cache && \
-    apk add --no-cache tini ffmpeg
+    apk add --no-cache tini ffmpeg ca-certificates
 
 FROM base AS dependencies
 WORKDIR /home/node/app
@@ -32,7 +32,7 @@ ENV NODE_ENV=production
 ENV PORT=3000
 
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn* && \
-    find / -xdev -perm /6000 -type f -exec chmod a-s {} \; 2>/dev/null || true
+    find / -xdev -type f \( -perm -4000 -o -perm -2000 \) -exec chmod a-s {} \; 2>/dev/null || true
 
 WORKDIR /home/node/app
 RUN chown root:node /home/node/app
