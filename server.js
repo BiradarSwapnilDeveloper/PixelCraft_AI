@@ -576,7 +576,15 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
     const geminiPayload = {
       contents: [{
         parts: [
-          { text: `Listen to this media file carefully. Transcribe the spoken speech and translate it into ${targetLanguage}. Return ONLY the translated text in ${targetLanguage}. Do not include any introductions, quotes, or original text. If there is no speech, return an empty string.` },
+          { text: `You are an expert AI translator. Listen to the provided media file carefully. 
+Your ONLY task is to translate the spoken speech directly into ${targetLanguage}.
+
+CRITICAL INSTRUCTIONS:
+- You MUST translate the speech into ${targetLanguage}.
+- Do NOT output the speech in its original language.
+- Return ONLY the final translated text in ${targetLanguage}.
+- Do NOT include any introductions, explanations, quotes, or markdown.
+- If there is no speech detected, return an empty string.` },
           { inline_data: { mime_type: mimeType, data: base64Media } }
         ]
       }]
