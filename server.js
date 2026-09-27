@@ -570,8 +570,32 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
     }
 
     // 2. Transcribe and Translate using Gemini 1.5 Flash via REST API
-    const base64Media = req.file.buffer.toString('base64');
-    const mimeType = req.file.mimetype;
+    let mediaDataForGemini = req.file.buffer;
+    let mimeTypeForGemini = req.file.mimetype;
+
+    // Gemini inline_data does not support video/mp4, so we must extract audio first
+    if (mimeTypeForGemini.startsWith('video/')) {
+      const tempDir = os.tmpdir();
+      const uniqueIdForExt = crypto.randomBytes(8).toString('hex');
+      const tempVideoPath = path.join(tempDir, `vid_ext_${uniqueIdForExt}.mp4`);
+      const tempAudioPath = path.join(tempDir, `aud_ext_${uniqueIdForExt}.mp3`);
+      
+      try {
+        fs.writeFileSync(tempVideoPath, req.file.buffer);
+        // Extract audio from video
+        execSync(`ffmpeg -y -i "${tempVideoPath}" -vn -acodec libmp3lame -q:a 2 "${tempAudioPath}"`, { stdio: 'ignore' });
+        mediaDataForGemini = fs.readFileSync(tempAudioPath);
+        mimeTypeForGemini = 'audio/mp3';
+      } catch (extErr) {
+        console.error("Audio extraction failed:", extErr);
+        throw new Error("Failed to extract audio from video. Does it have an audio track?");
+      } finally {
+        if (fs.existsSync(tempVideoPath)) fs.unlinkSync(tempVideoPath);
+        if (fs.existsSync(tempAudioPath)) fs.unlinkSync(tempAudioPath);
+      }
+    }
+
+    const base64Media = mediaDataForGemini.toString('base64');
 
     const geminiPayload = {
       contents: [{
@@ -585,7 +609,7 @@ CRITICAL INSTRUCTIONS:
 - Return ONLY the final translated text in ${targetLanguage}.
 - Do NOT include any introductions, explanations, quotes, or markdown.
 - If there is no speech detected, return an empty string.` },
-          { inline_data: { mime_type: mimeType, data: base64Media } }
+          { inline_data: { mime_type: mimeTypeForGemini, data: base64Media } }
         ]
       }]
     };
