@@ -620,11 +620,13 @@ CRITICAL INSTRUCTIONS:
       body: JSON.stringify(geminiPayload)
     });
 
-    if (!geminiRes.ok) {
-      const errText = await geminiRes.text();
-      console.error("[Dubbing] Gemini API Error:", errText);
-      throw new Error("Failed to transcribe/translate media with AI.");
-    }
+      if (!geminiRes.ok) {
+        const errText = await geminiRes.text();
+        console.error("[Dubbing] Gemini API Error:", errText);
+        let parsedErr = errText;
+        try { parsedErr = JSON.parse(errText).error.message; } catch(e){}
+        throw new Error(`Gemini API Error: ${parsedErr}`);
+      }
 
     const geminiData = await geminiRes.json();
     const translatedText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
