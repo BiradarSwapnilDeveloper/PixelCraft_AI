@@ -36,7 +36,7 @@
     "moment": "^2.31.0",
     "mongoose": "^9.9.4",
     "multer": "^2.4.0",
-    "nodemailer": "^10.0.5",
+    "nodemailer": "^10.0.12",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "qs": "^6.16.0",
