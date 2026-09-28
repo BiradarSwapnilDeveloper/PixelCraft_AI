@@ -569,7 +569,7 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
       throw new Error("GEMINI_API_KEY is not configured on the server.");
     }
 
-    // 2. Transcribe and Translate using Gemini 1.5 Flash via REST API
+    // 2. Transcribe and Translate using Gemini 3.1 Flash via REST API
     let mediaDataForGemini = req.file.buffer;
     let mimeTypeForGemini = req.file.mimetype;
 
@@ -614,7 +614,7 @@ CRITICAL INSTRUCTIONS:
       }]
     };
 
-    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(geminiPayload)
