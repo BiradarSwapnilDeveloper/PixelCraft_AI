@@ -26,9 +26,9 @@
     }
     
     .spinner {
-        width: 50px; height: 50px;
-        border: 4px solid rgba(236, 72, 153, 0.2);
-        border-top-color: #ec4899;
+        width: 40px; height: 40px;
+        border: 3px solid rgba(37, 99, 235, 0.2);
+        border-top-color: #2563eb;
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin-bottom: 16px;
@@ -52,22 +52,35 @@
 <div class="tool-page">
   <div class="tool-page-header">
     <a href="../index.html" class="back-link">← Back to All Tools</a>
-    <div style="font-size:2.5rem;margin-bottom:12px;">🎙️</div>
+    <div style="margin-bottom:16px;">
+      <svg width="48" height="48" fill="none" stroke="#2563eb" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="23"></line>
+        <line x1="8" y1="23" x2="16" y2="23"></line>
+      </svg>
+    </div>
     <h1>AI Audio & Video Dubbing</h1>
-    <p>Upload a short audio or video clip and instantly dub it into a different language while preserving the original voice tone using advanced AI.</p>
+    <p>Upload a media file to automatically transcribe, translate, and dub into your selected target language.</p>
   </div>
   
   <div class="tool-workspace" style="position: relative;">
     <div class="loading-overlay" id="loading-overlay">
         <div class="spinner"></div>
-        <h3 style="color: white;">Processing AI Dubbing...</h3>
-        <p style="color: #94a3b8; font-size: 0.9rem;">Translating and synthesizing voice (This might take a minute)</p>
+        <h3 style="color: white; font-weight: 500;">Processing Media</h3>
+        <p style="color: #94a3b8; font-size: 0.9rem;">Translating and synthesizing audio...</p>
     </div>
 
     <!-- UPLOAD SECTION -->
     <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
       <input type="file" id="file-input" accept="video/*,audio/*" style="display:none"/>
-      <div class="upload-icon" style="font-size: 48px;">🎬</div>
+      <div class="upload-icon" style="color: #64748b; margin-bottom: 12px;">
+        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+      </div>
       <h3>Drop your media file here</h3>
       <p>Supports MP4, MP3, WAV (Max 20MB)</p>
       <div class="upload-formats">
@@ -87,22 +100,22 @@
             <p style="color: var(--text-light); margin-bottom: 10px;">Selected File: <strong id="file-name" style="color: white;"></strong></p>
             
             <label style="display: block; font-weight: bold; color: var(--text-main); margin-bottom: 8px;">Target Language:</label>
-            <select id="target-language" style="width: 100%; padding: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; margin-bottom: 20px;">
-              <option value="Hindi">Hindi 🇮🇳</option>
-              <option value="Spanish">Spanish 🇪🇸</option>
-              <option value="French">French 🇫🇷</option>
-              <option value="German">German 🇩🇪</option>
-              <option value="Japanese">Japanese 🇯🇵</option>
-              <option value="Korean">Korean 🇰🇷</option>
-              <option value="Arabic">Arabic 🇦🇪</option>
+            <select id="target-language" style="width: 100%; padding: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; color: white; outline: none; margin-bottom: 20px;">
+              <option value="Hindi">Hindi</option>
+              <option value="Spanish">Spanish</option>
+              <option value="French">French</option>
+              <option value="German">German</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Korean">Korean</option>
+              <option value="Arabic">Arabic</option>
             </select>
 
-            <button class="btn" style="width: 100%; background: linear-gradient(135deg, #ec4899, #8b5cf6); border: none; padding: 16px; font-size: 1.1rem;" onclick="processDubbing()">Start AI Dubbing 🪄</button>
+            <button class="btn" style="width: 100%; background: #2563eb; color: white; border: none; padding: 14px; font-size: 1.05rem; border-radius: 6px; font-weight: 500; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'" onclick="processDubbing()">Start Processing</button>
           </div>
           
           <div id="result-section" style="display:none; text-align: left;">
             <hr style="border: 0; border-top: 1px solid var(--border); margin: 24px 0;" />
-            <h3 style="color: var(--success); margin-bottom: 12px;">✅ Dubbing Complete!</h3>
+            <h3 style="color: #10b981; margin-bottom: 12px; font-weight: 500;">✓ Processing Complete</h3>
             
             <div id="media-container" style="background: var(--bg2); padding: 16px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 16px; text-align: center;">
               <!-- Video/Audio element injected here -->
