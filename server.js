@@ -629,7 +629,7 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192",
+        model: "qwen/qwen3.8-27b",
         messages: [
           { role: "system", content: `You are an expert AI translator. Translate the given text directly into ${targetLanguage}. Return ONLY the final translated text in ${targetLanguage}. No introductions, no quotes, no markdown.` },
           { role: "user", content: transcribedText }
