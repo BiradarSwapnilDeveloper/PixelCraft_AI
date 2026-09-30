@@ -596,7 +596,7 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
     }
 
     // 2a. Transcribe Audio using Groq Whisper API
-    const formData = new FormData();
+    const formData = new globalThis.FormData();
     const blob = new Blob([mediaDataForGemini], { type: mimeTypeForGemini });
     formData.append("file", blob, "audio.mp3");
     formData.append("model", "whisper-large-v3");
