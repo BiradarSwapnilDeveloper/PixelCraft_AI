@@ -12,9 +12,8 @@ RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
 FROM base AS builder
 USER node
 WORKDIR /home/node/app
-COPY --chown=node:node package*.json ./
-COPY --from=dependencies --chown=node:node /home/node/app/node_modules ./node_modules
 COPY --chown=node:node . .
+COPY --from=dependencies --chown=node:node /home/node/app/node_modules ./node_modules
 RUN npm run build --if-present && rm -rf node_modules
 
 FROM base AS prod-dependencies
