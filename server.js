@@ -672,7 +672,7 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
     const finalAudioBuffer = Buffer.concat(audioBuffers);
 
     // 4. Mux audio back to video (if original was video)
-    if (mimeType.startsWith('video/')) {
+    if (req.file.mimetype.startsWith('video/')) {
       const tempDir = os.tmpdir();
       const uniqueId = crypto.randomBytes(8).toString('hex');
       const origVideoPath = path.join(tempDir, `orig_${uniqueId}.mp4`);
