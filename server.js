@@ -630,6 +630,7 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
       },
       body: JSON.stringify({
         model: "qwen/qwen3.8-27b",
+        max_tokens: 800,
         messages: [
           { role: "system", content: `You are an expert AI translator. Translate the given text directly into ${targetLanguage}. Return ONLY the final translated text in ${targetLanguage}. No introductions, no quotes, no markdown.` },
           { role: "user", content: transcribedText }
@@ -663,6 +664,7 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
       slow: false,
       host: 'https://translate.google.com',
       timeout: 10000,
+      splitPunct: ".,?!।，。、\n"
     });
 
     // Combine the base64 chunks into a single audio buffer
