@@ -595,44 +595,56 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
       }
     }
 
-    const base64Media = mediaDataForGemini.toString('base64');
+    // 2a. Transcribe Audio using Groq Whisper API
+    const formData = new FormData();
+    const blob = new Blob([mediaDataForGemini], { type: mimeTypeForGemini });
+    formData.append("file", blob, "audio.mp3");
+    formData.append("model", "whisper-large-v3");
 
-    const geminiPayload = {
-      contents: [{
-        parts: [
-          { text: `You are an expert AI translator. Listen to the provided media file carefully. 
-Your ONLY task is to translate the spoken speech directly into ${targetLanguage}.
+    // Read GROQ API Key from Environment Variables
+    const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
-CRITICAL INSTRUCTIONS:
-- You MUST translate the speech into ${targetLanguage}.
-- Do NOT output the speech in its original language.
-- Return ONLY the final translated text in ${targetLanguage}.
-- Do NOT include any introductions, explanations, quotes, or markdown.
-- If there is no speech detected, return an empty string.` },
-          { inline_data: { mime_type: mimeTypeForGemini, data: base64Media } }
-        ]
-      }]
-    };
-
-    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash-lite-tts:generateContent?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(geminiPayload)
+    const transcriptionRes = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${GROQ_API_KEY}` },
+      body: formData
     });
 
-      if (!geminiRes.ok) {
-        const errText = await geminiRes.text();
-        console.error("[Dubbing] Gemini API Error:", errText);
-        let parsedErr = errText;
-        try { parsedErr = JSON.parse(errText).error.message; } catch(e){}
-        throw new Error(`Gemini API Error: ${parsedErr}`);
-      }
+    const transcriptionData = await transcriptionRes.json();
+    if (!transcriptionRes.ok) {
+        throw new Error(`Groq Transcription Error: ${transcriptionData.error?.message || 'Unknown error'}`);
+    }
 
-    const geminiData = await geminiRes.json();
-    const translatedText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+    const transcribedText = transcriptionData.text;
+    if (!transcribedText || transcribedText.trim() === "") {
+        throw new Error("No speech detected in media.");
+    }
+    console.log(`[Dubbing] Original Transcribed: ${transcribedText}`);
 
+    // 2b. Translate using Groq Llama 3 API
+    const chatRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama3-8b-8192",
+        messages: [
+          { role: "system", content: `You are an expert AI translator. Translate the given text directly into ${targetLanguage}. Return ONLY the final translated text in ${targetLanguage}. No introductions, no quotes, no markdown.` },
+          { role: "user", content: transcribedText }
+        ]
+      })
+    });
+
+    const chatData = await chatRes.json();
+    if (!chatRes.ok) {
+        throw new Error(`Groq Translation Error: ${chatData.error?.message || 'Unknown error'}`);
+    }
+
+    const translatedText = chatData.choices?.[0]?.message?.content?.trim() || "";
     if (!translatedText) {
-      throw new Error("No speech detected or translation failed.");
+      throw new Error("Translation failed.");
     }
 
     console.log(`[Dubbing] Translated Text: ${translatedText}`);
