@@ -41,7 +41,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "qs": "^6.16.0",
-    "sharp": "^0.35.4"
+    "sharp": "^0.35.5"
   },
   "overrides": {
     "proxy-addr": "^2.0.8",
