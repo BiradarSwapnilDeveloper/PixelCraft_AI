@@ -33,7 +33,8 @@ COPY --from=builder --chown=root:node /home/node/app ./
 COPY --from=prod-dependencies --chown=root:node /home/node/app/node_modules ./node_modules
 
 USER root
-RUN sed -i '/^node:/s|/bin/.*sh|/sbin/nologin|' /etc/passwd && \
+RUN chown root:node /home/node/app && \
+    sed -i '/^node:/s|/bin/.*sh|/sbin/nologin|' /etc/passwd && \
     find /home/node/app -type d -exec chmod 550 {} + && \
     find /home/node/app -type f -exec chmod 440 {} + && \
     find /home/node/app -type f -name "*.node" -exec chmod 550 {} + 2>/dev/null || true && \
