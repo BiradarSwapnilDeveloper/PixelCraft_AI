@@ -1219,8 +1219,8 @@ app.post('/api/admin/ban', requireAdminAuth, async (req, res) => {
                 </div>
                 
                 <p style="color: #64748b; text-align: center; font-size: 13px;">
-                    <a href="https://pixelcraft-ai-94y5.onrender.com/terms-conditions.html" style="color: #ef4444; text-decoration: none;">Terms & Conditions</a> | 
-                    <a href="https://pixelcraft-ai-94y5.onrender.com/privacy-policy.html" style="color: #ef4444; text-decoration: none;">Privacy Policy</a>
+                    <a href="https://pixelcraftaitools.com/terms-conditions.html" style="color: #ef4444; text-decoration: none;">Terms & Conditions</a> | 
+                    <a href="https://pixelcraftaitools.com/privacy-policy.html" style="color: #ef4444; text-decoration: none;">Privacy Policy</a>
                 </p>
                 
                 <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #2a1111; padding-top: 15px; text-align: center;">PixelCraft AI Security — Ref: ${Date.now()}-${Math.floor(Math.random() * 1000)}</p>
@@ -1279,10 +1279,10 @@ app.post('/api/admin/ban', requireAdminAuth, async (req, res) => {
                     <p style="margin: 0; font-size: 14px;"><strong style="color: #10b981;">✓ Date:</strong> <span style="color: #d1fae5;">${new Date().toLocaleString()}</span></p>
                 </div>
                 
-                <p style="color: #94a3b8; line-height: 1.7; font-size: 14px;">We trust that you will continue to use our platform responsibly and in accordance with our <a href="https://pixelcraft-ai-94y5.onrender.com/terms-conditions.html" style="color: #10b981;">Terms of Service</a>. Our community thrives when everyone plays by the rules.</p>
+                <p style="color: #94a3b8; line-height: 1.7; font-size: 14px;">We trust that you will continue to use our platform responsibly and in accordance with our <a href="https://pixelcraftaitools.com/terms-conditions.html" style="color: #10b981;">Terms of Service</a>. Our community thrives when everyone plays by the rules.</p>
                 
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="https://pixelcraft-ai-94y5.onrender.com/" style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 14px 35px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block;">
+                    <a href="https://pixelcraftaitools.com/" style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 14px 35px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block;">
                         🚀 Go to PixelCraft AI
                     </a>
                 </div>
