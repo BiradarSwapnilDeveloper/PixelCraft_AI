@@ -485,22 +485,8 @@
         const sessionId = 'PX-FNG-' + Math.random().toString(36).substr(2, 9).toUpperCase();
         logTerminal(`Session ID: ${sessionId}`, 'sys');
         
-        // TELEMETRY LOGGING
-        try {
-            logTerminal('Logging session details securely...', 'sys');
-            await fetch('/api/forensic/log', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    sessionId: sessionId,
-                    action: 'ADVANCED_WIPE_V2',
-                    legalConsentGranted: true
-                })
-            });
-            logTerminal('Session logged.', 'success');
-        } catch (e) {
-            logTerminal('Telemetry fallback warning: ' + e.message, 'warn');
-        }
+        // TELEMETRY LOGGING REMOVED (Zero Data Policy Compliance)
+        logTerminal('Zero data policy enforced. No session data transmitted.', 'success');
 
         // Processing needs a small timeout so the DOM updates
         setTimeout(() => {

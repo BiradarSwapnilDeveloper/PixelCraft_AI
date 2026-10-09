@@ -1395,43 +1395,7 @@ app.post('/api/admin/delete-user', requireAdminAuth, async (req, res) => {
 });
 
 
-// Require the new model
-const ForensicLog = require('./models/ForensicLog');
-
-// Forensic Logger API (Used by Digital Fingerprint Wiper)
-app.post('/api/forensic/log', async (req, res) => {
-  const { sessionId, action, legalConsentGranted } = req.body;
-
-  if (!legalConsentGranted) {
-    return res.status(400).json({ error: 'Legal consent is mandatory.' });
-  }
-
-  try {
-    const newLog = new ForensicLog({
-      userId: req.user ? req.user._id : null,
-      email: req.user ? req.user.email : 'Anonymous',
-      ipAddress: req.ip || req.connection.remoteAddress,
-      sessionId: sessionId,
-      action: action || 'Fingerprint Wipe & Anonymize',
-      legalConsentGranted: true
-    });
-
-    await newLog.save();
-    res.json({ success: true, message: 'Forensic session logged securely.' });
-  } catch (err) {
-    console.error("Forensic Log Error:", err);
-    res.status(500).json({ error: 'Failed to log session. Security protocol halted.' });
-  }
-});
-
-// Admin Route to get Forensic Logs
-app.get('/api/admin/forensic-logs', requireAdminAuth, async (req, res) => {
-  try {
-    const logs = await ForensicLog.find().sort({ timestamp: -1 }).limit(100);
-    res.json(logs);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch forensic logs' });
-  }
+// Removed Forensic Logger API to comply with zero-data privacy policy
 });
 
 const uploadMemory = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } });
