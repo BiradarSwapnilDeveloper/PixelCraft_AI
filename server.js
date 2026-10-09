@@ -1396,8 +1396,27 @@ app.post('/api/admin/delete-user', requireAdminAuth, async (req, res) => {
 
 
 // Removed Forensic Logger API to comply with zero-data privacy policy
-});
 
+const pdfStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = path.join(__dirname, 'public', 'uploads', 'pdf');
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir, { recursive: true });
+    }
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_'));
+  }
+});
+const uploadPdf = multer({ storage: pdfStorage, limits: { fileSize: 50 * 1024 * 1024 } });
+
+app.post('/api/upload-pdf', uploadPdf.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/pdf/${req.file.filename}`;
+  res.json({ success: true, url: fileUrl });
+});
 const uploadMemory = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } });
 
 // Forensic Image Sanitizer Endpoint
