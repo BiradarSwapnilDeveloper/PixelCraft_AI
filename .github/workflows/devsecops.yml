@@ -308,7 +308,7 @@ jobs:
         run: |
           export NODE_ENV=development 
           export PORT=8080
-          npm start &
+          nohup node server.js > server.log 2>&1 &
           echo "Waiting for server to start on port 8080..."
           sleep 15
           curl -s http://localhost:8080 > /dev/null || echo "Server might not be fully up, but proceeding..."
