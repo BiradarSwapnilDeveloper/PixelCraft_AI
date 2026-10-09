@@ -339,7 +339,7 @@ jobs:
       contents: write
     environment: 
       name: production
-      url: https://pixelcraft-ai-94y5.onrender.com/
+      url: https://pixelcraftaitools.com/
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -384,7 +384,7 @@ jobs:
       - name: "🌐 Post-Deployment Health Check"
         run: |
           echo "Checking if the live URL is reachable..."
-          HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" https://pixelcraft-ai-94y5.onrender.com/)
+          HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" https://pixelcraftaitools.com/)
           if [ "$HTTP_STATUS" -eq 200 ] || [ "$HTTP_STATUS" -eq 404 ]; then
             echo "✅ Live Application is reachable! (HTTP $HTTP_STATUS)"
             echo "HTTP_STATUS=$HTTP_STATUS" >> $GITHUB_ENV
@@ -416,7 +416,7 @@ jobs:
           echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
           echo "| :--- | :--- |" >> $GITHUB_STEP_SUMMARY
           echo "| **Environment** | \`Production\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **URL** | [pixelcraft-ai-94y5.onrender.com](https://pixelcraft-ai-94y5.onrender.com/) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **URL** | [pixelcraftaitools.com](https://pixelcraftaitools.com/) |" >> $GITHUB_STEP_SUMMARY
           echo "| **HTTP Status** | ${{ env.HEALTH_EMOJI }} \`${{ env.HTTP_STATUS }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📈 Security Posture Overview" >> $GITHUB_STEP_SUMMARY
