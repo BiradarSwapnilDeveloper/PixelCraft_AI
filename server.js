@@ -1579,7 +1579,7 @@ app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res
 });
 
 // Serve all static files (HTML, CSS, JS) from the 'public' folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
