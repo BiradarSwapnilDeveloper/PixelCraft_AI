@@ -318,6 +318,7 @@ jobs:
         with:
           target: 'http://localhost:8080'
           fail_action: 'false'
+          network_mode: 'host'
           cmd_options: '-a'
 
       - name: "📊 Generate ZAP Markdown Report"
