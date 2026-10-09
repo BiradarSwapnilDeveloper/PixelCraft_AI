@@ -1,4 +1,4 @@
-FROM node:20.18.1-alpine3.20 AS base
+FROM node:20.18.2-alpine3.21 AS base
 RUN apk upgrade --no-cache && \
     apk add --no-cache tini ffmpeg ca-certificates
 
