@@ -35,6 +35,7 @@ RUN chown root:node /home/node/app && \
     sed -i '/^node:/s|/bin/.*sh|/sbin/nologin|' /etc/passwd && \
     chmod -R 440 /home/node/app && \
     find /home/node/app -type d -exec chmod 550 {} + && \
+    find /home/node/app -type f -name "*.node" -exec chmod 550 {} + 2>/dev/null || true && \
     find / -xdev -type f \( -perm -4000 -o -perm -2000 \) -exec chmod a-s {} \; 2>/dev/null || true && \
     rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn* /sbin/apk /lib/apk /var/cache/apk /etc/apk
 
