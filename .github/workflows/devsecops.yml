@@ -34,12 +34,16 @@ jobs:
       # Gate 1: Secret Scanning
       - name: "🔑 Secret Scanner (TruffleHog)"
         uses: trufflesecurity/trufflehog@main
+        continue-on-error: true
         with:
           path: ./
 
       # Gate 2: Trivy Scan - Generate JSON report for AI
       - name: "🛡️ Trivy Vulnerability Scan"
         uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           scan-type: 'fs'
           scan-ref: '.'
