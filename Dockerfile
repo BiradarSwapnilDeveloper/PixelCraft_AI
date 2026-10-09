@@ -3,23 +3,26 @@ RUN apk upgrade --no-cache && \
     apk add --no-cache tini ffmpeg ca-certificates
 
 FROM base AS dependencies
-USER node
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
 WORKDIR /home/node/app
+USER node
 COPY --chown=node:node package*.json ./
 RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
     npm ci --ignore-scripts
 
 FROM base AS builder
-USER node
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
 WORKDIR /home/node/app
+USER node
 COPY --chown=node:node package*.json ./
-COPY --from=dependencies --chown=node:node /home/node/app/node_modules ./node_modules
 COPY --chown=node:node . .
+COPY --from=dependencies --chown=node:node /home/node/app/node_modules ./node_modules
 RUN npm run build --if-present
 
 FROM base AS prod-dependencies
-USER node
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
 WORKDIR /home/node/app
+USER node
 COPY --chown=node:node package*.json ./
 RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
     npm ci --omit=dev --ignore-scripts
