@@ -23,10 +23,9 @@ COPY --chown=node:node package*.json ./
 RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
     npm ci --omit=dev --ignore-scripts
 
-FROM base AS runner
+FROM base AS runner-prep
 ENV NODE_ENV=production
 ENV PORT=3000
-
 WORKDIR /home/node/app
 
 COPY --from=builder --chown=root:node /home/node/app ./
@@ -39,6 +38,11 @@ RUN chown root:node /home/node/app && \
     find / -xdev -type f \( -perm -4000 -o -perm -2000 \) -exec chmod a-s {} \; 2>/dev/null || true && \
     rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn* /sbin/apk /lib/apk /var/cache/apk /etc/apk
 
+FROM scratch AS runner
+COPY --from=runner-prep / /
+ENV NODE_ENV=production
+ENV PORT=3000
+WORKDIR /home/node/app
 USER node
 EXPOSE 3000
 ENTRYPOINT ["/sbin/tini", "--"]
