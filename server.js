@@ -1090,56 +1090,100 @@ const pdfStorage = multer.diskStorage({
     cb(null, dir);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_'));
+    const crypto = require('crypto');
+    const uniqueSuffix = crypto.randomBytes(3).toString('hex');
+    cb(null, uniqueSuffix + '.pdf');
   }
 });
 const uploadPdfAdvanced = multer({ storage: pdfStorage, limits: { fileSize: 50 * 1024 * 1024 } });
 
 app.post('/api/upload-pdf', uploadPdfAdvanced.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-  const localUrl = `${req.protocol}://${req.get('host')}/uploads/pdf/${req.file.filename}`;
   
-  try {
-    const fs = require('fs');
-    const fileBuffer = fs.readFileSync(req.file.path);
-    const formData = new globalThis.FormData();
-    formData.append('file', new Blob([fileBuffer], { type: req.file.mimetype }), req.file.originalname);
-    
-    // Attempt 1: tmpfiles.org
-    const tmpResp = await fetch('https://tmpfiles.org/api/v1/upload', {
-      method: 'POST',
-      body: formData,
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
-    });
-    
-    if (tmpResp.ok) {
-      const data = await tmpResp.json();
-      return res.json({ success: true, url: data.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/') });
-    }
-    
-    // Attempt 2: catbox.moe
-    const cbFormData = new globalThis.FormData();
-    cbFormData.append('reqtype', 'fileupload');
-    cbFormData.append('fileToUpload', new Blob([fileBuffer], { type: req.file.mimetype }), req.file.originalname);
-    
-    const cbResp = await fetch('https://catbox.moe/user/api.php', {
-      method: 'POST',
-      body: cbFormData,
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
-    });
-    
-    if (cbResp.ok) {
-      const url = await cbResp.text();
-      return res.json({ success: true, url: url.trim() });
-    }
-    
-    // Fallback to local url
-    res.json({ success: true, url: localUrl });
-  } catch (err) {
-    console.error("PDF Upload Cloud Error:", err.message);
-    res.json({ success: true, url: localUrl });
+  // Create a nice small link, e.g. domain.com/p/a1b2c3
+  const shortId = req.file.filename.replace('.pdf', '');
+  const viewerUrl = `${req.protocol}://${req.get('host')}/p/${shortId}`;
+  
+  return res.json({ success: true, url: viewerUrl });
+});
+
+app.get('/p/:id', (req, res) => {
+  const fileId = req.params.id;
+  
+  // Basic path traversal protection
+  if (!/^[a-zA-Z0-9_-]+$/.test(fileId)) {
+    return res.status(400).send('Invalid Link');
   }
+
+  const filePath = path.join(__dirname, 'public', 'uploads', 'pdf', `${fileId}.pdf`);
+  
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Expired or Not Found</title>
+    <style>
+        body { background: #09090b; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .box { text-align: center; background: #18181b; padding: 40px; border-radius: 16px; border: 1px solid #27272a; }
+        h1 { color: #f43f5e; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>404 - Not Found</h1>
+        <p>This PDF link is invalid, expired, or has been removed.</p>
+    </div>
+</body>
+</html>
+    `);
+  }
+
+  const pdfUrl = `/uploads/pdf/${fileId}.pdf`;
+
+  res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure PDF Viewer - PixelCraft AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Outfit', sans-serif; background-color: #09090b; color: #e4e4e7; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: rgba(24, 24, 27, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 10; }
+        .logo { font-size: 1.2rem; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 8px; }
+        .actions { display: flex; gap: 12px; }
+        .btn { padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.05); color: #e4e4e7; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
+        .pdf-container { flex: 1; position: relative; background: #18181b; }
+        iframe { width: 100%; height: 100%; border: none; background: #18181b; display: block; }
+        .shield-icon { display: inline-block; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; border: 1px solid rgba(16, 185, 129, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b82f6" /><stop offset="100%" stop-color="#8b5cf6" /></linearGradient><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            PixelCraft AI
+            <span class="shield-icon">🛡️ Secure Document</span>
+        </div>
+        <div class="actions">
+            <a href="${pdfUrl}" class="btn btn-secondary" target="_blank">Full Screen</a>
+            <a href="${pdfUrl}" class="btn btn-primary" download>Download PDF</a>
+        </div>
+    </div>
+    <div class="pdf-container">
+        <iframe src="${pdfUrl}#toolbar=0" title="PDF Viewer"></iframe>
+    </div>
+</body>
+</html>
+  `);
 });
 
 // Serve all static files (HTML, CSS, JS) from the 'public' folder
