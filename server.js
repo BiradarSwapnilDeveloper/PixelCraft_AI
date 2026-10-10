@@ -1561,21 +1561,7 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
         const lon = tags['GPSLongitude'].description;
 
         // Reverse Geocoding via Nominatim OpenStreetMap
-        try {
-          const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`, {
-            headers: {
-              'User-Agent': 'PixelCraft-AI-Sanitizer/1.0'
-            }
-          });
-          const geoData = await geoRes.json();
-          if (geoData && geoData.display_name) {
-            locationData = geoData.display_name;
-            threats.push({ type: 'GPS Location', status: 'Found', alert: `⚠️ Alert: Image reveals you were at [${locationData}]. Exact coordinates: ${lat}, ${lon}` });
-          }
-        } catch (e) {
-          console.error("Geocoding error", e);
-          threats.push({ type: 'GPS Location', status: 'Found', alert: `⚠️ Alert: Image reveals exact coordinates: ${lat}, ${lon}` });
-        }
+        threats.push({ type: 'GPS Location', status: 'Found', alert: `⚠️ Alert: Image reveals exact coordinates: ${lat}, ${lon}` });
       }
 
       if (threats.filter(t => t.status === 'Found').length === 0 && !hasMalware) {
@@ -1654,3 +1640,23 @@ app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] })
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+
+
+// --- GDPR Auto-Cleanup (Delete PDFs older than 1 hour) ---
+setInterval(() => {
+  try {
+    const pdfDir = path.join(__dirname, 'public', 'uploads', 'pdf');
+    if (fs.existsSync(pdfDir)) {
+      const files = fs.readdirSync(pdfDir);
+      const now = Date.now();
+      files.forEach(file => {
+        const filePath = path.join(pdfDir, file);
+        const stats = fs.statSync(filePath);
+        if (now - stats.mtimeMs > 60 * 60 * 1000) {
+          fs.unlinkSync(filePath);
+          console.log('Auto-deleted old PDF:', file);
+        }
+      });
+    }
+  } catch (e) { console.error('PDF Cleanup Error:', e); }
+}, 60 * 60 * 1000);

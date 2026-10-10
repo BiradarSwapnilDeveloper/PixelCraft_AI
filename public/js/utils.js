@@ -237,3 +237,77 @@ window.addEventListener('appinstalled', () => {
   console.log('PWA installed');
 });
 
+// ===== GDPR COOKIE CONSENT BANNER =====
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('pc_consent_v1') === 'true') {
+    // Already consented, load tracking scripts
+    loadTrackingScripts();
+  } else if (!localStorage.getItem('pc_consent_v1')) {
+    // Show banner
+    showCookieBanner();
+  }
+});
+
+function showCookieBanner() {
+  if (document.getElementById('cookie-consent-banner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'cookie-consent-banner';
+  banner.style.cssText = `
+    position: fixed; bottom: 20px; left: 20px; right: 20px; max-width: 600px;
+    background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+    padding: 24px; z-index: 999999; box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column; gap: 16px; font-family: 'Outfit', sans-serif;
+  `;
+  banner.innerHTML = `
+    <div>
+      <h3 style="margin: 0 0 8px 0; color: #fff; font-size: 1.2rem;">🍪 We value your privacy</h3>
+      <p style="margin: 0; color: #94a3b8; font-size: 0.95rem; line-height: 1.5;">
+        We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.
+        <a href="/cookies-policy.html" style="color: #60a5fa; text-decoration: none;">Learn more</a>
+      </p>
+    </div>
+    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+      <button id="btn-reject-cookies" style="background: rgba(255,255,255,0.1); color: #e4e4e7; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">Reject All</button>
+      <button id="btn-accept-cookies" style="background: #3b82f6; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">Accept All</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+
+  document.getElementById('btn-accept-cookies').addEventListener('click', () => {
+    localStorage.setItem('pc_consent_v1', 'true');
+    banner.remove();
+    loadTrackingScripts();
+  });
+
+  document.getElementById('btn-reject-cookies').addEventListener('click', () => {
+    localStorage.setItem('pc_consent_v1', 'false');
+    banner.remove();
+  });
+}
+
+function loadTrackingScripts() {
+  if (document.getElementById('ga-script')) return;
+  
+  // Google Analytics
+  const ga = document.createElement('script');
+  ga.id = 'ga-script';
+  ga.async = true;
+  ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-V78ZLHJLR8';
+  document.head.appendChild(ga);
+  
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-V78ZLHJLR8');
+
+  // Google AdSense
+  const ads = document.createElement('script');
+  ads.id = 'adsense-script';
+  ads.async = true;
+  ads.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3788374704176398';
+  ads.crossOrigin = 'anonymous';
+  document.head.appendChild(ads);
+}
+
+
