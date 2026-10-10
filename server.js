@@ -794,19 +794,19 @@ app.post('/api/admin/settings', requireAdminAuth, (req, res) => {
   res.json({ success: true, settings: appSettings });
 });
 
-// Middleware to Protect ALL Tools (Requires Sign-In to use tools)
+// Middleware to Protect Premium Tools
 app.use('/tools', (req, res, next) => {
-  // Allow forensic-sanitizer to bypass auth
-  if (req.originalUrl.toLowerCase().includes('forensic-sanitizer')) {
+  const premiumTools = ['audio-steganography', 'digital-fingerprint-wiper', 'advanced-decoy', 'ai-dubbing'];
+  const isPremium = premiumTools.some(tool => req.originalUrl.toLowerCase().includes(tool));
+  
+  if (!isPremium) {
     return next();
   }
 
   if (req.isAuthenticated()) {
-    // Allow tool access
     return next();
   }
-  // If not logged in and they try to visit any tool, redirect to login page
-  res.redirect('/login.html?returnTo=' + encodeURIComponent('/tools' + req.url));
+  res.redirect('/login.html?returnTo=' + encodeURIComponent(req.originalUrl));
 });
 
 // AI Audio/SFX Generation Route (Using Hugging Face AudioLDM2)
