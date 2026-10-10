@@ -1081,27 +1081,64 @@ Analyze the URL and output the JSON.
   }
 });
 
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } });
+const pdfStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = path.join(__dirname, 'public', 'uploads', 'pdf');
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir, { recursive: true });
+    }
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_'));
+  }
+});
+const uploadPdfAdvanced = multer({ storage: pdfStorage, limits: { fileSize: 50 * 1024 * 1024 } });
 
-app.post('/api/upload-pdf', upload.single('file'), async (req, res) => {
+app.post('/api/upload-pdf', uploadPdfAdvanced.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  const localUrl = `${req.protocol}://${req.get('host')}/uploads/pdf/${req.file.filename}`;
+  
   try {
+    const fs = require('fs');
+    const fileBuffer = fs.readFileSync(req.file.path);
     const formData = new globalThis.FormData();
-    formData.append('reqtype', 'fileupload');
-    formData.append('fileToUpload', new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
-
-    const response = await fetch('https://catbox.moe/user/api.php', {
+    formData.append('file', new Blob([fileBuffer], { type: req.file.mimetype }), req.file.originalname);
+    
+    // Attempt 1: tmpfiles.org
+    const tmpResp = await fetch('https://tmpfiles.org/api/v1/upload', {
       method: 'POST',
-      body: formData
+      body: formData,
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
     });
-
-    if (!response.ok) throw new Error("Catbox upload failed");
-    const url = await response.text();
-
-    res.json({ success: true, url: url.trim() });
+    
+    if (tmpResp.ok) {
+      const data = await tmpResp.json();
+      return res.json({ success: true, url: data.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/') });
+    }
+    
+    // Attempt 2: catbox.moe
+    const cbFormData = new globalThis.FormData();
+    cbFormData.append('reqtype', 'fileupload');
+    cbFormData.append('fileToUpload', new Blob([fileBuffer], { type: req.file.mimetype }), req.file.originalname);
+    
+    const cbResp = await fetch('https://catbox.moe/user/api.php', {
+      method: 'POST',
+      body: cbFormData,
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+    });
+    
+    if (cbResp.ok) {
+      const url = await cbResp.text();
+      return res.json({ success: true, url: url.trim() });
+    }
+    
+    // Fallback to local url
+    res.json({ success: true, url: localUrl });
   } catch (err) {
-    console.error("PDF Upload Error:", err.message);
-    res.status(500).json({ error: "Failed to upload file to catbox" });
+    console.error("PDF Upload Cloud Error:", err.message);
+    res.json({ success: true, url: localUrl });
   }
 });
 
@@ -1397,26 +1434,7 @@ app.post('/api/admin/delete-user', requireAdminAuth, async (req, res) => {
 
 // Removed Forensic Logger API to comply with zero-data privacy policy
 
-const pdfStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = path.join(__dirname, 'public', 'uploads', 'pdf');
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
-    }
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_'));
-  }
-});
-const uploadPdf = multer({ storage: pdfStorage, limits: { fileSize: 50 * 1024 * 1024 } });
 
-app.post('/api/upload-pdf', uploadPdf.single('file'), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/pdf/${req.file.filename}`;
-  res.json({ success: true, url: fileUrl });
-});
 const uploadMemory = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } });
 
 // Forensic Image Sanitizer Endpoint
