@@ -85,10 +85,13 @@ async function honeytokenTrap(req, res, next) {
         });
         await trapLog.save();
 
+        // Mask IP for Telegram to ensure EU data isn't exposed raw
+        const maskedIp = ip.replace(/\.\d+\.\d+$/, '.xxx.xxx');
+
         // Send Telegram Alert
         const alertMsg = `🚨 <b>PHANTOM TRAP TRIGGERED</b> 🚨\n\n` +
                          `<b>Key:</b> ${honeytoken.description}\n` +
-                         `<b>IP Address:</b> <code>${ip}</code>\n` +
+                         `<b>IP Address:</b> <code>${maskedIp}</code>\n` +
                          `<b>Location:</b> ${location}\n` +
                          `<b>ISP:</b> ${isp}\n` +
                          `<b>Method:</b> ${method} ${endpoint}\n` +
