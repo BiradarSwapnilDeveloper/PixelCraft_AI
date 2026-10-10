@@ -28,8 +28,8 @@ RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
     npm ci --omit=dev --ignore-scripts
 
 FROM base AS runner
-ENV NODE_ENV=production
-ENV PORT=3000
+ENV NODE_ENV=production \
+    PORT=3000
 
 WORKDIR /home/node/app
 
