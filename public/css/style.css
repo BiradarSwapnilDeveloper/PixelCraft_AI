@@ -328,6 +328,7 @@ body::after {
 .section {
   padding: 100px 24px;
   position: relative;
+  scroll-margin-top: 80px;
 }
 .section-alt {
   background: linear-gradient(

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V78ZLHJLR8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-V78ZLHJLR8');
+  </script>
+  <title>What is PRNU Sensor Fingerprinting? | PixelCraft AI Blog</title>
+  <meta name="description" content="Even if you delete EXIF data, forensic tools can identify your specific smartphone sensor. Discover how PRNU fingerprinting works and its privacy implications." />
+  <meta name="robots" content="index, follow" />
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="../logo.jpg?v=5" />
+
+  <style>
+    .blog-content h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 24px; color: var(--text-main); }
+    .blog-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #6ee7b7; }
+    .blog-content p, .blog-content li { font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; text-align: left;}
+    .blog-content ul { padding-left: 20px; margin-bottom: 24px; }
+  </style>
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-3788374704176398">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3788374704176398"
+     crossorigin="anonymous"></script>
+
+  <link rel="canonical" href="https://pixelcraftaitools.com/blog/what-is-prnu-sensor-fingerprinting.html"/>
+</head>
+<body>
+  <div id="toast-container" class="toast-container"></div>
+
+  <nav class="navbar" id="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
+      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">Tools</a></li>
+      <li><a href="../index.html#how-it-works">How It Works</a></li>
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../index.html#blog">Blog</a></li>
+      <li class="mobile-visible">
+        <a href="/auth/google" class="nav-cta" id="nav-auth-btn">Sign In</a>
+      </li>
+    </ul>
+  </nav>
+
+  <section class="section" style="padding-top: 150px; min-height: 80vh;">
+    <div class="container" style="max-width: 900px; background: var(--bg-dark); padding: 50px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);">
+      <div class="blog-content">
+        <h1>Beyond EXIF: PRNU Sensor Fingerprinting</h1>
+
+        <p>When most people think about digital privacy regarding their photos, they think of EXIF data. EXIF (Exchangeable Image File Format) metadata stores information like the date the photo was taken, the camera model, and often the precise GPS location. While scrubbing EXIF data is a crucial first step for Operational Security (OPSEC), it is no longer enough to guarantee anonymity. Enter PRNU.</p>
+        
+        <h2>What is PRNU?</h2>
+        <p>PRNU stands for Photo-Response Non-Uniformity. It is a type of invisible, inherent noise present in every digital image captured by a modern camera sensor (like the CMOS sensors found in smartphones and DSLRs).</p>
+        <p>During the manufacturing process of silicon wafers used to create these sensors, microscopic imperfections are introduced. These imperfections mean that every individual pixel on a sensor reacts slightly differently to light. Some pixels might record a value slightly brighter than they should, while others record slightly darker.</p>
+        
+        <h2>The Digital Fingerprint</h2>
+        <p>Because these manufacturing imperfections are completely random and unique to each physical sensor, the resulting noise pattern is also unique. This pattern forms a distinct "fingerprint" for that specific camera.</p>
+        <p>When you take a photo, this PRNU fingerprint is embedded into the image pixels themselves—it is not metadata that can simply be stripped out. Forensic analysts and law enforcement agencies use this to definitively link a specific photograph to the exact physical device that took it, even if all EXIF data has been completely erased.</p>
+        
+        <h2>How is it Used?</h2>
+        <p>To utilize PRNU, an analyst typically requires a reference sample. By taking multiple flat, brightly lit photos (like a clear blue sky or a white wall) with a suspect's phone, they can extract the pure sensor fingerprint. They then compare this extracted fingerprint against the noise pattern found in an anonymous image uploaded online. If the patterns match statistically, it is irrefutable proof that the anonymous photo was taken by that specific phone.</p>
+        
+        <h2>Can PRNU be Removed?</h2>
+        <p>Unlike EXIF data, which is just text attached to the file, removing PRNU is complex because it involves altering the actual visual data of the image. Standard image compression (like saving a JPEG at a lower quality) or resizing can degrade the PRNU fingerprint, but it rarely destroys it entirely.</p>
+        <p>Advanced privacy tools, such as the Digital Fingerprint Wiper provided by PixelCraft AI, utilize sophisticated algorithms to introduce localized noise, apply subtle geometric distortions, and rewrite the frequency domain of the image. These operations effectively scramble the PRNU pattern, making it mathematically impossible for forensic tools to match the image back to the source camera sensor without visibly ruining the photo for human eyes.</p>
+        
+        <h2>The Future of Image Privacy</h2>
+        <p>As forensic techniques become more advanced, the tools required to maintain anonymity must evolve as well. Understanding concepts like PRNU is essential for journalists, activists, and anyone serious about protecting their digital identity in an era of pervasive surveillance.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" style="background: #0f172a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
+        <a href="../about-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">About Us</a>
+        <a href="../privacy-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Privacy Policy</a>
+        <a href="../terms-conditions.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Terms of Service</a>
+        <a href="../disclaimer.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Disclaimer</a>
+        <a href="../contact-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Contact</a>
+      </div>
+      <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">
+        &copy; 2026 PixelCraft AI. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+</body>
+</html>

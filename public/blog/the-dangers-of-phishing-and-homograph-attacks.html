@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V78ZLHJLR8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-V78ZLHJLR8');
+  </script>
+  <title>The Dangers of Phishing and Homograph Attacks | PixelCraft AI Blog</title>
+  <meta name="description" content="Hackers use Cyrillic characters to create fake URLs that look identical to real ones. Learn how phishing and homograph attacks work and how to stay safe." />
+  <meta name="robots" content="index, follow" />
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="../logo.jpg?v=5" />
+
+  <style>
+    .blog-content h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 24px; color: var(--text-main); }
+    .blog-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #38bdf8; }
+    .blog-content p, .blog-content li { font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; text-align: left;}
+    .blog-content ul { padding-left: 20px; margin-bottom: 24px; }
+  </style>
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-3788374704176398">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3788374704176398"
+     crossorigin="anonymous"></script>
+
+  <link rel="canonical" href="https://pixelcraftaitools.com/blog/the-dangers-of-phishing-and-homograph-attacks.html"/>
+</head>
+<body>
+  <div id="toast-container" class="toast-container"></div>
+
+  <nav class="navbar" id="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
+      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">Tools</a></li>
+      <li><a href="../index.html#how-it-works">How It Works</a></li>
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../index.html#blog">Blog</a></li>
+      <li class="mobile-visible">
+        <a href="/auth/google" class="nav-cta" id="nav-auth-btn">Sign In</a>
+      </li>
+    </ul>
+  </nav>
+
+  <section class="section" style="padding-top: 150px; min-height: 80vh;">
+    <div class="container" style="max-width: 900px; background: var(--bg-dark); padding: 50px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);">
+      <div class="blog-content">
+        <h1>The Silent Threat: How Phishing and Homograph Attacks Work</h1>
+
+        <p>In the digital age, seeing is no longer believing. While most internet users have learned to spot obvious phishing emails with poor grammar or suspicious sender addresses, a new wave of highly sophisticated attacks is bypassing traditional defenses. The most deceptive among these is the homograph attack.</p>
+        
+        <h2>What is a Homograph Attack?</h2>
+        <p>A homograph attack, also known as a homoglyph attack, is a deception technique where an attacker uses characters that look alike to spoof a legitimate domain name. By registering a domain that appears identical to a trusted website (like a bank or a popular email provider), attackers can trick users into entering their credentials on a malicious site.</p>
+        
+        <p>This is possible because the internet's Domain Name System (DNS) supports Internationalized Domain Names (IDNs). IDNs allow domains to use non-Latin characters, such as Cyrillic, Greek, or Arabic. For example, the Cyrillic small letter "a" (U+0430) looks exactly like the Latin small letter "a" (U+0061) in many fonts, but to a computer, they are entirely different characters.</p>
+        
+        <h2>How Punycode Plays a Role</h2>
+        <p>To support these international characters within the existing ASCII-based DNS infrastructure, a system called Punycode is used. Punycode converts Unicode characters into an ASCII-compatible format starting with <code>xn--</code>.</p>
+        <p>For instance, an attacker could register <code>apple.com</code> where the "a" is Cyrillic. In Punycode, this domain translates to something like <code>xn--pple-43d.com</code>. While modern browsers have implemented defenses to display the Punycode version instead of the rendered homoglyphs under certain suspicious conditions, attackers constantly find new ways to bypass these filters, particularly in messaging apps, emails, and older browsers.</p>
+        
+        <h2>The Evolution of Phishing</h2>
+        <p>Phishing is no longer just about mass-mailing generic scams. Today's phishing campaigns are targeted (spear-phishing) and employ advanced social engineering tactics alongside technical exploits like homograph attacks.</p>
+        <ul>
+          <li><strong>Typosquatting:</strong> Registering domains with common misspellings (e.g., <code>googIe.com</code> with a capital "i" instead of a lowercase "L").</li>
+          <li><strong>Subdomain Spoofing:</strong> Creating URLs like <code>login.yourbank.com.maliciousdomain.net</code>, hoping users only check the first part of the URL.</li>
+          <li><strong>URL Shorteners:</strong> Hiding the true destination behind services like bit.ly, masking the malicious domain entirely.</li>
+        </ul>
+        
+        <h2>How to Protect Yourself</h2>
+        <p>Protecting yourself from homograph and phishing attacks requires a combination of vigilance and technological assistance:</p>
+        <ul>
+          <li><strong>Use Password Managers:</strong> Password managers tie your credentials to the underlying URL. If you visit a homograph domain, the password manager won't recognize it and won't auto-fill your details.</li>
+          <li><strong>Verify Links Manually:</strong> Instead of clicking links in emails, navigate to the service by typing the URL manually or using a bookmark.</li>
+          <li><strong>Keep Software Updated:</strong> Modern browsers continuously update their IDN policies to mitigate homograph attacks.</li>
+          <li><strong>Use Security Tools:</strong> Employ heuristic link scanners that automatically translate and analyze Punycode and check for typosquatting.</li>
+        </ul>
+        
+        <p>Awareness is your first line of defense. By understanding the mechanics of these attacks, you can navigate the web safely and keep your personal data secure.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" style="background: #0f172a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
+        <a href="../about-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">About Us</a>
+        <a href="../privacy-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Privacy Policy</a>
+        <a href="../terms-conditions.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Terms of Service</a>
+        <a href="../disclaimer.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Disclaimer</a>
+        <a href="../contact-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Contact</a>
+      </div>
+      <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">
+        &copy; 2026 PixelCraft AI. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+</body>
+</html>
