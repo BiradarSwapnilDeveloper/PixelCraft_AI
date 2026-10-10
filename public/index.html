@@ -11,7 +11,7 @@
   <!-- ===== SEO META TAGS ===== -->
   <title>PixelCraft AI - Free AI Privacy, Security & Image Tools Online | Compressor, Steganography & More</title>
   <meta name="description"
-    content="PixelCraft AI offers 10+ free professional AI tools - detect phishing, hide secret messages, scrub metadata, and protect your digital privacy Works in browser. Experience the best AI security utilities instantly for free!" />
+    content="PixelCraft AI offers 10+ free professional AI tools - detect phishing, hide secret messages, scrub metadata, and protect your digital privacy. Experience the best AI security utilities instantly for free!" />
   <meta name="keywords" content="image tools, free online, PixelCraft AI" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="author" content="PixelCraft AI" />
@@ -28,7 +28,7 @@
   <meta property="og:url" content="https://pixelcraftaitools.com/" />
   <meta property="og:title" content="PixelCraft AI - Free Cybersecurity Utility Tools Online | Steganography & More" />
   <meta property="og:description"
-    content="PixelCraft AI offers 10+ free professional AI tools - detect phishing, hide secret messages, scrub metadata, and protect your digital privacy. No signup. Works in browser. Experience the best AI security utilities instantly for free!" />
+    content="PixelCraft AI offers 10+ free professional AI tools - detect phishing, hide secret messages, scrub metadata, and protect your digital privacy. No signup. Experience the best AI security utilities instantly for free!" />
   <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -39,7 +39,7 @@
   <meta name="twitter:site" content="@PixelCraftAI" />
   <meta name="twitter:title" content="PixelCraft AI - Free Cybersecurity Utility Tools Online | Steganography & More" />
   <meta name="twitter:description"
-    content="PixelCraft AI offers 10+ free professional AI tools - detect phishing, hide secret messages, scrub metadata, and protect your digital privacy. No signup. Works in browser. Experience the best AI security utilities instantly for free!" />
+    content="PixelCraft AI offers 10+ free professional AI tools - detect phishing, hide secret messages, scrub metadata, and protect your digital privacy. No signup. Experience the best AI security utilities instantly for free!" />
   <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
 
   <!-- Extra Technical SEO -->
@@ -71,7 +71,7 @@
             "@id": "https://pixelcraftaitools.com/#webpage",
             "url": "https://pixelcraftaitools.com/",
             "name": "PixelCraft AI - Free Cybersecurity Utility Tools Online",
-            "description": "PixelCraft AI offers 10+ free professional AI tools - detect phishing, hide secret messages, scrub metadata, and protect your digital privacy. No signup. Works in browser.",
+            "description": "PixelCraft AI offers 10+ free professional AI tools - detect phishing, hide secret messages, scrub metadata, and protect your digital privacy. No signup.",
             "isPartOf": { "@id": "https://pixelcraftaitools.com/#website" }
           },
           {
@@ -225,8 +225,7 @@
         Advanced Security &amp; Utility Tools With <span>AI</span><br />- Free &amp; Private
       </h1>
       <p>
-        Detect phishing, hide secret messages, convert PDFs, and edit images instantly. All processing runs securely in
-        your browser. 100% free.
+        Detect phishing, hide secret messages, convert PDFs, and edit images instantly. Core tools run locally in your browser, while advanced features use secure, temporary servers. 100% free.
       </p>
       <div class="hero-actions">
         <a href="#tools" class="btn-primary">🚀 Explore All Tools</a>
@@ -238,7 +237,7 @@
         </div>
         <div class="hero-divider"></div>
         <div class="hero-stat">
-          <strong>100%</strong><span>Browser-based</span>
+          <strong>Hybrid</strong><span>Local & Cloud</span>
         </div>
         <div class="hero-divider"></div>
         <div class="hero-stat">
@@ -259,8 +258,7 @@
         <div class="section-label">All Tools</div>
         <h2>Everything You Need to Edit Images</h2>
         <p>
-          Professional-grade tools that run entirely in your browser. No
-          uploads to servers. Privacy-focused.
+          Professional-grade tools designed with a hybrid architecture. Core features run locally, while advanced tools use secure, ephemeral cloud storage.
         </p>
       </div>
 
@@ -647,18 +645,16 @@
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">🔐</div>
-          <h3>100% Private</h3>
+          <h3>Privacy-First Architecture</h3>
           <p>
-            All processing happens in your browser. Your images never leave
-            your device.
+            Image editing happens locally. Server-based tools (like PDF sharing) auto-delete your data within 24 hours.
           </p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">⚡</div>
           <h3>Lightning Fast</h3>
           <p>
-            No server round trips. Client-side processing means instant
-            results.
+            Core tools use WebAssembly for zero server round trips, providing instant results on your device.
           </p>
         </div>
         <div class="feature-card">
@@ -751,13 +747,11 @@
       <div class="faq-list">
         <div class="faq-item">
           <button class="faq-q">
-            Are my images uploaded to any server?
+            Are my files uploaded to any server?
             <div class="faq-icon">+</div>
           </button>
           <div class="faq-a">
-            No! Image processing happens directly in your browser. However, we
-            securely store your basic profile information (Email, Name) on our
-            encrypted backend to let you exclusively access our premium tools.
+            Our core image editing tools run entirely locally in your browser. Advanced tools (like PDF-to-Link and AI Dubbing) temporarily use our secure servers and automatically delete all your data within 24 hours. We also store your basic profile information if you log in.
           </div>
         </div>
         <div class="faq-item">
@@ -1656,7 +1650,9 @@
           authBtn.style.backgroundColor = "#Ef4444"; // Make it red to signify logout
 
           // Record User Login in Analytics
-          gtag("event", "login", { method: "Google" });
+          if (typeof gtag === 'function') {
+            gtag("event", "login", { method: "Google" });
+          }
         }
       } catch (err) {
         console.error("Core Backend Unreachable:", err);
