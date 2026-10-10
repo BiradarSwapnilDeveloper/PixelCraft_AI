@@ -1107,6 +1107,31 @@ app.post('/api/upload-pdf', uploadPdfAdvanced.single('file'), async (req, res) =
   return res.json({ success: true, url: viewerUrl });
 });
 
+// Periodic Cleanup of PDFs older than 24 hours (runs every hour)
+setInterval(() => {
+  const pdfDir = path.join(__dirname, 'public', 'uploads', 'pdf');
+  if (fs.existsSync(pdfDir)) {
+    fs.readdir(pdfDir, (err, files) => {
+      if (err) return console.error('Error reading PDF directory:', err);
+      const now = Date.now();
+      const MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours
+      files.forEach(file => {
+        const filePath = path.join(pdfDir, file);
+        fs.stat(filePath, (err, stats) => {
+          if (err) return;
+          if (now - stats.mtimeMs > MAX_AGE) {
+            fs.unlink(filePath, err => {
+              if (err) console.error('Error deleting old PDF:', filePath);
+              else console.log('Deleted expired PDF:', file);
+            });
+          }
+        });
+      });
+    });
+  }
+}, 60 * 60 * 1000); // 1 hour interval
+
+
 app.get('/p/:id', (req, res) => {
   const fileId = req.params.id;
   
