@@ -446,6 +446,77 @@ function ensureNavbarControls() {
     });
     actions.appendChild(settingsBtn);
   }
+
+  // Ensure mobile 3-line hamburger menu button exists
+  if (!actions.querySelector('#nav-toggle-btn') && !actions.querySelector('.nav-hamburger')) {
+    const navToggleBtn = document.createElement('button');
+    navToggleBtn.id = 'nav-toggle-btn';
+    navToggleBtn.className = 'nav-icon-btn nav-hamburger';
+    navToggleBtn.title = 'Toggle Navigation Menu';
+    navToggleBtn.setAttribute('aria-label', 'Toggle Navigation Menu');
+    navToggleBtn.setAttribute('aria-expanded', 'false');
+    navToggleBtn.innerHTML = `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    `;
+    actions.appendChild(navToggleBtn);
+  }
+}
+
+// Mobile navigation interactive controller
+function initMobileNavbar() {
+  const navbar = document.querySelector('.navbar');
+  const navToggle = document.getElementById('nav-toggle-btn') || document.querySelector('.nav-hamburger');
+  const navLinks = document.getElementById('nav-links') || document.querySelector('.nav-links');
+  if (!navToggle || !navLinks) return;
+
+  function closeMobileNav() {
+    navLinks.classList.remove('mobile-open', 'open');
+    navToggle.classList.remove('active');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggleMobileNav(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const isOpen = navLinks.classList.toggle('mobile-open');
+    navLinks.classList.toggle('open', isOpen);
+    navToggle.classList.toggle('active', isOpen);
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+
+  if (!navToggle._hasNavListener) {
+    navToggle._hasNavListener = true;
+    navToggle.addEventListener('click', toggleMobileNav);
+  }
+
+  // Close when tapping any link inside mobile menu
+  navLinks.querySelectorAll('a').forEach(link => {
+    if (!link._hasNavCloseListener) {
+      link._hasNavCloseListener = true;
+      link.addEventListener('click', closeMobileNav);
+    }
+  });
+
+  // Close when tapping outside the navbar
+  if (!document._hasNavOutsideListener) {
+    document._hasNavOutsideListener = true;
+    document.addEventListener('click', (e) => {
+      if (navbar && !navbar.contains(e.target)) {
+        closeMobileNav();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMobileNav();
+      }
+    });
+  }
 }
 
 // 7. INITIALIZATION ON DOM READY
@@ -454,10 +525,12 @@ document.addEventListener('DOMContentLoaded', () => {
   recordCurrentTool();
   injectSettingsDrawer();
   updateThemeUI();
+  initMobileNavbar();
 
   // Bind settings button
   const settingsBtn = document.getElementById('settings-toggle-btn');
-  if (settingsBtn) {
+  if (settingsBtn && !settingsBtn._boundClick) {
+    settingsBtn._boundClick = true;
     settingsBtn.addEventListener('click', (e) => {
       e.preventDefault();
       toggleSettingsDrawer();
@@ -466,7 +539,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Bind theme toggle button
   const themeBtn = document.getElementById('theme-toggle-btn');
-  if (themeBtn) {
+  if (themeBtn && !themeBtn._boundClick) {
+    themeBtn._boundClick = true;
     themeBtn.addEventListener('click', (e) => {
       e.preventDefault();
       togglePixelCraftTheme();
@@ -478,16 +552,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navbar) {
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 20);
-    });
-  }
-
-  // Mobile menu toggle
-  const navToggle = document.getElementById('nav-toggle-btn') || document.querySelector('.nav-hamburger');
-  const navLinks = document.getElementById('nav-links') || document.querySelector('.nav-links');
-  if (navToggle && navLinks) {
-    navToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('mobile-open');
-      navLinks.classList.toggle('open');
     });
   }
 

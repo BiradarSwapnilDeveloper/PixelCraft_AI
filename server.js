@@ -13,11 +13,82 @@ const multer = require('multer');
 const FormData = require('form-data');
 const fs = require('fs');
 const crypto = require('crypto');
+const net = require('net');
 const { sendTelegramAlert } = require('./utils/telegramAlert');
 const honeytokenTrap = require('./middlewares/honeytokenTrap');
 const app = express();
 app.set('trust proxy', 1); // Trust the Render proxy to fix HTTP/HTTPS mismatch
 const PORT = process.env.PORT || 8080;
+
+// --- SSRF & PRIVATE IP VALIDATOR ---
+function isPrivateOrReservedIp(ip) {
+  if (!ip || !net.isIP(ip)) return true;
+
+  if (net.isIPv4(ip)) {
+    const parts = ip.split('.').map(Number);
+    if (parts.length !== 4 || parts.some(p => isNaN(p) || p < 0 || p > 255)) return true;
+    if (parts[0] === 0) return true; // 0.0.0.0/8
+    if (parts[0] === 10) return true; // 10.0.0.0/8
+    if (parts[0] === 127) return true; // 127.0.0.0/8
+    if (parts[0] === 169 && parts[1] === 254) return true; // 169.254.0.0/16
+    if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return true; // 172.16.0.0/12
+    if (parts[0] === 192 && parts[1] === 168) return true; // 192.168.0.0/16
+    if (parts[0] === 100 && parts[1] >= 64 && parts[1] <= 127) return true; // 100.64.0.0/10
+    if (parts[0] >= 224) return true; // 224.0.0.0/4 & 240.0.0.0/4
+    return false;
+  }
+
+  if (net.isIPv6(ip)) {
+    const lower = ip.toLowerCase();
+    if (lower === '::1' || lower === '::') return true;
+    if (lower.startsWith('fc') || lower.startsWith('fd')) return true; // fc00::/7
+    if (lower.startsWith('fe80')) return true; // fe80::/10
+    if (lower.includes('::ffff:')) {
+      const ipv4 = lower.split('::ffff:')[1];
+      if (net.isIPv4(ipv4)) return isPrivateOrReservedIp(ipv4);
+    }
+    return false;
+  }
+
+  return true;
+}
+
+async function isSafeDestinationUrl(urlString) {
+  let parsed;
+  try {
+    parsed = new URL(urlString);
+  } catch (e) {
+    return false;
+  }
+
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+    return false;
+  }
+
+  const hostname = parsed.hostname.toLowerCase();
+  if (hostname === 'localhost' || hostname.endsWith('.localhost') || hostname === 'metadata.google.internal' || hostname === 'instance-data') {
+    return false;
+  }
+
+  const cleanHost = hostname.replace(/^\[|\]$/g, '');
+
+  if (net.isIP(cleanHost)) {
+    return !isPrivateOrReservedIp(cleanHost);
+  }
+
+  try {
+    const addresses = await dns.promises.lookup(hostname, { all: true });
+    if (!addresses || addresses.length === 0) return false;
+    for (const record of addresses) {
+      if (isPrivateOrReservedIp(record.address)) {
+        return false;
+      }
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 // Connect to MongoDB (Will log error locally if DNS blocked, but won't crash)
 mongoose.connect(process.env.MONGO_URI, {
@@ -35,7 +106,8 @@ const sessionConfig = {
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 Days rolling persistent login
     secure: process.env.NODE_ENV === 'production', // true for HTTPS in production
-    httpOnly: true
+    httpOnly: true,
+    sameSite: 'lax' // Protect against CSRF while allowing OAuth redirects
   }
 };
 
@@ -58,6 +130,30 @@ app.use(honeytokenTrap);
 
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ limit: '20mb', extended: true }));
+
+// --- GLOBAL SECURITY HEADERS MIDDLEWARE ---
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  // Allow internal framing for PDF viewer route /p/ and raw PDF previews; deny external framing
+  if (!req.path.startsWith('/uploads/pdf/') && !req.path.startsWith('/p/')) {
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  }
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
+
+// --- API SENSITIVE RESPONSE CACHE-CONTROL MIDDLEWARE ---
+app.use('/api', (req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
 app.use(session(sessionConfig));
 
 // Initialize Passport
@@ -649,6 +745,13 @@ app.post('/api/admin/file/deploy', requireAdminSession, (req, res) => {
     if (!validated) return res.status(400).json({ error: 'Invalid or restricted path' });
     if (typeof content !== 'string') return res.status(400).json({ error: 'Invalid content format' });
 
+    // Restrict runtime file writes: block executable scripts and server code
+    const executablePattern = /\.(js|cjs|mjs|py|sh|bash|ps1|bat|cmd|exe|dll|so|dylib|ya?ml)$/i;
+    const isRootScript = !validated.relativePath.includes('/') && !validated.relativePath.includes('\\');
+    if (executablePattern.test(validated.relativePath) || (isRootScript && validated.relativePath !== 'settings.json')) {
+      return res.status(403).json({ error: 'Forbidden: Server executable code and root configurations cannot be modified via runtime HTTP deployment.' });
+    }
+
     // Schema Validation if editing settings.json
     if (validated.relativePath === 'settings.json') {
       try {
@@ -730,14 +833,29 @@ app.post('/api/user/track-behavior', async (req, res) => {
   res.sendStatus(200); // Silently ignore
 });
 
+// Strict Return URL Validator (Prevents OAuth Open Redirects)
+const sanitizeReturnUrl = (rawUrl) => {
+  if (!rawUrl || typeof rawUrl !== 'string') return '/';
+  const trimmed = rawUrl.trim();
+  // Must start with exactly one forward slash; disallow protocol-relative URLs (//) and backslashes
+  if (!trimmed.startsWith('/') || trimmed.startsWith('//') || trimmed.includes('\\')) {
+    return '/';
+  }
+  // Disallow CRLF, control characters, and malicious schemes
+  if (/[\r\n\0]|javascript:|data:|vbscript:/i.test(trimmed)) {
+    return '/';
+  }
+  return trimmed;
+};
+
 // Route to start Google Auth
 app.get('/auth/google', (req, res, next) => {
-  const options = { scope: ['profile', 'email'] };
+  const options = { scope: ['profile', 'email'], state: true };
   if (req.query.prompt === 'select_account') {
     options.prompt = 'select_account';
   }
   if (req.query.returnTo) {
-    req.session.returnTo = req.query.returnTo;
+    req.session.returnTo = sanitizeReturnUrl(req.query.returnTo);
   }
   passport.authenticate('google', options)(req, res, next);
 });
@@ -762,8 +880,8 @@ app.get('/auth/switch-account', (req, res, next) => {
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/?error=login_failed' }),
   (req, res) => {
-    // Successful authentication, redirect back to intended tool OR home page.
-    const redirectTo = req.session.returnTo || '/';
+    // Successful authentication, redirect back to strictly sanitized intended tool OR home page.
+    const redirectTo = sanitizeReturnUrl(req.session.returnTo || '/');
     delete req.session.returnTo;
     res.redirect(redirectTo);
   }
@@ -1003,10 +1121,61 @@ app.get('/report', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'website-evolution-report.html'));
 });
 
+// Rate Limiter & Resource Capping for Public AI Generation Endpoints (20 requests per 15 min per IP)
+const publicAiRateLimiterMap = new Map();
+function checkPublicAiRateLimit(ip) {
+  const now = Date.now();
+  const windowMs = 15 * 60 * 1000; // 15 minutes
+  const maxRequests = 20;
+  const record = publicAiRateLimiterMap.get(ip) || { count: 0, resetTime: now + windowMs };
+
+  if (now > record.resetTime) {
+    record.count = 0;
+    record.resetTime = now + windowMs;
+  }
+
+  if (record.count >= maxRequests) {
+    const retryAfter = Math.ceil((record.resetTime - now) / 1000);
+    return { allowed: false, retryAfter };
+  }
+
+  record.count++;
+  publicAiRateLimiterMap.set(ip, record);
+  return { allowed: true, remaining: maxRequests - record.count, resetTime: record.resetTime };
+}
+
+function aiGenerationLimiterMiddleware(req, res, next) {
+  const clientIp = req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0].trim() : (req.socket.remoteAddress || req.ip || '127.0.0.1');
+  const rateCheck = checkPublicAiRateLimit(clientIp);
+  if (!rateCheck.allowed) {
+    res.setHeader('Retry-After', rateCheck.retryAfter || 900);
+    return res.status(429).json({
+      error: `AI request rate limit exceeded. Please wait ${Math.ceil(rateCheck.retryAfter / 60)} minutes before trying again.`,
+      retryAfter: rateCheck.retryAfter
+    });
+  }
+
+  const { prompt } = req.body || {};
+  if (!prompt || typeof prompt !== 'string') {
+    return res.status(400).json({ error: "Missing prompt or invalid prompt data type." });
+  }
+
+  const trimmedPrompt = prompt.trim();
+  if (trimmedPrompt.length === 0) {
+    return res.status(400).json({ error: "Missing prompt" });
+  }
+
+  if (trimmedPrompt.length > 500) {
+    return res.status(400).json({ error: "Prompt exceeds maximum allowed length of 500 characters." });
+  }
+
+  req.body.prompt = trimmedPrompt;
+  next();
+}
+
 // AI Generation Route (Used for 3D AI QR and other tools)
-app.post('/api/generate-image', async (req, res) => {
+app.post('/api/generate-image', aiGenerationLimiterMiddleware, async (req, res) => {
   const { prompt } = req.body;
-  if (!prompt) return res.status(400).json({ error: "Missing prompt" });
 
   if (!process.env.HF_API_KEY) {
     return res.status(500).json({ error: "HF_API_KEY not configured" });
@@ -1076,9 +1245,8 @@ app.use('/tools', (req, res, next) => {
 });
 
 // AI Audio/SFX Generation Route (Using Hugging Face AudioLDM2)
-app.post('/api/generate-sfx', async (req, res) => {
+app.post('/api/generate-sfx', aiGenerationLimiterMiddleware, async (req, res) => {
   const { prompt } = req.body;
-  if (!prompt) return res.status(400).json({ error: "Missing prompt" });
 
   if (!process.env.HF_API_KEY) {
     return res.status(500).json({ error: "HF_API_KEY not configured" });
@@ -1118,9 +1286,8 @@ app.post('/api/generate-sfx', async (req, res) => {
 });
 
 // AI Text Generation for Fan Engage Manager
-app.post('/api/generate-comment', async (req, res) => {
+app.post('/api/generate-comment', aiGenerationLimiterMiddleware, async (req, res) => {
   const { prompt } = req.body;
-  if (!prompt) return res.status(400).json({ error: "Missing prompt" });
 
   if (!process.env.HF_API_KEY) {
     return res.status(500).json({ error: "HF_API_KEY not configured" });
@@ -1238,7 +1405,30 @@ app.post('/api/scan-link', async (req, res) => {
     const parsed = new URL(target);
     const domain = parsed.hostname.toLowerCase();
 
-    // Advanced Military-Grade Heuristics
+    // Upfront SSRF Protection: verify initial target URL is safe before performing any outbound actions
+    const isInitialSafe = await isSafeDestinationUrl(target);
+    if (!isInitialSafe) {
+      return res.json({
+        originalUrl: url,
+        finalUrl: target,
+        heuristics: {
+          homograph: false,
+          deepSubdomains: false,
+          typosquatting: false,
+          suspiciousPath: true,
+          isShortener: false,
+          hasIpAddress: net.isIP(domain.replace(/^\[|\]$/g, '')) !== 0,
+          isSuspiciousTLD: false
+        },
+        threatDbMatch: true,
+        riskScore: 100,
+        aiAnalysis: {
+          overrideRiskScore: 100,
+          reasoning: "CRITICAL ALERT: Target points to an internal loopback, private RFC1918, or cloud metadata address. Outbound requests are strictly prevented by SSRF defense."
+        }
+      });
+    }
+
     // Advanced Military-Grade Heuristics
     const heuristics = {
       homograph: /[а-яА-Я\u0400-\u04FF\u0500-\u052F\u2DE0-\u2DFF\uA640-\uA69F]/.test(domain) || domain.includes('xn--') || /[^\x00-\x7F]/.test(domain),
@@ -1252,10 +1442,42 @@ app.post('/api/scan-link', async (req, res) => {
 
     let finalUrl = target;
     if (heuristics.isShortener) {
-      try {
-        const r = await fetch(target, { redirect: 'follow', method: 'HEAD', timeout: 3000 });
-        finalUrl = r.url;
-      } catch (e) { }
+      let currentHopUrl = target;
+      let hops = 0;
+      const maxHops = 3;
+
+      while (hops < maxHops) {
+        const isSafe = await isSafeDestinationUrl(currentHopUrl);
+        if (!isSafe) {
+          // Blocked by SSRF protection: do not issue outbound request to private/restricted IP
+          break;
+        }
+
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 3000);
+          const r = await fetch(currentHopUrl, {
+            redirect: 'manual',
+            method: 'HEAD',
+            signal: controller.signal
+          });
+          clearTimeout(timeout);
+
+          if ([301, 302, 303, 307, 308].includes(r.status)) {
+            const loc = r.headers.get('location');
+            if (!loc) break;
+            const nextUrl = new URL(loc, currentHopUrl).toString();
+            currentHopUrl = nextUrl;
+            hops++;
+          } else {
+            finalUrl = currentHopUrl;
+            break;
+          }
+        } catch (e) {
+          break;
+        }
+      }
+      finalUrl = currentHopUrl;
     }
 
     let riskScore = 0;
@@ -1890,14 +2112,31 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
     }
 
     // 3. Deep Scrubbing & Cryptographic Seal
-    const sealSecret = 'Pixelcraft_Sanitizer_V1';
-    const fileHash = crypto.createHash('sha256').update(buffer).digest('hex');
-    const sealHash = crypto.createHash('sha256').update(fileHash + sealSecret).digest('hex');
-    const sealMessage = `Pixelcraft_Verified_${sealHash}`;
+    const getSealSecret = () => {
+      if (process.env.NODE_ENV === 'production') {
+        if (!process.env.SEAL_SECRET || process.env.SEAL_SECRET === 'Pixelcraft_Sanitizer_V1') {
+          throw new Error("SECURITY FAULT: Production deployment requires a secure, non-default SEAL_SECRET environment variable.");
+        }
+        return process.env.SEAL_SECRET;
+      }
+      return process.env.SEAL_SECRET || 'Pixelcraft_Sanitizer_V1';
+    };
 
+    const sealSecret = getSealSecret();
     let sanitizedBuffer;
+    let sealHash;
+
     try {
-      sanitizedBuffer = await sharp(buffer)
+      // Re-encode through sharp to deep-scrub EXIF metadata and hidden non-conforming chunks
+      const scrubbedBuffer = await sharp(buffer)
+        .rotate()
+        .toBuffer();
+
+      // Cryptographic seal generated using HMAC over scrubbed buffer content
+      sealHash = crypto.createHmac('sha256', sealSecret).update(scrubbedBuffer).digest('hex');
+      const sealMessage = `Pixelcraft_Verified_${sealHash}`;
+
+      sanitizedBuffer = await sharp(scrubbedBuffer)
         .withMetadata({
           exif: {
             IFD0: {
@@ -1907,8 +2146,13 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
         })
         .toBuffer();
     } catch (sharpErr) {
-      console.error("Sharp processing error:", sharpErr);
-      sanitizedBuffer = buffer; // fallback to original if sharp fails
+      console.error("Sharp sanitization failure:", sharpErr);
+      // Security fix: NEVER return the original unscrubbed file as success
+      return res.status(422).json({
+        success: false,
+        error: "Image sanitization processing failed. Unsanitized file cannot be verified or safely returned.",
+        details: sharpErr.message
+      });
     }
 
     res.json({
@@ -1936,14 +2180,25 @@ app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res
       const desc = tags['ImageDescription'].description;
       if (desc.startsWith('Pixelcraft_Verified_')) {
         sealFound = true;
-        sealHash = desc.replace('Pixelcraft_Verified_', '');
+        sealHash = desc.replace('Pixelcraft_Verified_', '').trim();
       }
     }
 
-    if (sealFound) {
-      res.json({ success: true, verified: true, message: `✅ This image is verified and heavily sanitized by Pixelcraft AI. Seal: ${sealHash.substring(0, 8)}...` });
+    const isValidFormat = sealFound && /^[a-f0-9]{64}$/i.test(sealHash);
+
+    if (isValidFormat) {
+      res.json({
+        success: true,
+        verified: true,
+        sealHash,
+        message: `✅ This image is verified and heavily sanitized by Pixelcraft AI. Seal: ${sealHash.substring(0, 8)}...`
+      });
     } else {
-      res.json({ success: true, verified: false, message: `❌ No Pixelcraft Cryptographic Seal found. This image may not be sanitized or has been modified.` });
+      res.json({
+        success: true,
+        verified: false,
+        message: '❌ No valid Pixelcraft Cryptographic Seal found. This image may not be sanitized or has been modified.'
+      });
     }
   } catch (err) {
     console.error("Seal verification error", err);
@@ -1968,6 +2223,14 @@ app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] })
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
+  if (process.env.NODE_ENV === 'production') {
+    if (!process.env.SEAL_SECRET || process.env.SEAL_SECRET === 'Pixelcraft_Sanitizer_V1') {
+      console.warn("⚠️ [SECURITY WARNING]: SEAL_SECRET is missing or using default fallback in production! Set a strong random SEAL_SECRET in your hosting environment.");
+    }
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+      console.warn("⚠️ [SECURITY WARNING]: GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET not configured in production. Google OAuth logins will fail until set.");
+    }
+  }
 });
 
 

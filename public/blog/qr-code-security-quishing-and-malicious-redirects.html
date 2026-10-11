@@ -18,114 +18,6 @@
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="../logo.jpg?v=5" />
 
-  <style>
-    .article-container {
-      max-width: 920px;
-      margin: 140px auto 60px;
-      padding: 0 24px;
-    }
-    .article-card {
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      padding: 50px 45px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    }
-    .post-badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 20px;
-      background: rgba(249, 115, 22, 0.15);
-      color: #fb923c;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(249, 115, 22, 0.3);
-    }
-    .post-meta {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      flex-wrap: wrap;
-    }
-    .article-card h1 {
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      line-height: 1.25;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 16px;
-    }
-    .article-card h2 {
-      font-size: 1.6rem;
-      color: #fb923c;
-      margin: 40px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(251, 146, 60, 0.2);
-    }
-    .article-card h3 {
-      font-size: 1.25rem;
-      color: #e2e8f0;
-      margin: 28px 0 12px;
-    }
-    .article-card p, .article-card li {
-      color: #cbd5e1;
-      font-size: 1.05rem;
-      line-height: 1.85;
-      margin-bottom: 18px;
-    }
-    .article-card ul, .article-card ol {
-      padding-left: 24px;
-      margin-bottom: 24px;
-    }
-    .callout-box {
-      background: rgba(249, 115, 22, 0.08);
-      border-left: 4px solid #f97316;
-      border-radius: 0 12px 12px 0;
-      padding: 20px 24px;
-      margin: 30px 0;
-    }
-    .callout-box strong { color: #fb923c; }
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 25px 0;
-      font-size: 0.95rem;
-    }
-    .data-table th, .data-table td {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 12px 16px;
-      text-align: left;
-    }
-    .data-table th {
-      background: rgba(30, 41, 59, 0.8);
-      color: #fb923c;
-    }
-    .code-snippet {
-      background: #090d16;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 16px 20px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.9rem;
-      color: #fed7aa;
-      overflow-x: auto;
-      margin: 20px 0;
-    }
-    .related-tools {
-      margin-top: 50px;
-      padding: 28px;
-      background: rgba(16, 24, 39, 0.9);
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-  </style>
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
@@ -189,6 +81,14 @@
 </nav>
 
   <article class="article-container">
+    <div class="article-breadcrumb">
+      <a href="../index.html">Home</a>
+      <span>&rsaquo;</span>
+      <a href="index.html">Research Blog</a>
+      <span>&rsaquo;</span>
+      <span>QR Code Security & Quishing</span>
+    </div>
+
     <div class="article-card">
       <span class="post-badge">Phishing & Threat Vectors</span>
       <h1>Quishing Explained: The Rise of Malicious QR Codes and How to Spot Them</h1>
@@ -200,7 +100,7 @@
         <span>🔍 Peer-Reviewed Security Analysis</span>
       </div>
 
-      <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px 24px; margin: 25px 0 35px; font-size: 0.9rem; color: #94a3b8;">
+      <div class="editorial-disclosure">
         <strong>Editorial Disclosure:</strong> Researched and authored by the PixelCraft AI Threat Intelligence Team. Fact-checked and technical review supervised by Swapnil Biradar (Lead Security Architect). Conforms to ISO/IEC 18004 (QR Code Bar Code Symbology) and CISA Phishing Defense guidelines. Feedback or corrections: <em>support.pixelcraft205@gmail.com</em>.
       </div>
 
@@ -278,7 +178,7 @@
       <p>Yes. In a <strong>Static QR Code</strong>, the destination URL is permanently encoded into the matrix pattern and can never be altered. In a <strong>Dynamic QR Code</strong>, the code points to an intermediary redirect server that forwards users to the target destination; if that third-party service is compromised, the redirect can be hijacked.</p>
 
       <div class="related-tools">
-        <h3 style="margin-top: 0; color: #fb923c;">Generate Safe & Reliable QR Codes</h3>
+        <h3>Generate Safe & Reliable QR Codes</h3>
         <p>Create secure, high-precision barcodes with customizable Reed-Solomon correction:</p>
         <p>
           👉 <a href="../tools/qr-generator.html" style="color: #fdba74; font-weight: 600;">Client-Side QR Code Generator</a> — Generate static, tracker-free QR codes directly in your browser.<br>

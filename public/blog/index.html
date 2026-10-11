@@ -19,175 +19,6 @@
   <link rel="icon" href="../logo.jpg?v=5" />
 
   <style>
-    .blog-hero {
-      padding: 150px 20px 60px;
-      text-align: center;
-      position: relative;
-    }
-    .blog-hero h1 {
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #ffffff 30%, #38bdf8 70%, #818cf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .blog-hero p {
-      font-size: clamp(1.05rem, 2vw, 1.25rem);
-      color: var(--text-muted);
-      max-width: 760px;
-      margin: 0 auto 35px;
-      line-height: 1.7;
-    }
-    .filter-bar {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
-    }
-    .filter-btn {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-muted);
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-    .filter-btn:hover, .filter-btn.active {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: #38bdf8;
-      color: #38bdf8;
-      transform: translateY(-2px);
-    }
-    .search-box {
-      max-width: 500px;
-      margin: 0 auto 50px;
-      position: relative;
-    }
-    .search-box input {
-      width: 100%;
-      padding: 14px 20px 14px 44px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 14px;
-      color: #fff;
-      font-size: 1rem;
-      outline: none;
-      transition: border 0.3s;
-    }
-    .search-box input:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
-    }
-    .search-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-    .posts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 30px;
-      max-width: 1200px;
-      margin: 0 auto 80px;
-      padding: 0 20px;
-    }
-    .blog-card {
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    .blog-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #38bdf8, #818cf8);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .blog-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(56, 189, 248, 0.4);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.15);
-    }
-    .blog-card:hover::before {
-      opacity: 1;
-    }
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .card-badge {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      background: rgba(56, 189, 248, 0.12);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.2);
-    }
-    .card-read {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-    .blog-card h3 {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 12px;
-      line-height: 1.35;
-      transition: color 0.2s;
-    }
-    .blog-card:hover h3 {
-      color: #38bdf8;
-    }
-    .blog-card p {
-      font-size: 0.95rem;
-      color: #94a3b8;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      flex-grow: 1;
-    }
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.85rem;
-      color: #64748b;
-    }
-    .card-cta {
-      color: #38bdf8;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
     .empty-state {
       text-align: center;
       padding: 60px 20px;
@@ -253,7 +84,7 @@
 
   <header class="blog-hero">
     <div class="container">
-      <span class="card-badge" style="margin-bottom: 16px; display: inline-block;">Security & AI Knowledge Hub</span>
+      <span class="blog-hero-badge">Security & AI Knowledge Hub</span>
       <h1>Cybersecurity, Privacy & Media Engineering Blog</h1>
       <p>Authoritative technical guides, cryptographic forensics, AI safety research, and digital operational security (OPSEC) best practices.</p>
 
@@ -279,7 +110,7 @@
       <a href="complete-guide-to-image-steganography.html" class="blog-card" data-category="privacy" data-title="image audio steganography lsb dct cryptography hidden data">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">Cryptography</span>
+            <span class="card-badge badge-blue">Cryptography</span>
             <span class="card-read">9 Min Read</span>
           </div>
           <h3>The Complete Guide to Image & Audio Steganography</h3>
@@ -295,7 +126,7 @@
       <a href="exif-metadata-privacy-risks-and-removal.html" class="blog-card" data-category="privacy" data-title="exif metadata gps location camera hardware privacy removal osint">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(244, 63, 94, 0.15); color: #fb7185;">Privacy & OPSEC</span>
+            <span class="card-badge badge-rose">Privacy &amp; OPSEC</span>
             <span class="card-read">8 Min Read</span>
           </div>
           <h3>EXIF Metadata Security: How Photos Leak Your Home Location</h3>
@@ -311,7 +142,7 @@
       <a href="how-honeypots-and-canary-tokens-detect-breaches.html" class="blog-card" data-category="security" data-title="honeypots canary tokens decoys active defense breach detection secops">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">Active Defense</span>
+            <span class="card-badge badge-purple">Active Defense</span>
             <span class="card-read">9 Min Read</span>
           </div>
           <h3>How Honeytokens & Canary Decoys Detect Cyber Breaches</h3>
@@ -327,7 +158,7 @@
       <a href="browser-side-vs-server-side-file-processing.html" class="blog-card" data-category="privacy" data-title="client-side server zero-knowledge webassembly wasm privacy canvas worker">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">Zero-Knowledge</span>
+            <span class="card-badge badge-emerald">Zero-Knowledge</span>
             <span class="card-read">8 Min Read</span>
           </div>
           <h3>Zero-Knowledge Architecture: Client-Side vs Server Processing</h3>
@@ -343,7 +174,7 @@
       <a href="understanding-ai-prompt-injection-attacks.html" class="blog-card" data-category="ai" data-title="ai prompt injection jailbreak llm owasp security guardrails red teaming">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(234, 179, 8, 0.15); color: #facc15;">AI Safety</span>
+            <span class="card-badge badge-amber">AI Safety</span>
             <span class="card-read">10 Min Read</span>
           </div>
           <h3>Understanding AI Prompt Injection & LLM Security</h3>
@@ -359,7 +190,7 @@
       <a href="mastering-lossless-image-compression-for-web.html" class="blog-card" data-category="codecs" data-title="image compression webp avif mozjpeg lcp performance core web vitals">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8;">Media & Performance</span>
+            <span class="card-badge badge-sky">Media &amp; Performance</span>
             <span class="card-read">9 Min Read</span>
           </div>
           <h3>Mastering Modern Image Compression: WebP, AVIF & MozJPEG</h3>
@@ -375,7 +206,7 @@
       <a href="qr-code-security-quishing-and-malicious-redirects.html" class="blog-card" data-category="security" data-title="quishing qr code phishing redirects reed solomon barcodes security">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">Threat Vectors</span>
+            <span class="card-badge badge-orange">Threat Vectors</span>
             <span class="card-read">8 Min Read</span>
           </div>
           <h3>Quishing Explained: Spotting Malicious QR Codes</h3>
@@ -391,7 +222,7 @@
       <a href="securing-pdfs-redaction-metadata-stripping-and-encryption.html" class="blog-card" data-category="security" data-title="pdf redaction black box security metadata ocr encryption aes-256">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">Document Security</span>
+            <span class="card-badge badge-indigo">Document Security</span>
             <span class="card-read">9 Min Read</span>
           </div>
           <h3>The Ultimate PDF Security Guide: True Redaction vs Black Boxes</h3>
@@ -407,7 +238,7 @@
       <a href="the-dangers-of-phishing-and-homograph-attacks.html" class="blog-card" data-category="security" data-title="phishing homograph attacks punycode unicode cyrillic domains typo squatting">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">Cybersecurity</span>
+            <span class="card-badge badge-cyan">Cybersecurity</span>
             <span class="card-read">7 Min Read</span>
           </div>
           <h3>The Silent Threat: Homograph & Punycode Attacks</h3>
@@ -423,7 +254,7 @@
       <a href="what-is-prnu-sensor-fingerprinting.html" class="blog-card" data-category="privacy" data-title="prnu sensor fingerprinting digital forensics camera noise anonymity opsec">
         <div>
           <div class="card-top">
-            <span class="card-badge" style="background: rgba(110, 231, 183, 0.15); color: #6ee7b7;">Forensics</span>
+            <span class="card-badge badge-teal">Forensics</span>
             <span class="card-read">8 Min Read</span>
           </div>
           <h3>Beyond EXIF: PRNU Sensor Fingerprinting</h3>

@@ -25,3 +25,16 @@ tmp/
 
 # Backups
 *.bak
+*.zip
+
+# Temporary maintenance & audit scripts
+audit_*.py
+clean_*.py
+fix*.py
+fix-*.js
+check_*.js
+replace_*.js
+update_*.py
+count_*.js
+add-*.js
+find_*.py
