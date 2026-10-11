@@ -457,6 +457,7 @@
                 <span style="font-size:12px; color:var(--text-main); text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Require Login For Tools</span>
                 <button id="toggle-tools-login" style="background:var(--success); color:#fff; border:none; border-radius:12px; padding:4px 12px; font-size:11px; cursor:pointer; font-weight:bold; transition:0.3s;">ON</button>
             </div>
+            <button class="btn-primary" id="open-retention-btn" style="width:auto; padding: 10px 20px; font-size: 13px; border-color: #38bdf8; color: #38bdf8;">Retention & Holds</button>
             <button class="btn-primary" id="open-forensics-btn" style="width:auto; padding: 10px 20px; font-size: 13px; border-color: var(--warning); color: var(--warning);">Forensics Hub</button>
             <button class="btn-primary" id="open-deploy-btn" style="width:auto; padding: 10px 20px; font-size: 13px;">Deployment Hub</button>
             <button class="btn-logout" id="logout-btn">Terminate Session</button>
@@ -591,6 +592,76 @@
                     </thead>
                     <tbody id="decoylogs-tbody">
                         <!-- Dynamic -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Data Retention & Legal Hold Modal -->
+<div class="modal-overlay" id="retention-modal-overlay">
+    <div class="user-modal" id="retention-modal" style="max-width: 1100px; height: 85vh; display: flex; flex-direction: column;">
+        <div class="modal-header">
+            <div class="modal-user-info">
+                <div>
+                    <h2 class="modal-name" style="color: #38bdf8;">Data Retention & Legal Preservation Hub</h2>
+                    <p class="modal-email">Evidence preservation, automated lifecycle monitoring, and certified log management.</p>
+                </div>
+            </div>
+            <button class="modal-close" id="retention-modal-close">&times;</button>
+        </div>
+
+        <div style="padding: 20px; overflow-y: auto; flex: 1;">
+            <!-- Telemetry Badges -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                <div class="glass-panel stat-card" style="padding: 15px;">
+                    <h3 style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px;">Active Stored PDFs</h3>
+                    <p class="value" id="ret-stat-pdfs" style="font-size: 24px; color: #38bdf8;">0</p>
+                    <span style="font-size: 11px; color: var(--success); font-family: 'JetBrains Mono', monospace;">● Verified: 24h Purge</span>
+                </div>
+                <div class="glass-panel stat-card" style="padding: 15px;">
+                    <h3 style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px;">Total Security Logs</h3>
+                    <p class="value" id="ret-stat-traps" style="font-size: 24px; color: #a78bfa;">0</p>
+                    <span style="font-size: 11px; color: var(--warning); font-family: 'JetBrains Mono', monospace;">● Configured: 180d Baseline</span>
+                </div>
+                <div class="glass-panel stat-card" style="padding: 15px;">
+                    <h3 style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px;">Active Legal Holds</h3>
+                    <p class="value" id="ret-stat-holds" style="font-size: 24px; color: var(--danger);">0</p>
+                    <span style="font-size: 11px; color: #f43f5e; font-family: 'JetBrains Mono', monospace;">● Atomic Expiry Exemption</span>
+                </div>
+                <div class="glass-panel stat-card" style="padding: 15px;">
+                    <h3 style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px;">Session Lifecycle</h3>
+                    <p class="value" style="font-size: 24px; color: #34d399;">30d</p>
+                    <span style="font-size: 11px; color: var(--success); font-family: 'JetBrains Mono', monospace;">● Configured: Sliding Window</span>
+                </div>
+            </div>
+
+            <!-- Controls & Table Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span style="font-size: 13px; font-weight: bold; color: var(--text-main);">Filter Logs:</span>
+                    <button class="btn-primary" id="ret-filter-all" style="width: auto; padding: 6px 14px; font-size: 11px; background: rgba(56, 189, 248, 0.2); border-color: #38bdf8;">All Security Logs</button>
+                    <button class="btn-primary" id="ret-filter-holds" style="width: auto; padding: 6px 14px; font-size: 11px; border-color: var(--danger); color: var(--danger);">Legal Holds Only</button>
+                </div>
+                <button class="btn-primary" id="ret-export-btn" style="width: auto; padding: 6px 16px; font-size: 11px; border-color: #a78bfa; color: #a78bfa;">Export Evidence (JSON)</button>
+            </div>
+
+            <!-- Security & Holds Table -->
+            <div style="overflow-x: auto; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid var(--border);">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>IP Address</th>
+                            <th>Endpoint</th>
+                            <th>Location / ISP</th>
+                            <th>Preservation Status</th>
+                            <th>Hold Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="retention-tbody">
+                        <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Loading retention telemetry...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1797,6 +1868,164 @@ inSxPwWk6OXcfLjWnE/xatI=
             newWindow.document.write(content);
             newWindow.document.close();
         });
+
+        // RETENTION & LEGAL HOLD HUB LOGIC
+        const retentionModal = document.getElementById('retention-modal-overlay');
+        const openRetentionBtn = document.getElementById('open-retention-btn');
+        const closeRetentionBtn = document.getElementById('retention-modal-close');
+        const retFilterAll = document.getElementById('ret-filter-all');
+        const retFilterHolds = document.getElementById('ret-filter-holds');
+        const retExportBtn = document.getElementById('ret-export-btn');
+        const retTbody = document.getElementById('retention-tbody');
+        let currentHoldFilter = null;
+        let cachedRetentionLogs = [];
+
+        if (openRetentionBtn) {
+            openRetentionBtn.addEventListener('click', () => {
+                retentionModal.classList.add('open');
+                loadRetentionData();
+            });
+        }
+        if (closeRetentionBtn) {
+            closeRetentionBtn.addEventListener('click', () => {
+                retentionModal.classList.remove('open');
+            });
+        }
+
+        async function loadRetentionData() {
+            try {
+                const statusRes = await fetch('/api/admin/retention/status', {
+                    headers: { 'x-admin-password': currentPassword }
+                });
+                if (statusRes.ok) {
+                    const statusData = await statusRes.json();
+                    if (statusData.metrics) {
+                        document.getElementById('ret-stat-pdfs').textContent = statusData.metrics.storedPdfCount ?? 0;
+                        document.getElementById('ret-stat-traps').textContent = statusData.metrics.totalTrapLogs ?? 0;
+                        document.getElementById('ret-stat-holds').textContent = statusData.metrics.activeLegalHolds ?? 0;
+                    }
+                }
+                await fetchRetentionLogs(currentHoldFilter);
+            } catch (err) {
+                console.error("Error loading retention data:", err);
+            }
+        }
+
+        async function fetchRetentionLogs(holdOnly) {
+            retTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Fetching security logs...</td></tr>';
+            try {
+                let url = '/api/admin/retention/traplogs?limit=50';
+                if (holdOnly === true) url += '&legalHold=true';
+                else if (holdOnly === false) url += '&legalHold=false';
+
+                const res = await fetch(url, {
+                    headers: { 'x-admin-password': currentPassword }
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to fetch logs');
+
+                cachedRetentionLogs = data.logs || [];
+                if (cachedRetentionLogs.length === 0) {
+                    retTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No security records found.</td></tr>';
+                    return;
+                }
+
+                retTbody.innerHTML = '';
+                cachedRetentionLogs.forEach(log => {
+                    const tr = document.createElement('tr');
+                    const isHold = log.legalHold === true;
+                    const dateStr = log.timestamp ? new Date(log.timestamp).toLocaleString() : 'N/A';
+                    const ipMasked = log.ipAddress ? log.ipAddress.replace(/(\d+)\.(\d+)$/, 'xxx.xxx') : 'Hidden';
+                    const statusBadge = isHold
+                        ? `<span style="background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold;">LEGAL HOLD ACTIVE</span><div style="font-size: 10px; color: var(--text-muted); margin-top: 3px;">${log.legalHoldReason || ''}</div>`
+                        : `<span style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid var(--success); padding: 3px 8px; border-radius: 6px; font-size: 11px;">180d Auto-TTL</span>`;
+
+                    const actionBtn = isHold
+                        ? `<button class="btn-prompt-submit" style="padding: 4px 10px; font-size: 11px; background: rgba(16, 185, 129, 0.2); border: 1px solid var(--success); color: var(--success);" onclick="toggleLegalHold('${log._id}', false)">Release Hold</button>`
+                        : `<button class="btn-prompt-cancel" style="padding: 4px 10px; font-size: 11px; border-color: var(--danger); color: var(--danger);" onclick="promptLegalHold('${log._id}')">Place Hold</button>`;
+
+                    tr.innerHTML = `
+                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">${dateStr}</td>
+                        <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">${ipMasked}</td>
+                        <td style="font-size: 12px;"><span style="color: #38bdf8; font-weight: bold;">${log.method || 'GET'}</span> ${log.endpoint || '/'}</td>
+                        <td style="font-size: 12px; color: var(--text-muted);">${log.location || 'Unknown'} / ${log.isp || 'Unknown'}</td>
+                        <td>${statusBadge}</td>
+                        <td>${actionBtn}</td>
+                    `;
+                    retTbody.appendChild(tr);
+                });
+            } catch (e) {
+                retTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger); padding: 20px;">Error: ${e.message}</td></tr>`;
+            }
+        }
+
+        if (retFilterAll) {
+            retFilterAll.addEventListener('click', () => {
+                currentHoldFilter = null;
+                retFilterAll.style.background = 'rgba(56, 189, 248, 0.2)';
+                retFilterHolds.style.background = 'transparent';
+                fetchRetentionLogs(null);
+            });
+        }
+
+        if (retFilterHolds) {
+            retFilterHolds.addEventListener('click', () => {
+                currentHoldFilter = true;
+                retFilterHolds.style.background = 'rgba(239, 68, 68, 0.2)';
+                retFilterAll.style.background = 'transparent';
+                fetchRetentionLogs(true);
+            });
+        }
+
+        window.promptLegalHold = async function(logId) {
+            const reason = prompt("Enter official justification reason for Legal Preservation Hold (e.g., Incident Case #, Law Enforcement Notice):");
+            if (!reason) return;
+            if (reason.trim().length < 5) {
+                alert("Reason must be at least 5 characters.");
+                return;
+            }
+            await toggleLegalHold(logId, true, reason.trim());
+        };
+
+        window.toggleLegalHold = async function(logId, enable, reason) {
+            try {
+                const res = await fetch('/api/admin/retention/toggle-hold', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        password: currentPassword,
+                        logId: logId,
+                        enableHold: enable,
+                        reason: reason
+                    })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    showCustomAlert(data.message, true);
+                    loadRetentionData();
+                } else {
+                    showCustomAlert(data.error || "Failed to update legal hold", false);
+                }
+            } catch (err) {
+                showCustomAlert("Network error updating legal hold", false);
+            }
+        };
+
+        if (retExportBtn) {
+            retExportBtn.addEventListener('click', () => {
+                if (!cachedRetentionLogs || cachedRetentionLogs.length === 0) {
+                    alert("No logs available to export.");
+                    return;
+                }
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cachedRetentionLogs, null, 2));
+                const dlAnchor = document.createElement('a');
+                dlAnchor.setAttribute("href", dataStr);
+                dlAnchor.setAttribute("download", `pixelcraft_incident_evidence_${Date.now()}.json`);
+                document.body.appendChild(dlAnchor);
+                dlAnchor.click();
+                dlAnchor.remove();
+            });
+        }
     }
 </script>
 

@@ -45,8 +45,15 @@
 <h2>3. Log Files & Basic Analytics</h2>
 <p>In our commitment to privacy, PixelCraft AI limits telemetry. We collect basic usage metrics (such as tools used and session counts) linked to your account to improve our platform and enforce rate limits. We use Google Analytics for aggregated traffic analysis, which you can opt out of via our cookie consent banner.</p>
 
-<h2>4. Data Retention Policy</h2>
-<p>We maintain a strict minimal-data retention policy. When advanced AI features require server processing, your files are stored temporarily. Specifically, uploaded PDFs and media files are automatically deleted from our servers after 1 hour. We do not use your files for training AI models. Your cryptographic keys and passwords are never transmitted to our servers.</p>
+<h2>4. Data Retention & Lifecycle Policy</h2>
+<p>We maintain an evidence-based, purpose-limited data retention policy across all platform services:</p>
+<ul>
+  <li><strong>Temporary Shared Files:</strong> Uploaded PDF documents processed via our PDF-to-Link sharing tool are stored temporarily on isolated server storage and are automatically, permanently deleted after <strong>24 hours</strong>. We do not inspect, index, or use user-uploaded documents for AI model training.</li>
+  <li><strong>Authentication Sessions:</strong> Active user login sessions are maintained for a rolling period of <strong>30 days</strong> from your last activity. Logging out immediately destroys the server session and invalidates the session cookie.</li>
+  <li><strong>Security & Abuse Investigation Logs:</strong> In alignment with Indian cybersecurity directives (CERT-In Direction 2(iv) under Section 70B of the Information Technology Act), system security logs, honeypot activations, and abusive IP request records are maintained securely for a rolling window of <strong>180 days</strong> for forensic investigation and attack mitigation. Records subject to a formal legal preservation hold are retained only for the duration of the justified inquiry.</li>
+  <li><strong>Account Data:</strong> Registered user profiles are retained while your account remains active. You may request permanent account and personal data erasure at any time.</li>
+  <li><strong>Client-Side Cryptography:</strong> For steganography, digital fingerprint wiping, and local privacy tools, all encryption keys, passwords, and media bytes remain entirely inside your browser memory and are never transmitted to our servers.</li>
+</ul>
 
 <h2>5. Third Party Privacy Policies</h2>
 <p>PixelCraft AI's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers (such as Google) for more detailed information.</p>

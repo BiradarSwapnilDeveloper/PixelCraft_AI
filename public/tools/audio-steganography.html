@@ -628,10 +628,6 @@
     async function handleVideoEncode(realMsg, realPass, fakeMsg, fakePass) {
         showLoading("Injecting Payload into Video...", "Embedding secret in audio track. Please wait up to 30s.", true);
         const sessionId = generateSessionId("PX-VID-");
-        fetch("/api/forensic/log", {
-            method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sessionId, action: "ROBUST_VIDEO_STEGO", legalConsentGranted: true })
-        }).catch(() => {});
 
         try {
             let textPayload = "PX:" + sessionId + "|";
@@ -797,11 +793,6 @@
                     view.setUint32(40, length, true);
 
                     const sessionId = generateSessionId('PX-AUD-');
-                    fetch('/api/forensic/log', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ sessionId: sessionId, action: 'ROBUST_AUDIO_STEGO', legalConsentGranted: true })
-                    }).catch(console.error);
 
                     // 1. Real Msg
                     const telemetryTagReal = `[PixelCraft AI Software - Session: ${sessionId} ]`;

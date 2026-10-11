@@ -30,8 +30,9 @@ const sessionConfig = {
   secret: process.env.SESSION_SECRET || require('crypto').randomBytes(32).toString('hex'),
   resave: false,
   saveUninitialized: false,
+  rolling: true, // Sliding active session window
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 Years persistent login
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 Days rolling persistent login
     secure: process.env.NODE_ENV === 'production', // true for HTTPS in production
     httpOnly: true
   }
@@ -42,7 +43,9 @@ const sessionConfig = {
 if (process.env.RENDER || process.env.NODE_ENV === 'production') {
   sessionConfig.store = MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
-    collectionName: 'sessions'
+    collectionName: 'sessions',
+    ttl: 30 * 24 * 60 * 60, // 30 days in seconds
+    touchAfter: 24 * 3600   // update session touch only once per 24 hours
   });
 } else {
   console.log("Using Local Memory Session Store");
@@ -351,17 +354,42 @@ passport.use(new GoogleStrategy({
 
 // --- API ROUTES ---
 
-// Admin Authorization Middleware (2-Step Verification)
+// Admin Rate Limiter (Max 25 attempts per minute per IP to mitigate brute force)
+const adminRateLimitMap = new Map();
+const checkAdminRateLimit = (ip) => {
+  const now = Date.now();
+  const windowMs = 60 * 1000;
+  const maxAttempts = 25;
+  const record = adminRateLimitMap.get(ip) || { count: 0, resetTime: now + windowMs };
+  if (now > record.resetTime) {
+    record.count = 1;
+    record.resetTime = now + windowMs;
+  } else {
+    record.count++;
+  }
+  adminRateLimitMap.set(ip, record);
+  return record.count <= maxAttempts;
+};
+
+// Admin Authorization Middleware (Constant-Time Verification + Rate Limiting)
 const requireAdminAuth = (req, res, next) => {
-  // Try to get password from body (POST) or headers (GET)
+  const clientIp = req.ip || req.connection?.remoteAddress || 'unknown';
+  if (!checkAdminRateLimit(clientIp)) {
+    return res.status(429).json({ error: 'Too many requests. Please slow down.' });
+  }
+
   const password = (req.body && req.body.password) || req.headers['x-admin-password'];
   const expectedPassword = (process.env.ADMIN_PASSWORD || 'PxlCrft_Admin_8x9vZapL2qWkmN5jR_cF1yT').replace(/["']/g, "").trim();
 
-  // Check Access Key only
-  if (!password || password.trim() !== expectedPassword) {
+  if (!password || typeof password !== 'string') {
     return res.status(401).json({ error: 'Unauthorized access. Incorrect Access Key.' });
   }
 
+  const bufA = Buffer.from(password.trim());
+  const bufB = Buffer.from(expectedPassword);
+  if (bufA.length !== bufB.length || !crypto.timingSafeEqual(bufA, bufB)) {
+    return res.status(401).json({ error: 'Unauthorized access. Incorrect Access Key.' });
+  }
 
   next();
 };
@@ -530,11 +558,18 @@ app.get('/auth/google/callback',
   }
 );
 
-// Logout Route
+// Logout Route - Destroys session and clears cookie
 app.get('/logout', async (req, res, next) => {
   req.logout((err) => {
     if (err) { return next(err); }
-    res.redirect('/');
+    if (req.session) {
+      req.session.destroy(() => {
+        res.clearCookie('connect.sid');
+        res.redirect('/');
+      });
+    } else {
+      res.redirect('/');
+    }
   });
 });
 
@@ -1107,29 +1142,36 @@ app.post('/api/upload-pdf', uploadPdfAdvanced.single('file'), async (req, res) =
   return res.json({ success: true, url: viewerUrl });
 });
 
-// Periodic Cleanup of PDFs older than 24 hours (runs every hour)
-setInterval(() => {
+// Periodic & Startup Cleanup of PDFs older than 24 hours (Non-blocking async)
+async function cleanupExpiredPdfs(maxAgeMs = 24 * 60 * 60 * 1000) {
   const pdfDir = path.join(__dirname, 'public', 'uploads', 'pdf');
-  if (fs.existsSync(pdfDir)) {
-    fs.readdir(pdfDir, (err, files) => {
-      if (err) return console.error('Error reading PDF directory:', err);
-      const now = Date.now();
-      const MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours
-      files.forEach(file => {
-        const filePath = path.join(pdfDir, file);
-        fs.stat(filePath, (err, stats) => {
-          if (err) return;
-          if (now - stats.mtimeMs > MAX_AGE) {
-            fs.unlink(filePath, err => {
-              if (err) console.error('Error deleting old PDF:', filePath);
-              else console.log('Deleted expired PDF:', file);
-            });
-          }
-        });
-      });
-    });
+  try {
+    if (!fs.existsSync(pdfDir)) return;
+    const files = await fs.promises.readdir(pdfDir);
+    const now = Date.now();
+    for (const file of files) {
+      if (!file.endsWith('.pdf')) continue;
+      const filePath = path.join(pdfDir, file);
+      try {
+        const stats = await fs.promises.stat(filePath);
+        if (now - stats.mtimeMs > maxAgeMs) {
+          await fs.promises.unlink(filePath);
+          console.log('Deleted expired PDF (24h retention):', file);
+        }
+      } catch (fileErr) {
+        if (fileErr.code !== 'ENOENT') {
+          console.warn('PDF cleanup file warning:', fileErr.message);
+        }
+      }
+    }
+  } catch (err) {
+    console.error('PDF Cleanup Error:', err.message);
   }
-}, 60 * 60 * 1000); // 1 hour interval
+}
+
+// Run once on server startup and hourly thereafter
+cleanupExpiredPdfs().catch(err => console.error('Initial PDF cleanup error:', err));
+setInterval(() => cleanupExpiredPdfs().catch(err => console.error('Scheduled PDF cleanup error:', err)), 60 * 60 * 1000);
 
 
 app.get('/p/:id', (req, res) => {
@@ -1642,21 +1684,135 @@ app.listen(PORT, () => {
 });
 
 
-// --- GDPR Auto-Cleanup (Delete PDFs older than 1 hour) ---
-setInterval(() => {
+// --- DATA RETENTION & COMPLIANCE TELEMETRY ENDPOINTS (PROTECTED) ---
+const TrapLog = require('./models/TrapLog');
+
+// 1. Retention Status Telemetry
+app.get('/api/admin/retention/status', requireAdminAuth, async (req, res) => {
   try {
+    const totalUsers = await User.countDocuments();
+    const totalTrapLogs = await TrapLog.countDocuments();
+    const activeLegalHolds = await TrapLog.countDocuments({ legalHold: true });
+
+    let storedPdfCount = 0;
     const pdfDir = path.join(__dirname, 'public', 'uploads', 'pdf');
     if (fs.existsSync(pdfDir)) {
-      const files = fs.readdirSync(pdfDir);
-      const now = Date.now();
-      files.forEach(file => {
-        const filePath = path.join(pdfDir, file);
-        const stats = fs.statSync(filePath);
-        if (now - stats.mtimeMs > 60 * 60 * 1000) {
-          fs.unlinkSync(filePath);
-          console.log('Auto-deleted old PDF:', file);
+      const files = await fs.promises.readdir(pdfDir);
+      storedPdfCount = files.filter(f => f.endsWith('.pdf')).length;
+    }
+
+    res.json({
+      success: true,
+      metrics: {
+        totalUsers,
+        totalTrapLogs,
+        activeLegalHolds,
+        storedPdfCount
+      },
+      policies: {
+        sessionWindowDays: 30,
+        pdfRetentionHours: 24,
+        securityLogRollingBaselineDays: 180,
+        legalHoldMechanism: 'Dual-state nullable expiresAt with audit record'
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve retention metrics' });
+  }
+});
+
+// 2. Paginated Security Trap Logs (Sanitized projections, no raw payloads)
+app.get('/api/admin/retention/traplogs', requireAdminAuth, async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 20));
+    const filter = {};
+    if (req.query.legalHold === 'true') filter.legalHold = true;
+    if (req.query.legalHold === 'false') filter.legalHold = false;
+
+    const logs = await TrapLog.find(filter)
+      .select('_id timestamp ipAddress location isp userAgent endpoint method legalHold legalHoldReason expiresAt')
+      .sort({ timestamp: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const total = await TrapLog.countDocuments(filter);
+
+    res.json({
+      success: true,
+      logs,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit)
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve security logs' });
+  }
+});
+
+// 3. Atomic Legal Hold Toggle
+app.post('/api/admin/retention/toggle-hold', requireAdminAuth, async (req, res) => {
+  try {
+    const { logId, enableHold, reason } = req.body;
+    if (!logId || !/^[a-fA-F0-9]{24}$/.test(logId)) {
+      return res.status(400).json({ error: 'Invalid or missing log ID' });
+    }
+
+    if (enableHold) {
+      if (!reason || typeof reason !== 'string' || reason.trim().length < 5) {
+        return res.status(400).json({ error: 'Justification reason is required to place a legal hold (min 5 characters).' });
+      }
+
+      const updated = await TrapLog.findOneAndUpdate(
+        { _id: logId, legalHold: false },
+        {
+          $set: {
+            legalHold: true,
+            legalHoldReason: reason.trim().slice(0, 500),
+            legalHoldPlacedAt: new Date(),
+            legalHoldPlacedBy: 'Control Room Admin'
+          },
+          $unset: { expiresAt: 1 }
+        },
+        { new: true, select: '_id timestamp ipAddress endpoint method legalHold legalHoldReason expiresAt' }
+      );
+
+      if (!updated) {
+        const exists = await TrapLog.findById(logId);
+        if (!exists) {
+          return res.status(410).json({ error: 'Record already purged or not found' });
+        }
+        return res.status(409).json({ error: 'Record is already on legal hold' });
+      }
+
+      return res.json({ success: true, message: 'Legal hold placed successfully', log: updated });
+    } else {
+      const existing = await TrapLog.findById(logId);
+      if (!existing) {
+        return res.status(404).json({ error: 'Record not found' });
+      }
+
+      const originalAgeMs = Date.now() - (existing.timestamp ? existing.timestamp.getTime() : Date.now());
+      const remainingMs = (180 * 24 * 60 * 60 * 1000) - originalAgeMs;
+      const newExpiresAt = remainingMs > 0 ? new Date(Date.now() + remainingMs) : new Date(Date.now() + 24 * 3600 * 1000);
+
+      existing.legalHold = false;
+      existing.legalHoldReason = null;
+      existing.expiresAt = newExpiresAt;
+      await existing.save();
+
+      return res.json({
+        success: true,
+        message: 'Legal hold lifted successfully',
+        log: {
+          _id: existing._id,
+          legalHold: false,
+          expiresAt: existing.expiresAt,
+          timestamp: existing.timestamp
         }
       });
     }
-  } catch (e) { console.error('PDF Cleanup Error:', e); }
-}, 60 * 60 * 1000);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update legal hold' });
+  }
+});

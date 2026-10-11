@@ -22,3 +22,6 @@ tmp/
 
 # Secrets
 .env
+
+# Backups
+*.bak

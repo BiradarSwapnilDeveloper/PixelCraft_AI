@@ -35,7 +35,30 @@ const TrapLogSchema = new mongoose.Schema({
   timestamp: {
     type: Date,
     default: Date.now
+  },
+  expiresAt: {
+    type: Date,
+    default: () => new Date(Date.now() + 180 * 24 * 60 * 60 * 1000)
+  },
+  legalHold: {
+    type: Boolean,
+    default: false
+  },
+  legalHoldReason: {
+    type: String,
+    default: null
+  },
+  legalHoldPlacedAt: {
+    type: Date,
+    default: null
+  },
+  legalHoldPlacedBy: {
+    type: String,
+    default: null
   }
 });
+
+// Safe TTL index on expiresAt (MongoDB TTL ignores missing or null dates)
+TrapLogSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0, background: true });
 
 module.exports = mongoose.model('TrapLog', TrapLogSchema);
