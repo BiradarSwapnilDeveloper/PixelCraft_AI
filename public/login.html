@@ -307,6 +307,12 @@
         .then(res => res.json())
         .then(data => {
           if (data && data.authenticated && data.user) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const returnTo = urlParams.get('returnTo');
+            if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
+              window.location.replace(returnTo);
+              return;
+            }
             const userEmail = data.user.email || 'Google User';
             const intro = document.querySelector('.intro-text');
             if (intro) {

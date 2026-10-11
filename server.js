@@ -1235,7 +1235,8 @@ app.post('/api/admin/settings', requireAdminSession, (req, res) => {
   res.json({ success: true, settings: appSettings });
 });
 
-// Middleware to Protect Premium Tools
+// Middleware to Protect Premium Tools (DISABLED: Tools are freely accessible without mandatory login wall)
+/*
 app.use('/tools', (req, res, next) => {
   const premiumTools = ['audio-steganography', 'digital-fingerprint-wiper', 'advanced-decoy', 'ai-dubbing'];
   const isPremium = premiumTools.some(tool => req.originalUrl.toLowerCase().includes(tool));
@@ -1249,6 +1250,7 @@ app.use('/tools', (req, res, next) => {
   }
   res.redirect('/login.html?returnTo=' + encodeURIComponent(req.originalUrl));
 });
+*/
 
 // AI Audio/SFX Generation Route (Using Hugging Face AudioLDM2)
 app.post('/api/generate-sfx', aiGenerationLimiterMiddleware, async (req, res) => {
