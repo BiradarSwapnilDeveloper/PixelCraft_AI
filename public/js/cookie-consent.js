@@ -21,7 +21,7 @@
       gtag('config', GA_ID);
     }
 
-    if (!document.getElementById('adsense-script')) {
+    if (!document.getElementById('adsense-script') && !document.querySelector('script[src*="pagead2.googlesyndication.com"]')) {
       const adScript = document.createElement('script');
       adScript.id = 'adsense-script';
       adScript.async = true;

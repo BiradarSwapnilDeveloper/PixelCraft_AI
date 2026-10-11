@@ -2226,6 +2226,13 @@ app.get(['/controlroommanage', '/controlroommanage.html'], (req, res) => {
   }
 });
 
+// Google AdSense ads.txt verification endpoint
+app.get('/ads.txt', (req, res) => {
+  res.type('text/plain; charset=utf-8');
+  res.set('Cache-Control', 'public, max-age=86400');
+  res.send('google.com, pub-3788374704176398, DIRECT, f08c47fec0942fa0\n');
+});
+
 // Serve all static files (HTML, CSS, JS) from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
