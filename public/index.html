@@ -880,7 +880,7 @@
       hidden information known as EXIF data. This metadata can include your exact GPS coordinates, the date and time the
       photo was taken, device specifications, and even the software used to edit it. Sharing these images online can
       inadvertently expose your location and identity. Our <strong>Digital Fingerprint Wiper</strong> tool strips away
-      all hidden metadata, ensuring your digital footprint is completely anonymized before you share your media on
+      known EXIF, TIFF, and GPS metadata tags through canvas re-rasterization, drastically reducing identifiable footprints before you share media on
       social platforms or forums.
     </p>
 
@@ -891,15 +891,17 @@
       For users operating in high-risk environments, plausible deniability is crucial. Our <strong>Advanced Decoy
         Steganography</strong> tool allows you to encrypt two separate messages within a single image: a harmless
       "decoy" message and the actual secret payload. Under duress, you can reveal the decoy password, keeping the true
-      message mathematically hidden and inaccessible. All data embedded using PixelCraft AI tools is secured using
-      military-grade <strong>AES-256 encryption</strong>, guaranteeing that even if the steganographic payload is
-      detected, the contents remain completely secure and unreadable without the correct cryptographic key.
+      message cryptographically isolated and inaccessible. Embedded payloads are encrypted using standard
+      <strong>AES-256 encryption</strong>, ensuring that even if steganographic alterations are
+      identified via statistical steganalysis, the underlying ciphertext remains unreadable without the correct cryptographic key.
     </p>
 
-    <h3 style="color: var(--text-main); margin-top: 30px; margin-bottom: 15px; font-size: 1.5rem;">Client-Side Processing: Your Data Stays Yours</h3>
+    <h3 style="color: var(--text-main); margin-top: 30px; margin-bottom: 15px; font-size: 1.5rem;">Client-Side Processing: Technical Transparency</h3>
     <p style="margin-bottom: 20px;">
-      One of the biggest concerns with modern web tools is data privacy. Most online image editors and PDF converters require you to upload your sensitive files to a remote server for processing. This creates a massive vulnerability—once uploaded, you have no control over who views your data, how long it's stored, or if it's being used to train third-party AI models. 
-      <strong>PixelCraft AI takes a radically different approach.</strong> We utilize cutting-edge WebAssembly (Wasm) and local browser APIs to process all of your files directly on your device. Whether you are removing an image background, converting a PDF, or scrubbing EXIF data, your files <em>never</em> leave your computer. This architecture provides absolute zero-knowledge security. We couldn't look at your files even if we wanted to.
+      One of the biggest concerns with modern web utilities is data privacy. Many legacy online image editors require you to upload your sensitive files to a remote server for processing, introducing risks of cloud exposure or unauthorized data harvesting.
+      <strong>PixelCraft AI implements a privacy-first hybrid architecture:</strong>
+      All core privacy, steganography, and media manipulation tools execute client-side using WebAssembly (Wasm), HTML5 Canvas, and the native Web Crypto API directly in your browser. For these client-side utilities, your raw files <em>never</em> leave your machine.
+      For the few features requiring backend services—such as temporary PDF-to-Link document sharing—files are hosted temporarily in isolated storage with strict <strong>24-hour automatic purging</strong> and zero model training.
     </p>
 
     <h3 style="color: var(--text-main); margin-top: 30px; margin-bottom: 15px; font-size: 1.5rem;">Use Cases: Who Benefits from PixelCraft AI?</h3>
