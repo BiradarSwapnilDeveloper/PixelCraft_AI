@@ -58,22 +58,36 @@
   <div id="toast-container" class="toast-container"></div>
 
   <nav class="navbar" id="navbar">
+  <div class="nav-container">
     <a href="index.html" class="nav-logo">
-      <img src="logo.jpg?v=5" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
-      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
+      <img src="logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+      <span>PixelCraft AI</span>
     </a>
     <ul class="nav-links">
-      <li><a href="index.html#tools">Tools</a></li>
-      <li><a href="index.html#how-it-works">How It Works</a></li>
+      <li><a href="index.html#tools">All Tools</a></li>
       <li><a href="index.html#features">Features</a></li>
-      <li><a href="index.html#faq">FAQ</a></li>
-      <li><a href="blog/index.html">Blog</a></li>
-      <!-- <li><a href="index.html#donate">Support</a></li> -->
-      <li class="mobile-visible">
-        <a href="/auth/google" class="nav-cta" id="nav-auth-btn">Sign In</a>
-      </li>
+      <li><a href="blog/index.html">Research</a></li>
+      <li><a href="contact-us.html">Contact</a></li>
     </ul>
-  </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+        <span style="font-size: 1.15rem;">🌙</span>
+      </button>
+      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      </a>
+    </div>
+  </div>
+</nav>
 
   <section class="section legal-page-section" style="padding-top: 150px; min-height: 80vh;">
     <div class="container legal-page-container" style="max-width: 900px; background: var(--glass-bg); padding: 50px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px);">
@@ -127,7 +141,7 @@
         <p>PixelCraft AI provides advanced privacy utilities, including but not limited to Audio & Video Steganography, AES-256 Encryption, and Digital Fingerprint Wipers. To maintain ethical standards and comply with international directives, the underlying technology of these tools has been completely rebuilt (V2 Architecture). By using these features, you explicitly agree to the following:</p>
         <ul>
           <li><strong>Lawful and Educational Use Only:</strong> These tools are provided strictly for personal privacy, academic research, and authorized security testing. You may not use these tools to conceal illegal activities, distribute malicious payloads, bypass corporate data loss prevention (DLP) systems unlawfully, or engage in any form of cybercrime.</li>
-          <li><strong>Zero Original Data Retention for Local Tools:</strong> As part of our strict privacy commitment, tools listed under Encryption and Steganography operate locally. For these specific tools, we do NOT retain your original images, EXIF data, hashes, or IP addresses. Your private media remains entirely on your device, and processing is done completely client-side. For other server-based tools (like AI Dubbing and PDF sharing), files are temporarily stored on isolated storage and deleted automatically within 24 hours as detailed in our Privacy Policy.</li>
+          <li><strong>Zero Original Data Retention for Local Tools:</strong> As part of our strict privacy commitment, tools listed under Encryption and Steganography operate locally. For these specific tools, we do NOT retain your original images, EXIF data, or secret keys; processing is executed client-side in your browser sandbox. For server-assisted tools: PDF-to-Link temporarily stores files on disk for up to 24 hours (with automated hourly cleanup) to serve your public share link; AI Dubbing processes media ephemerally in server RAM/temporary scratch space and unlinks all temporary files immediately upon request completion; and Forensic Sanitizer inspects images entirely in-memory with zero disk persistence. See our <a href="data-practices.html" style="color: #38bdf8;">Privacy & Data Practices</a> for tool-by-tool technical specifications.</li>
           <li><strong>Complete User Liability:</strong> PixelCraft AI, its developers, and hosts assume <strong>zero liability</strong> for any data concealed, encrypted, transmitted, or anonymized using our tools. You are solely responsible for the content you process and the legal implications of possessing or distributing that content in your jurisdiction.</li>
           <li><strong>No Recovery:</strong> Because encryption operations happen entirely client-side within your browser, we do not store your passwords, keys, or raw data. If you lose your password, the data is permanently unrecoverable. We cannot and will not assist in data recovery or decryption requests.</li>
         </ul>
@@ -140,23 +154,23 @@
 
   
   <!-- MASSIVE LEGAL FOOTER FOR ADSENSE -->
-  <footer class="footer" style="background: #0f172a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
-    <div style="max-width: 1200px; margin: 0 auto;">
-      <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
-        <a href="about-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">About Us</a>
-        <a href="blog/index.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Blog & Research</a>
-        <a href="privacy-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Privacy Policy</a>
-        <a href="terms-conditions.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Terms of Service</a>
-        <a href="disclaimer.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Disclaimer</a>
-        <a href="cookies-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Cookies Policy</a>
-        <a href="index.html#contact" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Contact</a>
-      </div>
-      <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">
-        &copy; 2026 PixelCraft AI. All rights reserved.<br>
-        A Decentralized Privacy, Cryptography & Digital Security Toolset.
-      </p>
+  <footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+      <a href="about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+      <a href="privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+      <a href="terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+      <a href="disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+      <a href="cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+      <a href="blog/index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+      <a href="contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
     </div>
-  </footer>
+    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+      &copy; 2026 PixelCraft AI. All rights reserved.<br>
+      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+    </p>
+  </div>
+</footer>
 
 
   <script src="js/utils.js"></script>

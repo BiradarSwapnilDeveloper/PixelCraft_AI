@@ -18,115 +18,276 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
   <link rel="stylesheet" href="../css/style.css"/>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
   <style>
-    body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-    .container { max-width: 900px; margin: 50px auto; padding: 30px; background: rgba(30, 41, 59, 0.7); border-radius: 16px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-    h1 { text-align: center; color: #60a5fa; margin-bottom: 10px; }
-    p.subtitle { text-align: center; color: #94a3b8; margin-bottom: 30px; }
+    .decoy-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+    }
     
-    .tabs { display: flex; border-bottom: 1px solid #334155; margin-bottom: 25px; }
-    .tab { flex: 1; text-align: center; padding: 15px; cursor: pointer; color: #94a3b8; font-weight: 600; transition: 0.3s; }
-    .tab.active { color: #3b82f6; border-bottom: 3px solid #3b82f6; }
-    .tab:hover:not(.active) { color: var(--text-muted); background: rgba(255,255,255,0.05); }
+    .tabs-header {
+      display: flex;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      margin-bottom: 28px;
+      gap: 6px;
+    }
+    .tab-btn-item {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition-smooth);
+      background: transparent;
+      border: none;
+    }
+    .tab-btn-item.active {
+      color: var(--primary);
+      background: var(--surface-card);
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-btn-item:hover:not(.active) {
+      color: var(--text-heading);
+    }
 
     .panel { display: none; }
-    .panel.active { display: block; animation: fadeIn 0.4s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    .drop-zone { border: 2px dashed #475569; border-radius: 12px; padding: 40px 20px; text-align: center; color: #94a3b8; cursor: pointer; transition: 0.3s; background: rgba(15, 23, 42, 0.5); margin-bottom: 25px; }
-    .drop-zone:hover, .drop-zone.dragover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); color: var(--text-muted); }
+    .drop-zone {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      background: var(--surface-subtle);
+      margin-bottom: 24px;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
     
-    .preview-container { text-align: center; margin-bottom: 25px; display: none; }
-    .preview-container img { max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 1px solid #334155; }
+    .preview-container {
+      text-align: center;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .preview-container img {
+      max-width: 100%;
+      max-height: 320px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-color);
+    }
 
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
-    .form-group input, .form-group textarea { width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid #475569; border-radius: 8px; color: white; font-family: inherit; font-size: 1rem; box-sizing: border-box; transition: 0.3s; }
-    .form-group input:focus, .form-group textarea:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
-    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-group-item {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .form-group-item label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-heading);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .form-group-item input,
+    .form-group-item textarea {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-heading);
+      font-family: inherit;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      outline: none;
+    }
+    .form-group-item input:focus,
+    .form-group-item textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    .form-group-item textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
 
-    .btn-action { display: block; width: 100%; padding: 15px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
-    .btn-action:hover { background: linear-gradient(135deg, #3b82f6, #2563eb); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6); }
-
-    .loading-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(15,23,42,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
-    .spinner { width: 50px; height: 50px; border: 4px solid #334155; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .alert-box { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #34d399; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; }
-    .error-box { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #f87171; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; }
+    .alert-box {
+      background: var(--success-light);
+      border: 1px solid var(--success-border);
+      color: var(--success);
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      display: none;
+      font-weight: 600;
+    }
+    .error-box {
+      background: var(--danger-light);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Advanced Decoy Steganography</h1>
-    <p class="subtitle">Military-Grade QIM Encryption & Plausible Deniability</p>
 
-    <div class="tabs">
-      <div class="tab active" onclick="switchTab('encrypt')">🔒 Encrypt (Hide)</div>
-      <div class="tab" onclick="switchTab('decrypt')">🔓 Decrypt (Extract)</div>
+  <!-- Enterprise Navbar -->
+  <nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+      <span>PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">All Tools</a></li>
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../blog/index.html">Research</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+        <span style="font-size: 1.15rem;">🌙</span>
+      </button>
+      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <div class="tool-page">
+    <div class="tool-page-header">
+      <a href="../index.html" class="back-link">← Back to All Tools</a>
+      <div style="margin-bottom: 12px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--primary-light); color: var(--primary);">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      </div>
+      <h1>Advanced Decoy Steganography</h1>
+      <p>Plausible deniability encryption with dual-channel payload injection using Quantization Index Modulation.</p>
     </div>
 
-    <!-- ENCRYPT PANEL -->
-    <div id="panel-encrypt" class="panel active">
-      <div class="drop-zone" id="enc-drop">
-        Drag & Drop Image Here<br><br>or Click to Browse
-        <input type="file" id="enc-file" accept="image/png, image/jpeg" style="display:none;">
-      </div>
-      <div class="preview-container" id="enc-preview-container">
-        <img id="enc-preview" src="" alt="Preview">
+    <div class="decoy-card">
+      <div class="tabs-header">
+        <button class="tab-btn-item active" onclick="switchTab('encrypt')">🔒 Encrypt (Hide Secret + Decoy)</button>
+        <button class="tab-btn-item" onclick="switchTab('decrypt')">🔓 Decrypt (Extract Payload)</button>
       </div>
 
-      <div class="form-group">
-        <label>Real Secret Message</label>
-        <textarea id="enc-real-msg" placeholder="The highly confidential message you want to protect..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Real Password</label>
-        <input type="password" id="enc-real-pwd" placeholder="Enter a strong password">
+      <!-- ENCRYPT PANEL -->
+      <div id="panel-encrypt" class="panel active">
+        <div class="drop-zone" id="enc-drop">
+          <div style="font-size: 2.2rem; margin-bottom: 8px;">🖼️</div>
+          <strong>Drag & Drop Image Here</strong><br>
+          <span style="font-size: 0.88rem; color: var(--text-muted);">or click to browse PNG or JPEG</span>
+          <input type="file" id="enc-file" accept="image/png, image/jpeg" style="display:none;">
+        </div>
+        <div class="preview-container" id="enc-preview-container">
+          <img id="enc-preview" src="" alt="Preview">
+        </div>
+
+        <div class="form-group-item">
+          <label>Real Secret Message</label>
+          <textarea id="enc-real-msg" placeholder="The confidential message you want to protect..."></textarea>
+        </div>
+        <div class="form-group-item">
+          <label>Real Password</label>
+          <input type="password" id="enc-real-pwd" placeholder="Enter a strong password for real message">
+        </div>
+
+        <div style="margin: 28px 0; border-top: 1px dashed var(--border-color); position: relative; text-align: center;">
+          <span style="position: relative; top: -11px; background: var(--surface-card); padding: 0 12px; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Optional Decoy Channel</span>
+        </div>
+
+        <div class="form-group-item">
+          <label>Decoy Message (Fake Message for Plausible Deniability)</label>
+          <textarea id="enc-decoy-msg" placeholder="A fake innocent message to reveal if forced to give up a password..."></textarea>
+        </div>
+        <div class="form-group-item">
+          <label>Decoy Password</label>
+          <input type="password" id="enc-decoy-pwd" placeholder="Must be different from Real Password">
+        </div>
+
+        <button class="btn btn-primary" id="btn-encrypt" style="width: 100%; padding: 14px; font-size: 1rem;">Initiate Encryption</button>
+        
+        <div id="enc-result" style="display: none; margin-top: 20px; text-align: center;">
+          <div class="alert-box" style="display:block;">Data Embedded Successfully!</div>
+          <button class="btn btn-success" id="btn-download" style="width: 100%; padding: 14px; font-size: 1rem;">Download Secure Image</button>
+        </div>
       </div>
 
-      <hr style="border:0; border-top:1px solid #334155; margin: 30px 0;">
+      <!-- DECRYPT PANEL -->
+      <div id="panel-decrypt" class="panel">
+        <div class="drop-zone" id="dec-drop">
+          <div style="font-size: 2.2rem; margin-bottom: 8px;">🔓</div>
+          <strong>Drag & Drop Encrypted Image Here</strong><br>
+          <span style="font-size: 0.88rem; color: var(--text-muted);">or click to browse PNG</span>
+          <input type="file" id="dec-file" accept="image/png" style="display:none;">
+        </div>
+        <div class="preview-container" id="dec-preview-container">
+          <img id="dec-preview" src="" alt="Preview">
+        </div>
 
-      <div class="form-group">
-        <label>Decoy Message (Fake Message)</label>
-        <textarea id="enc-decoy-msg" placeholder="A fake innocent message to show if forced to give up a password..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Decoy Password</label>
-        <input type="password" id="enc-decoy-pwd" placeholder="Must be different from Real Password">
-      </div>
+        <div class="form-group-item">
+          <label>Password (Real or Decoy)</label>
+          <input type="password" id="dec-pwd" placeholder="Enter Real or Decoy Password">
+        </div>
 
-      <button class="btn-action" id="btn-encrypt">INITIATE ENCRYPTION</button>
-      
-      <div id="enc-result" style="display: none; margin-top: 20px; text-align: center;">
-        <div class="alert-box" style="display:block;">Data Embedded Successfully!</div>
-        <button class="btn-action" id="btn-download" style="background: #10b981;">DOWNLOAD SECURE IMAGE</button>
-      </div>
-    </div>
+        <button class="btn btn-primary" id="btn-decrypt" style="width: 100%; padding: 14px; font-size: 1rem;">Extract Message</button>
 
-    <!-- DECRYPT PANEL -->
-    <div id="panel-decrypt" class="panel">
-      <div class="drop-zone" id="dec-drop">
-        Drag & Drop Encrypted Image Here<br><br>or Click to Browse
-        <input type="file" id="dec-file" accept="image/png" style="display:none;">
-      </div>
-      <div class="preview-container" id="dec-preview-container">
-        <img id="dec-preview" src="" alt="Preview">
-      </div>
-
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="dec-pwd" placeholder="Enter Real or Decoy Password">
-      </div>
-
-      <button class="btn-action" id="btn-decrypt">EXTRACT MESSAGE</button>
-
-      <div id="dec-result" style="display: none; margin-top: 20px;">
-        <label style="color:#cbd5e1; font-weight:bold; margin-bottom:10px; display:block;">Extracted Message:</label>
-        <div id="dec-text" style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 8px; border: 1px solid #475569; color: #a7f3d0; white-space: pre-wrap; font-family: monospace;"></div>
+        <div id="dec-result" style="display: none; margin-top: 24px; text-align: left;">
+          <label style="color: var(--text-heading); font-weight: 600; margin-bottom: 8px; display: block;">Extracted Message:</label>
+          <div id="dec-text" style="background: var(--surface-subtle); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); color: var(--text-heading); white-space: pre-wrap; font-family: monospace; font-size: 0.95rem;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -135,7 +296,7 @@
 
   <div class="loading-overlay" id="loading">
     <div class="spinner"></div>
-    <div id="loading-text" style="color: #60a5fa; font-weight: bold; font-size: 1.2rem;">Processing...</div>
+    <div id="loading-text" style="color: var(--text-heading); font-weight: 600; font-size: 1.1rem;">Processing...</div>
   </div>
 
   <script>
@@ -430,43 +591,30 @@
   </script>
 
   <!-- SEO/ADSENSE RICH TEXT INJECTION -->
-  <div style="margin-top: 60px; padding: 40px; background: rgba(30, 41, 59, 0.5); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-muted); line-height: 1.8; margin-bottom: 40px;">
-    <h2 style="color: var(--text-main); font-size: 1.8rem; margin-bottom: 20px;">Advanced Decoy Steganography: The Ultimate Plausible Deniability</h2>
-    <p style="margin-bottom: 20px;">
+  <div style="margin-top: 60px; padding: 36px; background: var(--surface-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-body); line-height: 1.8; margin-bottom: 40px;">
+    <h2 style="color: var(--text-heading); font-size: 1.6rem; margin-bottom: 16px;">Advanced Decoy Steganography: The Ultimate Plausible Deniability</h2>
+    <p style="margin-bottom: 16px; color: var(--text-muted);">
       Welcome to the <strong>PixelCraft AI Advanced Decoy Steganography</strong> tool. Standard steganography hides a single message, but what happens if an adversary discovers the hidden data and forces you to hand over the decryption password? This is where our Decoy Steganography tool shines, providing mathematically guaranteed <em>plausible deniability</em>.
     </p>
 
-    <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">How Plausible Deniability Works</h3>
-    <p style="margin-bottom: 20px;">
+    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">How Plausible Deniability Works</h3>
+    <p style="margin-bottom: 16px; color: var(--text-muted);">
       Our tool allows you to embed two entirely separate encrypted messages into a single image:
       <br><br>
       <strong>1. The Real Message:</strong> Your actual sensitive data, encrypted with a strong password.<br>
       <strong>2. The Decoy Message:</strong> A harmless or fake message, encrypted with a secondary "decoy" password.
       <br><br>
-      If you are ever compromised and forced to decrypt the image, you simply provide the Decoy Password. The tool will decrypt the harmless message, and the adversary will have no cryptographic or statistical proof that a second, real message even exists within the same file.
+      If you are ever compromised and forced to decrypt the image, you simply provide the Decoy Password. The tool decrypts the harmless message, and the adversary has no cryptographic or statistical proof that a second, real message exists within the same file.
     </p>
 
-    <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">Advanced QIM (Quantization Index Modulation)</h3>
-    <p style="margin-bottom: 20px;">
-      To securely embed dual payloads without causing suspicious visual artifacts, we moved beyond outdated LSB techniques. The Advanced Decoy tool uses <strong>Quantization Index Modulation (QIM)</strong>. This algorithm quantizes blocks of pixels (e.g., 8x8 pixel blocks) into discrete geometric zones. By carefully modulating these indices, we embed both the real and decoy payloads into the structural variance of the image. This method is incredibly robust against noise and minor compression, and it completely evades standard steganalysis tools that look for localized bit anomalies.
-    </p>
-
-    <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">Military-Grade AES-256 Encryption</h3>
-    <p style="margin-bottom: 20px;">
-      Both the real and decoy messages are independently encrypted using AES-256 cryptography before they are injected into the image via QIM. Because both ciphertexts appear as mathematically random noise, an attacker cannot differentiate between the encrypted data of the real message, the decoy message, or the natural background noise of a high-resolution photograph. 100% of this processing happens locally in your browser to guarantee zero server-side data leakage.
+    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">Advanced QIM & AES-256 Encryption</h3>
+    <p style="margin-bottom: 16px; color: var(--text-muted);">
+      To securely embed dual payloads without causing suspicious visual artifacts, we utilize <strong>Quantization Index Modulation (QIM)</strong>. Both real and decoy payloads are encrypted using client-side AES-256 before injection. 100% of this processing happens locally in your browser.
     </p>
   </div>
   <!-- END SEO/ADSENSE RICH TEXT -->
-  
 
-<!-- SEO CONTENT FOR ADVANCED-DECOY.HTML -->
-<section style="max-width: 1200px; margin: 50px auto; padding: 40px; background: rgba(15, 23, 42, 0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); color: #94a3b8; line-height: 1.8; font-family: 'Inter', sans-serif;">
-
-  <h2 style="color: #f8fafc; font-size: 1.8rem; margin-bottom: 20px;">Understanding Advanced Decoy Generation</h2>
-  <p style="margin-bottom: 15px;">Advanced Decoy generation helps security researchers and privacy advocates create realistic, yet harmless, digital footprints. By distributing decoy files or data, you can track unauthorized access and identify potential security breaches before they affect your critical infrastructure. Our browser-based decoy generator ensures that all files are created locally, offering a safe environment to experiment with honeypot strategies.</p>
-  
-</section>
-
+<script src="../js/utils.js"></script>
 <script src="../js/cookie-consent.js"></script>
 </body>
 </html>

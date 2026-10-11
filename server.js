@@ -835,8 +835,13 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
         console.error("Audio extraction failed:", extErr);
         throw new Error("Failed to extract audio from video. Does it have an audio track?");
       } finally {
-        if (fs.existsSync(tempVideoPath)) fs.unlinkSync(tempVideoPath);
-        if (fs.existsSync(tempAudioPath)) fs.unlinkSync(tempAudioPath);
+        [tempVideoPath, tempAudioPath].forEach(filePath => {
+          try {
+            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+          } catch (cleanupErr) {
+            console.warn("[Dubbing] Extraction cleanup warning:", cleanupErr.message);
+          }
+        });
       }
     }
 
@@ -924,6 +929,9 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
       const newAudioPath = path.join(tempDir, `audio_${uniqueId}.mp3`);
       const outputVideoPath = path.join(tempDir, `out_${uniqueId}.mp4`);
 
+      let finalBase64 = null;
+      let ffmpegFailed = false;
+
       try {
         fs.writeFileSync(origVideoPath, req.file.buffer);
         fs.writeFileSync(newAudioPath, finalAudioBuffer);
@@ -936,20 +944,27 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
         execSync(`ffmpeg -y -i "${origVideoPath}" -i "${newAudioPath}" -c:v copy -map 0:v:0 -map 1:a:0 -shortest "${outputVideoPath}"`, { stdio: 'ignore' });
 
         const finalVideoBuffer = fs.readFileSync(outputVideoPath);
-        const finalBase64 = finalVideoBuffer.toString('base64');
+        finalBase64 = finalVideoBuffer.toString('base64');
 
-        // Cleanup temp files
-        fs.unlinkSync(origVideoPath);
-        fs.unlinkSync(newAudioPath);
-        fs.unlinkSync(outputVideoPath);
-
-        return res.json({
-          success: true,
-          message: `Successfully dubbed into ${targetLanguage}`,
-          mediaUrl: `data:video/mp4;base64,${finalBase64}`
-        });
+        // finalBase64 obtained from buffer
       } catch (ffmpegErr) {
+        ffmpegFailed = true;
         console.error("[Dubbing] FFmpeg Error:", ffmpegErr.message);
+      } finally {
+        // Guarantee cleanup of all temporary files across both success and failure
+        // Output file is only unlinked after being read into finalVideoBuffer
+        [origVideoPath, newAudioPath, outputVideoPath].forEach(filePath => {
+          try {
+            if (fs.existsSync(filePath)) {
+              fs.unlinkSync(filePath);
+            }
+          } catch (cleanupErr) {
+            console.warn("[Dubbing] Muxing cleanup warning:", cleanupErr.message);
+          }
+        });
+      }
+
+      if (ffmpegFailed || !finalBase64) {
         // If ffmpeg fails (maybe not installed), fallback to returning just the audio
         return res.json({
           success: true,
@@ -957,6 +972,12 @@ app.post('/api/dub-media', dubUpload.single('file'), async (req, res) => {
           mediaUrl: `data:audio/mp3;base64,${finalAudioBuffer.toString('base64')}`
         });
       }
+
+      return res.json({
+        success: true,
+        message: `Successfully dubbed into ${targetLanguage}`,
+        mediaUrl: `data:video/mp4;base64,${finalBase64}`
+      });
     } else {
       // If it was just audio, return the new audio directly
       res.json({
@@ -1345,6 +1366,10 @@ const uploadPdfAdvanced = multer({ storage: pdfStorage, limits: { fileSize: 50 *
 app.post('/api/upload-pdf', uploadPdfAdvanced.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   
+  res.setHeader('Cache-Control', 'private, no-cache, no-store');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
   // Create a nice small link, e.g. domain.com/p/a1b2c3
   const shortId = req.file.filename.replace('.pdf', '');
   const viewerUrl = `${req.protocol}://${req.get('host')}/p/${shortId}`;
@@ -1387,6 +1412,11 @@ setInterval(() => cleanupExpiredPdfs().catch(err => console.error('Scheduled PDF
 app.get('/p/:id', (req, res) => {
   const fileId = req.params.id;
   
+  // Apply strict cache-control policy to shared PDF viewer responses
+  res.setHeader('Cache-Control', 'private, no-cache, no-store');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
   // Basic path traversal protection
   if (!/^[a-zA-Z0-9_-]+$/.test(fileId)) {
     return res.status(400).send('Invalid Link');
@@ -1461,6 +1491,41 @@ app.get('/p/:id', (req, res) => {
 </body>
 </html>
   `);
+});
+
+// Dedicated route for serving uploaded shared PDF files with strict cache controls
+app.get('/uploads/pdf/:filename', (req, res) => {
+  const filename = req.params.filename;
+
+  // Enforce private, no-cache, no-store on all shared PDF file downloads and views
+  res.setHeader('Cache-Control', 'private, no-cache, no-store');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
+  // Basic path traversal protection and filename validation
+  if (!/^[a-zA-Z0-9_-]+\.pdf$/.test(filename)) {
+    return res.status(400).send('Invalid file name');
+  }
+
+  const filePath = path.join(__dirname, 'public', 'uploads', 'pdf', filename);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).send('PDF not found or expired');
+  }
+
+  res.sendFile(filePath, {
+    cacheControl: false,
+    maxAge: 0,
+    setHeaders: (response) => {
+      response.setHeader('Cache-Control', 'private, no-cache, no-store');
+      response.setHeader('Pragma', 'no-cache');
+      response.setHeader('Expires', '0');
+    }
+  }, (err) => {
+    if (err && !res.headersSent) {
+      res.status(500).send('Error delivering PDF');
+    }
+  });
 });
 
 // Serve all static files (HTML, CSS, JS) from the 'public' folder

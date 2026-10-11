@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy & Data Practices Inventory | PixelCraft AI</title>
+  <meta name="description" content="Transparent, evidence-based technical data inventory for PixelCraft AI. Review exact processing locations, retention schedules, and third-party data flows for all tools." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://pixelcraftaitools.com/data-practices.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="logo.jpg?v=5" />
+
+  <style>
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-body);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .page-header {
+      padding: 130px 0 50px;
+      text-align: center;
+      position: relative;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      color: var(--text-heading);
+    }
+
+    .page-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Summary Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin: 40px 0 60px;
+    }
+
+    .stat-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Section Styling */
+    .content-section {
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .section-heading {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-description {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    /* Data Table */
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--surface-card);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+
+    .data-table th {
+      background: var(--surface-subtle);
+      color: var(--text-heading);
+      padding: 16px 18px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-body);
+      vertical-align: middle;
+    }
+
+    .data-table td strong {
+      color: var(--text-heading);
+      font-weight: 600;
+    }
+
+    .data-table tr:hover {
+      background: var(--surface-subtle);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .tag-local {
+      background: rgba(16, 185, 129, 0.12);
+      color: #047857;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    [data-theme="dark"] .tag-local {
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.35);
+    }
+
+    .tag-server {
+      background: rgba(245, 158, 11, 0.12);
+      color: #b45309;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    [data-theme="dark"] .tag-server {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+      border-color: rgba(251, 191, 36, 0.35);
+    }
+
+    .tag-hybrid {
+      background: rgba(124, 58, 237, 0.12);
+      color: #6d28d9;
+      border: 1px solid rgba(124, 58, 237, 0.25);
+    }
+    [data-theme="dark"] .tag-hybrid {
+      background: rgba(168, 85, 247, 0.18);
+      color: #c084fc;
+      border-color: rgba(192, 132, 252, 0.35);
+    }
+
+    .tag-tier {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      background: rgba(37, 99, 235, 0.1);
+      color: #1d4ed8;
+      border: 1px solid rgba(37, 99, 235, 0.25);
+    }
+    [data-theme="dark"] .tag-tier {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+
+    /* Notice Card */
+    .notice-card {
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 20px 0;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .notice-info {
+      background: var(--indigo-light);
+      border: 1px solid var(--indigo-border);
+      color: var(--text-body);
+    }
+
+    .notice-warn {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: var(--text-body);
+    }
+
+    .notice-card strong {
+      color: var(--text-heading) !important;
+    }
+
+    .code-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      .page-title { font-size: 2.1rem; }
+      .content-section { padding: 24px; }
+      .data-table th, .data-table td { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <img src="logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+      <span>PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#tools">All Tools</a></li>
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="blog/index.html">Research</a></li>
+      <li><a href="contact-us.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+        <span style="font-size: 1.15rem;">🌙</span>
+      </button>
+      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <main class="container">
+    <header class="page-header">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Evidence-Based Transparency Architecture
+      </div>
+      <h1 class="page-title">Privacy & Data Practices Inventory</h1>
+      <p class="page-subtitle">
+        We believe that technical trust requires clear evidence. This page details the exact execution environment, storage lifecycle, third-party transmission, and deletion mechanisms for every tool across the PixelCraft AI platform.
+      </p>
+    </header>
+
+    <!-- Key Metrics Grid -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" style="color: var(--accent-green);">10+ Tools</div>
+        <div class="stat-label">100% Client-Side Sandbox (Zero Upload)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: var(--accent-cyan);">24 Hours</div>
+        <div class="stat-label">Maximum Retention for Shared PDF Links</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: var(--accent-purple);">0 Files</div>
+        <div class="stat-label">Permanent Server Media Storage</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: var(--accent-amber);">Hourly</div>
+        <div class="stat-label">Automated Storage Cleanup Cron Cycles</div>
+      </div>
+    </section>
+
+    <!-- Master Inventory Table -->
+    <section class="content-section">
+      <div class="section-heading">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Complete Tool Processing & Data Inventory
+      </div>
+      <p class="section-description">
+        Every tool is cataloged with its verified code behavior and data flow. Tools that process media in client-side memory never send bytes across the network. Tools requiring server or AI assistance explicitly declare endpoints, third-party recipients, and cleanup lifecycles.
+      </p>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Tool Name</th>
+              <th>Processing Mode</th>
+              <th>Endpoint / Runtime</th>
+              <th>Server Storage & Retention</th>
+              <th>Third-Party Recipients</th>
+              <th>Auth Required</th>
+              <th>Audit Evidence Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Image Steganography</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>HTML5 Canvas / LSB Algorithm</td>
+              <td>None (0 bytes sent to server)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Audio Steganography</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>Web Audio API / PCM LSB</td>
+              <td>None (In-memory Float32Array)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Video Steganography</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>HTML5 Canvas / Frame Analysis</td>
+              <td>None (In-memory frame buffers)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Digital Fingerprint Wiper</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>HTML5 Canvas & piexif.js</td>
+              <td>None (Metadata stripped client-side)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Decoy Steganography</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>Client-side multi-layer LSB</td>
+              <td>None (In-browser memory)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Format Converter</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>HTML5 Canvas / toDataURL</td>
+              <td>None (Client-side rendering)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>QR Generator (Standard)</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>qrcode.min.js</td>
+              <td>None (Client-side SVG/Canvas)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>QR Generator (3D AI Option)</strong></td>
+              <td><span class="tag tag-hybrid">Hybrid External</span></td>
+              <td>Hugging Face Inference API</td>
+              <td>None on PixelCraft servers</td>
+              <td>Hugging Face API (Prompt string)</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Password Generator</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>Web Crypto API (CSPRN)</td>
+              <td>None (Browser memory)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>PDF-to-Link Sharing</strong></td>
+              <td><span class="tag tag-server">Server-Side</span></td>
+              <td><span class="code-chip">POST /api/upload-pdf</span></td>
+              <td>Disk: <span class="code-chip">uploads/</span>. Auto-deleted after <strong>24 hours</strong> (hourly cron)</td>
+              <td>None (Local server filesystem)</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED BY TEST</span></td>
+            </tr>
+            <tr>
+              <td><strong>AI Dubbing & Translation</strong></td>
+              <td><span class="tag tag-server">Server + AI API</span></td>
+              <td><span class="code-chip">POST /api/dub-media</span></td>
+              <td>Ephemeral RAM (<span class="code-chip">os.tmpdir()</span>). Deleted <strong>immediately</strong> via unlinkSync</td>
+              <td>Groq (Whisper STT), Google Cloud (TTS)</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Forensic Sanitizer</strong></td>
+              <td><span class="tag tag-server">Server In-Memory</span></td>
+              <td><span class="code-chip">POST /api/sanitize</span></td>
+              <td>0 bytes saved to disk (In-memory Buffer via multer.memoryStorage)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Phishing URL Scanner</strong></td>
+              <td><span class="tag tag-server">Server Inspection</span></td>
+              <td><span class="code-chip">POST /api/scan</span></td>
+              <td>URL analyzed in Node.js runtime memory. Zero persistence.</td>
+              <td>Optional external threat feeds if configured</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Canary Token Generator</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>Client-side token generator</td>
+              <td>None (Decoy tokens generated in browser)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+            <tr>
+              <td><strong>PRNU Noise Analyzer</strong></td>
+              <td><span class="tag tag-local">Local Browser</span></td>
+              <td>HTML5 Canvas pixel analysis</td>
+              <td>None (Local processing)</td>
+              <td>None</td>
+              <td>No</td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Architectural Deep Dives -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 30px; margin-bottom: 40px;">
+      
+      <!-- Client-Side Architecture -->
+      <section class="content-section" style="margin-bottom: 0;">
+        <div class="section-heading" style="color: var(--accent-green);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-9M14 17H5M12 3v18"/></svg>
+          Client-Side Browser Sandboxing
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">
+          Tools tagged as <strong>Local Browser</strong> execute exclusively inside your device's browser sandbox using standard Web APIs (<span class="code-chip">HTML5 Canvas</span>, <span class="code-chip">Web Audio API</span>, <span class="code-chip">crypto.getRandomValues</span>, and <span class="code-chip">piexif.js</span>).
+        </p>
+        <ul style="color: var(--text-muted); font-size: 0.92rem; padding-left: 20px; line-height: 1.8;">
+          <li>Original media never leaves your computer or phone.</li>
+          <li>Steganographic secret messages and passwords are encrypted and processed locally.</li>
+          <li>No tracking tokens or media bytes are transmitted over the network for local tools.</li>
+        </ul>
+      </section>
+
+      <!-- Server Processing & Retention -->
+      <section class="content-section" style="margin-bottom: 0;">
+        <div class="section-heading" style="color: var(--accent-cyan);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Automated Storage Cleanup & Lifecycles
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">
+          Server-assisted tools enforce strict, automated data lifecycles to prevent permanent data accumulation:
+        </p>
+        <ul style="color: var(--text-muted); font-size: 0.92rem; padding-left: 20px; line-height: 1.8;">
+          <li><strong>PDF-to-Link:</strong> Uploaded files are assigned cryptographic UUIDs and stored on isolated disk storage for up to <strong>24 hours</strong>. An automated hourly cron job checks file creation timestamps and purges expired files.</li>
+          <li><strong>AI Dubbing:</strong> Audio and video chunks are written to temporary system storage (<span class="code-chip">os.tmpdir()</span>) and deleted <span class="code-chip">unlinkSync</span> immediately after processing.</li>
+          <li><strong>Forensic Sanitizer:</strong> Operates entirely in memory buffers (<span class="code-chip">multer.memoryStorage()</span>); nothing is written to disk.</li>
+        </ul>
+      </section>
+
+    </div>
+
+    <!-- User Account, Cookies & Deletion -->
+    <section class="content-section">
+      <div class="section-heading">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Account Data, Sessions, and Complete Deletion
+      </div>
+      <p class="section-description">
+        PixelCraft AI is designed so that almost all tools can be used completely anonymously without creating an account. If you choose to log in with Google OAuth:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+        <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+          <h4 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">What We Store Upon Login</h4>
+          <p style="color: var(--text-body); font-size: 0.9rem; margin-bottom: 0;">
+            We store only your Google ID, primary email address, full name, profile picture URL, and a tool usage count in our MongoDB database. We never receive or store your Google account password.
+          </p>
+        </div>
+
+        <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+          <h4 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">Session Cookies & Duration</h4>
+          <p style="color: var(--text-body); font-size: 0.9rem; margin-bottom: 0;">
+            Authentication utilizes an HTTP-only, secure session cookie (<span class="code-chip">connect.sid</span>) with a rolling expiration window of <strong>30 days</strong>. Logging out immediately destroys the server session and invalidates the cookie.
+          </p>
+        </div>
+
+        <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+          <h4 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">Account & Data Erasure</h4>
+          <p style="color: var(--text-body); font-size: 0.9rem; margin-bottom: 0;">
+            You can delete your account and associated database profile at any time through our verified <span class="code-chip">POST /api/user/delete</span> endpoint. Your profile record is permanently removed from the database immediately.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Limitations & Honest Disclosures -->
+    <section class="content-section">
+      <div class="section-heading" style="color: var(--accent-amber);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Important Technical Limitations & External Provider Disclosures
+      </div>
+      <p class="section-description">
+        In compliance with our commitment to transparency, we do not make unsupported absolute claims such as "100% untraceable" or "zero-risk". Please be aware of the following technical boundaries:
+      </p>
+
+      <div class="notice-card notice-warn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <strong style="color: var(--text-heading); display: block; margin-bottom: 6px;">Third-Party AI Services (Groq, Google Cloud, Hugging Face)</strong>
+          When utilizing AI Dubbing or 3D AI QR generation, audio snippets or text prompts are transmitted to third-party AI APIs (Groq for speech-to-text, Google Cloud for TTS, and Hugging Face for 3D QR diffusion). While PixelCraft AI does not retain this media on its own servers, retention and processing on third-party provider infrastructure is governed by their respective privacy terms and beyond our physical control.
+        </div>
+      </div>
+
+      <div class="notice-card notice-info">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <div>
+          <strong style="color: var(--text-heading); display: block; margin-bottom: 6px;">Public PDF Links & Search Indexing</strong>
+          Files uploaded via PDF-to-Link receive an unguessable UUID. However, anyone who possesses this URL during the 24-hour lifetime can download the file. While we instruct search engines not to index uploaded PDF directories, users should exercise caution and avoid sharing confidential personal identifiers via public links.
+        </div>
+      </div>
+
+      <div class="notice-card notice-info">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <div>
+          <strong style="color: var(--text-heading); display: block; margin-bottom: 6px;">Indian Cybersecurity Directions (CERT-In 180-Day Retention)</strong>
+          PixelCraft AI operates in alignment with the Indian Information Technology Act (CERT-In Direction 2(iv)). System security logs, malicious traffic signatures, and honeytoken trap triggers are retained in tamper-resistant security logs for up to 180 days to investigate cyber attacks and unauthorized intrusions.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Legal Footer -->
+  <footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+      <a href="about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+      <a href="privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+      <a href="terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+      <a href="disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+      <a href="cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+      <a href="blog/index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+      <a href="contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+      &copy; 2026 PixelCraft AI. All rights reserved.<br>
+      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+    </p>
+  </div>
+</footer>
+
+  <script src="./js/cookie-consent.js"></script>
+<script src="js/utils.js"></script>
+</body>
+</html>

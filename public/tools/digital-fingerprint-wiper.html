@@ -7,20 +7,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Digital Fingerprint Wiper | PixelCraft AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/piexifjs/1.0.6/piexif.min.js"></script>
   <style>
     :root {
-      --bg-dark: #050505;
-      --panel-bg: #0a0a0a;
-      --border-cyan: rgba(6, 182, 212, 0.3);
-      --text-main: #e2e8f0;
-      --text-muted: #64748b;
-      --accent-cyan: #06b6d4;
-      --accent-cyan-glow: rgba(6, 182, 212, 0.4);
-      --accent-emerald: #10b981;
-      --accent-emerald-glow: rgba(16, 185, 129, 0.4);
-      --alert-red: #ef4444;
+      --bg-dark: var(--bg-body);
+      --panel-bg: var(--surface-card);
+      --border-cyan: var(--border-color);
+      --text-main: var(--text-heading);
+      --text-muted: var(--text-muted);
+      --accent-cyan: var(--primary);
+      --accent-cyan-glow: var(--glow-primary);
+      --accent-emerald: var(--success);
+      --accent-emerald-glow: rgba(16, 185, 129, 0.25);
+      --alert-red: var(--danger);
     }
     
     * { box-sizing: border-box; }
@@ -28,18 +29,19 @@
     body {
       margin: 0; padding: 0;
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
+      background-color: var(--bg-body);
+      color: var(--text-body);
       min-height: 100vh;
       display: flex; flex-direction: column;
     }
 
     /* Navbar */
     .navbar {
-      padding: 15px 20px;
-      background: #000;
-      border-bottom: 1px solid var(--border-cyan);
+      padding: 0 24px;
+      background: var(--navbar-bg);
+      border-bottom: 1px solid var(--navbar-border);
       display: flex; justify-content: space-between; align-items: center;
+      height: 72px;
     }
     .navbar .logo {
       color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 1.2rem; letter-spacing: 1px;
@@ -194,10 +196,41 @@
 </head>
 <body>
 
-  <nav class="navbar">
-    <a href="/index.html" class="logo">PixelCraft <span>AI</span></a>
-    <a href="/index.html" class="back-btn">RETURN</a>
-  </nav>
+  <nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+      <span>PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">All Tools</a></li>
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../blog/index.html">Research</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+        <span style="font-size: 1.15rem;">🌙</span>
+      </button>
+      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <div style="padding-top: 90px;"></div>
+  <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+    <a href="../index.html#tools" class="back-link">← Back to All Tools</a>
+  </div>
 
   <div class="container">
     
@@ -229,10 +262,10 @@
           Securely remove sensitive metadata (EXIF) and anonymize your images. This tool adds an invisible protective layer to help prevent unauthorized tracking while keeping your photos looking exactly the same.
         </p>
         
-        <div class="legal-container" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px;">
-          <div style="font-size: 1.2rem;">🔒</div>
+        <div class="legal-container" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 10px;">
+          <div style="font-size: 1.1rem; color: #10b981;">🛡️</div>
           <div>
-            <p style="font-size: 0.85rem; color: #93c5fd; margin: 0; line-height: 1.5;"><strong>Google Login Required:</strong> You must authenticate with a Google account to access this tool.</p>
+            <p style="font-size: 0.82rem; color: #cbd5e1; margin: 0; line-height: 1.4;"><strong style="color: #34d399;">100% Client-Side Processing:</strong> This tool executes entirely within your browser memory. Your images are never uploaded to any server or external API (<a href="../data-practices.html#digital-fingerprint-wiper" style="color: #34d399; text-decoration: underline;" target="_blank">view data practices</a>).</p>
           </div>
         </div>
         
@@ -619,7 +652,7 @@
 
     <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">What is EXIF Data and Why is it Dangerous?</h3>
     <p style="margin-bottom: 20px;">
-      EXIF data acts as a digital footprint. It can contain the exact GPS coordinates (latitude and longitude) of where the photo was taken, the date and timestamp down to the second, the make and model of your phone, and even the software version of your operating system. Cybercriminals and stalkers can easily extract this data from original image files shared on forums, messaging apps, or personal blogs to track your real-world location. Our Digital Fingerprint Wiper completely scrubs all EXIF, XMP, and IPTC metadata from your images, ensuring 100% anonymity.
+      EXIF data acts as a digital footprint. It can contain the exact GPS coordinates (latitude and longitude) of where the photo was taken, the date and timestamp down to the second, the make and model of your phone, and even the software version of your operating system. Cybercriminals and stalkers can easily extract this data from original image files shared on forums, messaging apps, or personal blogs to track your real-world location. Our Digital Fingerprint Wiper strips EXIF, XMP, and IPTC metadata headers from your images in your browser, significantly reducing digital fingerprinting and location tracking risks.
     </p>
 
     <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">Advanced Spatial Watermarking (QIM)</h3>
@@ -629,7 +662,7 @@
 
     <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">Client-Side Processing Security</h3>
     <p style="margin-bottom: 20px;">
-      Unlike other EXIF viewers and removers that require you to upload your personal photos to a cloud server, PixelCraft AI processes everything locally. Using HTML5 Canvas and JavaScript running directly within your web browser, the metadata is stripped away from the image before it ever leaves your device. This guarantees that your original, un-wiped photos are never intercepted or stored on third-party servers.
+      Unlike other EXIF viewers and removers that require you to upload your personal photos to a cloud server, PixelCraft AI processes everything locally. Using HTML5 Canvas and JavaScript running directly within your web browser, the metadata is stripped away from the image before it ever leaves your device. Because processing occurs client-side in your local browser sandbox, un-sanitized source files are not transmitted to or stored on PixelCraft AI backend servers.
     </p>
   </div>
   <!-- END SEO/ADSENSE RICH TEXT -->
@@ -643,6 +676,7 @@
   
 </section>
 
+<script src="../js/utils.js"></script>
 <script src="../js/cookie-consent.js"></script>
 </body>
 </html>

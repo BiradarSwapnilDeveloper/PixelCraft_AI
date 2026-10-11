@@ -79,202 +79,191 @@
   
 
   <style>
-    :root {
-      --cyber-bg: #050a15;
-      --cyber-panel: rgba(13, 20, 35, 0.85);
-      --cyber-border: rgba(6, 182, 212, 0.4);
-      --cyber-cyan: #06b6d4;
-      --cyber-red: #ef4444;
-      --cyber-green: #10b981;
-      --cyber-yellow: #f59e0b;
-    }
-    
-    .cyber-workspace {
-      background: var(--cyber-bg);
-      border: 1px solid var(--cyber-border);
-      border-radius: 12px;
-      padding: 30px;
-      color: var(--text-main);
-      font-family: 'Fira Code', monospace;
-      box-shadow: 0 0 30px rgba(6, 182, 212, 0.1);
+    .threat-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-card);
       position: relative;
-      overflow: hidden;
     }
 
-    .cyber-workspace::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at center, rgba(6,182,212,0.05) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .cyber-header {
+    .threat-header {
       text-align: center;
-      margin-bottom: 30px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border-color);
       padding-bottom: 20px;
     }
-    .cyber-header h2 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 2rem;
-      color: var(--cyber-cyan);
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+    .threat-header h2 {
+      font-size: 1.5rem;
+      color: var(--text-heading);
+      margin-bottom: 8px;
+      font-weight: 700;
     }
 
     .scan-input-group {
       display: flex;
       gap: 10px;
-      margin-bottom: 30px;
-      position: relative;
-      z-index: 2;
+      margin-bottom: 28px;
     }
 
     .scan-input-group input {
       flex: 1;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid var(--cyber-border);
-      padding: 15px 20px;
-      color: var(--text-main);
-      font-family: 'Fira Code', monospace;
-      font-size: 1.1rem;
-      border-radius: 8px;
+      background: var(--surface-subtle);
+      border: 1.5px solid var(--border-color);
+      padding: 14px 18px;
+      color: var(--text-heading);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
       outline: none;
-      transition: 0.3s;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
     .scan-input-group input:focus {
-      border-color: var(--cyber-cyan);
-      box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
-    }
-
-    .btn-cyber {
-      background: rgba(6, 182, 212, 0.1);
-      border: 1px solid var(--cyber-cyan);
-      color: var(--cyber-cyan);
-      padding: 0 30px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: bold;
-      font-size: 1.1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: 0.3s;
-    }
-    .btn-cyber:hover {
-      background: var(--cyber-cyan);
-      color: #000;
-      box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
-    }
-    .btn-cyber:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+      background: var(--surface-card);
     }
 
     .scan-results {
       display: none;
-      background: rgba(0,0,0,0.3);
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.05);
-      padding: 20px;
+      margin-top: 24px;
     }
 
     .risk-score-container {
       display: flex;
       align-items: center;
-      gap: 20px;
-      margin-bottom: 30px;
-      padding: 20px;
-      background: rgba(255,255,255,0.02);
-      border-radius: 8px;
-      border-left: 4px solid var(--cyber-cyan);
+      gap: 24px;
+      margin-bottom: 24px;
+      padding: 20px 24px;
+      background: var(--surface-subtle);
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--primary);
+      border: 1px solid var(--border-color);
+      border-left-width: 4px;
     }
     .risk-circle {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
-      font-weight: bold;
-      border: 4px solid var(--cyber-cyan);
-      box-shadow: 0 0 15px var(--cyber-cyan);
+      font-size: 1.8rem;
+      font-weight: 800;
+      border: 3px solid var(--primary);
+      background: var(--surface-card);
+      color: var(--text-heading);
+      flex-shrink: 0;
     }
     .risk-info h3 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.5rem;
-      margin-bottom: 5px;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+      color: var(--text-heading);
+      font-weight: 700;
     }
     .risk-info p {
       color: var(--text-muted);
       font-size: 0.9rem;
+      line-height: 1.5;
+      margin: 0;
     }
 
     .heuristics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
     .heuristic-card {
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 15px;
-      border-radius: 6px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .heuristic-name {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-heading);
     }
     .heuristic-status {
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
     }
-    .status-safe { color: var(--cyber-green); background: rgba(16, 185, 129, 0.1); }
-    .status-warn { color: var(--cyber-yellow); background: rgba(245, 158, 11, 0.1); }
-    .status-danger { color: var(--cyber-red); background: rgba(239, 68, 68, 0.1); }
-    .status-pending { color: var(--cyber-cyan); background: rgba(6, 182, 212, 0.1); animation: pulse 1s infinite; }
+    .status-safe { color: var(--success); background: var(--success-light); border: 1px solid var(--success-border); }
+    .status-warn { color: var(--warning); background: var(--warning-light); border: 1px solid rgba(217, 119, 6, 0.2); }
+    .status-danger { color: var(--danger); background: var(--danger-light); border: 1px solid rgba(220, 38, 38, 0.2); }
+    .status-pending { color: var(--primary); background: var(--primary-light); border: 1px solid var(--primary-border); animation: pulse 1.2s infinite; }
 
     @keyframes pulse {
-      0% { opacity: 0.5; }
+      0% { opacity: 0.6; }
       50% { opacity: 1; }
-      100% { opacity: 0.5; }
+      100% { opacity: 0.6; }
     }
 
     .terminal-output {
       margin-top: 20px;
-      background: #000;
-      padding: 15px;
-      border-radius: 6px;
-      height: 150px;
+      background: var(--surface-subtle);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      height: 160px;
       overflow-y: auto;
-      border: 1px solid rgba(255,255,255,0.1);
-      font-size: 0.8rem;
-      color: #0f0;
+      border: 1px solid var(--border-color);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--text-body);
+      line-height: 1.6;
     }
-    .term-line {
-      margin-bottom: 4px;
+    .term-line { margin-bottom: 4px; word-break: break-word; }
+    .term-err { color: var(--danger); font-weight: 600; }
+    .term-sys { color: var(--primary); font-weight: 600; }
+
+    @media (max-width: 600px) {
+      .scan-input-group { flex-direction: column; }
+      .risk-score-container { flex-direction: column; text-align: center; }
     }
-    .term-err { color: var(--cyber-red); }
-    .term-sys { color: var(--cyber-cyan); }
   </style>
 </head>
 <body>
 <div id="toast-container" class="toast-container"></div>
-<nav class="navbar">
-  <a href="../index.html" class="nav-logo">
-      <img src="../logo.jpg?v=3" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
-      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
+
+<!-- Enterprise Navbar -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+      <span>PixelCraft AI</span>
     </a>
-  <ul class="nav-links"><li><a href="../index.html#tools">All Tools</a></li></ul>
-  <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">All Tools</a></li>
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../blog/index.html">Research</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+        <span style="font-size: 1.15rem;">🌙</span>
+      </button>
+      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      </a>
+    </div>
+  </div>
 </nav>
 
 <div class="tool-page">
@@ -282,21 +271,27 @@
     <a href="../index.html" class="back-link">← Back to All Tools</a>
     <div style="font-size:2.5rem;margin-bottom:12px;">🛡️</div>
     <h1>Deep Phishing & Malware Scanner</h1>
-    <p>Advanced AI heuristic engine to detect homograph attacks, hidden payloads, and zero-day phishing links. Fast & secure. All processing happens locally on your device ensuring enhanced privacy. Enjoy premium features instantly, completely free and without any registration.</p>
+    <p>Advanced AI heuristic engine to detect homograph attacks, typosquatting, unmasked shorteners, and malicious domains. Scans are processed in isolated server memory and discarded immediately without logging browsing history.</p>
   </div>
 
-  <div class="tool-workspace" style="background: transparent; border: none; box-shadow: none; padding: 0;">
-    <div class="cyber-workspace">
-      <div class="cyber-header">
-        <h2>Threat Intelligence Scanner</h2>
-        <p style="color: var(--text-muted);">Enter a suspicious URL to perform a deep security audit.</p>
-        <p style="color: var(--cyber-red); font-size: 0.85rem; margin-top: 10px;">⚠️ Warning: Do not scan confidential password-reset links or internal private URLs.</p>
+  <div class="threat-card">
+    <div class="threat-header">
+      <h2>Threat Intelligence Link & Malware Scanner</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0 0 16px 0;">Enter any suspicious URL to inspect punycode homographs, redirects, and threat reputation.</p>
+      
+      <!-- Pre-Submission Transparency Box -->
+      <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; margin: 0 auto; max-width: 680px; font-size: 0.82rem; color: var(--text-body); line-height: 1.5; text-align: left;">
+        <strong style="color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+          <span>🛡️</span> Server-Side URL Inspection Notice
+        </strong>
+        Submitted URLs are sent to our backend analysis engine via <code>/api/scan-link</code> to evaluate punycode spoofing, IP routing, and DNS reputation. Scans are processed ephemerally in volatile RAM and are never linked to your personal identity.
       </div>
+    </div>
 
-      <div class="scan-input-group">
-        <input type="url" id="url-input" placeholder="https://suspicious-link.com/login..." required/>
-        <button class="btn-cyber" id="scan-btn">Initiate Scan</button>
-      </div>
+    <div class="scan-input-group">
+      <input type="url" id="url-input" placeholder="https://suspicious-link.com/login..." required/>
+      <button class="btn btn-primary" id="scan-btn" style="padding: 14px 28px; font-size: 1rem;">Initiate Scan</button>
+    </div>
 
       <div class="scan-results" id="scan-results">
         <div class="risk-score-container" id="risk-container">
@@ -348,7 +343,6 @@
       </div>
     </div>
   </div>
-</div>
 
 <script src="../js/utils.js"></script>
 <script>
@@ -513,41 +507,32 @@
 
   <!-- SEO/ADSENSE RICH TEXT INJECTION -->
   <div style="margin-top: 60px; padding: 40px; background: rgba(30, 41, 59, 0.5); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-muted); line-height: 1.8; margin-bottom: 40px;">
-    <h2 style="color: var(--text-main); font-size: 1.8rem; margin-bottom: 20px;">Everything You Need to Know About the Phishing Scanner Tool</h2>
-    <p style="margin-bottom: 20px;">Welcome to the ultimate guide on utilizing our powerful <strong>Phishing Scanner</strong> tool. In today's fast-paced digital world, efficiency and privacy are the two most critical factors when handling media online. Unlike many other platforms that force you to upload your sensitive files to remote servers, PixelCraft AI processes everything directly within your local browser environment.</p>
+  <!-- SEO/ADSENSE RICH TEXT INJECTION -->
+  <div style="margin-top: 60px; padding: 36px; background: var(--surface-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-body); line-height: 1.8; margin-bottom: 40px;">
+    <h2 style="color: var(--text-heading); font-size: 1.6rem; margin-bottom: 16px;">Understanding the Phishing & Threat Scanner</h2>
+    <p style="margin-bottom: 16px; color: var(--text-muted);">Welcome to the <strong>PixelCraft AI Phishing & Threat Link Scanner</strong>. Malicious actors frequently employ deceptive links to conduct credential harvesting, spoof banking portals, and deliver malware payloads. This security utility provides deep heuristic analysis to help users evaluate whether a link is safe before navigating to it.</p>
     
-    <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">How to Use This Tool Efficiently</h3>
-    <ol style="margin-bottom: 20px; padding-left: 20px;">
-      <li style="margin-bottom: 10px;"><strong>Upload Your Media:</strong> Simply drag and drop your file into the designated upload area. Since processing is local, there are no upload wait times or bandwidth constraints.</li>
-      <li style="margin-bottom: 10px;"><strong>Configure Settings:</strong> Adjust the available sliders, toggles, or input fields to match your exact requirements. Our UI is designed to be intuitive for both beginners and professionals.</li>
-      <li style="margin-bottom: 10px;"><strong>Instant Processing:</strong> Hit the execute button. Thanks to advanced WebAssembly algorithms, processing is virtually instantaneous.</li>
-      <li style="margin-bottom: 10px;"><strong>Download Securely:</strong> Save the final output directly to your local storage without any watermarks or hidden tracking scripts.</li>
+    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">How the Scanner Inspects URLs</h3>
+    <ol style="margin-bottom: 20px; padding-left: 20px; color: var(--text-muted);">
+      <li style="margin-bottom: 8px;"><strong style="color: var(--text-heading);">Punycode & Homograph Detection:</strong> Identifies deceptive Unicode characters (e.g., Cyrillic 'а' replacing Latin 'a') designed to mimic legitimate domain names.</li>
+      <li style="margin-bottom: 8px;"><strong style="color: var(--text-heading);">Typosquatting & Subdomain Analysis:</strong> Analyzes deep subdomains and common brand misspellings often used in phishing lures.</li>
+      <li style="margin-bottom: 8px;"><strong style="color: var(--text-heading);">Shortener Unmasking:</strong> Safely queries short links via redirect tracing to reveal the final destination without executing browser code.</li>
+      <li style="margin-bottom: 8px;"><strong style="color: var(--text-heading);">Contextual AI Threat Scoring:</strong> Evaluates domain entropy and threat databases to compute an overall risk score from 0 (Safe) to 100 (Critical Threat).</li>
     </ol>
     
-    <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">Frequently Asked Questions (FAQ)</h3>
-    <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-      <strong style="color: #e2e8f0; display: block; margin-bottom: 5px;">Is the Phishing Scanner free to use?</strong>
-      <p style="font-size: 0.95rem; margin-bottom: 15px;">Yes, absolutely. PixelCraft AI provides this feature completely free of charge, with no daily limits or premium subscriptions required.</p>
+    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">Frequently Asked Questions (FAQ)</h3>
+    <div style="background: var(--surface-subtle); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 20px;">
+      <strong style="color: var(--text-heading); display: block; margin-bottom: 5px;">How does the URL Phishing Scanner detect threats?</strong>
+      <p style="font-size: 0.95rem; margin-bottom: 15px; color: var(--text-muted);">The scanner executes multi-layered heuristics against submitted links via <code>/api/scan-link</code>, evaluating punycode homographs, subdomain entropy, known typosquatting patterns, and unmasked redirect endpoints in volatile memory.</p>
+
+      <strong style="color: var(--text-heading); display: block; margin-bottom: 5px;">Is the Phishing Scanner free to use?</strong>
+      <p style="font-size: 0.95rem; margin-bottom: 15px; color: var(--text-muted);">Yes, completely free with no usage fees or registration required.</p>
       
-      <strong style="color: #e2e8f0; display: block; margin-bottom: 5px;">Is my data safe and private?</strong>
-      <p style="font-size: 0.95rem; margin-bottom: 15px;">100% safe. We utilize client-side architecture, meaning your files never touch our servers. Your data stays entirely on your own device.</p>
-      
-      <strong style="color: #e2e8f0; display: block; margin-bottom: 5px;">Does this tool work on mobile devices?</strong>
-      <p style="font-size: 0.95rem;">Yes! Our platform is fully responsive and optimized for mobile browsers, allowing you to edit on the go without downloading any apps.</p>
+      <strong style="color: var(--text-heading); display: block; margin-bottom: 5px;">How is my scan data handled?</strong>
+      <p style="font-size: 0.95rem; color: var(--text-muted);">The target URL is submitted to our backend analysis engine via <code>/api/scan-link</code> and evaluated ephemerally in volatile memory. We do not maintain a permanent database of your submitted links, nor do we correlate scanned URLs with your user identity or IP address.</p>
     </div>
-    
-    <p style="font-size: 0.9rem; color: #94a3b8; text-align: center; margin-top: 30px;">For more advanced tutorials and in-depth guides on digital media manipulation, be sure to check out our <a href="../blog/index.html" style="color: #38bdf8;">official PixelCraft AI Blog</a>.</p>
   </div>
   <!-- END SEO/ADSENSE RICH TEXT -->
-  
-
-<!-- SEO CONTENT FOR PHISHING-SCANNER.HTML -->
-<section style="max-width: 1200px; margin: 50px auto; padding: 40px; background: rgba(15, 23, 42, 0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); color: #94a3b8; line-height: 1.8; font-family: 'Inter', sans-serif;">
-
-  <h2 style="color: #f8fafc; font-size: 1.8rem; margin-bottom: 20px;">Detecting Phishing and Homograph Attacks</h2>
-  <p style="margin-bottom: 15px;">Cybercriminals often use deceptive URLs that look identical to trusted domains by substituting characters with visually similar Unicode glyphs (homograph attacks). Our Phishing Scanner acts as a frontline defense, analyzing suspicious links for hidden redirects, punycode spoofing, and malicious payloads. This utility provides critical threat intelligence to keep your browsing sessions secure.</p>
-  
-</section>
 
 <script src="../js/cookie-consent.js"></script>
 </body>

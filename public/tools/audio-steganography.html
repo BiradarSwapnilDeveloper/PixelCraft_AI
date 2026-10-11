@@ -14,137 +14,250 @@
   
   <link rel="stylesheet" href="../css/style.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-  <script>
-    checkAuth();
-  </script>
 
   <style>
-    body {
-        background-color: #09090b !important;
-        background-image: radial-gradient(circle at 50% -10%, rgba(59, 130, 246, 0.12), rgba(9, 9, 11, 1) 70%) !important;
-        color: #f4f4f5 !important;
-        font-family: 'Inter', sans-serif !important;
-    }
-    .tool-page-header { text-align: center; margin-bottom: 20px; }
-    .tool-page-header h1 {
-        font-size: 2.5rem !important;
-        background: linear-gradient(to right, #ffffff, #a1a1aa);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 12px;
-    }
-    
     /* MASTER MODE SWITCH */
     .mode-switch {
-        display: flex; justify-content: center; margin-bottom: 30px; gap: 15px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .mode-btn {
-        background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
-        color: #a1a1aa; padding: 12px 30px; border-radius: 30px; cursor: pointer;
-        font-weight: 600; font-size: 1.1rem; transition: 0.3s;
-        display: flex; align-items: center; gap: 10px;
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mode-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-heading);
     }
     .mode-btn.active {
-        background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; color: var(--text-main);
-        box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
     }
 
-    .tool-workspace {
-        background: rgba(24, 24, 27, 0.6) !important;
-        backdrop-filter: blur(24px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
-        border-radius: 24px !important;
-        padding: 40px !important;
-        max-width: 850px;
-        margin: 0 auto;
-        position: relative;
-    }
     .tabs-container {
-        display: flex; gap: 12px; background: rgba(0,0,0,0.3) !important;
-        padding: 8px !important; border-radius: 16px !important; margin-bottom: 32px !important;
+      display: flex;
+      gap: 6px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 6px;
+      border-radius: var(--radius-md);
+      margin-bottom: 28px;
     }
     .tab-btn {
-        flex: 1; padding: 16px !important; background: transparent !important; border: none !important;
-        color: #a1a1aa !important; font-weight: 600 !important; border-radius: 12px !important; cursor: pointer;
-        transition: 0.3s;
+      flex: 1;
+      padding: 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition-smooth);
     }
-    .tab-btn.active { background: rgba(255,255,255,0.08) !important; color: #fff !important; }
+    .tab-btn:hover:not(.active) {
+      color: var(--text-heading);
+    }
+    .tab-btn.active {
+      background: var(--surface-card);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+    
     .file-drop-area {
-        background: rgba(0,0,0,0.2) !important; border: 2px dashed rgba(255,255,255,0.1) !important;
-        border-radius: 20px !important; padding: 60px 20px !important; text-align: center; cursor: pointer;
+      background: var(--surface-subtle);
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 50px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
     }
-    .control-group { margin-bottom: 24px; text-align: left; }
-    .control-group label { display: block; color: #e4e4e7 !important; font-weight: 500 !important; margin-bottom: 10px !important; }
+    .file-drop-area:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    
+    .control-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .control-group label {
+      display: block;
+      color: var(--text-heading);
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+    }
     
     .input-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
     }
     
     .real-section {
-        background: rgba(56, 189, 248, 0.05);
-        border: 1px solid rgba(56, 189, 248, 0.2);
-        padding: 20px;
-        border-radius: 16px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 18px;
+      border-radius: var(--radius-md);
     }
     .fake-section {
-        background: rgba(239, 68, 68, 0.05);
-        border: 1px solid rgba(239, 68, 68, 0.2);
-        padding: 20px;
-        border-radius: 16px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 18px;
+      border-radius: var(--radius-md);
     }
 
-    input[type="password"], textarea {
-        width: 100%; background: rgba(0,0,0,0.3) !important; border: 1px solid rgba(255,255,255,0.08) !important;
-        border-radius: 12px !important; color: #fff !important; padding: 16px !important; box-sizing: border-box;
+    .real-section input, .real-section textarea,
+    .fake-section input, .fake-section textarea,
+    .control-group input[type="password"],
+    .control-group textarea {
+      width: 100%;
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-heading);
+      padding: 12px 14px;
+      box-sizing: border-box;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
+    .real-section input:focus, .real-section textarea:focus,
+    .fake-section input:focus, .fake-section textarea:focus,
+    .control-group input[type="password"]:focus,
+    .control-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
     .btn-glow {
-        background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important; color: #fff !important;
-        padding: 16px 32px !important; font-weight: 600 !important; font-size: 1.1rem !important;
-        border-radius: 12px !important; border: none !important; cursor: pointer; width: 100%;
-        box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4) !important; transition: 0.3s;
+      background: var(--primary);
+      color: white;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: var(--transition-smooth);
     }
-    .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.6) !important; }
-    #visualizer { width: 100%; height: 100px; background: rgba(0,0,0,0.5); border-radius: 12px; margin-bottom: 20px; display: none; }
-    #video-player { width: 100%; max-height: 250px; background: #000; border-radius: 12px; margin-bottom: 20px; display: none; }
+    .btn-glow:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    #visualizer {
+      width: 100%;
+      height: 100px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      display: none;
+    }
+    #video-player {
+      width: 100%;
+      max-height: 250px;
+      background: #000;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      display: none;
+    }
     
     .loading-overlay {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(9, 9, 11, 0.9); border-radius: 24px; z-index: 100;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        display: none;
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: var(--radius-lg);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      display: none;
     }
     .spinner {
-        width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1);
-        border-left-color: #38bdf8; border-radius: 50%; animation: spin 1s linear infinite;
-        margin-bottom: 20px;
+      width: 44px; height: 44px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     @media (max-width: 768px) {
-        .tool-workspace { padding: 20px !important; border-radius: 16px !important; }
-        .tool-page-header h1 { font-size: 2rem !important; }
-        .mode-switch { flex-direction: column; padding: 0 20px; }
-        .input-grid { grid-template-columns: 1fr; gap: 15px; }
-        .file-drop-area { padding: 40px 15px !important; }
-        .btn-glow { padding: 14px 20px !important; font-size: 1rem !important; }
-        input[type="password"], textarea { padding: 12px !important; }
+      .input-grid { grid-template-columns: 1fr; }
+      .file-drop-area { padding: 36px 15px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Enterprise Navbar -->
   <nav class="navbar" id="navbar">
-    <div class="nav-container">
-      <a href="../index.html" class="nav-logo">PixelCraft <span>AI</span></a>
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+      <span>PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">All Tools</a></li>
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../blog/index.html">Research</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+        <span style="font-size: 1.15rem;">🌙</span>
+      </button>
+      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      </a>
     </div>
-  </nav>
-
-  <div class="tool-page-header" style="margin-top: 100px;">
-    <h1>Audio & Video Steganography</h1>
-    <p>Hide highly classified data in media files with enterprise-grade encryption.</p>
   </div>
+</nav>
+
+  <div class="tool-page">
+    <div class="tool-page-header">
+      <a href="../index.html" class="back-link">← Back to All Tools</a>
+      <div style="margin-bottom: 12px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--primary-light); color: var(--primary);">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+      </div>
+      <h1>Audio & Video Steganography</h1>
+      <p>Embed encrypted classified payloads into media files with Quantization Index Modulation and AES-256 cryptography.</p>
+    </div>
 
   <div class="mode-switch">
       <button class="mode-btn active" id="mode-audio">🎧 Audio Mode (Advanced DSSS / Echo Hiding)</button>
@@ -886,38 +999,25 @@
   </script>
 
   <!-- SEO/ADSENSE RICH TEXT INJECTION -->
-  <div style="margin-top: 60px; padding: 40px; background: rgba(30, 41, 59, 0.5); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-muted); line-height: 1.8; margin-bottom: 40px;">
-    <h2 style="color: var(--text-main); font-size: 1.8rem; margin-bottom: 20px;">Advanced Audio & Video Steganography: Securing Data with QIM and AES-256</h2>
-    <p style="margin-bottom: 20px;">
+  <div style="margin-top: 60px; padding: 36px; background: var(--surface-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-body); line-height: 1.8; margin-bottom: 40px;">
+    <h2 style="color: var(--text-heading); font-size: 1.6rem; margin-bottom: 16px;">Advanced Audio & Video Steganography: Securing Data with QIM and AES-256</h2>
+    <p style="margin-bottom: 16px; color: var(--text-muted);">
       Welcome to the <strong>PixelCraft AI Audio & Video Steganography</strong> tool. Unlike standard communication channels that leave digital traces, our platform allows you to embed encrypted secret messages directly into the audio channels of your media files (.wav, .mp3, .mp4, .webm). This ensures your sensitive data remains hidden in plain sight.
     </p>
     
-    <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">Cryptographic Security: AES-256 Encryption</h3>
-    <p style="margin-bottom: 20px;">
-      Before any data is hidden inside your audio or video file, the text is securely encrypted using <strong>Advanced Encryption Standard (AES) with a 256-bit key length</strong>. AES-256 is the cryptographic standard used by governments and security agencies worldwide. When you provide a password, it acts as the key to encrypt the payload. Without the exact cryptographic key, the embedded data is completely unreadable, ensuring mathematically proven security against brute-force attacks.
+    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">Cryptographic Security: AES-256 Encryption</h3>
+    <p style="margin-bottom: 16px; color: var(--text-muted);">
+      Before any data is hidden inside your audio or video file, the text is securely encrypted using <strong>Advanced Encryption Standard (AES) with a 256-bit key length</strong>. AES-256 is the cryptographic standard used by governments and security agencies worldwide.
     </p>
 
-    <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">Robust Embedding via Quantization Index Modulation (QIM)</h3>
-    <p style="margin-bottom: 20px;">
-      Most steganography tools use Least Significant Bit (LSB) substitution, which is easily destroyed by compression or noise. PixelCraft AI utilizes <strong>Quantization Index Modulation (QIM)</strong>. Instead of just changing the last bit, QIM modifies the structural properties of the audio waveforms (using Float32 audio samples). By quantifying the amplitude of the audio signal to specific geometric indices, the hidden bits are embedded deep within the audio track. This provides high robustness against MP3/MP4 lossy compression algorithms while remaining completely imperceptible to the human ear.
-    </p>
-
-    <h3 style="color: #38bdf8; font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px;">Forensic Telemetry & Plausible Deniability</h3>
-    <p style="margin-bottom: 20px;">
-      Our platform automatically integrates a unique Session ID into the steganographic payload. This digital watermark (PX-AUD or PX-VID) allows security administrators to track the origin of the encryption session in the event of automated abuse or forensic audits. Furthermore, the tool supports advanced decoy injection, allowing you to provide a secondary fake password to reveal a harmless decoy message if you are ever forced to decrypt the file under duress.
+    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">Robust Embedding via Quantization Index Modulation (QIM)</h3>
+    <p style="margin-bottom: 16px; color: var(--text-muted);">
+      PixelCraft AI utilizes <strong>Quantization Index Modulation (QIM)</strong>. By quantifying the amplitude of the audio signal to specific geometric indices, the hidden bits are embedded deep within the audio track without noticeable degradation.
     </p>
   </div>
   <!-- END SEO/ADSENSE RICH TEXT -->
-  
 
-<!-- SEO CONTENT FOR AUDIO-STEGANOGRAPHY.HTML -->
-<section style="max-width: 1200px; margin: 50px auto; padding: 40px; background: rgba(15, 23, 42, 0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); color: #94a3b8; line-height: 1.8; font-family: 'Inter', sans-serif;">
-
-  <h2 style="color: #f8fafc; font-size: 1.8rem; margin-bottom: 20px;">The Science of Audio Steganography</h2>
-  <p style="margin-bottom: 15px;">Audio steganography is the practice of concealing secret information within an audio file. This tool utilizes advanced LSB (Least Significant Bit) manipulation techniques to embed your encrypted messages directly into the waveform without noticeably degrading audio quality. Whether you are conducting academic research on data hiding or securing sensitive communications, this utility operates entirely within your browser for enhanced privacy.</p>
-  
-</section>
-
+<script src="../js/utils.js"></script>
 <script src="../js/cookie-consent.js"></script>
 </body>
 </html>

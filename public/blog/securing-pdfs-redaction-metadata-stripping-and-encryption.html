@@ -157,20 +157,36 @@
   <div id="toast-container" class="toast-container"></div>
 
   <nav class="navbar" id="navbar">
+  <div class="nav-container">
     <a href="../index.html" class="nav-logo">
-      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
-      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+      <span>PixelCraft AI</span>
     </a>
     <ul class="nav-links">
-      <li><a href="../index.html#tools">Tools</a></li>
-      <li><a href="index.html">Blog & Research</a></li>
-      <li><a href="../about-us.html">About</a></li>
+      <li><a href="../index.html#tools">All Tools</a></li>
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="index.html">Research Blog</a></li>
       <li><a href="../contact-us.html">Contact</a></li>
-      <li class="mobile-visible">
-        <a href="/auth/google" class="nav-cta" id="nav-auth-btn">Sign In</a>
-      </li>
     </ul>
-  </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+        <span style="font-size: 1.15rem;">🌙</span>
+      </button>
+      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      </a>
+    </div>
+  </div>
+</nav>
 
   <article class="article-container">
     <div class="article-card">
@@ -313,22 +329,23 @@ pdftotext sanitized_document.pdf - | grep -i "confidential"
     </div>
   </article>
 
-  <footer class="footer" style="background: #0f172a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
-    <div style="max-width: 1200px; margin: 0 auto;">
-      <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
-        <a href="../about-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">About Us</a>
-        <a href="index.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Blog & Research</a>
-        <a href="../privacy-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Privacy Policy</a>
-        <a href="../terms-conditions.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Terms of Service</a>
-        <a href="../disclaimer.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Disclaimer</a>
-        <a href="../cookies-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Cookies Policy</a>
-        <a href="../contact-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Contact</a>
-      </div>
-      <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">
-        &copy; 2026 PixelCraft AI. All rights reserved.
-      </p>
+  <footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+      <a href="../about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+      <a href="../privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+      <a href="../terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+      <a href="../disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+      <a href="../cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+      <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+      <a href="../contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
     </div>
-  </footer>
+    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+      &copy; 2026 PixelCraft AI. All rights reserved.<br>
+      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+    </p>
+  </div>
+</footer>
 
   <script src="../js/utils.js"></script>
   <script src="../js/cookie-consent.js"></script>

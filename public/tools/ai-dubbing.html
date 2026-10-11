@@ -41,19 +41,42 @@
 </head>
 <body>
 <div id="toast-container" class="toast-container"></div>
-<nav class="navbar">
-  <a href="../index.html" class="nav-logo">
-      <img src="../logo.jpg?v=3" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
-      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
-  </a>
-  <ul class="nav-links"><li><a href="../index.html#tools">All Tools</a></li></ul>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+      <span>PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">All Tools</a></li>
+      <li><a href="../index.html#features">Features</a></li>
+      <li><a href="../blog/index.html">Research</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+        <span style="font-size: 1.15rem;">🌙</span>
+      </button>
+      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      </a>
+    </div>
+  </div>
 </nav>
 
 <div class="tool-page">
   <div class="tool-page-header">
     <a href="../index.html" class="back-link">← Back to All Tools</a>
-    <div style="margin-bottom:16px;">
-      <svg width="48" height="48" fill="none" stroke="#2563eb" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+    <div style="margin-bottom:12px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--primary-light); color: var(--primary);">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
         <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
         <line x1="12" y1="19" x2="12" y2="23"></line>
@@ -61,20 +84,20 @@
       </svg>
     </div>
     <h1>AI Audio & Video Dubbing</h1>
-    <p>Upload a media file to automatically transcribe, translate, and dub into your selected target language.</p>
+    <p>Upload a media file to automatically transcribe, translate, and synthesize speech in your target language.</p>
   </div>
   
   <div class="tool-workspace" style="position: relative;">
     <div class="loading-overlay" id="loading-overlay">
         <div class="spinner"></div>
-        <h3 style="color: white; font-weight: 500;">Processing Media</h3>
-        <p style="color: #94a3b8; font-size: 0.9rem;">Translating and synthesizing audio...</p>
+        <h3 style="color: var(--text-heading); font-weight: 700;">Processing Media</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Translating speech and synthesizing vocal tracks...</p>
     </div>
 
     <!-- UPLOAD SECTION -->
     <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
       <input type="file" id="file-input" accept="video/*,audio/*" style="display:none"/>
-      <div class="upload-icon" style="color: #64748b; margin-bottom: 12px;">
+      <div class="upload-icon" style="color: var(--primary); margin-bottom: 12px;">
         <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
           <polyline points="17 8 12 3 7 8"></polyline>
@@ -83,8 +106,8 @@
       </div>
       <h3>Drop your media file here</h3>
       <p>Supports MP4, MP3, WAV (Max 20MB)</p>
-      <div class="upload-formats">
-        <span class="format-tag">MP4</span><span class="format-tag">MP3</span><span class="format-tag">WAV</span>
+      <div class="upload-format-chips">
+        <span class="upload-format-chip">MP4</span><span class="upload-format-chip">MP3</span><span class="upload-format-chip">WAV</span>
       </div>
     </div>
     
@@ -92,15 +115,15 @@
     <div id="editor" style="display:none;">
       <div class="result-area show" style="margin-top:0;">
         <div class="result-header">
-          <span class="result-header-title">Configure Dubbing</span>
-          <button class="btn btn-gray" onclick="resetTool()">New File</button>
+          <span style="font-weight: 700; color: var(--text-heading);">Configure Dubbing</span>
+          <button class="btn btn-secondary" onclick="resetTool()">Select Different File</button>
         </div>
         <div class="result-body">
           <div style="margin-bottom:20px; text-align: left;">
-            <p style="color: var(--text-light); margin-bottom: 10px;">Selected File: <strong id="file-name" style="color: white;"></strong></p>
+            <p style="color: var(--text-muted); margin-bottom: 12px; font-size: 0.95rem;">Selected File: <strong id="file-name" style="color: var(--text-heading);"></strong></p>
             
-            <label style="display: block; font-weight: bold; color: var(--text-main); margin-bottom: 8px;">Target Language:</label>
-            <select id="target-language" style="width: 100%; padding: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; color: white; outline: none; margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; color: var(--text-heading); margin-bottom: 8px;">Target Language:</label>
+            <select id="target-language" style="width: 100%; padding: 12px 14px; background: var(--surface-card); border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-heading); outline: none; margin-bottom: 20px; font-family: inherit; font-size: 0.95rem;">
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Spanish">Spanish</option>
@@ -111,18 +134,26 @@
               <option value="Arabic">Arabic</option>
             </select>
 
-            <button class="btn" style="width: 100%; background: #2563eb; color: white; border: none; padding: 14px; font-size: 1.05rem; border-radius: 6px; font-weight: 500; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'" onclick="processDubbing()">Start Processing</button>
+            <!-- Pre-Submission AI Data Practices Notice -->
+            <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px; font-size: 0.82rem; color: var(--text-body); line-height: 1.5;">
+              <strong style="color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 5px;">
+                <span>🌐</span> Third-Party AI Data Processing Notice
+              </strong>
+              Media is uploaded via <code>/api/dub-media</code> and processed ephemerally in server scratch memory. Audio is securely transmitted to <strong>Groq Inc. (USA)</strong> for Whisper transcription and <strong>Google TTS</strong> for voice synthesis. Temporary server media files are erased immediately upon processing completion.
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;" onclick="processDubbing()">Start Processing</button>
           </div>
           
           <div id="result-section" style="display:none; text-align: left;">
-            <hr style="border: 0; border-top: 1px solid var(--border); margin: 24px 0;" />
-            <h3 style="color: #10b981; margin-bottom: 12px; font-weight: 500;">✓ Processing Complete</h3>
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;" />
+            <h3 style="color: var(--success); margin-bottom: 12px; font-weight: 600;">✓ Dubbing Complete</h3>
             
-            <div id="media-container" style="background: var(--bg2); padding: 16px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 16px; text-align: center;">
+            <div id="media-container" style="background: var(--surface-subtle); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 16px; text-align: center;">
               <!-- Video/Audio element injected here -->
             </div>
             
-            <button class="btn btn-green" id="btn-download" style="width: 100%;">Download Dubbed Media</button>
+            <button class="btn btn-success" id="btn-download" style="width: 100%; padding: 14px; font-size: 1rem;">Download Dubbed Media</button>
           </div>
         </div>
       </div>
@@ -131,10 +162,22 @@
 </div>
 
 <!-- FOOTER -->
-<footer class="footer" style="background: #0f172a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
-  <p style="color: #64748b; font-size: 0.95rem;">
-    &copy; 2026 PixelCraft AI. All rights reserved.
-  </p>
+<footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+      <a href="../about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+      <a href="../privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+      <a href="../terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+      <a href="../disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+      <a href="../cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+      <a href="../blog/index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+      <a href="../index.html#contact" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+      &copy; 2026 PixelCraft AI. All rights reserved.<br>
+      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+    </p>
+  </div>
 </footer>
 
 <script src="../js/utils.js"></script>
