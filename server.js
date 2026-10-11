@@ -797,7 +797,7 @@ app.post('/api/admin/users', requireAdminSession, async (req, res) => {
 });
 
 // Check if user is logged in (Frontend calls this to update UI)
-app.get('/api/auth/status', (req, res) => {
+app.get(['/api/auth/status', '/auth/status'], (req, res) => {
   if (req.isAuthenticated()) {
     res.json({ authenticated: true, user: req.user, requireLoginForTools: appSettings.requireLoginForTools });
   } else {
@@ -888,15 +888,21 @@ app.get('/auth/google/callback',
 );
 
 // Logout Route - Destroys session and clears cookie
-app.get('/logout', async (req, res, next) => {
+app.all(['/logout', '/auth/logout', '/api/logout', '/api/auth/logout'], (req, res, next) => {
   req.logout((err) => {
     if (err) { return next(err); }
     if (req.session) {
       req.session.destroy(() => {
         res.clearCookie('connect.sid');
+        if (req.headers.accept && req.headers.accept.includes('application/json')) {
+          return res.json({ success: true, message: 'Logged out successfully' });
+        }
         res.redirect('/');
       });
     } else {
+      if (req.headers.accept && req.headers.accept.includes('application/json')) {
+        return res.json({ success: true, message: 'Logged out successfully' });
+      }
       res.redirect('/');
     }
   });

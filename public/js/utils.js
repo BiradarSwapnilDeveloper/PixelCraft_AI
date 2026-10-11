@@ -126,6 +126,7 @@ function injectSettingsDrawer() {
           </div>
         </div>
       </div>
+      <div id="settings-user-actions" style="margin-top: -6px; margin-bottom: 8px; display: flex; gap: 8px;"></div>
 
       <!-- Recent Tools Section -->
       <div>
@@ -294,22 +295,110 @@ function formatRelativeTime(ts) {
   return `${Math.floor(hours / 24)}d ago`;
 }
 
+function updateAuthUI(data) {
+  const isAuthenticated = !!(data && data.authenticated && data.user);
+  const user = isAuthenticated ? data.user : null;
+
+  // 1. Update all navbar auth buttons (#nav-auth-btn, .nav-auth-btn)
+  const navAuthButtons = document.querySelectorAll('#nav-auth-btn, .nav-auth-btn');
+  navAuthButtons.forEach(btn => {
+    if (isAuthenticated) {
+      btn.href = '/logout';
+      const userLabel = (user && (user.name || user.email)) || 'User';
+      btn.setAttribute('aria-label', `Signed in as ${user.email || userLabel}. Click to Sign Out`);
+      btn.title = `Signed in as ${user.email || userLabel} • Click to Sign Out`;
+      btn.classList.add('nav-auth-signed-in');
+      btn.innerHTML = `
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Sign Out</span>
+      `;
+    } else {
+      btn.href = '/auth/google';
+      btn.setAttribute('aria-label', 'Sign in with Google');
+      btn.title = 'Sign in with Google';
+      btn.classList.remove('nav-auth-signed-in');
+      btn.innerHTML = `
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In</span>
+      `;
+    }
+  });
+
+  // 2. Update Settings Drawer User Card & Actions
+  const emailEl = document.getElementById('settings-user-email');
+  const avatarEl = document.getElementById('settings-user-avatar');
+  const statusEl = document.getElementById('settings-user-status');
+  let actionsEl = document.getElementById('settings-user-actions');
+
+  if (!actionsEl) {
+    const userCard = document.getElementById('settings-user-card');
+    if (userCard) {
+      actionsEl = document.createElement('div');
+      actionsEl.id = 'settings-user-actions';
+      actionsEl.style.cssText = 'margin-top: -6px; margin-bottom: 8px; display: flex; gap: 8px;';
+      userCard.parentNode.insertBefore(actionsEl, userCard.nextSibling);
+    }
+  }
+
+  if (isAuthenticated) {
+    if (emailEl) emailEl.innerText = user.email || 'Authenticated User';
+    if (avatarEl) {
+      avatarEl.innerText = (user.name || user.email || 'U').charAt(0).toUpperCase();
+    }
+    if (statusEl) statusEl.innerText = 'Google Enterprise Account • Verified';
+    if (actionsEl) {
+      actionsEl.innerHTML = `
+        <a href="/logout" class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.82rem; padding: 7px 12px; gap: 6px; color: #ef4444; border-color: rgba(239, 68, 68, 0.35); text-decoration: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span style="font-weight: 600;">Sign Out</span>
+        </a>
+        <a href="/auth/switch-account" class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.82rem; padding: 7px 12px; gap: 6px; text-decoration: none;">
+          <span>Switch Account</span>
+        </a>
+      `;
+    }
+  } else {
+    if (emailEl) emailEl.innerText = 'guest.client@pixelcraft.local';
+    if (avatarEl) avatarEl.innerText = 'PC';
+    if (statusEl) statusEl.innerText = 'Client-Side Sandbox (Zero Logs)';
+    if (actionsEl) {
+      actionsEl.innerHTML = `
+        <a href="/auth/google" class="btn btn-primary" style="flex: 1; justify-content: center; font-size: 0.82rem; padding: 7px 12px; gap: 6px; text-decoration: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+          <span>Sign In with Google</span>
+        </a>
+      `;
+    }
+  }
+}
+
 function fetchUserSession() {
-  fetch('/auth/status', { credentials: 'same-origin' })
-    .then(res => res.json())
-    .then(data => {
-      if (data && data.authenticated && data.user) {
-        const emailEl = document.getElementById('settings-user-email');
-        const avatarEl = document.getElementById('settings-user-avatar');
-        const statusEl = document.getElementById('settings-user-status');
-        if (emailEl) emailEl.innerText = data.user.email || 'Authenticated User';
-        if (avatarEl) {
-          avatarEl.innerText = (data.user.name || data.user.email || 'U').charAt(0).toUpperCase();
-        }
-        if (statusEl) statusEl.innerText = 'Google Enterprise Account • Verified';
-      }
+  fetch('/api/auth/status', { credentials: 'same-origin' })
+    .then(res => {
+      if (!res.ok) throw new Error('Status HTTP ' + res.status);
+      return res.json();
     })
-    .catch(() => {});
+    .catch(() => {
+      return fetch('/auth/status', { credentials: 'same-origin' }).then(r => r.json());
+    })
+    .then(data => {
+      updateAuthUI(data);
+    })
+    .catch(() => {
+      updateAuthUI({ authenticated: false });
+    });
 }
 
 window.purgeLocalSessionData = function() {
@@ -526,6 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
   injectSettingsDrawer();
   updateThemeUI();
   initMobileNavbar();
+  fetchUserSession();
 
   // Bind settings button
   const settingsBtn = document.getElementById('settings-toggle-btn');
