@@ -1,5 +1,7 @@
 FROM node:20.18.2-alpine3.21 AS base
 
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
 RUN apk upgrade --no-cache && \
     apk add --no-cache tini ffmpeg ca-certificates && \
     mkdir -p /home/node/app && \
@@ -19,8 +21,9 @@ RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
 FROM base AS builder
 
 WORKDIR /home/node/app
-COPY --chown=node:node . .
+COPY --chown=node:node package*.json ./
 COPY --from=dependencies --chown=node:node /home/node/app/node_modules ./node_modules
+COPY --chown=node:node . .
 
 USER node
 RUN npm run build --if-present && rm -rf node_modules
@@ -35,6 +38,8 @@ RUN --mount=type=cache,target=/home/node/.npm,uid=1000,gid=1000 \
     npm ci --omit=dev --ignore-scripts
 
 FROM base AS runner
+
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 ENV NODE_ENV=production \
     PORT=3000
@@ -54,6 +59,9 @@ RUN sed -i '/^node:/s|/bin/.*sh|/sbin/nologin|' /etc/passwd && \
 USER node
 
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:' + (process.env.PORT || 3000) + '/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"
 
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", "."]
