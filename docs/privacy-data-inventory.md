@@ -139,7 +139,7 @@ The following tools transmit data to the PixelCraft AI backend server or third-p
   * `localStorage.cookieConsent`: Stores `'accepted'` or `'rejected'`. Duration: Persistent in browser local storage. `[VERIFIED IN CODE]`
   * `localStorage.pc_consent_v1`: Stores `'true'` or `'false'`. Duration: Persistent in browser local storage. `[VERIFIED IN CODE]`
 * **Analytics Cookies (Optional):**
-  * `_ga`, `_gid`, `_ga_*`: Google Analytics (ID: `G-V78ZLHJLR8`). Blocked until user clicks "Accept All". `[VERIFIED IN CODE]`
+  * `_ga`, `_gid`, `_ga_*`: Google Analytics (ID: `G-9EK2GY31YP`). Blocked until user clicks "Accept All". `[VERIFIED IN CODE]`
 * **Advertising Cookies (Optional):**
   * `__gads`, `__gpi`: Google AdSense (Client: `ca-pub-3788374704176398`). Blocked until user clicks "Accept All". `[VERIFIED IN CODE]`
 

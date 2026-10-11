@@ -3,12 +3,12 @@
  * Consolidates all consent modals into a single, polished, non-intrusive component.
  */
 (function () {
-  const GA_ID = 'G-V78ZLHJLR8';
+  const GA_ID = 'G-9EK2GY31YP';
   const ADSENSE_ID = 'ca-pub-3788374704176398';
 
   function loadTracking() {
     // Prevent duplicate injections
-    if (!document.getElementById('ga-script')) {
+    if (!document.getElementById('ga-script') && !document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
       const gaScript = document.createElement('script');
       gaScript.id = 'ga-script';
       gaScript.async = true;

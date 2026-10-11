@@ -564,7 +564,7 @@ async function runStagingVerification() {
     const consentCode = fs.readFileSync(path.join(__dirname, 'public', 'js', 'cookie-consent.js'), 'utf8');
 
     // Verify Script Injection Logic
-    assert.ok(consentCode.includes("const GA_ID = 'G-V78ZLHJLR8'"), 'Must specify GA ID');
+    assert.ok(consentCode.includes("const GA_ID = 'G-9EK2GY31YP'"), 'Must specify GA ID');
     assert.ok(consentCode.includes("const ADSENSE_ID = 'ca-pub-3788374704176398'"), 'Must specify AdSense ID');
 
     // Verify Default Behavior: loadTracking() is NOT called on init if consent is unset
