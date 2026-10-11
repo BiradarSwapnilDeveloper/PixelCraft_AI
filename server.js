@@ -12,6 +12,7 @@ const User = require('./models/User');
 const multer = require('multer');
 const FormData = require('form-data');
 const fs = require('fs');
+const crypto = require('crypto');
 const { sendTelegramAlert } = require('./utils/telegramAlert');
 const honeytokenTrap = require('./middlewares/honeytokenTrap');
 const app = express();
@@ -354,55 +355,245 @@ passport.use(new GoogleStrategy({
 
 // --- API ROUTES ---
 
-// Admin Rate Limiter (Max 25 attempts per minute per IP to mitigate brute force)
-const adminRateLimitMap = new Map();
-const checkAdminRateLimit = (ip) => {
-  const now = Date.now();
-  const windowMs = 60 * 1000;
-  const maxAttempts = 25;
-  const record = adminRateLimitMap.get(ip) || { count: 0, resetTime: now + windowMs };
-  if (now > record.resetTime) {
-    record.count = 1;
-    record.resetTime = now + windowMs;
-  } else {
-    record.count++;
+// --- HARDENED ADMIN AUTHENTICATION & DEFENSE ARCHITECTURE ---
+
+// 1. Fail-Closed Password Verification (Constant-Time SHA-256)
+const verifyAdminKey = (candidate) => {
+  const configured = process.env.ADMIN_PASSWORD;
+  if (!configured || typeof configured !== 'string' || configured.trim() === '') {
+    console.error('FATAL: ADMIN_PASSWORD environment variable is missing or empty. Admin authentication is blocked.');
+    return false;
   }
-  adminRateLimitMap.set(ip, record);
-  return record.count <= maxAttempts;
+  if (!candidate || typeof candidate !== 'string') {
+    return false;
+  }
+  const cleanConfigured = configured.replace(/["']/g, '').trim();
+  const hashA = crypto.createHash('sha256').update(candidate.trim()).digest();
+  const hashB = crypto.createHash('sha256').update(cleanConfigured).digest();
+  return crypto.timingSafeEqual(hashA, hashB);
 };
 
-// Admin Authorization Middleware (Constant-Time Verification + Rate Limiting)
-const requireAdminAuth = (req, res, next) => {
-  const clientIp = req.ip || req.connection?.remoteAddress || 'unknown';
-  if (!checkAdminRateLimit(clientIp)) {
-    return res.status(429).json({ error: 'Too many requests. Please slow down.' });
+// 2. Admin Login Rate Limiter (5 failed attempts per 15 minutes per IP)
+const adminLoginAttempts = new Map();
+const checkAdminLoginRateLimit = (ip) => {
+  const now = Date.now();
+  const windowMs = 15 * 60 * 1000;
+  const maxAttempts = 5;
+  const record = adminLoginAttempts.get(ip) || { count: 0, resetTime: now + windowMs, lockedUntil: null };
+
+  if (record.lockedUntil && now < record.lockedUntil) {
+    return { allowed: false, retryAfter: Math.ceil((record.lockedUntil - now) / 1000) };
   }
 
-  const password = (req.body && req.body.password) || req.headers['x-admin-password'];
-  const expectedPassword = (process.env.ADMIN_PASSWORD || 'PxlCrft_Admin_8x9vZapL2qWkmN5jR_cF1yT').replace(/["']/g, "").trim();
-
-  if (!password || typeof password !== 'string') {
-    return res.status(401).json({ error: 'Unauthorized access. Incorrect Access Key.' });
+  if (now > record.resetTime) {
+    record.count = 0;
+    record.resetTime = now + windowMs;
+    record.lockedUntil = null;
   }
 
-  const bufA = Buffer.from(password.trim());
-  const bufB = Buffer.from(expectedPassword);
-  if (bufA.length !== bufB.length || !crypto.timingSafeEqual(bufA, bufB)) {
-    return res.status(401).json({ error: 'Unauthorized access. Incorrect Access Key.' });
+  return { allowed: true };
+};
+
+const recordFailedAdminLogin = (ip) => {
+  const now = Date.now();
+  const windowMs = 15 * 60 * 1000;
+  const record = adminLoginAttempts.get(ip) || { count: 0, resetTime: now + windowMs, lockedUntil: null };
+  record.count++;
+  if (record.count >= 5) {
+    record.lockedUntil = now + windowMs;
+  }
+  adminLoginAttempts.set(ip, record);
+};
+
+const clearFailedAdminLogin = (ip) => {
+  adminLoginAttempts.delete(ip);
+};
+
+// 3. Multi-Layer CSRF & Origin/Referer Verifier
+const verifyAdminCsrfAndOrigin = (req) => {
+  const host = req.get('host');
+  const origin = req.headers['origin'];
+  const referer = req.headers['referer'];
+
+  // Origin / Referer Validation
+  if (origin) {
+    try {
+      const originHost = new URL(origin).host;
+      if (originHost !== host) {
+        return { valid: false, error: 'Forbidden: Cross-origin request rejected.' };
+      }
+    } catch (e) {
+      return { valid: false, error: 'Forbidden: Malformed origin header.' };
+    }
+  } else if (referer) {
+    try {
+      const refererHost = new URL(referer).host;
+      if (refererHost !== host) {
+        return { valid: false, error: 'Forbidden: Referer header mismatch.' };
+      }
+    } catch (e) {
+      return { valid: false, error: 'Forbidden: Malformed referer header.' };
+    }
+  } else {
+    return { valid: false, error: 'Forbidden: Missing Origin and Referer header on state-changing request.' };
+  }
+
+  // Session-bound Unpredictable CSRF Token
+  const clientToken = req.headers['x-admin-csrf-token'];
+  const sessionToken = req.session ? req.session.adminCsrfToken : null;
+
+  if (!clientToken || !sessionToken || typeof clientToken !== 'string') {
+    return { valid: false, error: 'Forbidden: Missing or invalid CSRF security token.' };
+  }
+
+  const bufClient = Buffer.from(clientToken, 'utf8');
+  const bufSession = Buffer.from(sessionToken, 'utf8');
+
+  if (bufClient.length !== bufSession.length || !crypto.timingSafeEqual(bufClient, bufSession)) {
+    return { valid: false, error: 'Forbidden: CSRF token verification failed.' };
+  }
+
+  return { valid: true };
+};
+
+// 4. Session Authorization Middleware
+const requireAdminSession = (req, res, next) => {
+  if (!req.session || !req.session.isAdmin) {
+    return res.status(401).json({ error: 'Unauthorized access. Administrative session required.' });
+  }
+
+  // 2-Hour Admin Session Expiration
+  const maxAdminSessionAge = 2 * 60 * 60 * 1000;
+  if (!req.session.adminLoggedInAt || (Date.now() - req.session.adminLoggedInAt > maxAdminSessionAge)) {
+    req.session.isAdmin = false;
+    return res.status(401).json({ error: 'Session expired. Please re-authenticate.' });
+  }
+
+  // Enforce CSRF on all mutating requests
+  if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
+    const csrfCheck = verifyAdminCsrfAndOrigin(req);
+    if (!csrfCheck.valid) {
+      return res.status(403).json({ error: csrfCheck.error });
+    }
   }
 
   next();
 };
 
+// 5. Admin Authentication Endpoints
+app.post('/api/admin/login', async (req, res) => {
+  const clientIp = req.ip || req.connection?.remoteAddress || 'unknown';
+  const rateCheck = checkAdminLoginRateLimit(clientIp);
+  if (!rateCheck.allowed) {
+    res.setHeader('Retry-After', rateCheck.retryAfter || 900);
+    return res.status(429).json({ error: `Too many failed attempts. Access locked for ${Math.ceil(rateCheck.retryAfter / 60)} minutes.` });
+  }
+
+  const { password } = req.body;
+  const isValid = verifyAdminKey(password);
+
+  if (!isValid) {
+    recordFailedAdminLogin(clientIp);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return res.status(401).json({ error: 'ACCESS DENIED. Invalid Access Key.' });
+  }
+
+  clearFailedAdminLogin(clientIp);
+
+  // Regenerate session ID to prevent session fixation
+  req.session.regenerate((err) => {
+    if (err) {
+      console.error('Session regeneration failure:', err);
+      return res.status(500).json({ error: 'Internal security error initializing session.' });
+    }
+
+    req.session.isAdmin = true;
+    req.session.adminLoggedInAt = Date.now();
+    req.session.adminCsrfToken = crypto.randomBytes(32).toString('hex');
+
+    res.json({
+      success: true,
+      message: 'Authentication successful',
+      csrfToken: req.session.adminCsrfToken
+    });
+  });
+});
+
+app.post('/api/admin/logout', requireAdminSession, (req, res) => {
+  req.session.destroy((err) => {
+    res.clearCookie('connect.sid', { path: '/' });
+    res.json({ success: true, message: 'Administrative session terminated.' });
+  });
+});
+
+app.get('/api/admin/csrf-token', (req, res) => {
+  if (req.session && req.session.isAdmin && req.session.adminCsrfToken) {
+    res.json({ csrfToken: req.session.adminCsrfToken });
+  } else {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+});
+
+app.get('/api/admin/status', (req, res) => {
+  const isAuthenticated = !!(req.session && req.session.isAdmin);
+  res.json({ authenticated: isAuthenticated });
+});
+
+app.get('/api/admin/forensic-logs', requireAdminSession, (req, res) => {
+  res.json([]);
+});
+
+// 6. Hardened Path Containment Validator (RealPath + Relative Containment)
+const validateContainment = (userPath) => {
+  if (!userPath || typeof userPath !== 'string') return null;
+  if (userPath.includes('\0')) return null;
+
+  const normalized = path.normalize(userPath);
+  const absoluteCandidate = path.resolve(__dirname, normalized);
+  let realProjectRoot;
+  try {
+    realProjectRoot = fs.realpathSync(__dirname);
+  } catch (e) {
+    realProjectRoot = path.resolve(__dirname);
+  }
+
+  const relFromRoot = path.relative(realProjectRoot, absoluteCandidate);
+
+  // Containment check: must not escape root
+  if (relFromRoot === '' || relFromRoot.startsWith('..') || path.isAbsolute(relFromRoot)) {
+    return null;
+  }
+
+  // Deny list: dotfiles, git, node_modules, keys, certs, backups, scripts, models
+  const blockedPatterns = [/^\.env/i, /^\.git/i, /^node_modules/i, /\.pem$/i, /\.key$/i, /\.pfx$/i, /\.crt$/i, /\.bak$/i, /^scripts[\\\/]/i, /^models[\\\/]/i];
+  if (blockedPatterns.some(p => p.test(relFromRoot))) {
+    return null;
+  }
+
+  // Symlink resolution check on existing file
+  if (fs.existsSync(absoluteCandidate)) {
+    try {
+      const realTarget = fs.realpathSync(absoluteCandidate);
+      const realRel = path.relative(realProjectRoot, realTarget);
+      if (realRel.startsWith('..') || path.isAbsolute(realRel)) {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  return { absolutePath: absoluteCandidate, relativePath: relFromRoot };
+};
+
 // --- ADVANCED DEPLOYMENT CENTER ENDPOINTS ---
 
 // 1. Get Project Files
-app.get('/api/admin/files', requireAdminAuth, (req, res) => {
+app.get('/api/admin/files', requireAdminSession, (req, res) => {
   try {
     const publicDir = path.join(__dirname, 'public');
     const rootDir = __dirname;
 
-    // Read root files (like server.js) and public directory
     const getFiles = (dir, prefix = '') => {
       let results = [];
       const list = fs.readdirSync(dir);
@@ -410,14 +601,15 @@ app.get('/api/admin/files', requireAdminAuth, (req, res) => {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
         if (stat && stat.isDirectory()) {
-          // Exclude node_modules, .git, etc.
-          if (!file.startsWith('.') && file !== 'node_modules' && file !== 'models' && file !== 'scratch_imgly') {
+          if (!file.startsWith('.') && file !== 'node_modules' && file !== 'models' && file !== 'scripts' && file !== 'k8s' && file !== 'terraform' && file !== 'scratch_imgly') {
             results = results.concat(getFiles(filePath, prefix + file + '/'));
           }
         } else {
-          // Allow editing .html, .css, .js, .json
           if (file.match(/\.(html|css|js|json)$/)) {
-            results.push({ name: file, path: prefix + file, fullPath: filePath });
+            const isBlocked = file.startsWith('.env') || file.endsWith('.bak') || file === 'package-lock.json';
+            if (!isBlocked) {
+              results.push({ name: file, path: prefix + file, fullPath: filePath });
+            }
           }
         }
       });
@@ -425,7 +617,7 @@ app.get('/api/admin/files', requireAdminAuth, (req, res) => {
     };
 
     const publicFiles = getFiles(publicDir, 'public/');
-    const rootFiles = getFiles(rootDir, '').filter(f => !f.path.startsWith('public/')); // Exclude duplicates
+    const rootFiles = getFiles(rootDir, '').filter(f => !f.path.startsWith('public/'));
 
     res.json({ files: [...rootFiles, ...publicFiles] });
   } catch (err) {
@@ -434,37 +626,56 @@ app.get('/api/admin/files', requireAdminAuth, (req, res) => {
 });
 
 // 2. Read specific file content
-app.get('/api/admin/file/read', requireAdminAuth, (req, res) => {
+app.get('/api/admin/file/read', requireAdminSession, (req, res) => {
   try {
     const targetPath = req.query.path;
-    if (!targetPath || targetPath.includes('..')) return res.status(400).json({ error: 'Invalid path' });
+    const validated = validateContainment(targetPath);
+    if (!validated) return res.status(400).json({ error: 'Invalid or restricted path' });
 
-    const absolutePath = path.join(__dirname, targetPath);
-    if (!fs.existsSync(absolutePath)) return res.status(404).json({ error: 'File not found' });
+    if (!fs.existsSync(validated.absolutePath)) return res.status(404).json({ error: 'File not found' });
 
-    const content = fs.readFileSync(absolutePath, 'utf8');
+    const content = fs.readFileSync(validated.absolutePath, 'utf8');
     res.json({ content });
   } catch (err) {
     res.status(500).json({ error: 'Failed to read file' });
   }
 });
 
-// 3. Deploy/Save file content with Rollback support
-app.post('/api/admin/file/deploy', requireAdminAuth, (req, res) => {
+// 3. Deploy/Save file content with Rollback support & JSON Schema Validation
+app.post('/api/admin/file/deploy', requireAdminSession, (req, res) => {
   try {
     const { filePath, content } = req.body;
-    if (!filePath || filePath.includes('..')) return res.status(400).json({ error: 'Invalid path' });
-    if (typeof content !== 'string') return res.status(400).json({ error: 'Invalid content' });
+    const validated = validateContainment(filePath);
+    if (!validated) return res.status(400).json({ error: 'Invalid or restricted path' });
+    if (typeof content !== 'string') return res.status(400).json({ error: 'Invalid content format' });
 
-    const absolutePath = path.join(__dirname, filePath);
-    if (!fs.existsSync(absolutePath)) return res.status(404).json({ error: 'File not found' });
+    // Schema Validation if editing settings.json
+    if (validated.relativePath === 'settings.json') {
+      try {
+        const parsed = JSON.parse(content);
+        if (typeof parsed.requireLoginForTools !== 'boolean') {
+          return res.status(400).json({ error: 'Validation failed: settings.json requires boolean requireLoginForTools.' });
+        }
+      } catch (jsonErr) {
+        return res.status(400).json({ error: 'Validation failed: settings.json must be valid JSON.' });
+      }
+    }
+
+    if (!fs.existsSync(validated.absolutePath)) return res.status(404).json({ error: 'File not found' });
 
     // Create Backup (Rollback Support)
-    const backupPath = absolutePath + '.bak';
-    fs.copyFileSync(absolutePath, backupPath);
+    const backupPath = validated.absolutePath + '.bak';
+    fs.copyFileSync(validated.absolutePath, backupPath);
 
     // Write new content
-    fs.writeFileSync(absolutePath, content, 'utf8');
+    fs.writeFileSync(validated.absolutePath, content, 'utf8');
+
+    // Update in-memory settings if settings.json changed
+    if (validated.relativePath === 'settings.json') {
+      try {
+        appSettings = JSON.parse(content);
+      } catch (e) { }
+    }
 
     res.json({ success: true, message: 'File deployed successfully! Backup created.' });
   } catch (err) {
@@ -473,7 +684,7 @@ app.post('/api/admin/file/deploy', requireAdminAuth, (req, res) => {
 });
 
 // Admin Panel Route
-app.post('/api/admin/users', requireAdminAuth, async (req, res) => {
+app.post('/api/admin/users', requireAdminSession, async (req, res) => {
   try {
     const users = await User.find({}).sort({ createdAt: -1 });
     res.json(users);
@@ -579,7 +790,6 @@ const googleTTS = require('google-tts-api');
 const { execSync } = require('child_process');
 // fs and path are already declared at the top of server.js
 const os = require('os');
-const crypto = require('crypto');
 
 const dubUpload = multer({
   storage: multer.memoryStorage(),
@@ -816,12 +1026,12 @@ try {
 } catch (e) { }
 
 // API to get settings
-app.get('/api/admin/settings', requireAdminAuth, (req, res) => {
+app.get('/api/admin/settings', requireAdminSession, (req, res) => {
   res.json(appSettings);
 });
 
 // API to update settings
-app.post('/api/admin/settings', requireAdminAuth, (req, res) => {
+app.post('/api/admin/settings', requireAdminSession, (req, res) => {
   if (req.body.requireLoginForTools !== undefined) {
     appSettings.requireLoginForTools = req.body.requireLoginForTools;
     fs.writeFileSync(path.join(__dirname, 'settings.json'), JSON.stringify(appSettings));
@@ -1318,7 +1528,7 @@ app.post('/api/verify-registered-email', async (req, res) => {
 });
 
 // Admin Route to Ban/Unban users
-app.post('/api/admin/ban', requireAdminAuth, async (req, res) => {
+app.post('/api/admin/ban', requireAdminSession, async (req, res) => {
   const { userId, isBanned, durationStr, reason } = req.body;
 
   try {
@@ -1469,7 +1679,7 @@ app.post('/api/admin/ban', requireAdminAuth, async (req, res) => {
 });
 
 // Admin Route to Send Warning Email
-app.post('/api/admin/warn', requireAdminAuth, async (req, res) => {
+app.post('/api/admin/warn', requireAdminSession, async (req, res) => {
   const { userId, reason } = req.body;
 
   try {
@@ -1530,7 +1740,7 @@ app.post('/api/admin/warn', requireAdminAuth, async (req, res) => {
 });
 
 // Delete User Route
-app.post('/api/admin/delete-user', requireAdminAuth, async (req, res) => {
+app.post('/api/admin/delete-user', requireAdminSession, async (req, res) => {
   const { userId } = req.body;
 
   try {
@@ -1676,6 +1886,18 @@ app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res
   }
 });
 
+// Gated Control Room: Unauthenticated visitors receive minimal login gate; authenticated admins receive dashboard
+app.get(['/controlroommanage', '/controlroommanage.html'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  if (req.session && req.session.isAdmin) {
+    res.sendFile(path.join(__dirname, 'views', 'admin-dashboard.html'));
+  } else {
+    res.sendFile(path.join(__dirname, 'views', 'admin-gate.html'));
+  }
+});
+
 // Serve all static files (HTML, CSS, JS) from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
@@ -1688,7 +1910,7 @@ app.listen(PORT, () => {
 const TrapLog = require('./models/TrapLog');
 
 // 1. Retention Status Telemetry
-app.get('/api/admin/retention/status', requireAdminAuth, async (req, res) => {
+app.get('/api/admin/retention/status', requireAdminSession, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const totalTrapLogs = await TrapLog.countDocuments();
@@ -1722,7 +1944,7 @@ app.get('/api/admin/retention/status', requireAdminAuth, async (req, res) => {
 });
 
 // 2. Paginated Security Trap Logs (Sanitized projections, no raw payloads)
-app.get('/api/admin/retention/traplogs', requireAdminAuth, async (req, res) => {
+app.get('/api/admin/retention/traplogs', requireAdminSession, async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 20));
@@ -1751,7 +1973,7 @@ app.get('/api/admin/retention/traplogs', requireAdminAuth, async (req, res) => {
 });
 
 // 3. Atomic Legal Hold Toggle
-app.post('/api/admin/retention/toggle-hold', requireAdminAuth, async (req, res) => {
+app.post('/api/admin/retention/toggle-hold', requireAdminSession, async (req, res) => {
   try {
     const { logId, enableHold, reason } = req.body;
     if (!logId || !/^[a-fA-F0-9]{24}$/.test(logId)) {

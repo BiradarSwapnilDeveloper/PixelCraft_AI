@@ -9,6 +9,15 @@
   <url><loc>https://pixelcraftaitools.com/login.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://pixelcraftaitools.com/privacy-policy.html</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
   <url><loc>https://pixelcraftaitools.com/terms-conditions.html</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/index.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/complete-guide-to-image-steganography.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/exif-metadata-privacy-risks-and-removal.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/how-honeypots-and-canary-tokens-detect-breaches.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/browser-side-vs-server-side-file-processing.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/understanding-ai-prompt-injection-attacks.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/mastering-lossless-image-compression-for-web.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/qr-code-security-quishing-and-malicious-redirects.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pixelcraftaitools.com/blog/securing-pdfs-redaction-metadata-stripping-and-encryption.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://pixelcraftaitools.com/blog/the-dangers-of-phishing-and-homograph-attacks.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://pixelcraftaitools.com/blog/what-is-prnu-sensor-fingerprinting.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://pixelcraftaitools.com/tools/advanced-decoy.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>

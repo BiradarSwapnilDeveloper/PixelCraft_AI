@@ -30,6 +30,25 @@ function getClientIp(req) {
     return ip;
 }
 
+// Redact sensitive values before logging to database
+function sanitizePayload(data, depth = 0) {
+    if (depth > 5 || !data || typeof data !== 'object') return data;
+    const sanitized = Array.isArray(data) ? [] : {};
+    const sensitivePattern = /password|pass|secret|token|key|auth|cookie|session|credential|admin/i;
+    for (const [key, value] of Object.entries(data)) {
+        if (sensitivePattern.test(key)) {
+            sanitized[key] = '[REDACTED]';
+        } else if (typeof value === 'object' && value !== null) {
+            sanitized[key] = sanitizePayload(value, depth + 1);
+        } else if (typeof value === 'string' && value.length > 500) {
+            sanitized[key] = value.substring(0, 500) + '...[TRUNCATED]';
+        } else {
+            sanitized[key] = value;
+        }
+    }
+    return sanitized;
+}
+
 async function honeytokenTrap(req, res, next) {
     const tokenValue = extractToken(req);
     if (!tokenValue) {
@@ -70,7 +89,10 @@ async function honeytokenTrap(req, res, next) {
         const userAgent = req.headers['user-agent'] || 'Unknown';
         const method = req.method;
         const endpoint = req.originalUrl;
-        const payloadSent = { body: req.body, query: req.query };
+        const payloadSent = {
+            body: sanitizePayload(req.body),
+            query: sanitizePayload(req.query)
+        };
 
         // Save to Database
         const trapLog = new TrapLog({

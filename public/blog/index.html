@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cybersecurity, Forensics & AI Research Blog | PixelCraft AI</title>
+  <meta name="description" content="Explore authoritative technical guides on digital privacy, steganography, EXIF metadata sanitization, AI prompt injection defense, and lossy/lossless media compression." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://pixelcraftaitools.com/blog/index.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="PixelCraft AI Research & Engineering Blog" />
+  <meta property="og:description" content="In-depth technical guides and research reports covering OPSEC, steganography, PRNU sensors, AI guardrails, and zero-knowledge privacy architecture." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pixelcraftaitools.com/blog/index.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="../logo.jpg?v=5" />
+
+  <style>
+    .blog-hero {
+      padding: 150px 20px 60px;
+      text-align: center;
+      position: relative;
+    }
+    .blog-hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 30%, #38bdf8 70%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .blog-hero p {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 760px;
+      margin: 0 auto 35px;
+      line-height: 1.7;
+    }
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38bdf8;
+      color: #38bdf8;
+      transform: translateY(-2px);
+    }
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto 50px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 14px 20px 14px 44px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.3s;
+    }
+    .search-box input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    }
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto 80px;
+      padding: 0 20px;
+    }
+    .blog-card {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .blog-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .blog-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.15);
+    }
+    .blog-card:hover::before {
+      opacity: 1;
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .card-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.12);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .card-read {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .blog-card h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.35;
+      transition: color 0.2s;
+    }
+    .blog-card:hover h3 {
+      color: #38bdf8;
+    }
+    .blog-card p {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .card-cta {
+      color: #38bdf8;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      display: none;
+      grid-column: 1 / -1;
+    }
+  </style>
+
+  <!-- Schema.org CollectionPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "headline": "PixelCraft AI Cybersecurity & Technology Blog",
+    "description": "Comprehensive engineering research, OPSEC methodologies, and privacy guides.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "PixelCraft AI",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://pixelcraftaitools.com/logo.jpg"
+      }
+    },
+    "url": "https://pixelcraftaitools.com/blog/index.html"
+  }
+  </script>
+</head>
+<body>
+  <div id="toast-container" class="toast-container"></div>
+
+  <nav class="navbar" id="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
+      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">Tools</a></li>
+      <li><a href="index.html" style="color: #38bdf8;">Blog & Research</a></li>
+      <li><a href="../about-us.html">About</a></li>
+      <li><a href="../contact-us.html">Contact</a></li>
+      <li class="mobile-visible">
+        <a href="/auth/google" class="nav-cta" id="nav-auth-btn">Sign In</a>
+      </li>
+    </ul>
+  </nav>
+
+  <header class="blog-hero">
+    <div class="container">
+      <span class="card-badge" style="margin-bottom: 16px; display: inline-block;">Security & AI Knowledge Hub</span>
+      <h1>Cybersecurity, Privacy & Media Engineering Blog</h1>
+      <p>Authoritative technical guides, cryptographic forensics, AI safety research, and digital operational security (OPSEC) best practices.</p>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="article-search" placeholder="Search guides by topic, keyword, or tool..." onkeyup="filterArticles()">
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="setCategory('all')">All Research (10)</button>
+        <button class="filter-btn" onclick="setCategory('security')">Cybersecurity & Traps</button>
+        <button class="filter-btn" onclick="setCategory('privacy')">Privacy & OPSEC</button>
+        <button class="filter-btn" onclick="setCategory('codecs')">Media & Codecs</button>
+        <button class="filter-btn" onclick="setCategory('ai')">AI Safety</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="posts-grid" id="posts-grid">
+
+      <!-- Post 1: Steganography -->
+      <a href="complete-guide-to-image-steganography.html" class="blog-card" data-category="privacy" data-title="image audio steganography lsb dct cryptography hidden data">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">Cryptography</span>
+            <span class="card-read">9 Min Read</span>
+          </div>
+          <h3>The Complete Guide to Image & Audio Steganography</h3>
+          <p>Master how digital steganography conceals confidential payloads inside JPEG, PNG, and WAV files using LSB substitution and frequency DCT quantization without visual distortion.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 2: EXIF Security -->
+      <a href="exif-metadata-privacy-risks-and-removal.html" class="blog-card" data-category="privacy" data-title="exif metadata gps location camera hardware privacy removal osint">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(244, 63, 94, 0.15); color: #fb7185;">Privacy & OPSEC</span>
+            <span class="card-read">8 Min Read</span>
+          </div>
+          <h3>EXIF Metadata Security: How Photos Leak Your Home Location</h3>
+          <p>Every snapshot contains hidden forensic markers. Discover how unscrubbed GPS tags, camera serial numbers, and timestamps are harvested by OSINT investigators—and how to sanitize them.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 3: Honeypots & Canary Tokens -->
+      <a href="how-honeypots-and-canary-tokens-detect-breaches.html" class="blog-card" data-category="security" data-title="honeypots canary tokens decoys active defense breach detection secops">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">Active Defense</span>
+            <span class="card-read">9 Min Read</span>
+          </div>
+          <h3>How Honeytokens & Canary Decoys Detect Cyber Breaches</h3>
+          <p>Move from reactive logging to proactive deception. Explore how tripped honeytokens and canary documents alert SecOps teams to stealthy intruder reconnaissance with zero false positives.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 4: Zero-Knowledge Client-Side Processing -->
+      <a href="browser-side-vs-server-side-file-processing.html" class="blog-card" data-category="privacy" data-title="client-side server zero-knowledge webassembly wasm privacy canvas worker">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">Zero-Knowledge</span>
+            <span class="card-read">8 Min Read</span>
+          </div>
+          <h3>Zero-Knowledge Architecture: Client-Side vs Server Processing</h3>
+          <p>Why uploading sensitive files to cloud converters is a major compliance hazard. Learn how WebAssembly and Web Workers enable high-speed media transformation directly in your browser.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 5: AI Prompt Injection -->
+      <a href="understanding-ai-prompt-injection-attacks.html" class="blog-card" data-category="ai" data-title="ai prompt injection jailbreak llm owasp security guardrails red teaming">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(234, 179, 8, 0.15); color: #facc15;">AI Safety</span>
+            <span class="card-read">10 Min Read</span>
+          </div>
+          <h3>Understanding AI Prompt Injection & LLM Security</h3>
+          <p>A comprehensive technical breakdown of direct jailbreaks, indirect data exfiltration via markdown, and defensive guardrail architectures according to the OWASP LLM Top 10 framework.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 6: Modern Image Compression -->
+      <a href="mastering-lossless-image-compression-for-web.html" class="blog-card" data-category="codecs" data-title="image compression webp avif mozjpeg lcp performance core web vitals">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8;">Media & Performance</span>
+            <span class="card-read">9 Min Read</span>
+          </div>
+          <h3>Mastering Modern Image Compression: WebP, AVIF & MozJPEG</h3>
+          <p>An optimization benchmark of next-gen image codecs. Learn how chroma subsampling, DCT quantization, and responsive picture tags slash bandwidth by up to 80% without visible quality loss.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 7: Quishing (QR Phishing) -->
+      <a href="qr-code-security-quishing-and-malicious-redirects.html" class="blog-card" data-category="security" data-title="quishing qr code phishing redirects reed solomon barcodes security">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">Threat Vectors</span>
+            <span class="card-read">8 Min Read</span>
+          </div>
+          <h3>Quishing Explained: Spotting Malicious QR Codes</h3>
+          <p>QR code phishing is rapidly evading traditional corporate email filters. Discover how Quishing campaigns trick users onto mobile fake portals and how to inspect redirects safely.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 8: PDF Security & Redaction -->
+      <a href="securing-pdfs-redaction-metadata-stripping-and-encryption.html" class="blog-card" data-category="security" data-title="pdf redaction black box security metadata ocr encryption aes-256">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">Document Security</span>
+            <span class="card-read">9 Min Read</span>
+          </div>
+          <h3>The Ultimate PDF Security Guide: True Redaction vs Black Boxes</h3>
+          <p>Discover why drawing black rectangles over sensitive text in PDFs fails to protect confidentiality. Learn how to perform true byte-level redaction and metadata stripping.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 9: Phishing & Homograph Attacks -->
+      <a href="the-dangers-of-phishing-and-homograph-attacks.html" class="blog-card" data-category="security" data-title="phishing homograph attacks punycode unicode cyrillic domains typo squatting">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">Cybersecurity</span>
+            <span class="card-read">7 Min Read</span>
+          </div>
+          <h3>The Silent Threat: Homograph & Punycode Attacks</h3>
+          <p>Hackers use Cyrillic and Greek characters to create visually identical fraudulent domain names. Explore how internationalized domain spoofing bypasses visual inspection.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <!-- Post 10: PRNU Sensor Fingerprinting -->
+      <a href="what-is-prnu-sensor-fingerprinting.html" class="blog-card" data-category="privacy" data-title="prnu sensor fingerprinting digital forensics camera noise anonymity opsec">
+        <div>
+          <div class="card-top">
+            <span class="card-badge" style="background: rgba(110, 231, 183, 0.15); color: #6ee7b7;">Forensics</span>
+            <span class="card-read">8 Min Read</span>
+          </div>
+          <h3>Beyond EXIF: PRNU Sensor Fingerprinting</h3>
+          <p>Even after scrubbing EXIF tags, microscopic silicon manufacturing variations imprint a unique noise pattern on every camera sensor. Learn how forensic analysts track physical devices.</p>
+        </div>
+        <div class="card-footer">
+          <span>Oct 11, 2026</span>
+          <span class="card-cta">Read Guide →</span>
+        </div>
+      </a>
+
+      <div class="empty-state" id="empty-state">
+        <h3>No matching research guides found.</h3>
+        <p>Try searching for a different keyword or select "All Research".</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" style="background: #0f172a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
+        <a href="../about-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">About Us</a>
+        <a href="index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Blog & Research</a>
+        <a href="../privacy-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Privacy Policy</a>
+        <a href="../terms-conditions.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Terms of Service</a>
+        <a href="../disclaimer.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Disclaimer</a>
+        <a href="../cookies-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Cookies Policy</a>
+        <a href="../contact-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Contact</a>
+      </div>
+      <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">
+        &copy; 2026 PixelCraft AI. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/cookie-consent.js"></script>
+  <script>
+    let activeCat = 'all';
+
+    function setCategory(cat) {
+      activeCat = cat;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      filterArticles();
+    }
+
+    function filterArticles() {
+      const q = document.getElementById('article-search').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.blog-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cat = card.getAttribute('data-category');
+        const searchData = (card.getAttribute('data-title') + ' ' + card.innerText).toLowerCase();
+        
+        const matchesCat = (activeCat === 'all' || cat === activeCat);
+        const matchesSearch = (!q || searchData.includes(q));
+
+        if (matchesCat && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('empty-state').style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>

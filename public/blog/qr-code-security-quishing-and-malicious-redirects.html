@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quishing Explained: Spotting Malicious QR Codes | PixelCraft AI Blog</title>
+  <meta name="description" content="A comprehensive security breakdown of Quishing (QR code phishing), URL tampering, and how cybercriminals bypass email filters using image barcodes." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://pixelcraftaitools.com/blog/qr-code-security-quishing-and-malicious-redirects.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Quishing Explained: Spotting Malicious QR Codes | PixelCraft AI" />
+  <meta property="og:description" content="QR code phishing is rapidly bypassing traditional cybersecurity firewalls. Discover how Quishing works and how to protect users from malicious redirects." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://pixelcraftaitools.com/blog/qr-code-security-quishing-and-malicious-redirects.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" href="../logo.jpg?v=5" />
+
+  <style>
+    .article-container {
+      max-width: 920px;
+      margin: 140px auto 60px;
+      padding: 0 24px;
+    }
+    .article-card {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 50px 45px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    .post-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(249, 115, 22, 0.15);
+      color: #fb923c;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+    }
+    .article-card h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.25;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    .article-card h2 {
+      font-size: 1.6rem;
+      color: #fb923c;
+      margin: 40px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(251, 146, 60, 0.2);
+    }
+    .article-card h3 {
+      font-size: 1.25rem;
+      color: #e2e8f0;
+      margin: 28px 0 12px;
+    }
+    .article-card p, .article-card li {
+      color: #cbd5e1;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      margin-bottom: 18px;
+    }
+    .article-card ul, .article-card ol {
+      padding-left: 24px;
+      margin-bottom: 24px;
+    }
+    .callout-box {
+      background: rgba(249, 115, 22, 0.08);
+      border-left: 4px solid #f97316;
+      border-radius: 0 12px 12px 0;
+      padding: 20px 24px;
+      margin: 30px 0;
+    }
+    .callout-box strong { color: #fb923c; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 0.95rem;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 16px;
+      text-align: left;
+    }
+    .data-table th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #fb923c;
+    }
+    .code-snippet {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9rem;
+      color: #fed7aa;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    .related-tools {
+      margin-top: 50px;
+      padding: 28px;
+      background: rgba(16, 24, 39, 0.9);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Quishing Explained: The Rise of Malicious QR Codes and How to Spot Them",
+    "description": "A comprehensive security breakdown of Quishing (QR code phishing), URL tampering, and how cybercriminals bypass email filters using image barcodes.",
+    "author": {
+      "@type": "Organization",
+      "name": "PixelCraft AI Threat Intelligence Team"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "PixelCraft AI",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://pixelcraftaitools.com/logo.jpg"
+      }
+    },
+    "datePublished": "2026-10-10",
+    "dateModified": "2026-10-11",
+    "mainEntityOfPage": "https://pixelcraftaitools.com/blog/qr-code-security-quishing-and-malicious-redirects.html"
+  }
+  </script>
+</head>
+<body>
+  <div id="toast-container" class="toast-container"></div>
+
+  <nav class="navbar" id="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 40px; border-radius: 50%; vertical-align: middle;">
+      <span style="margin-left: 8px; vertical-align: middle;">PixelCraft AI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#tools">Tools</a></li>
+      <li><a href="index.html">Blog & Research</a></li>
+      <li><a href="../about-us.html">About</a></li>
+      <li><a href="../contact-us.html">Contact</a></li>
+      <li class="mobile-visible">
+        <a href="/auth/google" class="nav-cta" id="nav-auth-btn">Sign In</a>
+      </li>
+    </ul>
+  </nav>
+
+  <article class="article-container">
+    <div class="article-card">
+      <span class="post-badge">Phishing & Threat Vectors</span>
+      <h1>Quishing Explained: The Rise of Malicious QR Codes and How to Spot Them</h1>
+
+      <div class="post-meta">
+        <span>✍️ By PixelCraft AI Threat Intelligence Team</span>
+        <span>📅 October 11, 2026</span>
+        <span>⏱️ 8 Min Read</span>
+        <span>🔍 Vector Vulnerability Analysis</span>
+      </div>
+
+      <p>Quick Response (QR) codes have transitioned from niche logistics tools into an indispensable part of global digital infrastructure. From contactless restaurant menus and parking meters to two-factor authentication (2FA) setup workflows, billions of scans occur daily. However, this universal trust has birthed a dangerous cyber attack vector: <strong>Quishing (QR Code Phishing)</strong>.</p>
+
+      <div class="callout-box">
+        <strong>The Detection Blindspot:</strong> Traditional Secure Email Gateways (SEGs) scan inbound emails for malicious hyperlinks in the email body. Because a QR code is simply an image attachment containing optical 2D patterns, standard text scanners often ignore it completely—allowing phishing lures straight into user inboxes.
+      </div>
+
+      <h2>1. The Anatomy of a Quishing Attack</h2>
+      <p>Quishing campaigns exploit human behavior and device separation. When an employee receives an email claiming their corporate Microsoft 365 or Google Workspace session has expired, the email instructs them to scan a QR code using their personal smartphone to <em>"verify your multi-factor identity"</em>.</p>
+      <p>By moving the user from their corporate-monitored workstation to an unmanaged personal smartphone, the attacker bypasses corporate endpoint detection, DNS sinkholes, and browser URL protection.</p>
+
+      <h2>2. Common Quishing Vectors in the Wild</h2>
+      <ul>
+        <li><strong>Physical Decoy Overlays:</strong> Attackers print high-resolution sticker replicas and paste them directly over authentic QR codes on public parking meters, rental scooters, and transit kiosks. Unsuspecting users scan the sticker and submit credit card numbers to a cloned payment portal.</li>
+        <li><strong>MFA Re-Enrollment Scams:</strong> Impersonating corporate IT departments, attackers send emails prompting users to scan an "Authenticator Sync Code", harvesting session tokens.</li>
+        <li><strong>Dynamic QR Redirection Tampering:</strong> A legitimate QR service is exploited where an attacker changes the destination link after the QR code has already been printed or distributed.</li>
+      </ul>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Attack Vector</th>
+            <th>Primary Delivery Channel</th>
+            <th>Target Asset</th>
+            <th>Evasion Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Email Quishing</td>
+            <td>Inbound corporate email (PNG image)</td>
+            <td>Corporate SSO Credentials / MFA Tokens</td>
+            <td>OCR & Sandbox Evasion</td>
+          </tr>
+          <tr>
+            <td>Physical Overlay</td>
+            <td>Parking meters, payment terminals</td>
+            <td>Credit Card / Debit Credentials</td>
+            <td>Physical Deception</td>
+          </tr>
+          <tr>
+            <td>Dynamic URL Swap</td>
+            <td>Marketing flyers, print media</td>
+            <td>Malware Downloads / Drive-by Exploits</td>
+            <td>Delayed Redirect Flipping</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. Technical QR Architecture: Error Correction Levels</h2>
+      <p>QR codes utilize <strong>Reed-Solomon Error Correction</strong>, allowing scanners to recover data even if the code is torn, smudged, or partially obscured. Four standardized levels exist:</p>
+      <ul>
+        <li><strong>Level L (Low):</strong> 7% of codewords can be restored. Suitable for clean digital displays with large payloads.</li>
+        <li><strong>Level M (Medium):</strong> 15% error correction. Standard default for general applications.</li>
+        <li><strong>Level Q (Quartile):</strong> 25% error correction. Used in commercial industrial environments.</li>
+        <li><strong>Level H (High):</strong> Up to 30% error correction. Essential when embedding a custom central logo or brand icon into the center of the QR canvas.</li>
+      </ul>
+
+      <h2>4. How to Spot and Defend Against Quishing</h2>
+      <p>Organizations and individual internet users can safeguard their devices using proactive defense protocols:</p>
+      <ol>
+        <li><strong>Preview the Destination URL Before Opening:</strong> Modern smartphone camera apps display a preview of the decoded URL before you tap. If the domain uses Punycode (e.g., <code>xn--...</code>), unusual top-level domains, or mismatched subdomains, do not proceed.</li>
+        <li><strong>Inspect Physical Barcodes:</strong> Check whether a QR code on a kiosk or meter is a sticker placed over the real signage. Run your finger over the surface to feel for raised edges.</li>
+        <li><strong>Never Authorize Financial Transfers Blindly:</strong> Authentic payment gateways display merchant names within authorized banking applications rather than opening generic third-party web forms.</li>
+        <li><strong>Implement Computer Vision in Email Gateways:</strong> Modern SecOps teams configure mail servers to run automated Optical Character Recognition (OCR) and barcode decoders on all image attachments.</li>
+      </ol>
+
+      <h2>5. Frequently Asked Questions</h2>
+      <h3>Can scanning a QR code directly infect an iPhone or Android phone?</h3>
+      <p>Scanning a QR code alone cannot immediately execute arbitrary shell code on modern updated operating systems. However, scanning prompts the browser to navigate to a destination URL. If that destination hosts a malicious WebKit exploit, a zero-day browser vulnerability, or an APK payload, device compromise can follow.</p>
+
+      <h3>Are static QR codes safer than dynamic QR codes?</h3>
+      <p>Yes. In a <strong>Static QR Code</strong>, the destination URL is permanently encoded into the matrix pattern and can never be altered. In a <strong>Dynamic QR Code</strong>, the code points to an intermediary redirect server that forwards users to the target destination; if that third-party service is compromised, the redirect can be hijacked.</p>
+
+      <div class="related-tools">
+        <h3 style="margin-top: 0; color: #fb923c;">Generate Safe & Reliable QR Codes</h3>
+        <p>Create secure, high-precision barcodes with customizable Reed-Solomon correction:</p>
+        <p>
+          👉 <a href="../tools/qr-generator.html" style="color: #fdba74; font-weight: 600;">Client-Side QR Code Generator</a> — Generate static, tracker-free QR codes directly in your browser.<br>
+          👉 <a href="../tools/phishing-scanner.html" style="color: #fdba74; font-weight: 600;">Phishing & Homograph Scanner</a> — Audit decoded QR URLs for security risks before browsing.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <footer class="footer" style="background: #0f172a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
+        <a href="../about-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">About Us</a>
+        <a href="index.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Blog & Research</a>
+        <a href="../privacy-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Privacy Policy</a>
+        <a href="../terms-conditions.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Terms of Service</a>
+        <a href="../disclaimer.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Disclaimer</a>
+        <a href="../cookies-policy.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Cookies Policy</a>
+        <a href="../contact-us.html" style="color: #94a3b8; text-decoration: none; font-weight: 500;">Contact</a>
+      </div>
+      <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">
+        &copy; 2026 PixelCraft AI. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/cookie-consent.js"></script>
+</body>
+</html>

@@ -55,56 +55,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 254, 0.05);
         }
 
-        /* LOGIN SCREEN */
-        .login-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        
-        .login-box {
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .login-box::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(45deg, var(--accent), transparent, var(--accent));
-            z-index: -1;
-            border-radius: 18px;
-            animation: borderGlow 3s linear infinite;
-        }
-
-        @keyframes borderGlow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-
-        .login-box h1 { margin-bottom: 8px; font-weight: 700; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 0 10px var(--accent-glow); }
-        .login-box p { color: var(--accent); margin-bottom: 30px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
-
-        input[type="password"] {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--accent);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 16px;
-            margin-bottom: 20px;
-            outline: none;
-            transition: 0.3s;
-            text-align: center;
-            letter-spacing: 5px;
-        }
-        input[type="password"]:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-
         .btn-primary {
             width: 100%;
             padding: 16px;
@@ -122,13 +72,9 @@
         }
         .btn-primary:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
 
-        #error-msg {
-            color: var(--danger); margin-top: 15px; font-size: 14px; display: none; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
-        }
-
         /* DASHBOARD */
         #dashboard {
-            display: none;
+            display: block;
             padding: 40px 5%;
             max-width: 1600px;
             margin: 0 auto;
@@ -358,19 +304,6 @@
         .tool-meta { font-size: 12px; color: var(--text-muted); text-align: right; }
         .tool-duration { color: var(--warning); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
         .tool-time { color: var(--text-muted); font-size: 11px; display: block; margin-top: 2px; }
-        
-        /* Behavior Cards */
-        .behavior-card { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
-        .behavior-badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
-        .badge-deep { background: rgba(0,242,254,0.15); color: var(--accent); border: 1px solid var(--accent); }
-        .badge-tool { background: rgba(16,185,129,0.15); color: var(--success); border: 1px solid var(--success); }
-        .badge-scroll { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid var(--warning); }
-        .badge-none { background: rgba(148,163,184,0.1); color: var(--text-muted); border: 1px solid rgba(148,163,184,0.3); }
-        .scroll-bar-wrap { flex: 1; }
-        .scroll-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 5px; }
-        .scroll-bar-bg { height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
-        .scroll-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #10b981, #00f2fe); transition: width 0.5s ease; }
-        .behavior-info { font-size: 11px; color: var(--text-muted); text-align: right; white-space: nowrap; }
 
         /* Forensic Extractor Styles */
         .forensic-dropzone { border: 2px dashed rgba(245, 158, 11, 0.4); padding: 40px; text-align: center; cursor: pointer; margin: 20px 0; color: var(--text-muted); border-radius: 12px; transition: 0.3s; background: rgba(0,0,0,0.2); }
@@ -381,14 +314,6 @@
         .forensic-terminal .error { color: var(--danger); }
         .forensic-preview { max-width: 100%; max-height: 250px; display: none; margin: 10px auto; border-radius: 8px; border: 1px solid var(--border); }
     </style>
-    <!-- CodeMirror -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
 </head>
 <body>
 
@@ -425,23 +350,10 @@
                     <span id="editor-status" style="color:var(--text-muted); font-size:11px;"></span>
                 </div>
                 <div style="flex:1; position:relative;" id="editor-container">
-                    <!-- CodeMirror goes here -->
                     <textarea id="code-editor"></textarea>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Login View -->
-<div class="login-wrapper" id="login-view">
-    <div class="glass-panel login-box">
-        <h1>Command Center</h1>
-        <p>SECURE TELEMETRY ACCESS</p>
-
-        <input type="password" id="admin-pass" placeholder="ENTER ACCESS KEY" autocomplete="off">
-        <button class="btn-primary" id="login-btn">Initialize Link</button>
-        <div id="error-msg">ACCESS DENIED.</div>
     </div>
 </div>
 
@@ -543,13 +455,11 @@
                             <th>Session ID</th>
                             <th>Timestamp</th>
                             <th>Entity (Email)</th>
-
                             <th>Action</th>
                             <th>Legal Consent</th>
                         </tr>
                     </thead>
                     <tbody id="forensic-tbody">
-                        <!-- Dynamic -->
                     </tbody>
                 </table>
             </div>
@@ -564,13 +474,11 @@
                             <th>Session ID</th>
                             <th>Timestamp</th>
                             <th>Entity (Email)</th>
-
                             <th>Action</th>
                             <th>Legal Consent</th>
                         </tr>
                     </thead>
                     <tbody id="avlogs-tbody">
-                        <!-- Dynamic -->
                     </tbody>
                 </table>
             </div>
@@ -585,13 +493,11 @@
                             <th>Session ID</th>
                             <th>Timestamp</th>
                             <th>Entity (Email)</th>
-
                             <th>Action</th>
                             <th>Legal Consent</th>
                         </tr>
                     </thead>
                     <tbody id="decoylogs-tbody">
-                        <!-- Dynamic -->
                     </tbody>
                 </table>
             </div>
@@ -613,7 +519,6 @@
         </div>
 
         <div style="padding: 20px; overflow-y: auto; flex: 1;">
-            <!-- Telemetry Badges -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
                 <div class="glass-panel stat-card" style="padding: 15px;">
                     <h3 style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px;">Active Stored PDFs</h3>
@@ -637,7 +542,6 @@
                 </div>
             </div>
 
-            <!-- Controls & Table Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <span style="font-size: 13px; font-weight: bold; color: var(--text-main);">Filter Logs:</span>
@@ -647,7 +551,6 @@
                 <button class="btn-primary" id="ret-export-btn" style="width: auto; padding: 6px 16px; font-size: 11px; border-color: #a78bfa; color: #a78bfa;">Export Evidence (JSON)</button>
             </div>
 
-            <!-- Security & Holds Table -->
             <div style="overflow-x: auto; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid var(--border);">
                 <table>
                     <thead>
@@ -717,8 +620,6 @@
             <div id="tool-history-list"></div>
         </div>
 
-
-
         <!-- Tab: Actions -->
         <div class="tab-content" id="tab-actions">
             <div id="action-buttons-container" style="max-width:400px; margin: 0 auto;"></div>
@@ -774,20 +675,17 @@
 </div>
 
 <script>
-    const loginView = document.getElementById('login-view');
-    const dashboard = document.getElementById('dashboard');
-    const loginBtn = document.getElementById('login-btn');
-    const passInput = document.getElementById('admin-pass');
-    const errorMsg = document.getElementById('error-msg');
-    
-    const modalOverlay = document.getElementById('modal-overlay');
-    const modalCloseBtn = document.getElementById('modal-close');
-    
+    // State Variables (Memory Only - Zero Storage Exposure)
+    let adminCsrfToken = '';
     let usersData = [];
     let currentSelectedUser = null;
-    let currentPassword = sessionStorage.getItem('admin_pass') || '';
-    
-    // Initialize CodeMirror
+    let toolsLoginRequired = true;
+
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalCloseBtn = document.getElementById('modal-close');
+    const toggleToolsBtn = document.getElementById('toggle-tools-login');
+
+    // Initialize CodeMirror for Deployment Hub
     const editorTextArea = document.getElementById('code-editor');
     const codeMirrorInstance = CodeMirror.fromTextArea(editorTextArea, {
         mode: "htmlmixed",
@@ -801,10 +699,18 @@
     codeMirrorInstance.setSize("100%", "100%");
     let currentActiveFile = null;
 
-    if (currentPassword) fetchDashboardData(currentPassword);
+    // Helper for CSRF-protected JSON mutations
+    function getCsrfHeaders(extra = {}) {
+        return Object.assign({
+            'Content-Type': 'application/json',
+            'X-Admin-CSRF-Token': adminCsrfToken
+        }, extra);
+    }
 
-    loginBtn.onclick = () => { if(passInput.value) fetchDashboardData(passInput.value); };
-    passInput.onkeypress = (e) => { if(e.key === 'Enter') loginBtn.click(); };
+    // Modal Control
+    function closeModal() { modalOverlay.classList.remove('open'); }
+    modalCloseBtn.onclick = closeModal;
+    modalOverlay.onclick = (e) => { if (e.target === modalOverlay) closeModal(); };
 
     // Tab switching
     function switchTab(tabId, btn) {
@@ -814,20 +720,66 @@
         btn.classList.add('active');
     }
 
-    document.getElementById('logout-btn').onclick = () => {
-        sessionStorage.removeItem('admin_pass');
+    // Termination of Administrative Session
+    document.getElementById('logout-btn').onclick = async () => {
+        try {
+            await fetch('/api/admin/logout', {
+                method: 'POST',
+                headers: { 'X-Admin-CSRF-Token': adminCsrfToken }
+            });
+        } catch (e) { }
         window.location.reload();
     };
 
-    // Tools Login Toggle Logic
-    const toggleToolsBtn = document.getElementById('toggle-tools-login');
-    let toolsLoginRequired = true;
+    // Initialize Admin Session on Page Load
+    async function initSession() {
+        try {
+            const res = await fetch('/api/admin/csrf-token');
+            if (!res.ok) {
+                // Not authenticated or session expired
+                window.location.reload();
+                return;
+            }
+            const data = await res.json();
+            adminCsrfToken = data.csrfToken || '';
 
+            // Load telemetry and components
+            await fetchDashboardData();
+            await fetchSettings();
+            await fetchForensicLogs();
+        } catch (e) {
+            console.error("Session init failed:", e);
+        }
+    }
+
+    // Fetch User Database
+    async function fetchDashboardData() {
+        try {
+            const res = await fetch('/api/admin/users', {
+                method: 'POST',
+                headers: getCsrfHeaders(),
+                body: JSON.stringify({})
+            });
+
+            if (res.status === 401) {
+                window.location.reload();
+                return;
+            }
+
+            const data = await res.json().catch(() => null);
+            if (!res.ok) throw new Error((data && data.error) ? data.error : 'Failed to fetch users');
+            
+            usersData = data;
+            processData(usersData);
+        } catch (e) {
+            console.error("Error loading dashboard data:", e);
+        }
+    }
+
+    // Settings Toggle Logic
     async function fetchSettings() {
         try {
-            const res = await fetch('/api/admin/settings', {
-                headers: { 'x-admin-password': currentPassword }
-            });
+            const res = await fetch('/api/admin/settings');
             if (res.ok) {
                 const data = await res.json();
                 toolsLoginRequired = data.requireLoginForTools;
@@ -852,59 +804,21 @@
         try {
             const res = await fetch('/api/admin/settings', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'x-admin-password': currentPassword 
-                },
+                headers: getCsrfHeaders(),
                 body: JSON.stringify({ requireLoginForTools: newState })
             });
             if (res.ok) {
                 toolsLoginRequired = newState;
                 updateToggleBtnUI();
             } else {
-                updateToggleBtnUI(); // Revert on failure
+                updateToggleBtnUI();
                 alert('Failed to update setting.');
             }
-        } catch(e) {
+        } catch (e) {
             console.error(e);
             updateToggleBtnUI();
         }
     };
-
-    function closeModal() { modalOverlay.classList.remove('open'); }
-    modalCloseBtn.onclick = closeModal;
-    modalOverlay.onclick = (e) => { if(e.target === modalOverlay) closeModal(); };
-
-    async function fetchDashboardData(password) {
-        currentPassword = password;
-        try {
-            loginBtn.textContent = 'AUTHENTICATING...';
-            const res = await fetch('/api/admin/users', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password })
-            });
-
-            const data = await res.json().catch(() => null);
-            if (!res.ok) {
-                const errMsg = data && data.error ? data.error : 'DATABASE CONNECTION FAILED.';
-                throw new Error(errMsg);
-            }
-            
-            usersData = data;
-            sessionStorage.setItem('admin_pass', password);
-            loginView.style.display = 'none';
-            dashboard.style.display = 'block';
-            processData(usersData);
-            fetchSettings();
-            fetchForensicLogs(password);
-        } catch(e) {
-            errorMsg.textContent = e.message;
-            errorMsg.style.display = 'block';
-            sessionStorage.removeItem('admin_pass');
-            loginBtn.textContent = 'Initialize Link';
-        }
-    }
 
     // Forensics Hub Logic
     const openForensicsBtn = document.getElementById('open-forensics-btn');
@@ -920,13 +834,11 @@
     });
 
     function switchForensicTab(tabId, btn) {
-        // Hide all forensic tabs
         document.getElementById('tab-extractor').style.display = 'none';
         document.getElementById('tab-flogs').style.display = 'none';
         document.getElementById('tab-avlogs').style.display = 'none';
         document.getElementById('tab-decoylogs').style.display = 'none';
         
-        // Remove active class from all forensic tab buttons
         document.getElementById('tab-btn-extractor').classList.remove('active');
         document.getElementById('tab-btn-logs').classList.remove('active');
         document.getElementById('tab-btn-avlogs').classList.remove('active');
@@ -967,7 +879,7 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 audioCtx.decodeAudioData(e.target.result, (buffer) => {
-                    extractAudioDSSSWatermark(buffer);
+                    extractAudioQIMWatermark(buffer);
                 }, (err) => {
                     flog(`Error decoding audio format.`, 'error');
                 });
@@ -978,7 +890,7 @@
             const video = document.createElement('video');
             video.onloadeddata = () => {
                 flog(`Analyzing video stream...`);
-                video.currentTime = 1; // Seek to 1s to grab a stable frame
+                video.currentTime = 1;
             };
             video.onseeked = () => {
                 const canvas = document.createElement('canvas');
@@ -1012,7 +924,7 @@
             reader.readAsDataURL(file);
         }
     }
-    
+
     function mulberry32(a) {
         return function() {
             var t = a += 0x6D2B79F5;
@@ -1027,7 +939,7 @@
         return hash;
     }
     function bytesToStr(bytes) { return new TextDecoder().decode(new Uint8Array(bytes)); }
-    
+
     function extractAudioQIMWatermark(audioBuffer) {
         flog('Scanning Audio for QIM Decoy Watermark...');
         const prng = mulberry32(hashString("PIXELCRAFT_ADMIN_KEY"));
@@ -1098,74 +1010,6 @@
         return false;
     }
 
-    // --- ADVANCED DSSS FORENSIC EXTRACTOR ---
-    const ADMIN_PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7QgkLQJ/vk0Af
-UGZZfjJP3XqIfqhGhDLJiMY4K6IarZzvHCNFwYKqsZ3y48E53+/SmBuL0mPmbQ/2
-x426Pl5IbKWSNW/kwMg2j1lk1dTXShsd/OSQDvvREeQmUivLFzr4OobOk+OBCjOF
-UNRIvv1SjegnrjlFeAqQEKDrcq6RFZhL8O6LBWosNRwB++WfkaWzEtmu7hoTPbjw
-MHtZJWfciBfBN7dfI2xhbfrMfxeIEdiX5g+5+H8x7FMLl7xOPwgdDb3nEjHEwEOR
-PdKJSlhQYUoOzHpHD2USJ2ypJuBLOh3yomk+X8SOp8ceDkM/XRk4aKk3+6oSkB9H
-QhBiKgzTAgMBAAECggEAFm8ZXUc/Qfj+sCG2OVeEmIvcr7iY2WXiHcHsmXMkxxRw
-njbdRPCjgmaoGR7PGetptG2zsyMgA82iIXsT0DHDouKdTXBoeNvdwKeY2ptBlg9T
-Q1r2WQnqgkgl8K9cfsbIMk/0sZAHLAD4XirqW9LBz5+fpg1Z4Cg6/7p2RO7m2gur
-SjJuDYG8eML9lvoZuZ8t+oYdq9ipaeZeT6lr2kyJxrBkhrPzTQwdkaA8nlF4Vjb6
-nZUxfQHSTlapDaUcMZQRA36I9GvAoChYfcdLjwuMa3oHauQMsJmPrw7RAolNpfgX
-JRSKqIhuraBpv/yze8AGkg0VINCt1AfyCTXIzoVd4QKBgQDgl5HpjxZDFLqE5fal
-z3ehMU1ANeO7rbCGLgeVH+fYaAkbNVS2nsge5ZJZCNXZMM9L1shaDN87UsAj6G4e
-l3nKZhiSAdsWqL5BgMpUnkVYFXB/imt76dMntugAMZc6Z5tVXObtwZE4ZJG0W99E
-wgJEIdQp+lHYKCm/D6hEG7VUcwKBgQDVceXytgC6RZV6Zs+Kt1dP6ouz2ge8TDlx
-4ZVouAeMHzYn2/+hVQ44WQaMeKZehCWmm7ldX+l40UR+ryXW0NzLnFV9LoFMLudM
-rWMYw/ilCFbEdIR7Vc82/pmXXTCIUthggOAOw1AMcqFAs9rsJpu4/wzm/nsPNOTZ
-cDnCOQyuIQKBgH51OYY9t/Y7ZK5R4agJAj3zyaB+92SEbuGOZ1yTI3MZWQ9F3xYY
-n2uuLdIOBIMPVZlJLXRuzP7VIDTXubFl7wCErg8AFoFSsBWn08UDfN4U7EwT/2M9
-DFTPSyBYy+Lp1W+iKLD0jbUoA1Z/aF6Jssb0GUctmAnSy3a19TOsOlR7AoGAXnzx
-YqSXZd5v8aOZtLq8+C/IcHHQgtbrhzJpxdXR4YHfo32MiIrypJckgwLWA3lUgZDm
-WiOfY1CglcRLZ/FGDQzD+4qeym7pDdSjzc7TP5uVbZp3G3I9LQdATvV+CptCFlZ2
-2ZI02Y3VPKNiArCEtzyRJaD6MR0lQeygZQ6EQoECgYEAkU8yJYhnFNLQEpOJ616t
-bB2YiZGdkhJowr3o/cxI/If9X+afAHiKp/uCLChOyUsZsCrJ9w7sth+nBk6K7677
-5m7Qr7Mtaa7/XYivWDtbCjSWgEQSWCA7a5yYiPVLVkHjdhilyXoiAcyRoIwYj25V
-inSxPwWk6OXcfLjWnE/xatI=
------END PRIVATE KEY-----`;
-
-    async function importPrivateKey(pem) {
-        const pemHeader = "-----BEGIN PRIVATE KEY-----";
-        const pemFooter = "-----END PRIVATE KEY-----";
-        const pemContents = pem.substring(pemHeader.length, pem.length - pemFooter.length).replace(/\s/g, '');
-        const binaryDerString = window.atob(pemContents);
-        const binaryDer = str2ab(binaryDerString);
-        return window.crypto.subtle.importKey(
-            "pkcs8",
-            binaryDer,
-            { name: "RSA-OAEP", hash: "SHA-256" },
-            true,
-            ["decrypt"]
-        );
-    }
-    
-    async function rsaDecrypt(u8Array) {
-        try {
-            const privKey = await importPrivateKey(ADMIN_PRIVATE_KEY);
-            const decrypted = await window.crypto.subtle.decrypt({ name: "RSA-OAEP" }, privKey, u8Array);
-            return new TextDecoder().decode(new Uint8Array(decrypted));
-        } catch(e) {
-            return null;
-        }
-    }
-
-    function mulberry32(a) {
-        return function() {
-            var t = a += 0x6D2B79F5;
-            t = Math.imul(t ^ t >>> 15, t | 1);
-            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-            return ((t ^ t >>> 14) >>> 0) / 4294967296;
-        }
-    }
-    function hashString(str) {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) hash = Math.imul(31, hash) + str.charCodeAt(i) | 0;
-        return hash;
-    }
     const BLOCK_SIZE = 4;
     const Q_STEP = 16;
     const FIXED_REDUNDANCY = 8;
@@ -1209,8 +1053,6 @@ inSxPwWk6OXcfLjWnE/xatI=
         };
 
         let blockPtr = 0;
-        
-        // Extract 16-bit length
         let len16 = 0;
         for(let b=15; b>=0; b--) {
             let votes = 0;
@@ -1260,6 +1102,7 @@ inSxPwWk6OXcfLjWnE/xatI=
         flog('No Advanced QIM Decoy Forensic ID found.', 'warning');
         return false;
     }
+
     function extractDecoyWatermark(img) {
         flog('Scanning Image for Decoy Stego (LSB) Watermark...');
         fHiddenCanvas.width = img.width;
@@ -1355,15 +1198,13 @@ inSxPwWk6OXcfLjWnE/xatI=
                 let count = 0;
                 for(let y = startY; y < startY + blockSize; y++) {
                     for(let x = startX; x < startX + blockSize; x++) {
-                        sum += data[(y * width + x) * 4 + 1]; // Use Green (Luminance) channel instead of Blue
+                        sum += data[(y * width + x) * 4 + 1];
                         count++;
                     }
                 }
                 const avg = sum / count;
-                
                 const val0 = Math.round(avg / qStep) * qStep;
                 const val1 = Math.round((avg - qStep/2)/qStep)*qStep + qStep/2;
-                
                 const dist0 = Math.abs(avg - val0);
                 const dist1 = Math.abs(avg - val1);
                 
@@ -1401,19 +1242,14 @@ inSxPwWk6OXcfLjWnE/xatI=
         }
     }
 
-    async function fetchForensicLogs(password) {
+    async function fetchForensicLogs() {
         try {
-            const res = await fetch('/api/admin/forensic-logs', {
-                method: 'GET',
-                headers: { 'x-admin-password': password }
-            });
+            const res = await fetch('/api/admin/forensic-logs');
             if (res.ok) {
                 const logs = await res.json();
                 renderForensicLogs(logs);
             }
-        } catch(e) {
-            console.error('Failed to fetch forensic logs:', e);
-        }
+        } catch(e) { }
     }
 
     function renderForensicLogs(logs) {
@@ -1425,10 +1261,10 @@ inSxPwWk6OXcfLjWnE/xatI=
         tbodyAV.innerHTML = '';
         tbodyD.innerHTML = '';
         
-        if (logs.length === 0) {
-            tbodyF.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#94a3b8;">No forensic logs found.</td></tr>';
-            tbodyAV.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#94a3b8;">No AV logs found.</td></tr>';
-            tbodyD.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#94a3b8;">No Decoy logs found.</td></tr>';
+        if (!logs || logs.length === 0) {
+            tbodyF.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No fingerprint logs found.</td></tr>';
+            tbodyAV.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No AV logs found.</td></tr>';
+            tbodyD.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No Decoy logs found.</td></tr>';
             return;
         }
 
@@ -1440,7 +1276,6 @@ inSxPwWk6OXcfLjWnE/xatI=
                 <td style="color:var(--accent); font-family:'JetBrains Mono',monospace;">PixelCraft Software<br><span style="font-size:0.85em; color:var(--text-muted);">${log.sessionId}</span></td>
                 <td>${new Date(log.timestamp).toLocaleString()}</td>
                 <td style="color:#fff;">${log.email}</td>
-                
                 <td><span style="background:rgba(245,158,11,0.15); color:var(--warning); padding:2px 8px; border-radius:4px; font-size:11px;">${log.action}</span></td>
                 <td>${log.legalConsentGranted ? '<span style="color:var(--success);">TRUE</span>' : '<span style="color:var(--danger);">FALSE</span>'}</td>
             `;
@@ -1451,15 +1286,14 @@ inSxPwWk6OXcfLjWnE/xatI=
                 tbodyD.appendChild(tr);
                 dCount++;
             } else {
-                // Default fallback to fingerprint wipe logs (DIGITAL_WIPER_STEGO)
                 tbodyF.appendChild(tr);
                 fCount++;
             }
         });
 
-        if(fCount === 0) tbodyF.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#94a3b8;">No fingerprint logs found.</td></tr>';
-        if(avCount === 0) tbodyAV.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#94a3b8;">No AV logs found.</td></tr>';
-        if(dCount === 0) tbodyD.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#94a3b8;">No Decoy logs found.</td></tr>';
+        if(fCount === 0) tbodyF.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No fingerprint logs found.</td></tr>';
+        if(avCount === 0) tbodyAV.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No AV logs found.</td></tr>';
+        if(dCount === 0) tbodyD.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No Decoy logs found.</td></tr>';
     }
 
     function openUserModal(index) {
@@ -1467,18 +1301,15 @@ inSxPwWk6OXcfLjWnE/xatI=
         if(!u) return;
         currentSelectedUser = u;
 
-        // Reset to first tab
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('tab-overview').classList.add('active');
         document.querySelectorAll('.tab-btn')[0].classList.add('active');
 
-        // Header
         document.getElementById('m-avatar').src = u.avatar || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300f2fe'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E`;
         document.getElementById('m-name').textContent = u.name || 'Unknown';
         document.getElementById('m-email').textContent = u.email || 'Unknown';
 
-        // Status Badge
         const badge = document.getElementById('m-status-badge');
         if (u.isBanned) {
             badge.textContent = "🚫 BANNED";
@@ -1492,8 +1323,6 @@ inSxPwWk6OXcfLjWnE/xatI=
             badge.style.border = "1px solid var(--success)";
         }
 
-        // TAB 1: Overview
-        // Derive account creation date from MongoDB ObjectID
         const createdDate = new Date(parseInt(u._id.substring(0, 8), 16) * 1000);
         document.getElementById('m-created').textContent = createdDate.toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
         document.getElementById('m-logins').textContent = u.loginCount || 1;
@@ -1504,15 +1333,12 @@ inSxPwWk6OXcfLjWnE/xatI=
         const toolCountEl = document.getElementById('m-toolscount');
         toolCountEl.textContent = u.toolsUsedCount || 0;
         toolCountEl.onclick = () => {
-            // Switch to tool history tab on click
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-tools').classList.add('active');
             document.querySelectorAll('.tab-btn')[1].classList.add('active');
         };
 
-
-        // TAB 2: Tool History
         const toolList = document.getElementById('tool-history-list');
         toolList.innerHTML = '';
         const toolHistory = u.toolUsageHistory || [];
@@ -1520,7 +1346,6 @@ inSxPwWk6OXcfLjWnE/xatI=
         if (toolHistory.length === 0) {
             toolList.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px; font-size:14px;">No tool usage recorded yet.</div>`;
         } else {
-            // Show in chronological order (oldest first) with numbered steps
             [...toolHistory].forEach((t, i) => {
                 const date = new Date(t.usedAt);
                 const durSec = t.durationSeconds || 0;
@@ -1541,11 +1366,7 @@ inSxPwWk6OXcfLjWnE/xatI=
             });
         }
 
-
-
-        // TAB 5: Actions
         const actionContainer = document.getElementById('action-buttons-container');
-        
         const deleteButtonHtml = `
             <div style="margin-top: 35px; border-top: 1px solid rgba(239, 68, 68, 0.2); padding-top: 25px;">
                 <p style="color:var(--text-muted); font-size:12px; text-align:center; margin-bottom:12px;">Dangerous Action: Completely erase user from database</p>
@@ -1582,7 +1403,6 @@ inSxPwWk6OXcfLjWnE/xatI=
 
     // Submit Ban/Unban
     async function submitBan(isBanned) {
-
         let durationStr = null;
         let reason = null;
 
@@ -1595,9 +1415,8 @@ inSxPwWk6OXcfLjWnE/xatI=
         try {
             const res = await fetch('/api/admin/ban', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getCsrfHeaders(),
                 body: JSON.stringify({ 
-                    password: sessionStorage.getItem('admin_pass'), 
                     userId: currentSelectedUser._id, 
                     isBanned: isBanned,
                     durationStr: durationStr,
@@ -1609,10 +1428,10 @@ inSxPwWk6OXcfLjWnE/xatI=
                 document.getElementById('ban-prompt-overlay').classList.remove('open');
                 if(isBanned) document.getElementById('confirm-ban-btn').textContent = "Enforce Ban";
                 showCustomAlert("Action completed! Email Status: " + (data.emailStatus || "Unknown"), true);
-                fetchDashboardData(sessionStorage.getItem('admin_pass'));
+                fetchDashboardData();
                 closeModal();
             } else {
-                showCustomAlert("Failed to update status.", false);
+                showCustomAlert(data.error || "Failed to update status.", false);
                 if(isBanned) document.getElementById('confirm-ban-btn').textContent = "Enforce Ban";
             }
         } catch (e) {
@@ -1625,16 +1444,13 @@ inSxPwWk6OXcfLjWnE/xatI=
         try {
             const res = await fetch('/api/admin/delete-user', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    password: sessionStorage.getItem('admin_pass'), 
-                    userId: userId 
-                })
+                headers: getCsrfHeaders(),
+                body: JSON.stringify({ userId: userId })
             });
             const data = await res.json();
             if(data.success) {
                 showCustomAlert("User permanently erased from database!", true);
-                fetchDashboardData(sessionStorage.getItem('admin_pass'));
+                fetchDashboardData();
                 closeModal();
             } else {
                 showCustomAlert(data.error || "Failed to delete user.", false);
@@ -1653,9 +1469,8 @@ inSxPwWk6OXcfLjWnE/xatI=
         try {
             const res = await fetch('/api/admin/warn', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getCsrfHeaders(),
                 body: JSON.stringify({ 
-                    password: sessionStorage.getItem('admin_pass'), 
                     userId: currentSelectedUser._id, 
                     reason: reason
                 })
@@ -1666,7 +1481,7 @@ inSxPwWk6OXcfLjWnE/xatI=
                 btn.textContent = "Send Warning";
                 showCustomAlert("Warning sent! Email Status: " + (data.emailStatus || "Unknown"), true);
             } else {
-                showCustomAlert("Failed to send warning.", false);
+                showCustomAlert(data.error || "Failed to send warning.", false);
                 btn.textContent = "Send Warning";
             }
         } catch (e) {
@@ -1759,9 +1574,7 @@ inSxPwWk6OXcfLjWnE/xatI=
         async function loadFiles() {
             try {
                 fileListContainer.innerHTML = '<li style="color:var(--text-muted);">Loading files...</li>';
-                const res = await fetch('/api/admin/files', {
-                    headers: { 'x-admin-password': currentPassword }
-                });
+                const res = await fetch('/api/admin/files');
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed to load files');
 
@@ -1793,7 +1606,6 @@ inSxPwWk6OXcfLjWnE/xatI=
         async function loadFileContent(filePath, liElement) {
             currentActiveFile = filePath;
             
-            // Highlight active item
             Array.from(fileListContainer.children).forEach(child => {
                 child.style.background = "transparent";
                 child.style.color = "#cbd5e1";
@@ -1808,13 +1620,10 @@ inSxPwWk6OXcfLjWnE/xatI=
             previewBtn.style.display = 'none';
             
             try {
-                const res = await fetch(`/api/admin/file/read?path=${encodeURIComponent(filePath)}`, {
-                    headers: { 'x-admin-password': currentPassword }
-                });
+                const res = await fetch(`/api/admin/file/read?path=${encodeURIComponent(filePath)}`);
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed to read file');
 
-                // Set CodeMirror mode based on extension
                 if(filePath.endsWith('.js')) codeMirrorInstance.setOption("mode", "javascript");
                 else if(filePath.endsWith('.css')) codeMirrorInstance.setOption("mode", "css");
                 else if(filePath.endsWith('.json')) codeMirrorInstance.setOption("mode", "application/json");
@@ -1843,8 +1652,8 @@ inSxPwWk6OXcfLjWnE/xatI=
             try {
                 const res = await fetch('/api/admin/file/deploy', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: currentPassword, filePath: currentActiveFile, content: content })
+                    headers: getCsrfHeaders(),
+                    body: JSON.stringify({ filePath: currentActiveFile, content: content })
                 });
                 const data = await res.json();
                 
@@ -1862,7 +1671,6 @@ inSxPwWk6OXcfLjWnE/xatI=
 
         previewBtn.addEventListener('click', () => {
             if(!currentActiveFile || !currentActiveFile.endsWith('.html')) return;
-            
             const content = codeMirrorInstance.getValue();
             const newWindow = window.open();
             newWindow.document.write(content);
@@ -1894,9 +1702,7 @@ inSxPwWk6OXcfLjWnE/xatI=
 
         async function loadRetentionData() {
             try {
-                const statusRes = await fetch('/api/admin/retention/status', {
-                    headers: { 'x-admin-password': currentPassword }
-                });
+                const statusRes = await fetch('/api/admin/retention/status');
                 if (statusRes.ok) {
                     const statusData = await statusRes.json();
                     if (statusData.metrics) {
@@ -1918,9 +1724,7 @@ inSxPwWk6OXcfLjWnE/xatI=
                 if (holdOnly === true) url += '&legalHold=true';
                 else if (holdOnly === false) url += '&legalHold=false';
 
-                const res = await fetch(url, {
-                    headers: { 'x-admin-password': currentPassword }
-                });
+                const res = await fetch(url);
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed to fetch logs');
 
@@ -1991,9 +1795,8 @@ inSxPwWk6OXcfLjWnE/xatI=
             try {
                 const res = await fetch('/api/admin/retention/toggle-hold', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getCsrfHeaders(),
                     body: JSON.stringify({
-                        password: currentPassword,
                         logId: logId,
                         enableHold: enable,
                         reason: reason
@@ -2027,8 +1830,11 @@ inSxPwWk6OXcfLjWnE/xatI=
             });
         }
     }
+
+    // Launch
+    initSession();
 </script>
 
-<script src="./js/cookie-consent.js"></script>
+<script src="/js/cookie-consent.js"></script>
 </body>
 </html>

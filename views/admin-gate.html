@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelCraft AI - Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050b14;
+            --surface: rgba(16, 25, 43, 0.6);
+            --surface-hover: rgba(30, 45, 75, 0.8);
+            --border: rgba(0, 242, 254, 0.2);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #00f2fe;
+            --accent-glow: rgba(0, 242, 254, 0.4);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            min-height: 100vh;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 254, 0.05);
+        }
+
+        /* LOGIN SCREEN */
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, var(--accent), transparent, var(--accent));
+            z-index: -1;
+            border-radius: 18px;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .login-box h1 { margin-bottom: 8px; font-weight: 700; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 0 10px var(--accent-glow); }
+        .login-box p { color: var(--accent); margin-bottom: 30px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+            letter-spacing: 5px;
+        }
+        input[type="password"]:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .btn-primary:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
+
+        #error-msg {
+            color: var(--danger); margin-top: 15px; font-size: 14px; display: none; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-wrapper" id="login-view">
+    <div class="glass-panel login-box">
+        <h1>Command Center</h1>
+        <p>SECURE TELEMETRY ACCESS</p>
+
+        <input type="password" id="admin-pass" placeholder="ENTER ACCESS KEY" autocomplete="off">
+        <button class="btn-primary" id="login-btn">Initialize Link</button>
+        <div id="error-msg">ACCESS DENIED.</div>
+    </div>
+</div>
+
+<script>
+    const loginBtn = document.getElementById('login-btn');
+    const passInput = document.getElementById('admin-pass');
+    const errorMsg = document.getElementById('error-msg');
+
+    async function attemptLogin() {
+        const password = passInput.value;
+        if (!password) return;
+
+        errorMsg.style.display = 'none';
+        loginBtn.textContent = 'AUTHENTICATING...';
+        loginBtn.disabled = true;
+
+        try {
+            const res = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+
+            const data = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                const msg = (data && data.error) ? data.error : 'ACCESS DENIED.';
+                throw new Error(msg);
+            }
+
+            // Authentication succeeded; reload to receive full authenticated dashboard
+            loginBtn.textContent = 'LINK ESTABLISHED...';
+            window.location.reload();
+        } catch (err) {
+            errorMsg.textContent = err.message || 'ACCESS DENIED.';
+            errorMsg.style.display = 'block';
+            loginBtn.textContent = 'Initialize Link';
+            loginBtn.disabled = false;
+            passInput.value = '';
+            passInput.focus();
+        }
+    }
+
+    loginBtn.onclick = attemptLogin;
+    passInput.onkeypress = (e) => {
+        if (e.key === 'Enter') attemptLogin();
+    };
+    passInput.focus();
+</script>
+<script src="/js/cookie-consent.js"></script>
+</body>
+</html>
