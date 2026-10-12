@@ -18,29 +18,58 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Understanding AI Prompt Injection & LLM Security | PixelCraft AI Blog</title>
-  <meta name="description" content="A comprehensive technical breakdown of prompt injection, indirect jailbreaks, and defense architectures for Large Language Models according to OWASP guidelines." />
-  <meta name="robots" content="index, follow" />
+
+  <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
+  <title>Understanding AI Prompt Injection Attacks & Defenses | PixelCraft AI Blog</title>
+  <meta name="description" content="In-depth analysis of direct and indirect prompt injection attacks against LLMs, jailbreaks, data exfiltration vectors, and enterprise defense guardrails." />
+  <meta name="keywords" content="ai prompt injection attacks, llm security vulnerabilities, indirect prompt injection defense, prevent llm jailbreaks, owasp top 10 for llms, prompt engineering security" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="author" content="PixelCraft AI" />
+  <meta name="publisher" content="PixelCraft AI" />
+  <meta name="language" content="English" />
+  <meta name="distribution" content="Global" />
+  <meta name="revisit-after" content="1 days" />
+  <meta name="rating" content="Safe For Kids" />
   <link rel="canonical" href="https://pixelcraftaitools.com/blog/understanding-ai-prompt-injection-attacks.html" />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Understanding AI Prompt Injection & LLM Security | PixelCraft AI" />
-  <meta property="og:description" content="How adversarial prompts bypass guardrails, hijack autonomous AI agents, and leak system secrets. Discover actionable defense frameworks." />
+  <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
   <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="PixelCraft AI" />
   <meta property="og:url" content="https://pixelcraftaitools.com/blog/understanding-ai-prompt-injection-attacks.html" />
+  <meta property="og:title" content="Understanding AI Prompt Injection Attacks & Defenses | PixelCraft AI Blog" />
+  <meta property="og:description" content="In-depth analysis of direct and indirect prompt injection attacks against LLMs, jailbreaks, data exfiltration vectors, and enterprise defense guardrails." />
+  <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:locale:alternate" content="en_US" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PixelCraftAI" />
+  <meta name="twitter:title" content="Understanding AI Prompt Injection Attacks & Defenses | PixelCraft AI Blog" />
+  <meta name="twitter:description" content="In-depth analysis of direct and indirect prompt injection attacks against LLMs, jailbreaks, data exfiltration vectors, and enterprise defense guardrails." />
+  <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
+
+  <!-- Technical SEO & PWA -->
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
+  <meta name="application-name" content="PixelCraft AI" />
+  <link rel="manifest" href="../manifest.json" />
   <link rel="icon" href="../logo.jpg?v=5" />
 
-
-  <!-- Schema.org JSON-LD -->
+  <!-- Schema.org BlogPosting JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Understanding AI Prompt Injection & Jailbreaks: Defense Strategies for LLMs",
-    "description": "A comprehensive technical breakdown of prompt injection, indirect jailbreaks, and defense architectures for Large Language Models according to OWASP guidelines.",
+    "headline": "Understanding AI Prompt Injection Attacks & Defenses",
+    "description": "In-depth analysis of direct and indirect prompt injection attacks against LLMs, jailbreaks, data exfiltration vectors, and enterprise defense guardrails.",
+    "image": "https://pixelcraftaitools.com/og-image.png",
     "author": {
       "@type": "Organization",
       "name": "PixelCraft AI Security Research Team"
@@ -53,12 +82,14 @@
         "url": "https://pixelcraftaitools.com/logo.jpg"
       }
     },
-    "datePublished": "2026-09-24",
-    "dateModified": "2026-10-11",
-    "editor": "Swapnil Biradar",
+    "datePublished": "2026-08-24",
+    "dateModified": "2026-10-12",
     "mainEntityOfPage": "https://pixelcraftaitools.com/blog/understanding-ai-prompt-injection-attacks.html"
   }
   </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />  <link rel="stylesheet" href="../css/style.css" />
+
 </head>
 <body>
   <div id="toast-container" class="toast-container"></div>

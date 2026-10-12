@@ -16,209 +16,95 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3788374704176398"
      crossorigin="anonymous" id="adsense-script"></script>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Forensic Image Sanitizer & Cryptographic Seal | PixelCraft AI</title>
-  <meta name="description" content="Deep structural threat OSINT analysis, EXIF/IPTC/XMP sanitization, and cryptographic watermark sealing."/>
-  <link rel="stylesheet" href="../css/style.css"/>
-  <style>
-    .sanitizer-container {
-      display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 24px;
-      align-items: start;
-    }
-    
-    .panel-left {
-      background: var(--surface-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      min-height: 480px;
-      box-shadow: var(--shadow-card);
-    }
-    
-    .dropzone {
-      flex: 1;
-      border: 2px dashed var(--border-color);
-      border-radius: var(--radius-md);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--surface-subtle);
-      cursor: pointer;
-      transition: var(--transition-smooth);
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .dropzone:hover, .dropzone.dragover {
-      background: var(--primary-light);
-      border-color: var(--primary);
-    }
-    .dropzone-icon {
-      font-size: 3rem;
-      margin-bottom: 12px;
-      color: var(--primary);
-    }
-    .dropzone-title {
-      margin: 0 0 6px 0;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-heading);
-    }
-    .dropzone-desc {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    .preview-wrapper {
-      display: none;
-      flex-direction: column;
-      height: 100%;
-      position: relative;
-    }
-    .preview-img-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border-radius: var(--radius-md);
-      background: var(--surface-subtle);
-      border: 1px solid var(--border-color);
-      position: relative;
-      margin-bottom: 16px;
-      min-height: 260px;
-      max-height: 420px;
-    }
-    .preview-img-container img {
-      max-width: 100%;
-      max-height: 400px;
-      object-fit: contain;
-    }
-    
-    /* Scanner Animation */
-    .scanner {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: var(--primary);
-      box-shadow: 0 0 12px var(--primary);
-      display: none;
-      z-index: 10;
-      animation: scanline 2s linear infinite;
-    }
-    @keyframes scanline {
-      0% { top: 0; opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { top: 100%; opacity: 0; }
-    }
+  <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
+  <title>Forensic Sanitizer - Sanitize Images & Wipe Forensic Traces | PixelCraft AI</title>
+  <meta name="description" content="Deep sanitize digital images by stripping hidden metadata, color profile tracking, and forensic markers. Maximize media OPSEC and confidentiality." />
+  <meta name="keywords" content="forensic sanitizer online, photo forensic cleaner, wipe image tracking markers, metadata stripper online, digital security privacy tools, sanitize photos free, pixelcraft ai" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="author" content="PixelCraft AI" />
+  <meta name="publisher" content="PixelCraft AI" />
+  <meta name="language" content="English" />
+  <meta name="distribution" content="Global" />
+  <meta name="revisit-after" content="1 days" />
+  <meta name="rating" content="Safe For Kids" />
+  <link rel="canonical" href="https://pixelcraftaitools.com/tools/forensic-sanitizer.html" />
 
-    .panel-right {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    
-    .control-box {
-      background: var(--surface-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-card);
-    }
-    
-    .tool-header-row {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-heading);
-      margin: 0 0 10px 0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .tool-desc-text {
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
+  <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PixelCraft AI" />
+  <meta property="og:url" content="https://pixelcraftaitools.com/tools/forensic-sanitizer.html" />
+  <meta property="og:title" content="Forensic Sanitizer - Sanitize Images & Wipe Forensic Traces | PixelCraft AI" />
+  <meta property="og:description" content="Deep sanitize digital images by stripping hidden metadata, color profile tracking, and forensic markers. Maximize media OPSEC and confidentiality." />
+  <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:locale:alternate" content="en_US" />
 
-    /* Threat Items */
-    .threat-dashboard {
-      background: var(--surface-subtle);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      margin-bottom: 16px;
-      display: none;
-    }
-    .threat-item {
-      padding: 10px 12px;
-      border-left: 3px solid var(--border-color);
-      margin-bottom: 8px;
-      background: var(--surface-card);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    }
-    .threat-item.danger {
-      border-left-color: var(--danger);
-      background: var(--danger-light);
-    }
-    .threat-item.warning {
-      border-left-color: var(--warning);
-      background: var(--warning-light);
-    }
-    .threat-item.safe {
-      border-left-color: var(--success);
-      background: var(--success-light);
-    }
-    
-    .threat-title {
-      font-weight: 600;
-      font-size: 0.88rem;
-      color: var(--text-heading);
-    }
-    .threat-desc {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-    .threat-alert {
-      font-size: 0.82rem;
-      color: var(--danger);
-      margin-top: 4px;
-      font-weight: 600;
-    }
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PixelCraftAI" />
+  <meta name="twitter:title" content="Forensic Sanitizer - Sanitize Images & Wipe Forensic Traces | PixelCraft AI" />
+  <meta name="twitter:description" content="Deep sanitize digital images by stripping hidden metadata, color profile tracking, and forensic markers. Maximize media OPSEC and confidentiality." />
+  <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
 
-    /* Terminal Output */
-    .terminal {
-      background: var(--surface-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      color: var(--text-body);
-      overflow-y: auto;
-      max-height: 240px;
-      line-height: 1.6;
-    }
-    .terminal div { margin-bottom: 4px; word-break: break-word; }
-    .terminal .sys { color: var(--primary); font-weight: 500; }
-    .terminal .success { color: var(--success); font-weight: 500; }
-    .terminal .err { color: var(--danger); font-weight: 500; }
-    .terminal .warn { color: var(--warning); font-weight: 500; }
+  <!-- Technical SEO & PWA -->
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
+  <meta name="application-name" content="PixelCraft AI" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="icon" href="../logo.jpg?v=5" />
 
-    @media (max-width: 900px) {
-      .sanitizer-container { grid-template-columns: 1fr; }
-    }
-  </style>
+  <!-- Schema.org SoftwareApplication JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://pixelcraftaitools.com/#website",
+        "url": "https://pixelcraftaitools.com/",
+        "name": "PixelCraft AI",
+        "description": "The ultimate free AI tools and image utility suite.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://pixelcraftaitools.com/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://pixelcraftaitools.com/tools/forensic-sanitizer.html#webpage",
+        "url": "https://pixelcraftaitools.com/tools/forensic-sanitizer.html",
+        "name": "Forensic Sanitizer - Sanitize Images & Wipe Forensic Traces | PixelCraft AI",
+        "description": "Deep sanitize digital images by stripping hidden metadata, color profile tracking, and forensic markers. Maximize media OPSEC and confidentiality.",
+        "isPartOf": { "@id": "https://pixelcraftaitools.com/#website" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Forensic Sanitizer",
+        "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
+        "applicationCategory": "SecurityApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "INR"
+        },
+        "featureList": ["100% Free", "Privacy First", "Client-Side Processing", "No Signup Required"]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="../css/style.css"/>  <style>    .sanitizer-container {      display: grid;      grid-template-columns: 1fr 420px;      gap: 24px;      align-items: start;    }    .panel-left {      background: var(--surface-card);      border: 1px solid var(--border-color);      border-radius: var(--radius-lg);      padding: 24px;      display: flex;      flex-direction: column;      position: relative;      min-height: 480px;      box-shadow: var(--shadow-card);    }    .dropzone {      flex: 1;      border: 2px dashed var(--border-color);      border-radius: var(--radius-md);      display: flex;      flex-direction: column;      align-items: center;      justify-content: center;      background: var(--surface-subtle);      cursor: pointer;      transition: var(--transition-smooth);      text-align: center;      padding: 40px 20px;    }    .dropzone:hover, .dropzone.dragover {      background: var(--primary-light);      border-color: var(--primary);    }    .dropzone-icon {      font-size: 3rem;      margin-bottom: 12px;      color: var(--primary);    }    .dropzone-title {      margin: 0 0 6px 0;      font-size: 1.2rem;      font-weight: 700;      color: var(--text-heading);    }    .dropzone-desc {      margin: 0;      color: var(--text-muted);      font-size: 0.9rem;    }    .preview-wrapper {      display: none;      flex-direction: column;      height: 100%;      position: relative;    }    .preview-img-container {      display: flex;      align-items: center;      justify-content: center;      overflow: hidden;      border-radius: var(--radius-md);      background: var(--surface-subtle);      border: 1px solid var(--border-color);      position: relative;      margin-bottom: 16px;      min-height: 260px;      max-height: 420px;    }    .preview-img-container img {      max-width: 100%;      max-height: 400px;      object-fit: contain;    }    /* Scanner Animation */    .scanner {      position: absolute;      top: 0;      left: 0;      width: 100%;      height: 3px;      background: var(--primary);      box-shadow: 0 0 12px var(--primary);      display: none;      z-index: 10;      animation: scanline 2s linear infinite;    }    @keyframes scanline {      0% { top: 0; opacity: 0; }      10% { opacity: 1; }      90% { opacity: 1; }      100% { top: 100%; opacity: 0; }    }    .panel-right {      display: flex;      flex-direction: column;      gap: 20px;    }    .control-box {      background: var(--surface-card);      border: 1px solid var(--border-color);      border-radius: var(--radius-lg);      padding: 24px;      box-shadow: var(--shadow-card);    }    .tool-header-row {      font-size: 1.2rem;      font-weight: 700;      color: var(--text-heading);      margin: 0 0 10px 0;      display: flex;      align-items: center;      gap: 10px;    }    .tool-desc-text {      color: var(--text-muted);      font-size: 0.88rem;      line-height: 1.5;      margin-bottom: 16px;    }    /* Threat Items */    .threat-dashboard {      background: var(--surface-subtle);      border: 1px solid var(--border-color);      border-radius: var(--radius-md);      padding: 16px;      margin-bottom: 16px;      display: none;    }    .threat-item {      padding: 10px 12px;      border-left: 3px solid var(--border-color);      margin-bottom: 8px;      background: var(--surface-card);      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;    }    .threat-item.danger {      border-left-color: var(--danger);      background: var(--danger-light);    }    .threat-item.warning {      border-left-color: var(--warning);      background: var(--warning-light);    }    .threat-item.safe {      border-left-color: var(--success);      background: var(--success-light);    }    .threat-title {      font-weight: 600;      font-size: 0.88rem;      color: var(--text-heading);    }    .threat-desc {      font-size: 0.8rem;      color: var(--text-muted);    }    .threat-alert {      font-size: 0.82rem;      color: var(--danger);      margin-top: 4px;      font-weight: 600;    }    /* Terminal Output */    .terminal {      background: var(--surface-card);      border: 1px solid var(--border-color);      border-radius: var(--radius-md);      padding: 14px 16px;      font-family: 'JetBrains Mono', monospace;      font-size: 0.82rem;      color: var(--text-body);      overflow-y: auto;      max-height: 240px;      line-height: 1.6;    }    .terminal div { margin-bottom: 4px; word-break: break-word; }    .terminal .sys { color: var(--primary); font-weight: 500; }    .terminal .success { color: var(--success); font-weight: 500; }    .terminal .err { color: var(--danger); font-weight: 500; }    .terminal .warn { color: var(--warning); font-weight: 500; }    @media (max-width: 900px) {      .sanitizer-container { grid-template-columns: 1fr; }    }  </style>
+
 </head>
 <body>
 

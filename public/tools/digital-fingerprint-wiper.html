@@ -16,198 +16,95 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3788374704176398"
      crossorigin="anonymous" id="adsense-script"></script>
 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  
+  <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
+  <title>Digital Fingerprint Wiper - Scrub PRNU & Sensor Noise Free | PixelCraft AI</title>
+  <meta name="description" content="Scrub device sensor noise, PRNU camera fingerprints, and forensic tracking artifacts from photos. Ensure complete digital anonymity before uploading media." />
+  <meta name="keywords" content="digital fingerprint wiper, remove camera sensor noise, scrub prnu fingerprint, forensic photo cleaner, sanitize image metadata, photo privacy tool free, opsec media cleaner, pixelcraft ai" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="author" content="PixelCraft AI" />
+  <meta name="publisher" content="PixelCraft AI" />
+  <meta name="language" content="English" />
+  <meta name="distribution" content="Global" />
+  <meta name="revisit-after" content="1 days" />
+  <meta name="rating" content="Safe For Kids" />
+  <link rel="canonical" href="https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html" />
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Digital Fingerprint Wiper | PixelCraft AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/piexifjs/1.0.6/piexif.min.js"></script>
-  <style>
-    :root {
-      --bg-dark: var(--bg-body);
-      --panel-bg: var(--surface-card);
-      --border-cyan: var(--border-color);
-      --text-main: var(--text-heading);
-      --text-muted: var(--text-muted);
-      --accent-cyan: var(--primary);
-      --accent-cyan-glow: var(--glow-primary);
-      --accent-emerald: var(--success);
-      --accent-emerald-glow: rgba(16, 185, 129, 0.25);
-      --alert-red: var(--danger);
-    }
-    
-    * { box-sizing: border-box; }
-    
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-body);
-      color: var(--text-body);
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-    }
+  <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PixelCraft AI" />
+  <meta property="og:url" content="https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html" />
+  <meta property="og:title" content="Digital Fingerprint Wiper - Scrub PRNU & Sensor Noise Free | PixelCraft AI" />
+  <meta property="og:description" content="Scrub device sensor noise, PRNU camera fingerprints, and forensic tracking artifacts from photos. Ensure complete digital anonymity before uploading media." />
+  <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:locale:alternate" content="en_US" />
 
-    /* Navbar */
-    .navbar {
-      padding: 0 24px;
-      background: var(--navbar-bg);
-      border-bottom: 1px solid var(--navbar-border);
-      display: flex; justify-content: space-between; align-items: center;
-      height: 72px;
-    }
-    .navbar .logo {
-      color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 1.2rem; letter-spacing: 1px;
-    }
-    .navbar .logo span { color: var(--accent-cyan); }
-    .back-btn {
-      color: var(--text-muted); text-decoration: none; font-size: 0.85rem;
-      border: 1px solid #333; padding: 6px 12px; border-radius: 4px; transition: 0.2s;
-    }
-    .back-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PixelCraftAI" />
+  <meta name="twitter:title" content="Digital Fingerprint Wiper - Scrub PRNU & Sensor Noise Free | PixelCraft AI" />
+  <meta name="twitter:description" content="Scrub device sensor noise, PRNU camera fingerprints, and forensic tracking artifacts from photos. Ensure complete digital anonymity before uploading media." />
+  <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
 
-    /* Main Container */
-    .container {
-      display: flex; flex: 1;
-      max-width: 1400px; margin: 0 auto; width: 100%;
-      padding: 20px; gap: 20px;
-      align-items: stretch;
-    }
-    
-    /* Left Panel: Dropzone & Image */
-    .panel-left {
-      flex: 1; min-width: 0;
-      background: var(--panel-bg);
-      border: 1px solid var(--border-cyan);
-      border-radius: 8px; padding: 20px;
-      display: flex; flex-direction: column; position: relative;
-    }
-    
-    .dropzone {
-      flex: 1; border: 1px dashed var(--accent-cyan); border-radius: 6px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: rgba(6, 182, 212, 0.02); cursor: pointer; transition: 0.3s;
-      text-align: center; padding: 20px;
-    }
-    .dropzone.dragover { background: rgba(6, 182, 212, 0.1); border-style: solid; box-shadow: inset 0 0 20px var(--accent-cyan-glow); }
-    .dropzone-icon { font-size: 3rem; margin-bottom: 10px; color: var(--accent-cyan); }
-    .dropzone-title { margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 500; letter-spacing: 0.5px; }
-    .dropzone-desc { margin: 0; color: var(--text-muted); font-size: 0.9rem; }
+  <!-- Technical SEO & PWA -->
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
+  <meta name="application-name" content="PixelCraft AI" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="icon" href="../logo.jpg?v=5" />
 
-    .preview-wrapper {
-      display: none; flex-direction: column; height: 100%; position: relative;
-    }
-    .preview-img-container {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      overflow: hidden; border-radius: 6px; background: #000; border: 1px solid #333;
-      position: relative;
-    }
-    .preview-img-container img {
-      max-width: 100%; max-height: 50vh; object-fit: contain;
-    }
-    
-    /* Scanner Animation */
-    .scanner {
-      position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-      background: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-cyan);
-      display: none; z-index: 10;
-      animation: scanline 2s linear infinite;
-    }
-    @keyframes scanline {
-      0% { top: 0; opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { top: 100%; opacity: 0; }
-    }
+  <!-- Schema.org SoftwareApplication JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://pixelcraftaitools.com/#website",
+        "url": "https://pixelcraftaitools.com/",
+        "name": "PixelCraft AI",
+        "description": "The ultimate free AI tools and image utility suite.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://pixelcraftaitools.com/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html#webpage",
+        "url": "https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html",
+        "name": "Digital Fingerprint Wiper - Scrub PRNU & Sensor Noise Free | PixelCraft AI",
+        "description": "Scrub device sensor noise, PRNU camera fingerprints, and forensic tracking artifacts from photos. Ensure complete digital anonymity before uploading media.",
+        "isPartOf": { "@id": "https://pixelcraftaitools.com/#website" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Digital Fingerprint Wiper",
+        "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
+        "applicationCategory": "SecurityApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "INR"
+        },
+        "featureList": ["100% Free", "Privacy First", "Client-Side Processing", "No Signup Required"]
+      }
+    ]
+  }
+  </script>
 
-    .btn-outline {
-      background: transparent; border: 1px solid var(--text-muted); color: var(--text-main);
-      padding: 10px; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif;
-      margin-top: 15px; transition: 0.2s; font-size: 0.9rem;
-    }
-    .btn-outline:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">  <link rel="stylesheet" href="../css/style.css"/>  <script src="https://cdnjs.cloudflare.com/ajax/libs/piexifjs/1.0.6/piexif.min.js"></script>  <style>    :root {      --bg-dark: var(--bg-body);      --panel-bg: var(--surface-card);      --border-cyan: var(--border-color);      --text-main: var(--text-heading);      --text-muted: var(--text-muted);      --accent-cyan: var(--primary);      --accent-cyan-glow: var(--glow-primary);      --accent-emerald: var(--success);      --accent-emerald-glow: rgba(16, 185, 129, 0.25);      --alert-red: var(--danger);    }    * { box-sizing: border-box; }    body {      margin: 0; padding: 0;      font-family: 'Inter', sans-serif;      background-color: var(--bg-body);      color: var(--text-body);      min-height: 100vh;      display: flex; flex-direction: column;    }    /* Navbar */    .navbar {      padding: 0 24px;      background: var(--navbar-bg);      border-bottom: 1px solid var(--navbar-border);      display: flex; justify-content: space-between; align-items: center;      height: 72px;    }    .navbar .logo {      color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 1.2rem; letter-spacing: 1px;    }    .navbar .logo span { color: var(--accent-cyan); }    .back-btn {      color: var(--text-muted); text-decoration: none; font-size: 0.85rem;      border: 1px solid #333; padding: 6px 12px; border-radius: 4px; transition: 0.2s;    }    .back-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }    /* Main Container */    .container {      display: flex; flex: 1;      max-width: 1400px; margin: 0 auto; width: 100%;      padding: 20px; gap: 20px;      align-items: stretch;    }    /* Left Panel: Dropzone & Image */    .panel-left {      flex: 1; min-width: 0;      background: var(--panel-bg);      border: 1px solid var(--border-cyan);      border-radius: 8px; padding: 20px;      display: flex; flex-direction: column; position: relative;    }    .dropzone {      flex: 1; border: 1px dashed var(--accent-cyan); border-radius: 6px;      display: flex; flex-direction: column; align-items: center; justify-content: center;      background: rgba(6, 182, 212, 0.02); cursor: pointer; transition: 0.3s;      text-align: center; padding: 20px;    }    .dropzone.dragover { background: rgba(6, 182, 212, 0.1); border-style: solid; box-shadow: inset 0 0 20px var(--accent-cyan-glow); }    .dropzone-icon { font-size: 3rem; margin-bottom: 10px; color: var(--accent-cyan); }    .dropzone-title { margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 500; letter-spacing: 0.5px; }    .dropzone-desc { margin: 0; color: var(--text-muted); font-size: 0.9rem; }    .preview-wrapper {      display: none; flex-direction: column; height: 100%; position: relative;    }    .preview-img-container {      flex: 1; display: flex; align-items: center; justify-content: center;      overflow: hidden; border-radius: 6px; background: #000; border: 1px solid #333;      position: relative;    }    .preview-img-container img {      max-width: 100%; max-height: 50vh; object-fit: contain;    }    /* Scanner Animation */    .scanner {      position: absolute; top: 0; left: 0; width: 100%; height: 2px;      background: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-cyan);      display: none; z-index: 10;      animation: scanline 2s linear infinite;    }    @keyframes scanline {      0% { top: 0; opacity: 0; }      10% { opacity: 1; }      90% { opacity: 1; }      100% { top: 100%; opacity: 0; }    }    .btn-outline {      background: transparent; border: 1px solid var(--text-muted); color: var(--text-main);      padding: 10px; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif;      margin-top: 15px; transition: 0.2s; font-size: 0.9rem;    }    .btn-outline:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }    /* Right Panel: Controls */    .panel-right {      flex: 0 0 400px; display: flex; flex-direction: column; gap: 20px;    }    .control-box {      background: var(--panel-bg); border: 1px solid var(--border-cyan);      border-radius: 8px; padding: 25px;    }    .tool-header {      font-family: 'JetBrains Mono', monospace; font-size: 1.3rem; color: var(--accent-cyan);      margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px;    }    .tool-desc {      color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;    }    /* Professional Legal Checkbox */    .legal-container {      background: rgba(239, 68, 68, 0.05); border-left: 3px solid var(--alert-red);      padding: 12px; border-radius: 0 4px 4px 0; margin-bottom: 20px;    }    .legal-container label {      display: flex; gap: 10px; cursor: pointer; align-items: flex-start;    }    .legal-container input {      margin-top: 3px; accent-color: var(--alert-red); cursor: pointer; width: 16px; height: 16px;    }    .legal-text {      font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;    }    /* Action Buttons */    .btn-cyber {      width: 100%; background: #111; border: 1px solid var(--accent-cyan); color: var(--accent-cyan);      padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: bold;      border-radius: 4px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;      transition: all 0.3s ease; opacity: 0.5; pointer-events: none;    }    .btn-cyber.active {      opacity: 1; pointer-events: auto; background: rgba(6, 182, 212, 0.1);      box-shadow: inset 0 0 10px var(--accent-cyan-glow);    }    .btn-cyber.active:hover {      background: var(--accent-cyan); color: #000; box-shadow: 0 0 20px var(--accent-cyan-glow);    }    .btn-success {      display: none; width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-emerald);      color: var(--accent-emerald); padding: 14px; font-family: 'JetBrains Mono', monospace;      font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase;      margin-top: 15px; transition: 0.3s;    }    .btn-success:hover { background: var(--accent-emerald); color: #000; box-shadow: 0 0 20px var(--accent-emerald-glow); }    /* Terminal */    .terminal {      flex: 1; background: #000; border: 1px solid #222; border-radius: 8px; padding: 15px;      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted);      overflow-y: auto; max-height: 300px;    }    .terminal div { margin-bottom: 4px; word-wrap: break-word; }    .terminal .sys { color: var(--accent-cyan); }    .terminal .success { color: var(--accent-emerald); }    .terminal .err { color: var(--alert-red); }    .terminal .warn { color: #f59e0b; }    /* Mobile Optimization */    @media (max-width: 900px) {      .container { flex-direction: column; padding: 10px; margin-top: 10px; gap: 10px; }      .panel-right { flex: none; width: 100%; }      .panel-left { padding: 15px; min-height: 300px; }      .preview-img-container img { max-height: 35vh; }      .btn-cyber, .btn-success { padding: 12px; font-size: 0.9rem; }      .control-box { padding: 15px; }      .terminal { max-height: 200px; font-size: 0.75rem; }    }  </style>
 
-    /* Right Panel: Controls */
-    .panel-right {
-      flex: 0 0 400px; display: flex; flex-direction: column; gap: 20px;
-    }
-    
-    .control-box {
-      background: var(--panel-bg); border: 1px solid var(--border-cyan);
-      border-radius: 8px; padding: 25px;
-    }
-    
-    .tool-header {
-      font-family: 'JetBrains Mono', monospace; font-size: 1.3rem; color: var(--accent-cyan);
-      margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px;
-    }
-    .tool-desc {
-      color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;
-    }
-
-    /* Professional Legal Checkbox */
-    .legal-container {
-      background: rgba(239, 68, 68, 0.05); border-left: 3px solid var(--alert-red);
-      padding: 12px; border-radius: 0 4px 4px 0; margin-bottom: 20px;
-    }
-    .legal-container label {
-      display: flex; gap: 10px; cursor: pointer; align-items: flex-start;
-    }
-    .legal-container input {
-      margin-top: 3px; accent-color: var(--alert-red); cursor: pointer; width: 16px; height: 16px;
-    }
-    .legal-text {
-      font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;
-    }
-
-    /* Action Buttons */
-    .btn-cyber {
-      width: 100%; background: #111; border: 1px solid var(--accent-cyan); color: var(--accent-cyan);
-      padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: bold;
-      border-radius: 4px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
-      transition: all 0.3s ease; opacity: 0.5; pointer-events: none;
-    }
-    .btn-cyber.active {
-      opacity: 1; pointer-events: auto; background: rgba(6, 182, 212, 0.1);
-      box-shadow: inset 0 0 10px var(--accent-cyan-glow);
-    }
-    .btn-cyber.active:hover {
-      background: var(--accent-cyan); color: #000; box-shadow: 0 0 20px var(--accent-cyan-glow);
-    }
-
-    .btn-success {
-      display: none; width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-emerald);
-      color: var(--accent-emerald); padding: 14px; font-family: 'JetBrains Mono', monospace;
-      font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase;
-      margin-top: 15px; transition: 0.3s;
-    }
-    .btn-success:hover { background: var(--accent-emerald); color: #000; box-shadow: 0 0 20px var(--accent-emerald-glow); }
-
-    /* Terminal */
-    .terminal {
-      flex: 1; background: #000; border: 1px solid #222; border-radius: 8px; padding: 15px;
-      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted);
-      overflow-y: auto; max-height: 300px;
-    }
-    .terminal div { margin-bottom: 4px; word-wrap: break-word; }
-    .terminal .sys { color: var(--accent-cyan); }
-    .terminal .success { color: var(--accent-emerald); }
-    .terminal .err { color: var(--alert-red); }
-    .terminal .warn { color: #f59e0b; }
-
-    /* Mobile Optimization */
-    @media (max-width: 900px) {
-      .container { flex-direction: column; padding: 10px; margin-top: 10px; gap: 10px; }
-      .panel-right { flex: none; width: 100%; }
-      .panel-left { padding: 15px; min-height: 300px; }
-      .preview-img-container img { max-height: 35vh; }
-      .btn-cyber, .btn-success { padding: 12px; font-size: 0.9rem; }
-      .control-box { padding: 15px; }
-      .terminal { max-height: 200px; font-size: 0.75rem; }
-    }
-  </style>
 </head>
 <body>
 

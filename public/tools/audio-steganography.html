@@ -16,219 +16,95 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3788374704176398"
      crossorigin="anonymous" id="adsense-script"></script>
 
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  
+  <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
+  <title>Audio Steganography - Hide Secret Encrypted Text in Audio Free | PixelCraft AI</title>
+  <meta name="description" content="Conceal encrypted text and confidential messages inside WAV audio tracks using phase & LSB modulation. Zero audible distortion, private in-browser tool." />
+  <meta name="keywords" content="audio steganography online free, hide secret message in audio, audio steganography decoder, covert audio communication tool, cybersecurity encryption audio, pixelcraft ai" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="author" content="PixelCraft AI" />
+  <meta name="publisher" content="PixelCraft AI" />
+  <meta name="language" content="English" />
+  <meta name="distribution" content="Global" />
+  <meta name="revisit-after" content="1 days" />
+  <meta name="rating" content="Safe For Kids" />
+  <link rel="canonical" href="https://pixelcraftaitools.com/tools/audio-steganography.html" />
 
-  
-  <title>Audio & Video Steganography | PixelCraft AI</title>
-  <meta name="description" content="Hide secret messages inside audio and video files using LSB, Payload Injection, and AES-256 encryption."/>
-  <meta name="keywords" content="steganography, audio steganography, video steganography, hide text in audio, hide text in video, AES-256 encryption, privacy tool, payload injection"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
-  
-  <link rel="stylesheet" href="../css/style.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PixelCraft AI" />
+  <meta property="og:url" content="https://pixelcraftaitools.com/tools/audio-steganography.html" />
+  <meta property="og:title" content="Audio Steganography - Hide Secret Encrypted Text in Audio Free | PixelCraft AI" />
+  <meta property="og:description" content="Conceal encrypted text and confidential messages inside WAV audio tracks using phase & LSB modulation. Zero audible distortion, private in-browser tool." />
+  <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:locale:alternate" content="en_US" />
 
-  <style>
-    /* MASTER MODE SWITCH */
-    .mode-switch {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 28px;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .mode-btn {
-      background: var(--surface-card);
-      border: 1.5px solid var(--border-color);
-      color: var(--text-muted);
-      padding: 10px 24px;
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: var(--transition-smooth);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .mode-btn:hover {
-      border-color: var(--border-hover);
-      color: var(--text-heading);
-    }
-    .mode-btn.active {
-      background: var(--primary-light);
-      border-color: var(--primary);
-      color: var(--primary);
-      box-shadow: 0 0 0 1px var(--primary);
-    }
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PixelCraftAI" />
+  <meta name="twitter:title" content="Audio Steganography - Hide Secret Encrypted Text in Audio Free | PixelCraft AI" />
+  <meta name="twitter:description" content="Conceal encrypted text and confidential messages inside WAV audio tracks using phase & LSB modulation. Zero audible distortion, private in-browser tool." />
+  <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
 
-    .tabs-container {
-      display: flex;
-      gap: 6px;
-      background: var(--surface-subtle);
-      border: 1px solid var(--border-color);
-      padding: 6px;
-      border-radius: var(--radius-md);
-      margin-bottom: 28px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 12px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.95rem;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: var(--transition-smooth);
-    }
-    .tab-btn:hover:not(.active) {
-      color: var(--text-heading);
-    }
-    .tab-btn.active {
-      background: var(--surface-card);
-      color: var(--primary);
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .file-drop-area {
-      background: var(--surface-subtle);
-      border: 2px dashed var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 50px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition-smooth);
-    }
-    .file-drop-area:hover {
-      background: var(--primary-light);
-      border-color: var(--primary);
-    }
-    
-    .control-group {
-      margin-bottom: 20px;
-      text-align: left;
-    }
-    .control-group label {
-      display: block;
-      color: var(--text-heading);
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 0.92rem;
-    }
-    
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-    
-    .real-section {
-      background: var(--surface-subtle);
-      border: 1px solid var(--border-color);
-      padding: 18px;
-      border-radius: var(--radius-md);
-    }
-    .fake-section {
-      background: var(--surface-subtle);
-      border: 1px solid var(--border-color);
-      padding: 18px;
-      border-radius: var(--radius-md);
-    }
+  <!-- Technical SEO & PWA -->
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
+  <meta name="application-name" content="PixelCraft AI" />
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="icon" href="../logo.jpg?v=5" />
 
-    .real-section input, .real-section textarea,
-    .fake-section input, .fake-section textarea,
-    .control-group input[type="password"],
-    .control-group textarea {
-      width: 100%;
-      background: var(--surface-card);
-      border: 1.5px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      color: var(--text-heading);
-      padding: 12px 14px;
-      box-sizing: border-box;
-      font-family: inherit;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    }
-    .real-section input:focus, .real-section textarea:focus,
-    .fake-section input:focus, .fake-section textarea:focus,
-    .control-group input[type="password"]:focus,
-    .control-group textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-light);
-    }
+  <!-- Schema.org SoftwareApplication JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://pixelcraftaitools.com/#website",
+        "url": "https://pixelcraftaitools.com/",
+        "name": "PixelCraft AI",
+        "description": "The ultimate free AI tools and image utility suite.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://pixelcraftaitools.com/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://pixelcraftaitools.com/tools/audio-steganography.html#webpage",
+        "url": "https://pixelcraftaitools.com/tools/audio-steganography.html",
+        "name": "Audio Steganography - Hide Secret Encrypted Text in Audio Free | PixelCraft AI",
+        "description": "Conceal encrypted text and confidential messages inside WAV audio tracks using phase & LSB modulation. Zero audible distortion, private in-browser tool.",
+        "isPartOf": { "@id": "https://pixelcraftaitools.com/#website" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Audio Steganography",
+        "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
+        "applicationCategory": "SecurityApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "INR"
+        },
+        "featureList": ["100% Free", "Privacy First", "Client-Side Processing", "No Signup Required"]
+      }
+    ]
+  }
+  </script>
 
-    .btn-glow {
-      background: var(--primary);
-      color: white;
-      padding: 14px 28px;
-      font-weight: 600;
-      font-size: 1rem;
-      border-radius: var(--radius-sm);
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-      transition: var(--transition-smooth);
-    }
-    .btn-glow:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-    }
+  <link rel="stylesheet" href="../css/style.css"/>  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>  <style>    /* MASTER MODE SWITCH */    .mode-switch {      display: flex;      justify-content: center;      margin-bottom: 28px;      gap: 12px;      flex-wrap: wrap;    }    .mode-btn {      background: var(--surface-card);      border: 1.5px solid var(--border-color);      color: var(--text-muted);      padding: 10px 24px;      border-radius: var(--radius-pill);      cursor: pointer;      font-weight: 600;      font-size: 0.95rem;      transition: var(--transition-smooth);      display: inline-flex;      align-items: center;      gap: 8px;    }    .mode-btn:hover {      border-color: var(--border-hover);      color: var(--text-heading);    }    .mode-btn.active {      background: var(--primary-light);      border-color: var(--primary);      color: var(--primary);      box-shadow: 0 0 0 1px var(--primary);    }    .tabs-container {      display: flex;      gap: 6px;      background: var(--surface-subtle);      border: 1px solid var(--border-color);      padding: 6px;      border-radius: var(--radius-md);      margin-bottom: 28px;    }    .tab-btn {      flex: 1;      padding: 12px;      background: transparent;      border: none;      color: var(--text-muted);      font-weight: 600;      font-size: 0.95rem;      border-radius: var(--radius-sm);      cursor: pointer;      transition: var(--transition-smooth);    }    .tab-btn:hover:not(.active) {      color: var(--text-heading);    }    .tab-btn.active {      background: var(--surface-card);      color: var(--primary);      box-shadow: var(--shadow-sm);    }    .file-drop-area {      background: var(--surface-subtle);      border: 2px dashed var(--border-color);      border-radius: var(--radius-lg);      padding: 50px 20px;      text-align: center;      cursor: pointer;      transition: var(--transition-smooth);    }    .file-drop-area:hover {      background: var(--primary-light);      border-color: var(--primary);    }    .control-group {      margin-bottom: 20px;      text-align: left;    }    .control-group label {      display: block;      color: var(--text-heading);      font-weight: 600;      margin-bottom: 8px;      font-size: 0.92rem;    }    .input-grid {      display: grid;      grid-template-columns: 1fr 1fr;      gap: 16px;      margin-bottom: 20px;    }    .real-section {      background: var(--surface-subtle);      border: 1px solid var(--border-color);      padding: 18px;      border-radius: var(--radius-md);    }    .fake-section {      background: var(--surface-subtle);      border: 1px solid var(--border-color);      padding: 18px;      border-radius: var(--radius-md);    }    .real-section input, .real-section textarea,    .fake-section input, .fake-section textarea,    .control-group input[type="password"],    .control-group textarea {      width: 100%;      background: var(--surface-card);      border: 1.5px solid var(--border-color);      border-radius: var(--radius-sm);      color: var(--text-heading);      padding: 12px 14px;      box-sizing: border-box;      font-family: inherit;      font-size: 0.95rem;      outline: none;      transition: border-color 0.15s ease, box-shadow 0.15s ease;    }    .real-section input:focus, .real-section textarea:focus,    .fake-section input:focus, .fake-section textarea:focus,    .control-group input[type="password"]:focus,    .control-group textarea:focus {      border-color: var(--primary);      box-shadow: 0 0 0 3px var(--primary-light);    }    .btn-glow {      background: var(--primary);      color: white;      padding: 14px 28px;      font-weight: 600;      font-size: 1rem;      border-radius: var(--radius-sm);      border: none;      cursor: pointer;      width: 100%;      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);      transition: var(--transition-smooth);    }    .btn-glow:hover {      background: var(--primary-hover);      transform: translateY(-1px);      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);    }    #visualizer {      width: 100%;      height: 100px;      background: var(--surface-subtle);      border: 1px solid var(--border-color);      border-radius: var(--radius-md);      margin-bottom: 20px;      display: none;    }    #video-player {      width: 100%;      max-height: 250px;      background: #000;      border-radius: var(--radius-md);      margin-bottom: 20px;      display: none;    }    .loading-overlay {      position: absolute;      top: 0; left: 0; width: 100%; height: 100%;      background: rgba(15, 23, 42, 0.7);      backdrop-filter: blur(4px);      border-radius: var(--radius-lg);      z-index: 100;      display: flex;      flex-direction: column;      align-items: center;      justify-content: center;      display: none;    }    .spinner {      width: 44px; height: 44px;      border: 3px solid var(--border-color);      border-top-color: var(--primary);      border-radius: 50%;      animation: spin 1s linear infinite;      margin-bottom: 16px;    }    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }    @media (max-width: 768px) {      .input-grid { grid-template-columns: 1fr; }      .file-drop-area { padding: 36px 15px; }    }  </style>
 
-    #visualizer {
-      width: 100%;
-      height: 100px;
-      background: var(--surface-subtle);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      margin-bottom: 20px;
-      display: none;
-    }
-    #video-player {
-      width: 100%;
-      max-height: 250px;
-      background: #000;
-      border-radius: var(--radius-md);
-      margin-bottom: 20px;
-      display: none;
-    }
-    
-    .loading-overlay {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(4px);
-      border-radius: var(--radius-lg);
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      display: none;
-    }
-    .spinner {
-      width: 44px; height: 44px;
-      border: 3px solid var(--border-color);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    @media (max-width: 768px) {
-      .input-grid { grid-template-columns: 1fr; }
-      .file-drop-area { padding: 36px 15px; }
-    }
-  </style>
 </head>
 <body>
 
