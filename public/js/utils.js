@@ -330,6 +330,36 @@ function updateAuthUI(data) {
     }
   });
 
+  // Update Mobile Drawer Auth Item if present
+  const drawerAuthLink = document.querySelector('.mobile-nav-auth-link');
+  if (drawerAuthLink) {
+    if (isAuthenticated) {
+      drawerAuthLink.href = '/logout';
+      drawerAuthLink.style.background = 'var(--surface-subtle)';
+      drawerAuthLink.style.color = '#ef4444';
+      drawerAuthLink.style.borderColor = 'rgba(239, 68, 68, 0.35)';
+      drawerAuthLink.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Sign Out (${user && user.email ? user.email.split('@')[0] : 'User'})</span>
+      `;
+    } else {
+      drawerAuthLink.href = '/auth/google';
+      drawerAuthLink.style.background = 'var(--primary)';
+      drawerAuthLink.style.color = '#ffffff';
+      drawerAuthLink.style.borderColor = 'var(--primary)';
+      drawerAuthLink.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In with Google</span>
+      `;
+    }
+  }
+
   // 2. Update Settings Drawer User Card & Actions
   const emailEl = document.getElementById('settings-user-email');
   const avatarEl = document.getElementById('settings-user-avatar');
@@ -606,6 +636,58 @@ function initMobileNavbar() {
       }
     });
   }
+  // Ensure mobile drawer auth action exists
+  if (navLinks && !navLinks.querySelector('#mobile-drawer-auth-item')) {
+    const li = document.createElement('li');
+    li.id = 'mobile-drawer-auth-item';
+    li.style.marginTop = '6px';
+    li.style.paddingTop = '10px';
+    li.style.borderTop = '1px solid var(--border-color)';
+    li.innerHTML = `
+      <a href="/auth/google" class="mobile-nav-auth-link" style="justify-content: center; background: var(--primary) !important; color: #ffffff !important; border-color: var(--primary) !important; font-weight: 700;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
+        <span>Sign In with Google</span>
+      </a>
+    `;
+    navLinks.appendChild(li);
+  }
+}
+
+// Universal Responsive Table Auto-Wrapper
+function initResponsiveTables() {
+  document.querySelectorAll('table, .data-table, .cookie-table').forEach(table => {
+    if (table.closest('.table-responsive')) return;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'table-responsive';
+    table.parentNode.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+  });
+}
+
+// Ensure all tool SEO & blog articles adapt edge-to-edge on mobile
+function optimizeMobileArticles() {
+  const articleSelectors = [
+    'div[style*="margin-top: 60px"]',
+    'div[style*="margin-top: 50px"]',
+    'div[style*="padding: 40px"]',
+    'div[style*="padding: 36px"]',
+    'section[style*="margin: 50px auto"]',
+    'section[style*="padding: 40px"]',
+    '.seo-content-block'
+  ];
+
+  articleSelectors.forEach(selector => {
+    document.querySelectorAll(selector).forEach(el => {
+      if (!el.classList.contains('tool-article-box')) {
+        el.classList.add('tool-article-box');
+      }
+      if (el.parentElement === document.body && !el.classList.contains('tool-article-standalone')) {
+        el.classList.add('tool-article-standalone');
+      }
+    });
+  });
 }
 
 // 7. INITIALIZATION ON DOM READY
@@ -615,6 +697,8 @@ document.addEventListener('DOMContentLoaded', () => {
   injectSettingsDrawer();
   updateThemeUI();
   initMobileNavbar();
+  initResponsiveTables();
+  optimizeMobileArticles();
   fetchUserSession();
 
   // Bind settings button
