@@ -56,14 +56,26 @@ def main():
     Format the output cleanly in Markdown. Do not include any polite conversational filler. Just the report.
     """
 
-    print("[*] Engaging Gemini 3.5 Flash for Threat Modeling...")
+    print("[*] Engaging Gemini Flash for Threat Modeling...")
     try:
         client = genai.Client(api_key=api_key)
-        response = client.models.generate_content(
-            model='gemini-3.5-flash',
-            contents=prompt,
-        )
+        response = None
+        for model_name in ['gemini-2.5-flash', 'gemini-1.5-flash']:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                )
+                if response and response.text:
+                    break
+            except Exception as m_err:
+                print(f"[-] Model {model_name} failed: {m_err}")
+                continue
         
+        if not response or not response.text:
+            print("[-] All models failed to generate response.")
+            return
+            
         report_content = response.text
         
         # Save to file

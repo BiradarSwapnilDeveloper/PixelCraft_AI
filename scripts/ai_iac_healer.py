@@ -48,13 +48,25 @@ def main():
     IMPORTANT: Output ONLY the raw content of the fixed Dockerfile. Do not include markdown formatting like ```dockerfile or explanations. I need to write your exact output directly into the file.
     """
 
-    print("[*] Engaging Gemini 3.5 Flash to generate Secure Dockerfile...")
+    print("[*] Engaging Gemini Flash to generate Secure Dockerfile...")
     try:
         client = genai.Client(api_key=api_key)
-        response = client.models.generate_content(
-            model='gemini-3.5-flash',
-            contents=prompt,
-        )
+        response = None
+        for model_name in ['gemini-2.5-flash', 'gemini-1.5-flash']:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                )
+                if response and response.text:
+                    break
+            except Exception as m_err:
+                print(f"[-] Model {model_name} failed: {m_err}")
+                continue
+        
+        if not response or not response.text:
+            print("[-] All models failed to generate response.")
+            return
         
         # Clean the output in case Gemini added markdown blocks
         fixed_dockerfile = response.text.strip()

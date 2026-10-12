@@ -87,20 +87,21 @@ Vulnerabilities:
     client = genai.Client(api_key=api_key)
     
     for attempt in range(3):
-        try:
-            response = client.models.generate_content(
-                model='gemini-3.5-flash',
-                contents=prompt
-            )
-            res_text = response.text
-            log_debug("Gemini Response:\n" + res_text)
-            return res_text
-        except Exception as e:
-            log_debug(f"Gemini API Error on attempt {attempt + 1}: {e}")
-            if "503" in str(e) or "429" in str(e):
-                time.sleep(5)
-            else:
-                return None
+        for model_name in ['gemini-2.5-flash', 'gemini-1.5-flash']:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
+                res_text = response.text
+                log_debug(f"Gemini Response ({model_name}):\n" + res_text)
+                return res_text
+            except Exception as e:
+                log_debug(f"Gemini API Error with {model_name} on attempt {attempt + 1}: {e}")
+                if "503" in str(e) or "429" in str(e):
+                    time.sleep(4)
+                else:
+                    continue
                 
     log_debug("Failed after 3 retries due to high demand.")
     return None
