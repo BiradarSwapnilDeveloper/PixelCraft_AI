@@ -90,7 +90,197 @@
   }
   </script>
 
-  <link rel="stylesheet" href="../css/style.css"/>  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>  <style>    /* MASTER MODE SWITCH */    .mode-switch {      display: flex;      justify-content: center;      margin-bottom: 28px;      gap: 12px;      flex-wrap: wrap;    }    .mode-btn {      background: var(--surface-card);      border: 1.5px solid var(--border-color);      color: var(--text-muted);      padding: 10px 24px;      border-radius: var(--radius-pill);      cursor: pointer;      font-weight: 600;      font-size: 0.95rem;      transition: var(--transition-smooth);      display: inline-flex;      align-items: center;      gap: 8px;    }    .mode-btn:hover {      border-color: var(--border-hover);      color: var(--text-heading);    }    .mode-btn.active {      background: var(--primary-light);      border-color: var(--primary);      color: var(--primary);      box-shadow: 0 0 0 1px var(--primary);    }    .tabs-container {      display: flex;      gap: 6px;      background: var(--surface-subtle);      border: 1px solid var(--border-color);      padding: 6px;      border-radius: var(--radius-md);      margin-bottom: 28px;    }    .tab-btn {      flex: 1;      padding: 12px;      background: transparent;      border: none;      color: var(--text-muted);      font-weight: 600;      font-size: 0.95rem;      border-radius: var(--radius-sm);      cursor: pointer;      transition: var(--transition-smooth);    }    .tab-btn:hover:not(.active) {      color: var(--text-heading);    }    .tab-btn.active {      background: var(--surface-card);      color: var(--primary);      box-shadow: var(--shadow-sm);    }    .file-drop-area {      background: var(--surface-subtle);      border: 2px dashed var(--border-color);      border-radius: var(--radius-lg);      padding: 50px 20px;      text-align: center;      cursor: pointer;      transition: var(--transition-smooth);    }    .file-drop-area:hover {      background: var(--primary-light);      border-color: var(--primary);    }    .control-group {      margin-bottom: 20px;      text-align: left;    }    .control-group label {      display: block;      color: var(--text-heading);      font-weight: 600;      margin-bottom: 8px;      font-size: 0.92rem;    }    .input-grid {      display: grid;      grid-template-columns: 1fr 1fr;      gap: 16px;      margin-bottom: 20px;    }    .real-section {      background: var(--surface-subtle);      border: 1px solid var(--border-color);      padding: 18px;      border-radius: var(--radius-md);    }    .fake-section {      background: var(--surface-subtle);      border: 1px solid var(--border-color);      padding: 18px;      border-radius: var(--radius-md);    }    .real-section input, .real-section textarea,    .fake-section input, .fake-section textarea,    .control-group input[type="password"],    .control-group textarea {      width: 100%;      background: var(--surface-card);      border: 1.5px solid var(--border-color);      border-radius: var(--radius-sm);      color: var(--text-heading);      padding: 12px 14px;      box-sizing: border-box;      font-family: inherit;      font-size: 0.95rem;      outline: none;      transition: border-color 0.15s ease, box-shadow 0.15s ease;    }    .real-section input:focus, .real-section textarea:focus,    .fake-section input:focus, .fake-section textarea:focus,    .control-group input[type="password"]:focus,    .control-group textarea:focus {      border-color: var(--primary);      box-shadow: 0 0 0 3px var(--primary-light);    }    .btn-glow {      background: var(--primary);      color: white;      padding: 14px 28px;      font-weight: 600;      font-size: 1rem;      border-radius: var(--radius-sm);      border: none;      cursor: pointer;      width: 100%;      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);      transition: var(--transition-smooth);    }    .btn-glow:hover {      background: var(--primary-hover);      transform: translateY(-1px);      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);    }    #visualizer {      width: 100%;      height: 100px;      background: var(--surface-subtle);      border: 1px solid var(--border-color);      border-radius: var(--radius-md);      margin-bottom: 20px;      display: none;    }    #video-player {      width: 100%;      max-height: 250px;      background: #000;      border-radius: var(--radius-md);      margin-bottom: 20px;      display: none;    }    .loading-overlay {      position: absolute;      top: 0; left: 0; width: 100%; height: 100%;      background: rgba(15, 23, 42, 0.7);      backdrop-filter: blur(4px);      border-radius: var(--radius-lg);      z-index: 100;      display: flex;      flex-direction: column;      align-items: center;      justify-content: center;      display: none;    }    .spinner {      width: 44px; height: 44px;      border: 3px solid var(--border-color);      border-top-color: var(--primary);      border-radius: 50%;      animation: spin 1s linear infinite;      margin-bottom: 16px;    }    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }    @media (max-width: 768px) {      .input-grid { grid-template-columns: 1fr; }      .file-drop-area { padding: 36px 15px; }    }  </style>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <style>
+    /* MASTER MODE SWITCH */
+    .mode-switch {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .mode-btn {
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mode-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-heading);
+    }
+    .mode-btn.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+    .tabs-container {
+      display: flex;
+      gap: 6px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 6px;
+      border-radius: var(--radius-md);
+      margin-bottom: 28px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .tab-btn:hover:not(.active) {
+      color: var(--text-heading);
+    }
+    .tab-btn.active {
+      background: var(--surface-card);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+    .file-drop-area {
+      background: var(--surface-subtle);
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 50px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .file-drop-area:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    .control-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .control-group label {
+      display: block;
+      color: var(--text-heading);
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+    }
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .real-section {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 18px;
+      border-radius: var(--radius-md);
+    }
+    .fake-section {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      padding: 18px;
+      border-radius: var(--radius-md);
+    }
+    .real-section input, .real-section textarea,
+    .fake-section input, .fake-section textarea,
+    .control-group input[type="password"],
+    .control-group textarea {
+      width: 100%;
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-heading);
+      padding: 12px 14px;
+      box-sizing: border-box;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .real-section input:focus, .real-section textarea:focus,
+    .fake-section input:focus, .fake-section textarea:focus,
+    .control-group input[type="password"]:focus,
+    .control-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    .btn-glow {
+      background: var(--primary);
+      color: white;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: var(--transition-smooth);
+    }
+    .btn-glow:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+    #visualizer {
+      width: 100%;
+      height: 100px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      display: none;
+    }
+    #video-player {
+      width: 100%;
+      max-height: 250px;
+      background: #000;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      display: none;
+    }
+    .loading-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: var(--radius-lg);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @media (max-width: 768px) {
+      .input-grid { grid-template-columns: 1fr; }
+      .file-drop-area { padding: 36px 15px; }
+    }
+  </style>
 
 </head>
 <body>
@@ -876,26 +1066,321 @@
     };
   </script>
 
-  <!-- SEO/ADSENSE RICH TEXT INJECTION -->
-  <div style="margin-top: 60px; padding: 36px; background: var(--surface-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-body); line-height: 1.8; margin-bottom: 40px;">
-    <h2 style="color: var(--text-heading); font-size: 1.6rem; margin-bottom: 16px;">Advanced Audio & Video Steganography: Securing Data with QIM and AES-256</h2>
-    <p style="margin-bottom: 16px; color: var(--text-muted);">
-      Welcome to the <strong>PixelCraft AI Audio & Video Steganography</strong> tool. Unlike standard communication channels that leave digital traces, our platform allows you to embed encrypted secret messages directly into the audio channels of your media files (.wav, .mp3, .mp4, .webm). This ensures your sensitive data remains hidden in plain sight.
-    </p>
-    
-    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">Cryptographic Security: AES-256 Encryption</h3>
-    <p style="margin-bottom: 16px; color: var(--text-muted);">
-      Before any data is hidden inside your audio or video file, the text is securely encrypted using <strong>Advanced Encryption Standard (AES) with a 256-bit key length</strong>. AES-256 is the cryptographic standard used by governments and security agencies worldwide.
-    </p>
-
-    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">Robust Embedding via Quantization Index Modulation (QIM)</h3>
-    <p style="margin-bottom: 16px; color: var(--text-muted);">
-      PixelCraft AI utilizes <strong>Quantization Index Modulation (QIM)</strong>. By quantifying the amplitude of the audio signal to specific geometric indices, the hidden bits are embedded deep within the audio track without noticeable degradation.
-    </p>
-  </div>
-  <!-- END SEO/ADSENSE RICH TEXT -->
+  
 
 <script src="../js/utils.js"></script>
+
+<!-- RELATED TOOLS FOR SEO INTERNAL LINKING -->
+      <div style="max-width: 1000px; margin: 60px auto 40px; padding: 0 20px;">
+        <div style="padding: 30px; background: var(--surface-subtle); border-radius: 16px; border: 1px solid var(--border-color);">
+          <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 20px; font-family: 'Outfit', sans-serif;">Explore More Cryptographic Privacy Tools</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+            <a href="advanced-decoy.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
+              <div style="font-size: 1.5rem; margin-bottom: 8px;">🪤</div>
+              <strong style="display: block; margin-bottom: 4px;">Advanced Decoy Generator</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Plant deceptive canary tripwires to catch attackers during lateral movement.</span>
+            </a>
+            <a href="digital-fingerprint-wiper.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
+              <div style="font-size: 1.5rem; margin-bottom: 8px;">🛡️</div>
+              <strong style="display: block; margin-bottom: 4px;">Digital Fingerprint Wiper</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Scrub camera hardware noise and EXIF telemetry from photos before distribution.</span>
+            </a>
+            <a href="qr-generator.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
+              <div style="font-size: 1.5rem; margin-bottom: 8px;">📱</div>
+              <strong style="display: block; margin-bottom: 4px;">Advanced QR Generator</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Generate high-contrast, privacy-focused vector QR codes directly in your browser.</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- END RELATED TOOLS -->
+
+<!-- ========================================================
+     AUTHORITATIVE TECHNICAL GUIDE & RESEARCH MANUAL (10 MIN READ)
+     ======================================================== -->
+<section class="tool-guide-section" style="max-width: 1000px; margin: 60px auto 40px; padding: 0 20px;">
+  <article class="article-card" style="padding: 44px 38px; line-height: 1.85; border-radius: 16px; background: var(--surface-card); border: 1px solid var(--border-color); box-shadow: var(--shadow-card);">
+    
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center;">
+      <span class="post-badge" style="margin-bottom: 0;">Acoustic Cryptography &amp; Steganalysis Manual</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: var(--surface-subtle); color: var(--text-muted); font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color);">
+        <span>⏱️</span> 10 Min Read (Comprehensive Deep-Dive)
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: var(--surface-subtle); color: var(--text-muted); font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color);">
+        <span>🔒</span> Zero-Knowledge / AES-256 Client-Side
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: var(--surface-subtle); color: var(--text-muted); font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color);">
+        <span>📅</span> Updated: 2026 Edition
+      </span>
+    </div>
+
+    <h2 style="color: var(--text-heading); font-size: 2.1rem; font-family: 'Outfit', sans-serif; font-weight: 800; line-height: 1.3; margin-bottom: 20px; letter-spacing: -0.02em;">
+      The Mathematical Science of Audio Steganography, Covert Acoustic Channels &amp; Bitwise Encoding
+    </h2>
+
+    <p style="font-size: 1.1rem; color: var(--text-body); margin-bottom: 24px; font-weight: 400;">
+      While cryptography focuses on scrambling the contents of a message so that unintended parties cannot read it, <strong>steganography</strong> conceals the very existence of the communication. In hostile environments where possessing encrypted files invites scrutiny, confiscation, or legal persecution, steganography enables secure, covert transmission. By embedding encrypted data inside harmless acoustic recordings (such as ambient voice notes, podcast clips, or musical waveforms), audio steganography exploits the psychoacoustic limits of the human auditory system (HAS) to create imperceptible, deniable communication channels.
+    </p>
+
+    <div class="callout-box" style="margin: 28px 0;">
+      <strong style="display: block; font-size: 1.05rem; margin-bottom: 8px;">Key Principles of Audio Steganographic Security</strong>
+      <ul style="margin: 0; padding-left: 20px; color: var(--text-body); font-size: 0.95rem;">
+        <li><strong>Pre-Encryption is Mandatory:</strong> Embedding plaintext into audio leaves detectable statistical patterns. PixelCraft AI mandates AES-256-GCM encryption with PBKDF2 key derivation before bitwise insertion, rendering hidden payloads indistinguishable from white thermal noise.</li>
+        <li><strong>Psychoacoustic Masking:</strong> The human ear cannot discern amplitude variations in the lowest bits of high-dynamic-range audio samples (16-bit or 24-bit PCM), allowing up to 1-2 bits per sample to carry covert payload without audible distortion.</li>
+        <li><strong>Pure Client-Side Computation:</strong> Carrier audio and hidden payloads never leave your browser. Decoding and encoding execute locally via JavaScript TypedArrays and Web Audio APIs.</li>
+      </ul>
+    </div>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      1. Theoretical Foundations: Signal Processing &amp; LSB Modulation
+    </h3>
+    <p>
+      In digital audio, analog sound waves are digitized through pulse-code modulation (PCM). Standard CD-quality audio samples the waveform 44,100 times per second (44.1 kHz) at a bit depth of 16 bits per sample per channel. Each 16-bit signed integer represents an instantaneous amplitude value ranging from -32,768 to +32,767.
+    </p>
+    <p>
+      The <strong>Least Significant Bit (LSB)</strong> algorithm works by isolating the 16th bit (the bit with the smallest numerical weight, representing a change of just 1 in 65,536). When you modify the LSB to match a bit of your encrypted payload, the amplitude shift is less than 0.0015% of full scale—far below the threshold of human hearing and typical microphone noise floors.
+    </p>
+    <ul>
+      <li><strong>Payload Serialization:</strong> The message is converted to UTF-8 bytes, encrypted with AES-256-GCM, prepended with a 32-bit length header, and serialized into a stream of binary bits (0s and 1s).</li>
+      <li><strong>Modulation Loop:</strong> The encoder iterates through the audio sample buffer: <code>sample[i] = (sample[i] &amp; ~1) | payload_bit[k]</code>. This operation guarantees that higher-order bits (which define the timbre, melody, and volume) remain completely unchanged.</li>
+      <li><strong>Steganalysis Evasion:</strong> By interleaving data across stereo channels and using pseudo-random sample spacing derived from the encryption key, PixelCraft prevents Chi-Square sample pair distribution anomalies that automated stego-detection engines search for.</li>
+    </ul>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      2. Step-by-Step Practical Masterclass: Encoding &amp; Extraction
+    </h3>
+    <p>
+      Execute a clean steganographic transmission using this operational workflow:
+    </p>
+    <ol>
+      <li><strong>Carrier Selection:</strong> Choose a clean WAV or high-bitrate audio file. Ambient soundscapes, acoustic guitar strumming, podcast recordings, or field recordings make ideal carriers because natural acoustic variance masks microscopic bit flips far more effectively than synthesized sine waves or silence.</li>
+      <li><strong>Payload &amp; Passphrase Configuration:</strong> In the PixelCraft Audio Steganography interface, enter the confidential text or coordinates you wish to transmit. Set a strong passphrase (16+ characters recommended). The engine uses PBKDF2 with 100,000 iterations to derive an AES-256 encryption key and initialization vector (IV).</li>
+      <li><strong>Client-Side Bit Injection:</strong> Click <em>Hide Data in Audio</em>. The browser decodes the audio buffer into Float32Array or Int16Array arrays, injects the encrypted bits into the least significant bit positions, rebuilds the RIFF WAV header, and generates a downloadable stego-audio file.</li>
+      <li><strong>Transmission &amp; Extraction:</strong> Transmit the carrier file via standard file transfer or USB media. The recipient opens the file in PixelCraft AI, switches to the <em>Extract Hidden Message</em> tab, enters the identical passphrase, and extracts the decrypted text directly within their local browser.</li>
+    </ol>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      3. Binary Anatomy of the RIFF WAV Container
+    </h3>
+    <p>
+      To understand how audio steganography operates without corrupting playback software, inspect the precise byte layout of a 44-byte canonical WAV header:
+    </p>
+    <ul>
+      <li><strong>Bytes 0–3 ('RIFF'):</strong> Resource Interchange File Format signature.</li>
+      <li><strong>Bytes 4–7:</strong> Total file size minus 8 bytes (32-bit unsigned little-endian).</li>
+      <li><strong>Bytes 8–11 ('WAVE'):</strong> Audio format descriptor string.</li>
+      <li><strong>Bytes 12–15 ('fmt '):</strong> Format subchunk marker.</li>
+      <li><strong>Bytes 16–19 (16):</strong> Length of the format chunk for uncompressed PCM.</li>
+      <li><strong>Bytes 20–21 (1):</strong> Audio format category (1 = Linear PCM; 3 = IEEE Float).</li>
+      <li><strong>Bytes 22–23 (2):</strong> Number of channels (1 = Mono; 2 = Stereo).</li>
+      <li><strong>Bytes 24–27 (44100):</strong> Sampling rate in Hertz.</li>
+      <li><strong>Bytes 28–31 (176400):</strong> Byte rate: <code>SampleRate * NumChannels * BitsPerSample / 8</code>.</li>
+      <li><strong>Bytes 34–35 (16):</strong> Bits per sample.</li>
+      <li><strong>Bytes 36–39 ('data'):</strong> Subchunk 2 identifier marking the beginning of raw PCM audio samples.</li>
+    </ul>
+
+    
+      <div style="margin-top: 18px; padding: 18px; background: var(--surface-subtle); border-radius: 10px; border-left: 3px solid var(--primary);">
+        <h4 style="color: var(--text-heading); font-size: 1.1rem; margin-bottom: 8px;">Signal-to-Noise Ratio (SNR) Degradation Equation</h4>
+        <p style="margin-bottom: 10px; color: var(--text-body); font-size: 0.95rem;">
+          In 16-bit linear uncompressed PCM audio, injecting ciphertext bits into the least significant bit (LSB) introduces quantization noise equivalent to white noise at $-96.3	ext{ dBFS}$. The theoretical Signal-to-Noise Ratio (SNR) is governed by the standard uniform quantization formula:
+        </p>
+        <p style="font-family: monospace; font-size: 0.9rem; background: var(--surface-card); padding: 10px; border-radius: 6px; color: var(--primary);">
+          SNR = 6.02 &middot; N + 1.76 dB
+        </p>
+        <p style="margin-bottom: 0; color: var(--text-muted); font-size: 0.88rem;">
+          Where $N=16$ yields an Pristine SNR of approximately $98.08	ext{ dB}$. When 1-bit LSB steganography is applied across 100% of samples, the Effective Number of Bits (ENOB) drops marginally to $15.82	ext{ bits}$, resulting in an overall SNR of $96.9	ext{ dB}$. This delta of $1.18	ext{ dB}$ remains beneath the human hearing threshold in virtually all natural acoustic environments.
+        </p>
+      </div>
+
+
+<h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      4. Advanced Psychoacoustic Masking &amp; Frequency Domain Alternatives
+    </h3>
+    <p>
+      While LSB manipulation is the most computationally efficient method for client-side web audio, advanced academic steganography also studies frequency-domain techniques:
+    </p>
+    <ul>
+      <li><strong>Phase Coding:</strong> The human auditory system is remarkably insensitive to relative phase shifts as long as the magnitude spectrum remains unchanged. Phase coding embeds data into discrete Fourier transform (DFT) phase angles of the sound wave. While highly resistant to analog capture, it requires higher mathematical overhead.</li>
+      <li><strong>Spread Spectrum Steganography:</strong> Spread spectrum spreads the hidden data across the entire frequency band using a pseudo-random noise sequence. Even if specific frequency bands are clipped or filtered, the message can be reconstructed via cross-correlation.</li>
+      <li><strong>Echo Hiding:</strong> Injects an artificial, imperceptible resonance or echo (delayed by sub-millisecond intervals) into the audio stream. By varying the echo delay between 1ms and 2ms, binary zeros and ones are represented without altering bit values.</li>
+    </ul>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      5. Steganalysis Threats &amp; Channel Fragility
+    </h3>
+    <p>
+      Audio steganography operates under specific channel constraints that every operational security (OPSEC) practitioner must respect:
+    </p>
+    <ul>
+      <li><strong>Lossy Compression Destroys LSB Data:</strong> If you convert an LSB-encoded WAV file to MP3, AAC, or send it over WhatsApp or Facebook Messenger, lossy psychoacoustic encoders discard high-frequency and low-bit information during compression. This completely destroys LSB-embedded payloads. <em>Steganographic audio must be shared as lossless WAV or transmitted inside ZIP/7z archives to prevent transcoding.</em></li>
+      <li><strong>Sampling Rate Mismatches:</strong> Audio players that resample from 48kHz to 44.1kHz interpolate sample values, corrupting individual bit sequences. Ensure carrier playback and extraction maintain native sample rates.</li>
+      <li><strong>Chi-Square Attack Resistance:</strong> In unhardened LSB steganography, frequency counts of adjacent odd/even sample values equalize (PoV analysis). PixelCraft's pre-encryption scrambles parity, defeating statistical Chi-Square steganalysis tools.</li>
+    </ul>
+
+    
+      <div style="margin-top: 18px; padding: 18px; background: var(--surface-subtle); border-radius: 10px; border-left: 3px solid #ef4444;">
+        <h4 style="color: var(--text-heading); font-size: 1.1rem; margin-bottom: 8px;">Chi-Square &amp; Sample Pair Analysis (SPA) Countermeasures</h4>
+        <p style="margin-bottom: 10px; color: var(--text-body); font-size: 0.95rem;">
+          Adversarial surveillance appliances employ statistical steganalysis tests—notably the <strong>Chi-Square (&chi;&sup2;) test</strong> and <strong>Sample Pair Analysis (SPA)</strong>. Because natural audio exhibits asymmetric sample transitions between adjacent even and odd integer values ($2k \leftrightarrow 2k+1$), sequential LSB replacement artificially equalizes these transition pairs (Pairs of Values - PoVs).
+        </p>
+        <p style="margin-bottom: 0; color: var(--text-muted); font-size: 0.88rem;">
+          To defeat PoV equalization, PixelCraft AI utilizes <strong>LSB Matching (also known as &plusmn;1 embedding)</strong>. Instead of directly overwriting the least significant bit, the sample amplitude is randomly incremented or decremented by 1 whenever the target bit differs from the carrier bit. This preserves the natural macroscopic histogram distribution of the WAV carrier file.
+        </p>
+      </div>
+
+
+<h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      6. Comparative Evaluation: Audio vs Image vs Network Steganography
+    </h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr style="background: var(--surface-subtle); text-align: left;">
+            <th style="padding: 14px;">Steganography Vector</th>
+            <th style="padding: 14px;">PixelCraft Audio Stego</th>
+            <th style="padding: 14px;">Image LSB (PNG/BMP)</th>
+            <th style="padding: 14px;">Network TCP/IP Steganography</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Carrier Medium</td>
+            <td style="padding: 12px;">Lossless Audio Waveforms (WAV)</td>
+            <td style="padding: 12px;">Lossless Bitmaps &amp; PNGs</td>
+            <td style="padding: 12px;">TCP Sequence Numbers &amp; Packet Timing</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Human Perceptibility</td>
+            <td style="padding: 12px; color: var(--success);">Zero audible noise (< -96dB SNR)</td>
+            <td style="padding: 12px;">Zero visible noise if < 2 bits/color</td>
+            <td style="padding: 12px;">Invisible to humans; detectable by IDS</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Data Density</td>
+            <td style="padding: 12px;">~5.5 KB of secret data per second of audio</td>
+            <td style="padding: 12px;">~100 KB per 1080p image</td>
+            <td style="padding: 12px; color: var(--danger);">Very low (few bits per packet)</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Cryptographic Hardening</td>
+            <td style="padding: 12px; color: var(--success);">AES-256-GCM + PBKDF2 derived keys</td>
+            <td style="padding: 12px;">Often plaintext in basic web tools</td>
+            <td style="padding: 12px;">Custom cipher encapsulation</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Social Media Resilience</td>
+            <td style="padding: 12px; color: var(--danger);">Destroyed if converted to lossy AAC</td>
+            <td style="padding: 12px; color: var(--danger);">Destroyed by JPEG conversion</td>
+            <td style="padding: 12px; color: var(--danger);">Blocked by stateful NAT gateways</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      7. Frequently Asked Questions (FAQ) &amp; Operational Security Tips
+    </h3>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can an attacker detect that data is hidden in my audio file?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          Because PixelCraft encrypts your payload with AES-256 before embedding, the resulting bitstream has maximum Shannon entropy, closely resembling natural high-frequency analog thermal noise. While specialized statistical tools (such as RS-analysis) might flag anomalies in completely silent audio, embedding in rich natural recordings makes detection practically impossible.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">What happens if the recipient types the wrong passphrase?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          AES-256-GCM features authenticated encryption. If the passphrase or initialization vector is incorrect by even a single character, cryptographic authentication fails immediately and the system returns a decryption error without exposing partial plaintext.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How much text can I hide inside a 3-minute song?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          In a 3-minute stereo WAV recording at 44.1kHz, there are approximately 15.8 million audio samples. Using 1 bit per sample, the carrier can store roughly 1.9 Megabytes of data—enough to embed hundreds of pages of confidential text, spreadsheets, or small encrypted archives.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can I play the stego audio in normal media players like VLC or QuickTime?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          Yes! The output file is a 100% compliant standard WAV audio file. It plays completely normally in iTunes, VLC, Windows Media Player, and web browsers with zero distortion or error messages.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Does PixelCraft transmit my passphrase or audio to remote servers?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          Zero bytes leave your computer. Both the encryption, bit injection, audio reconstruction, and decryption routines run locally in your browser using standard Web Audio and Web Crypto APIs.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can I hide files like images or PDFs inside an audio track?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          Yes! Any digital asset that can be base64-encoded or converted to an ArrayBuffer can be serialized into the encrypted bitstream, provided the audio track has sufficient duration and sample count to hold the payload.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Why does saving as MP3 destroy the hidden secret?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          MP3 uses lossy perceptual encoding: it applies modified discrete cosine transforms (MDCT) and quantizes frequency bands according to psychoacoustic curves. This process alters or drops least significant bits entirely, wiping out LSB data. Lossless formats (WAV/FLAC) are required.
+        </p>
+      </div>
+    </div>
+
+    
+        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q5: Can payload data survive audio conversion to MP3, AAC, or Opus?</h4>
+          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
+            No. Perceptual lossy audio codecs (MP3, AAC, OGG Vorbis) function by performing a Modified Discrete Cosine Transform (MDCT) and ruthlessly discarding frequency components beneath psychoacoustic masking curves. Because standard LSB steganography stores bits in the least significant bit of raw PCM amplitudes, the lossy psychoacoustic quantization process obliterates those bits. For lossless secret transmission, carriers must remain in uncompressed WAV, AIFF, or FLAC formats.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q6: Why is AES-256-GCM utilized over legacy CBC mode in audio carriers?</h4>
+          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
+            Galois/Counter Mode (GCM) provides Authenticated Encryption with Associated Data (AEAD). In legacy CBC mode, an adversary could modify bit values in the carrier file without triggering a decryption crash, potentially inducing padding oracle vulnerabilities. GCM computes a 128-bit authentication tag; if even a single byte of the audio file is tampered with or corrupted during transfer, the decryption algorithm instantly rejects the payload before execution.
+          </p>
+        </div>
+
+
+<h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      8. Operational Security (OPSEC) Protocol for Covert Communication
+    </h3>
+    <ul style="padding-left: 20px; color: var(--text-body); margin-bottom: 28px;">
+      <li><strong>Use Natural Sound Sources:</strong> Never embed secrets into synthesized pure tones or silence. Record real ambient sounds, voice memos, or live instruments where natural acoustic noise is high.</li>
+      <li><strong>Avoid Re-Using Carrier Files:</strong> Once you embed data in a carrier track, do not use that same track again for future communications. Generate unique carriers for each transmission.</li>
+      <li><strong>Share Carrier Files in Zip Archives:</strong> Always compress carrier WAV files inside a standard ZIP or TAR archive when transmitting over email or chat to prevent cloud platforms from auto-transcoding the file to MP3/AAC.</li>
+      <li><strong>Passphrase Distribution via Out-of-Band Channels:</strong> Never send the decryption passphrase over the same communication channel used to transmit the audio file. Share passphrases in person or via end-to-end encrypted messaging apps.</li>
+    </ul>
+
+    <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-top: 32px; font-size: 0.95rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <span>Read our technical paper: <a href="../blog/complete-guide-to-image-steganography.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Complete Guide to Steganography &amp; Covert Channels</a>.</span>
+      <span style="font-size: 0.85rem; color: var(--text-light);">PixelCraft Cryptography Core • 2026 Edition</span>
+    </div>
+
+  </article>
+</section>
+<!-- ========================================================
+     END AUTHORITATIVE TECHNICAL GUIDE
+     ======================================================== -->
+
+<footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+      <a href="../about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+      <a href="../privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+      <a href="../terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+      <a href="../disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+      <a href="../cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+      <a href="../blog/index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+      <a href="../index.html#contact" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+      &copy; 2026 PixelCraft AI. All rights reserved.<br>
+      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+    </p>
+  </div>
+</footer>
+
 <script src="../js/cookie-consent.js"></script>
 </body>
 </html>

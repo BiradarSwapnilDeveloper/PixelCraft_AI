@@ -90,7 +90,153 @@
   }
   </script>
 
-  <link rel="stylesheet" href="../css/style.css"/>  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>  <style>    .decoy-card {      max-width: 900px;      margin: 0 auto;      background: var(--surface-card);      border: 1px solid var(--border-color);      border-radius: var(--radius-lg);      padding: 32px;      box-shadow: var(--shadow-card);    }    .tabs-header {      display: flex;      background: var(--surface-subtle);      border: 1px solid var(--border-color);      border-radius: var(--radius-md);      padding: 6px;      margin-bottom: 28px;      gap: 6px;    }    .tab-btn-item {      flex: 1;      text-align: center;      padding: 12px;      cursor: pointer;      color: var(--text-muted);      font-weight: 600;      font-size: 0.95rem;      border-radius: var(--radius-sm);      transition: var(--transition-smooth);      background: transparent;      border: none;    }    .tab-btn-item.active {      color: var(--primary);      background: var(--surface-card);      box-shadow: var(--shadow-sm);    }    .tab-btn-item:hover:not(.active) {      color: var(--text-heading);    }    .panel { display: none; }    .panel.active { display: block; animation: fadeIn 0.3s ease; }    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }    .drop-zone {      border: 2px dashed var(--border-color);      border-radius: var(--radius-md);      padding: 40px 20px;      text-align: center;      color: var(--text-muted);      cursor: pointer;      transition: var(--transition-smooth);      background: var(--surface-subtle);      margin-bottom: 24px;    }    .drop-zone:hover, .drop-zone.dragover {      border-color: var(--primary);      background: var(--primary-light);      color: var(--primary);    }    .preview-container {      text-align: center;      margin-bottom: 24px;      display: none;    }    .preview-container img {      max-width: 100%;      max-height: 320px;      border-radius: var(--radius-md);      box-shadow: var(--shadow-card);      border: 1px solid var(--border-color);    }    .form-group-item {      margin-bottom: 20px;      text-align: left;    }    .form-group-item label {      display: block;      margin-bottom: 8px;      color: var(--text-heading);      font-size: 0.92rem;      font-weight: 600;    }    .form-group-item input,    .form-group-item textarea {      width: 100%;      padding: 12px 14px;      background: var(--surface-card);      border: 1.5px solid var(--border-color);      border-radius: var(--radius-sm);      color: var(--text-heading);      font-family: inherit;      font-size: 0.95rem;      box-sizing: border-box;      transition: border-color 0.15s ease, box-shadow 0.15s ease;      outline: none;    }    .form-group-item input:focus,    .form-group-item textarea:focus {      border-color: var(--primary);      box-shadow: 0 0 0 3px var(--primary-light);    }    .form-group-item textarea {      resize: vertical;      min-height: 100px;    }    .loading-overlay {      display: none;      position: fixed;      top: 0; left: 0; width: 100%; height: 100%;      background: rgba(15, 23, 42, 0.7);      backdrop-filter: blur(4px);      z-index: 1000;      justify-content: center;      align-items: center;      flex-direction: column;    }    .spinner {      width: 44px; height: 44px;      border: 3px solid var(--border-color);      border-top-color: var(--primary);      border-radius: 50%;      animation: spin 1s linear infinite;      margin-bottom: 16px;    }    @keyframes spin { to { transform: rotate(360deg); } }    .alert-box {      background: var(--success-light);      border: 1px solid var(--success-border);      color: var(--success);      padding: 14px;      border-radius: var(--radius-sm);      margin-bottom: 16px;      display: none;      font-weight: 600;    }    .error-box {      background: var(--danger-light);      border: 1px solid var(--danger);      color: var(--danger);      padding: 14px;      border-radius: var(--radius-sm);      margin-bottom: 16px;      display: none;    }  </style>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <style>
+    .decoy-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+    }
+    .tabs-header {
+      display: flex;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      margin-bottom: 28px;
+      gap: 6px;
+    }
+    .tab-btn-item {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition-smooth);
+      background: transparent;
+      border: none;
+    }
+    .tab-btn-item.active {
+      color: var(--primary);
+      background: var(--surface-card);
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-btn-item:hover:not(.active) {
+      color: var(--text-heading);
+    }
+    .panel { display: none; }
+    .panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .drop-zone {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      background: var(--surface-subtle);
+      margin-bottom: 24px;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    .preview-container {
+      text-align: center;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .preview-container img {
+      max-width: 100%;
+      max-height: 320px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-color);
+    }
+    .form-group-item {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .form-group-item label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-heading);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .form-group-item input,
+    .form-group-item textarea {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-heading);
+      font-family: inherit;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      outline: none;
+    }
+    .form-group-item input:focus,
+    .form-group-item textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    .form-group-item textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .alert-box {
+      background: var(--success-light);
+      border: 1px solid var(--success-border);
+      color: var(--success);
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      display: none;
+      font-weight: 600;
+    }
+    .error-box {
+      background: var(--danger-light);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      display: none;
+    }
+  </style>
 
 </head>
 <body>
@@ -510,31 +656,278 @@
     });
   </script>
 
-  <!-- SEO/ADSENSE RICH TEXT INJECTION -->
-  <div style="margin-top: 60px; padding: 36px; background: var(--surface-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-body); line-height: 1.8; margin-bottom: 40px;">
-    <h2 style="color: var(--text-heading); font-size: 1.6rem; margin-bottom: 16px;">Advanced Decoy Steganography: The Ultimate Plausible Deniability</h2>
-    <p style="margin-bottom: 16px; color: var(--text-muted);">
-      Welcome to the <strong>PixelCraft AI Advanced Decoy Steganography</strong> tool. Standard steganography hides a single message, but what happens if an adversary discovers the hidden data and forces you to hand over the decryption password? This is where our Decoy Steganography tool shines, providing mathematically guaranteed <em>plausible deniability</em>.
-    </p>
-
-    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">How Plausible Deniability Works</h3>
-    <p style="margin-bottom: 16px; color: var(--text-muted);">
-      Our tool allows you to embed two entirely separate encrypted messages into a single image:
-      <br><br>
-      <strong>1. The Real Message:</strong> Your actual sensitive data, encrypted with a strong password.<br>
-      <strong>2. The Decoy Message:</strong> A harmless or fake message, encrypted with a secondary "decoy" password.
-      <br><br>
-      If you are ever compromised and forced to decrypt the image, you simply provide the Decoy Password. The tool decrypts the harmless message, and the adversary has no cryptographic or statistical proof that a second, real message exists within the same file.
-    </p>
-
-    <h3 style="color: var(--primary); font-size: 1.25rem; margin-top: 24px; margin-bottom: 12px;">Advanced QIM & AES-256 Encryption</h3>
-    <p style="margin-bottom: 16px; color: var(--text-muted);">
-      To securely embed dual payloads without causing suspicious visual artifacts, we utilize <strong>Quantization Index Modulation (QIM)</strong>. Both real and decoy payloads are encrypted using client-side AES-256 before injection. 100% of this processing happens locally in your browser.
-    </p>
-  </div>
-  <!-- END SEO/ADSENSE RICH TEXT -->
+  
 
 <script src="../js/utils.js"></script>
+
+<!-- RELATED TOOLS FOR SEO INTERNAL LINKING -->
+      <div style="max-width: 1000px; margin: 60px auto 40px; padding: 0 20px;">
+        <div style="padding: 30px; background: var(--surface-subtle); border-radius: 16px; border: 1px solid var(--border-color);">
+          <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 20px; font-family: 'Outfit', sans-serif;">Explore More Defensive Cybersecurity Tools</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+            <a href="phishing-scanner.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
+              <div style="font-size: 1.5rem; margin-bottom: 8px;">🔍</div>
+              <strong style="display: block; margin-bottom: 4px;">Phishing Link Scanner</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Detect malicious URLs, typosquatting, and IDN homograph spoofing attacks.</span>
+            </a>
+            <a href="digital-fingerprint-wiper.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
+              <div style="font-size: 1.5rem; margin-bottom: 8px;">🛡️</div>
+              <strong style="display: block; margin-bottom: 4px;">Digital Fingerprint Wiper</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Eliminate camera PRNU sensor noise and embedded EXIF metadata identifiers.</span>
+            </a>
+            <a href="audio-steganography.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
+              <div style="font-size: 1.5rem; margin-bottom: 8px;">🎵</div>
+              <strong style="display: block; margin-bottom: 4px;">Audio Steganography</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Conceal encrypted cryptographic payloads inside lossless audio carriers.</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- END RELATED TOOLS -->
+
+<!-- ========================================================
+     AUTHORITATIVE TECHNICAL GUIDE & RESEARCH MANUAL (10 MIN READ)
+     ======================================================== -->
+<section class="tool-guide-section" style="max-width: 1000px; margin: 60px auto 40px; padding: 0 20px;">
+  <article class="article-card" style="padding: 44px 38px; line-height: 1.85; border-radius: 16px; background: var(--surface-card); border: 1px solid var(--border-color); box-shadow: var(--shadow-card);">
+    
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center;">
+      <span class="post-badge" style="margin-bottom: 0;">Cybersecurity &amp; Deception Tech Manual</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: var(--surface-subtle); color: var(--text-muted); font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color);">
+        <span>⏱️</span> 10 Min Read (Comprehensive Deep-Dive)
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: var(--surface-subtle); color: var(--text-muted); font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color);">
+        <span>🔒</span> Zero-Knowledge / Client-Side Sandbox
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: var(--surface-subtle); color: var(--text-muted); font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color);">
+        <span>📅</span> Updated: 2026 Edition
+      </span>
+    </div>
+
+    <h2 style="color: var(--text-heading); font-size: 2.1rem; font-family: 'Outfit', sans-serif; font-weight: 800; line-height: 1.3; margin-bottom: 20px; letter-spacing: -0.02em;">
+      The Definitive Guide to Advanced Decoys, Canary Tokens, and Active Cyber Deception Architecture
+    </h2>
+
+    <p style="font-size: 1.1rem; color: var(--text-body); margin-bottom: 24px; font-weight: 400;">
+      In an era where perimeter defenses, firewall rules, and zero-trust boundaries are continually challenged by sophisticated advanced persistent threats (APTs) and malicious insiders, waiting for an alert from an external sensor is no longer sufficient. <strong>Cyber deception technology</strong> turns the asymmetric advantage of attackers on its head. Instead of attempting to secure an infinite attack surface, defenders seed their internal environments with high-fidelity, weaponized decoy assets—often called <em>canaries</em>, <em>honey-tokens</em>, or <em>tripwires</em>. The moment an adversary touches, opens, or attempts to authenticate using a decoy asset, silent alarms trigger instantaneous containment protocols before critical enterprise data is compromised.
+    </p>
+
+    <div class="callout-box" style="margin: 28px 0;">
+      <strong style="display: block; font-size: 1.05rem; margin-bottom: 8px;">Key Architectural Takeaways &amp; Operational Rules</strong>
+      <ul style="margin: 0; padding-left: 20px; color: var(--text-body); font-size: 0.95rem;">
+        <li><strong>Zero False Positives:</strong> Legitimate business users have no operational reason to interact with decoy files or dormant credentials. Every alert generated by a canary token represents unauthorized reconnaissance or lateral movement.</li>
+        <li><strong>Dual-Payload Steganography:</strong> Advanced decoys generated by PixelCraft AI incorporate plausible cover data alongside embedded tracking beacons, ensuring adversaries cannot differentiate real files from honeypots through superficial triage.</li>
+        <li><strong>Client-Side Cryptographic Construction:</strong> Unlike legacy cloud honeypot generators that retain logs of your deployed decoys, PixelCraft AI generates and compiles all decoy payloads locally within your browser's sandboxed memory.</li>
+        <li><strong>Tripwire Layering:</strong> Optimal defense requires distributing decoys across multiple tiers: file systems, cloud storage buckets (AWS S3, GCP Cloud Storage), source code repos, and environment variables.</li>
+      </ul>
+    </div>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      1. Under the Hood: The Mechanics of Active Deception &amp; Canary Signals
+    </h3>
+    <p>
+      Traditional cybersecurity tools rely on signature matching, heuristic analysis, or behavioral anomalies. However, adversaries who successfully harvest valid credentials or exploit zero-day vulnerabilities easily bypass these filters because their lateral movement blends in with legitimate administrative traffic. Deception technology operates on an entirely different premise: <strong>deterministic entrapment</strong>.
+    </p>
+    <p>
+      When you generate an Advanced Decoy using PixelCraft AI, the tool constructs an authentic file wrapper—such as a Microsoft Word document (<code>.docx</code>), an Excel financial spreadsheet (<code>.xlsx</code>), an AWS configuration file (<code>credentials</code>), or a database connection string. Inside this carrier file, two critical components are engineered:
+    </p>
+    <ul>
+      <li><strong>Plausible Cognitive Camouflage:</strong> Attackers inspect file names, byte sizes, and preliminary text to evaluate whether a target is worth exfiltrating. PixelCraft AI crafts structurally authentic templates—such as "Q4_Executive_Compensation_Plan.xlsx" or "prod_db_backup_keys.json"—complete with realistic formatting, synthetic row counts, and plausible metadata timestamps.</li>
+      <li><strong>Out-of-Band (OOB) DNS &amp; HTTP Trigger Beacons:</strong> Deep within the document's XML hierarchy or network schemas, a unique, high-entropy cryptographic token is embedded. When opened, the file instructs the host operating system or productivity suite to resolve a unique subdomain (e.g., <code>[token_id].canary.internal.domain</code>) or issue an HTTP GET request to an ephemeral telemetry listener.</li>
+      <li><strong>Zero-Noise Forensic Telemetry:</strong> Because the token hostname is cryptographically unique to that individual file, the listener instantly logs the attacker's public egress IP address, internal DNS forwarder, User-Agent string, and timestamp of access without alerting the attacker that their reconnaissance has been detected.</li>
+    </ul>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      2. Step-by-Step Operational Masterclass: Deploying Enterprise Canaries
+    </h3>
+    <p>
+      Deploying active deception requires a disciplined operational methodology to prevent accidental operational interference and ensure maximum threat intelligence value. Follow this four-stage deployment protocol:
+    </p>
+    <ol>
+      <li><strong>Phase 1: Asset Target Identification:</strong> Identify critical choke points in your infrastructure where an unauthorized actor is most likely to search during post-exploitation reconnaissance. High-value deployment locations include developer desktop download directories, shared network drives (SMB/NFS), unindexed cloud storage buckets, CI/CD pipeline environment variables, and dormant test repositories on GitHub or GitLab.</li>
+      <li><strong>Phase 2: Tailored Decoy Synthesis:</strong> Launch the PixelCraft AI Advanced Decoy Studio. Select the carrier format that matches your targeted threat model. For insider threats and unauthorized employee data mining, choose financial spreadsheets or human resources compensation files. For external ransomware actors and script kiddies, select AWS root credentials or database dump configuration files.</li>
+      <li><strong>Phase 3: Telemetry Webhook Configuration:</strong> Supply an isolated webhook endpoint (such as your SIEM's event collector, an AWS Lambda webhook, or an automated Slack/PagerDuty alert channel). PixelCraft embeds this routing into the decoy token without storing your webhook in any public database.</li>
+      <li><strong>Phase 4: Silent Seeding &amp; Baseline Monitoring:</strong> Place the synthesized decoy into the target directory. Ensure file permissions allow standard read access for non-privileged accounts so that automated directory enumeration tools (such as <code>dir /s</code>, <code>find / -name "*pass*"</code>, or BloodHound) catalog the file. Document the file hash and token ID in your incident response register.</li>
+    </ol>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      3. Threat Modeling: Counteracting Reverse Engineering &amp; Sandbox Evasion
+    </h3>
+    <p>
+      Sophisticated threat groups often run automated sandbox analysis on stolen data before acting upon it. If a honeypot file looks suspicious or contains an obvious external URL, the attacker may realize they have been detected, immediately purge their foothold, and change tactics. PixelCraft AI implements state-of-the-art evasive decoys:
+    </p>
+    <ul>
+      <li><strong>DNS Tunneling Resilience:</strong> Corporate firewalls frequently block outbound HTTP requests to untrusted external IP addresses. However, internal recursive DNS resolvers almost universally forward UDP port 53 queries. Our canaries prioritize recursive DNS queries, ensuring beacon delivery even from tightly air-gapped or egress-restricted network segments.</li>
+      <li><strong>Micro-Steganography in File Headers:</strong> In document and image formats, canary tokens are embedded within standard metadata blocks (e.g., XML relationships, EXIF comment headers, or PDF trailer dictionaries) rather than visible body layers, preventing automated optical character recognition (OCR) or keyword scrapers from flagging the trigger logic.</li>
+      <li><strong>Quantization Index Modulation (QIM):</strong> For dual-payload decoys that require hiding operational instructions inside harmless cover files, PixelCraft utilizes client-side QIM steganography to prevent statistical entropy spikes that trigger heuristic file scanners.</li>
+    </ul>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      4. Enterprise Field Scenarios &amp; Real-World Case Studies
+    </h3>
+    <p>
+      Active deception delivers actionable intelligence across a wide spectrum of contemporary threat scenarios:
+    </p>
+    <div style="background: var(--surface-subtle); border-radius: 12px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--primary); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Scenario A: Detecting Ransomware During Pre-Encryption Reconnaissance</h4>
+      <p style="margin-bottom: 12px; font-size: 0.95rem;">
+        Before executing destructive encryption algorithms, modern ransomware operators (such as LockBit or BlackCat affiliates) spend days exfiltrating sensitive intellectual property. By placing canary documents across network file shares, security operations teams receive an instant, deterministic alarm during the reconnaissance phase, allowing automated isolation of the compromised endpoint via EDR APIs before a single productive file is encrypted.
+      </p>
+      <h4 style="color: var(--primary); font-size: 1.15rem; margin-top: 16px; margin-bottom: 8px;">Scenario B: Unmasking Supply Chain Infiltration &amp; CI/CD Leaks</h4>
+      <p style="margin-bottom: 12px; font-size: 0.95rem;">
+        Developers occasionally push test credentials into public repositories or internal build scripts. Placing honey-token API keys in private source code repositories provides an early warning if those repositories are mirrored, accessed by an unauthorized third-party contractor, or scraped by threat actors scanning GitHub via public commit streams.
+      </p>
+      <h4 style="color: var(--primary); font-size: 1.15rem; margin-top: 16px; margin-bottom: 8px;">Scenario C: Insider Threat &amp; Departing Employee Data Exfiltration</h4>
+      <p style="margin-bottom: 0; font-size: 0.95rem;">
+        When an employee plans to join a direct competitor, they often run broad keyword searches across shared company repositories for customer lists or unreleased roadmaps. Placing a canary spreadsheet named "2026_Q3_Strategic_Client_Accounts.xlsx" in standard departmental drives serves as an immediate early warning when the departing employee copies files to a personal USB drive or cloud drive.
+      </p>
+    </div>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      5. Legal, Regulatory &amp; Evidentiary Considerations (NIST &amp; ISO 27001)
+    </h3>
+    <p>
+      Security operations teams must ensure that deceptive countermeasures meet legal thresholds and evidentiary standards for forensic attribution and potential criminal prosecution:
+    </p>
+    <ul>
+      <li><strong>Admissibility of Canary Logs:</strong> Because PixelCraft tokens log immutable cryptographic timestamps, source IP addresses, and DNS resolver routes, the resulting alerts establish clear chain-of-custody proof that an unauthorized party accessed non-public data without administrative privilege.</li>
+      <li><strong>Entrapment vs Enticement:</strong> In civil and criminal law, passive decoys do not constitute entrapment because defenders merely leave files accessible in areas where unauthorized parties have already breached access boundaries. No active coercion or inducement occurs.</li>
+      <li><strong>NIST SP 800-172 &amp; ISO/IEC 27001 Alignment:</strong> NIST Special Publication 800-172 explicitly highlights deception as an enhanced security requirement (Control 3.14.1e: "Employ deception techniques to confuse and misinform adversaries"). Deploying canary decoys directly satisfies advanced zero-trust compliance standards.</li>
+    </ul>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      6. Technical Architecture Comparison: PixelCraft AI vs Legacy Honeynets
+    </h3>
+    <p>
+      Evaluate how client-side, zero-knowledge decoy generation differs fundamentally from legacy cloud-hosted deception platforms:
+    </p>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr style="background: var(--surface-subtle); text-align: left;">
+            <th style="padding: 14px;">Evaluation Dimension</th>
+            <th style="padding: 14px;">PixelCraft AI Advanced Decoys</th>
+            <th style="padding: 14px;">Commercial SaaS Honey-Token Clouds</th>
+            <th style="padding: 14px;">DIY Open-Source Honeypot Daemons</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Data Privacy &amp; Custody</td>
+            <td style="padding: 12px; color: var(--success); font-weight: 600;">100% In-Browser Memory; No server logs or token retention</td>
+            <td style="padding: 12px; color: var(--danger);">Vendor logs every token, webhook URL, and alert telemetry</td>
+            <td style="padding: 12px;">Self-hosted, but requires full server maintenance and hardening</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Deployment Overhead</td>
+            <td style="padding: 12px;">Instant zero-install download; ready in 5 seconds</td>
+            <td style="padding: 12px;">Requires cloud console accounts, agents, or API integration</td>
+            <td style="padding: 12px; color: var(--danger);">Heavy Linux VM configuration, port forwarding, continuous patching</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Egress Evasion</td>
+            <td style="padding: 12px; color: var(--success);">Multi-vector (DNS, HTTP, Webhook, Steganographic)</td>
+            <td style="padding: 12px;">Primarily HTTP/HTTPS domain callbacks (easily blocked by proxy)</td>
+            <td style="padding: 12px;">Variable; requires manual network route design</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Attacker Attribution</td>
+            <td style="padding: 12px;">Direct payload correlation via cryptographic SHA-256 tokens</td>
+            <td style="padding: 12px;">Correlated via vendor database tables</td>
+            <td style="padding: 12px;">Requires log scraping and manual syslog parsing</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: 600;">Subscription &amp; Cost</td>
+            <td style="padding: 12px; color: var(--success); font-weight: 600;">100% Free / Unlimited</td>
+            <td style="padding: 12px; color: var(--danger);">$500 – $2,500/month enterprise minimum</td>
+            <td style="padding: 12px;">Cloud hosting compute costs</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      7. Frequently Asked Questions (FAQ) &amp; Technical Troubleshooting
+    </h3>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can an antivirus or EDR solution trigger a false alarm on my canary file?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          No. PixelCraft decoys do not contain shellcode, exploit payloads, or malicious macros. They are strictly valid, passive file structures that leverage standard operating system network routines (such as resolving an external stylesheet or font URL). Consequently, standard endpoint protection systems recognize them as clean data files and will not generate false quarantine alerts.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">What happens if a backup daemon or search indexer opens the canary?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          Passive file backups (such as rsync, Veeam, or tar) read binary disk blocks without parsing the document layout or launching an application runtime, so they will not trigger the embedded network beacon. However, aggressive full-text indexing daemons (such as enterprise search crawlers) may open the document. To prevent false positives, we recommend excluding your decoy drop directories from internal indexing or whitelisting your internal crawler's IP address.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How long do the generated canary tokens remain active?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          Because you provide your own webhook URL or internal alerting endpoint during generation, the token lifetime is entirely within your control. There is no vendor expiration date, license timeout, or artificial throttling imposed by PixelCraft AI.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can an attacker discover the webhook destination and flood it with fake alarms?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          If an attacker manually deconstructs the XML payload using an offline hex editor, they can view the trigger URL. To prevent denial-of-service or alert flooding, your receiving webhook should implement token authentication, rate limiting, and HMAC signature verification on all incoming notifications.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">What is the difference between high-interaction and low-interaction decoys?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          High-interaction honeypots run full, active operating systems or containerized database daemons that let attackers interact deeply, but carry substantial risk of becoming pivoting bases. PixelCraft's tokens are low-interaction: passive, lightweight document and token triggers that alert immediately upon access with zero risk of attacker hijacking.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How should our security team test decoys without triggering alerts?</strong>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+          When preparing decoys for production seeding, always test them in an isolated test environment with a dedicated staging webhook. Document the token ID in your incident response database before placing it in production directories so your SOC team can instantly identify the decoy location when an alert triggers.
+        </p>
+      </div>
+    </div>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      8. Operational Verification &amp; Security Checklist
+    </h3>
+    <ul style="padding-left: 20px; color: var(--text-body); margin-bottom: 28px;">
+      <li><strong>Test in a Sandbox First:</strong> Always verify your generated decoy in an isolated virtual machine before deploying it to production servers to ensure the webhook fires as intended.</li>
+      <li><strong>Document Token Identifiers:</strong> Maintain an encrypted spreadsheet or credential vault record mapping each canary ID to its physical host and folder location.</li>
+      <li><strong>Rotate Decoys Annually:</strong> Periodically refresh filenames and file formats to match organizational changes (e.g., updating year references from 2025 to 2026).</li>
+      <li><strong>Immediate Incident Response Plan:</strong> Define an explicit playbook for what happens when a canary fires: isolate host, preserve RAM memory image, and initiate root-cause investigation.</li>
+      <li><strong>Ensure Plausible Naming Conventions:</strong> Avoid suspicious names like "honeypot.docx" or "fake_passwords.txt". Use context-relevant enterprise names like "2026_Q1_Audit_Reconciliation.xlsx" or "id_rsa.staging.bak".</li>
+    </ul>
+
+    <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-top: 32px; font-size: 0.95rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <span>Read our in-depth research paper: <a href="../blog/how-honeypots-and-canary-tokens-detect-breaches.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">How Honeypots and Canary Tokens Detect Breaches</a>.</span>
+      <span style="font-size: 0.85rem; color: var(--text-light);">PixelCraft Security Lab • Zero-Knowledge Architecture</span>
+    </div>
+
+  </article>
+</section>
+<!-- ========================================================
+     END AUTHORITATIVE TECHNICAL GUIDE
+     ======================================================== -->
+
+<footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+      <a href="../about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+      <a href="../privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+      <a href="../terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+      <a href="../disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+      <a href="../cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+      <a href="../blog/index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+      <a href="../index.html#contact" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+      &copy; 2026 PixelCraft AI. All rights reserved.<br>
+      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+    </p>
+  </div>
+</footer>
+
 <script src="../js/cookie-consent.js"></script>
 </body>
 </html>
