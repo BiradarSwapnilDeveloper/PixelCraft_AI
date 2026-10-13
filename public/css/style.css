@@ -227,6 +227,8 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   font-size: 1.3rem;
   letter-spacing: -0.02em;
   transition: color 0.15s ease;
+  white-space: nowrap !important;
+  flex-shrink: 0;
 }
 
 .nav-logo img {
@@ -235,6 +237,7 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   border-radius: 8px;
   border: 1px solid var(--border-color);
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .nav-logo-badge {
@@ -250,6 +253,8 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   background: var(--indigo-light);
   color: var(--indigo);
   border: 1px solid var(--indigo-border);
+  white-space: nowrap !important;
+  flex-shrink: 0;
 }
 
 /* NAVBAR HOVER FIX: NEVER WHITE ON HOVER - ELEGANT VIBRANT GRADIENT */
@@ -261,6 +266,7 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 .nav-logo span {
   color: var(--text-heading);
   transition: all 0.2s ease;
+  white-space: nowrap !important;
 }
 
 .nav-logo:hover span:not(.nav-logo-badge) {
@@ -291,6 +297,11 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   list-style: none;
   margin: 0;
   padding: 0;
+  flex-wrap: nowrap;
+}
+
+.nav-links li {
+  white-space: nowrap;
 }
 
 .nav-links a {
@@ -301,6 +312,7 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   padding: 8px 16px;
   border-radius: var(--radius-sm);
   transition: all 0.15s ease;
+  white-space: nowrap !important;
 }
 
 /* Fixed hover state: clear blue/indigo text with soft background pill */
@@ -315,6 +327,8 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .nav-icon-btn {
@@ -384,6 +398,8 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   align-items: center;
   gap: 6px;
   text-decoration: none !important;
+  white-space: nowrap !important;
+  flex-shrink: 0;
 }
 
 .nav-cta:hover {
@@ -1046,31 +1062,95 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
    RESPONSIVE DESIGN (Tablets, Medium Displays & Mobile)
    ======================================================== */
 
-/* Medium Displays & Small Laptops (993px to 1180px) - Prevent cramped wrapping */
-@media (min-width: 993px) and (max-width: 1180px) {
+/* Medium Displays, Laptops & Ultrabooks (993px to 1240px) - Enterprise Crisp Nav Layout (Fix 1081px-1209px) */
+@media (min-width: 993px) and (max-width: 1240px) {
   .nav-container {
-    padding: 0 24px;
+    padding: 0 20px !important;
   }
+
   .nav-logo {
-    font-size: 1.15rem;
-    gap: 8px;
+    font-size: 1.15rem !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
   }
+
+  .nav-logo img {
+    width: 32px !important;
+    height: 32px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .nav-logo span {
+    white-space: nowrap !important;
+  }
+
   .nav-logo-badge {
-    display: none; /* Smoothly hide badge so nav links never wrap or look crowded */
+    font-size: 0.68rem !important;
+    padding: 2px 7px !important;
+    letter-spacing: 0.03em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
   }
+
   .nav-links {
-    gap: 4px;
+    gap: 4px !important;
+    flex-wrap: nowrap !important;
   }
+
+  .nav-links li {
+    white-space: nowrap !important;
+  }
+
   .nav-links a {
-    padding: 6px 10px;
-    font-size: 0.88rem;
+    padding: 6px 9px !important;
+    font-size: 0.86rem !important;
+    white-space: nowrap !important;
   }
+
   .nav-actions {
-    gap: 6px;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
   }
+
+  .nav-icon-btn {
+    width: 36px !important;
+    height: 36px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .nav-icon-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
   .nav-cta {
-    padding: 6px 14px !important;
-    font-size: 0.88rem !important;
+    padding: 6px 13px !important;
+    font-size: 0.86rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* Compact Sub-Laptops & iPad Pro Landscape (993px to 1060px) - Hide badge for extra breathing room */
+@media (min-width: 993px) and (max-width: 1060px) {
+  .nav-container {
+    padding: 0 16px !important;
+  }
+
+  .nav-logo-badge {
+    display: none !important;
+  }
+
+  .nav-links a {
+    padding: 6px 7px !important;
+    font-size: 0.83rem !important;
+  }
+
+  .nav-cta {
+    padding: 6px 11px !important;
+    font-size: 0.83rem !important;
   }
 }
 
