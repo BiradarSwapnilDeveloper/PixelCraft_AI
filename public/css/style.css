@@ -188,7 +188,7 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   width: 100%;
   max-width: 100%;
   height: 72px;
-  padding: 0 32px;
+  padding: 0;
   background: var(--navbar-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -196,7 +196,6 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   z-index: 1000;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   box-shadow: var(--shadow-sm);
   box-sizing: border-box;
   transform: none;
@@ -209,9 +208,10 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 }
 
 .nav-container {
-  max-width: 1280px;
   width: 100%;
-  margin: 0 auto;
+  max-width: 100%;
+  padding: 0 40px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -346,6 +346,11 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 }
 
 .nav-hamburger {
+  display: none;
+}
+
+/* Hide mobile-only drawer auth item on desktop */
+#mobile-drawer-auth-item {
   display: none;
 }
 
@@ -1043,8 +1048,8 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 
 /* Medium Displays & Small Laptops (993px to 1180px) - Prevent cramped wrapping */
 @media (min-width: 993px) and (max-width: 1180px) {
-  .navbar {
-    padding: 0 20px;
+  .nav-container {
+    padding: 0 24px;
   }
   .nav-logo {
     font-size: 1.15rem;
@@ -1071,7 +1076,7 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 
 /* Tablet & Mobile Breakpoint (<= 992px) - 3-Line Hamburger Menu */
 @media (max-width: 992px) {
-  .navbar {
+  .nav-container {
     padding: 0 20px;
   }
 
@@ -1113,6 +1118,12 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   }
 
   .nav-links li {
+    width: 100%;
+  }
+
+  /* Show mobile auth item inside mobile nav dropdown */
+  #mobile-drawer-auth-item {
+    display: list-item !important;
     width: 100%;
   }
 
@@ -1175,8 +1186,10 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 /* Smartphone Breakpoint (<= 560px) - Enterprise Google/Amazon Grade Clean Reflow */
 @media (max-width: 560px) {
   .navbar {
-    padding: 0 14px;
     height: 64px;
+  }
+  .nav-container {
+    padding: 0 14px;
   }
   .nav-logo {
     font-size: 1.05rem !important;
