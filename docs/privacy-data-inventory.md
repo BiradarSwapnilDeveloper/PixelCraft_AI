@@ -1,4 +1,4 @@
-﻿# PixelCraft AI - Privacy & Data Processing Inventory
+# PixelCraft AI - Privacy & Data Processing Inventory
 **Document Version:** 1.0.0  
 **Effective Date:** October 11, 2026  
 **Classification:** Technical Source of Truth  

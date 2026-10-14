@@ -1,4 +1,4 @@
-﻿# Expansion Builder for Batch 4:
+# Expansion Builder for Batch 4:
 # 1. phishing-scanner.html
 # 2. qr-generator.html
 # 3. smart-resize.html

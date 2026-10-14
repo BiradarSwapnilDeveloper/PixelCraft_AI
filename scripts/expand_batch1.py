@@ -1,4 +1,4 @@
-﻿import os, re
+import os, re
 import tool_content_batch1
 
 # Let's define the expansions for color-palette.html, audio-steganography.html, and ai-dubbing.html

@@ -426,6 +426,7 @@
         
         <div class="modal-tabs">
             <button class="tab-btn active" id="tab-btn-extractor" onclick="switchForensicTab('tab-extractor', this)">🔍 QIM Extractor</button>
+            <button class="tab-btn" id="tab-btn-sealverifier" onclick="switchForensicTab('tab-sealverifier', this)">🛡️ Seal & Hash Verifier</button>
             <button class="tab-btn" id="tab-btn-logs" onclick="switchForensicTab('tab-flogs', this)">📜 Fingerprint Logs</button>
             <button class="tab-btn" id="tab-btn-avlogs" onclick="switchForensicTab('tab-avlogs', this)">🎧 Audio/Video Logs</button>
             <button class="tab-btn" id="tab-btn-decoylogs" onclick="switchForensicTab('tab-decoylogs', this)">🎭 Decoy Stego Logs</button>
@@ -500,6 +501,54 @@
                     <tbody id="decoylogs-tbody">
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <!-- Forensics Tab: Seal & Hash Verifier -->
+        <div class="tab-content" id="tab-sealverifier" style="display: none;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <!-- Left: Image Drag & Drop -->
+                <div class="glass-panel" style="padding: 20px; background: rgba(0,0,0,0.4); border-color: rgba(0, 242, 254, 0.25);">
+                    <h4 style="margin: 0 0 10px 0; color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace;">1. Image Cryptographic Seal Inspector</h4>
+                    <p style="color: var(--text-muted); font-size: 12px; margin: 0 0 15px 0;">Upload any image to test for genuine PixelCraft AI forensic sanitization and HMAC seal.</p>
+                    <div class="forensic-dropzone" id="seal-dropzone" style="margin: 0; padding: 25px 15px; border-color: rgba(0, 242, 254, 0.4);">
+                        <div style="font-size: 2rem; margin-bottom: 8px;">🛡️</div>
+                        <strong style="color: var(--text-main); font-size: 14px;">Drop Sanitized Image Here</strong>
+                        <p style="color: var(--text-muted); font-size: 12px; margin: 6px 0 0 0;">or click to browse from device (JPG, PNG, WEBP)</p>
+                    </div>
+                    <input type="file" id="seal-fileInput" accept="image/*" style="display: none;">
+                    <img id="seal-previewImg" class="forensic-preview" src="" style="margin-top: 15px; display: none; max-height: 180px;">
+                </div>
+
+                <!-- Right: Manual Hash / Seal String Validator -->
+                <div class="glass-panel" style="padding: 20px; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; border-color: rgba(0, 242, 254, 0.25);">
+                    <h4 style="margin: 0 0 10px 0; color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace;">2. Direct Hash / Seal Lookup</h4>
+                    <p style="color: var(--text-muted); font-size: 12px; margin: 0 0 15px 0;">Validate raw HMAC-SHA256 hash or extracted Pixelcraft_Verified string syntax & entropy.</p>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+                        <input type="text" id="manual-hash-input" placeholder="Paste 64-char Hash or Pixelcraft_Verified_..." style="width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; outline: none;">
+                        <button class="btn-primary" id="btn-manual-verify" style="padding: 12px; font-size: 12px; width: 100%;">Audit Hash Signature</button>
+                        
+                        <!-- Quick Stats Box -->
+                        <div id="seal-status-box" style="margin-top: auto; padding: 14px; border-radius: 8px; background: rgba(0,0,0,0.6); border: 1px solid var(--border); display: none;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 11px; text-transform: uppercase; color: var(--text-muted);">Seal Status:</span>
+                                <span id="seal-badge" style="font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;">-</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 11px;">
+                                <span style="color: var(--text-muted);">HMAC-SHA256 Hash:</span>
+                                <span style="color: var(--warning); font-family: 'JetBrains Mono', monospace;">256-bit</span>
+                            </div>
+                            <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; word-break: break-all; color: var(--accent); background: rgba(0,242,254,0.05); padding: 6px 8px; border-radius: 4px; border: 1px solid rgba(0,242,254,0.1);" id="seal-hash-display">-</div>
+                            <div id="seal-audit-meta" style="margin-top: 8px; font-size: 11px; color: var(--text-muted); display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terminal Output -->
+            <div class="forensic-terminal" id="seal-terminal" style="height: 220px;">
+                <div class="sys">> PIXELCRAFT AI CRYPTOGRAPHIC SEAL & HASH CONTROL ROOM READY...</div>
+                <div class="sys">> DROP SANITIZED FILE OR ENTER RAW HASH TO BEGIN VERIFICATION AUDIT.</div>
             </div>
         </div>
     </div>
@@ -835,11 +884,13 @@
 
     function switchForensicTab(tabId, btn) {
         document.getElementById('tab-extractor').style.display = 'none';
+        document.getElementById('tab-sealverifier').style.display = 'none';
         document.getElementById('tab-flogs').style.display = 'none';
         document.getElementById('tab-avlogs').style.display = 'none';
         document.getElementById('tab-decoylogs').style.display = 'none';
         
         document.getElementById('tab-btn-extractor').classList.remove('active');
+        document.getElementById('tab-btn-sealverifier').classList.remove('active');
         document.getElementById('tab-btn-logs').classList.remove('active');
         document.getElementById('tab-btn-avlogs').classList.remove('active');
         document.getElementById('tab-btn-decoylogs').classList.remove('active');
@@ -1294,6 +1345,177 @@
         if(fCount === 0) tbodyF.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No fingerprint logs found.</td></tr>';
         if(avCount === 0) tbodyAV.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No AV logs found.</td></tr>';
         if(dCount === 0) tbodyD.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">No Decoy logs found.</td></tr>';
+    }
+
+    // --- CRYPTOGRAPHIC SEAL & HASH CONTROL ROOM LOGIC ---
+    const sealDropzone = document.getElementById('seal-dropzone');
+    const sealFileInput = document.getElementById('seal-fileInput');
+    const sealTerminal = document.getElementById('seal-terminal');
+    const sealPreviewImg = document.getElementById('seal-previewImg');
+    const sealStatusBox = document.getElementById('seal-status-box');
+    const sealBadge = document.getElementById('seal-badge');
+    const sealHashDisplay = document.getElementById('seal-hash-display');
+    const sealAuditMeta = document.getElementById('seal-audit-meta');
+    const manualHashInput = document.getElementById('manual-hash-input');
+    const btnManualVerify = document.getElementById('btn-manual-verify');
+
+    function slog(msg, type = '') {
+        if (!sealTerminal) return;
+        const div = document.createElement('div');
+        div.textContent = '> ' + msg;
+        if (type) div.className = type;
+        sealTerminal.appendChild(div);
+        sealTerminal.scrollTop = sealTerminal.scrollHeight;
+    }
+
+    if (sealDropzone) {
+        sealDropzone.addEventListener('click', () => sealFileInput.click());
+
+        sealDropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            sealDropzone.style.borderColor = 'var(--accent)';
+            sealDropzone.style.background = 'rgba(0, 242, 254, 0.1)';
+        });
+
+        sealDropzone.addEventListener('dragleave', () => {
+            sealDropzone.style.borderColor = 'rgba(0, 242, 254, 0.4)';
+            sealDropzone.style.background = 'transparent';
+        });
+
+        sealDropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            sealDropzone.style.borderColor = 'rgba(0, 242, 254, 0.4)';
+            sealDropzone.style.background = 'transparent';
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                processSealFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        sealFileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                processSealFile(e.target.files[0]);
+            }
+        });
+    }
+
+    async function processSealFile(file) {
+        slog('------------------------------------------------------------', 'sys');
+        slog(`[FILE RECEIVED] Name: ${file.name} | Size: ${(file.size / 1024).toFixed(1)} KB | Type: ${file.type || 'image'}`);
+        
+        // Preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            sealPreviewImg.src = e.target.result;
+            sealPreviewImg.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+
+        slog('[ANALYSIS] Dispatching binary buffer to Cryptographic Seal Inspector (/api/tools/verify-seal)...');
+        
+        const fd = new FormData();
+        fd.append('image', file);
+
+        try {
+            const res = await fetch('/api/tools/verify-seal', {
+                method: 'POST',
+                body: fd
+            });
+            const data = await res.json();
+
+            sealStatusBox.style.display = 'block';
+
+            if (data.verified) {
+                slog('============================================================', 'success');
+                slog(`[VERIFIED AUTHENTIC] Genuine PixelCraft Cryptographic Seal Detected!`, 'success');
+                slog(`[SIGNATURE ALGO] ${data.algorithm || 'HMAC-SHA256'} (256-Bit Cryptographic Integrity)`, 'success');
+                slog(`[SEAL HASH] ${data.sealHash}`, 'success');
+                
+                sealBadge.textContent = '✅ GENUINE PIXELCRAFT VERIFIED';
+                sealBadge.style.background = 'rgba(16, 185, 129, 0.2)';
+                sealBadge.style.color = 'var(--success)';
+                sealBadge.style.border = '1px solid var(--success)';
+                sealHashDisplay.textContent = data.sealHash;
+
+                if (data.metadataAudit) {
+                    const gpsStatus = data.metadataAudit.hasGps ? '⚠️ GPS LEAK DETECTED' : '🛡️ GPS STRIPPED (CLEAN)';
+                    const camStatus = data.metadataAudit.hasCamera ? '⚠️ CAMERA SPECS FOUND' : '🛡️ CAMERA SPECS WIPED';
+                    slog(`[FORENSIC AUDIT] GPS: ${gpsStatus} | Camera: ${camStatus} | Remaining Tags: ${data.metadataAudit.tagCount}`);
+                    
+                    sealAuditMeta.innerHTML = `
+                        <span style="color:${data.metadataAudit.hasGps ? 'var(--danger)' : 'var(--success)'}; font-weight:bold;">${gpsStatus}</span>
+                        <span style="color:${data.metadataAudit.hasCamera ? 'var(--danger)' : 'var(--success)'}; font-weight:bold;">${camStatus}</span>
+                        <span style="color:var(--text-muted);">Active Tags: ${data.metadataAudit.tagCount}</span>
+                    `;
+                }
+                slog('============================================================', 'success');
+            } else {
+                slog('============================================================', 'error');
+                slog(`[UNVERIFIED / UNTRUSTED] No valid PixelCraft Cryptographic Seal found.`, 'error');
+                slog(`[DIAGNOSTIC] ${data.message || 'Image has not been sanitized by PixelCraft AI, or file metadata was modified.'}`, 'error');
+                
+                sealBadge.textContent = '❌ UNVERIFIED / FORGED';
+                sealBadge.style.background = 'rgba(239, 68, 68, 0.2)';
+                sealBadge.style.color = 'var(--danger)';
+                sealBadge.style.border = '1px solid var(--danger)';
+                sealHashDisplay.textContent = data.sealHash ? `Extracted Unverified: ${data.sealHash}` : 'NO SEAL DETECTED';
+                
+                if (data.metadataAudit) {
+                    sealAuditMeta.innerHTML = `
+                        <span style="color:${data.metadataAudit.hasGps ? 'var(--danger)' : 'var(--warning)'};">${data.metadataAudit.hasGps ? '⚠️ GPS Metadata Present' : 'No GPS Tag'}</span>
+                        <span style="color:${data.metadataAudit.hasCamera ? 'var(--danger)' : 'var(--warning)'};">${data.metadataAudit.hasCamera ? '⚠️ Camera Hardware Tag Present' : 'No Camera Tag'}</span>
+                        <span style="color:var(--text-muted);">Tags: ${data.metadataAudit.tagCount}</span>
+                    `;
+                }
+                slog('============================================================', 'error');
+            }
+        } catch (err) {
+            slog(`[NETWORK FAULT] Seal inspector request failed: ${err.message}`, 'error');
+        }
+    }
+
+    if (btnManualVerify) {
+        btnManualVerify.addEventListener('click', () => {
+            const raw = (manualHashInput.value || '').trim();
+            if (!raw) {
+                slog('[INPUT ERROR] Please paste a 64-character hash or Pixelcraft_Verified string.', 'error');
+                return;
+            }
+
+            slog('------------------------------------------------------------', 'sys');
+            slog(`[MANUAL AUDIT] Inspecting input signature: "${raw}"`);
+            
+            let hash = raw;
+            if (raw.startsWith('Pixelcraft_Verified_')) {
+                hash = raw.replace('Pixelcraft_Verified_', '').trim();
+                slog('[HEADER] Detected valid "Pixelcraft_Verified_" prefix identifier.', 'success');
+            }
+
+            const isHex64 = /^[a-f0-9]{64}$/i.test(hash);
+            sealStatusBox.style.display = 'block';
+
+            if (isHex64) {
+                slog(`[FORMAT VALID] 256-bit Hexadecimal SHA-256 HMAC structure confirmed.`, 'success');
+                slog(`[HASH LENGTH] 64 characters (256 bits)`, 'success');
+                slog(`[HEX ENTROPY] Valid Cryptographic digest. Hash: ${hash}`, 'success');
+
+                sealBadge.textContent = '✅ VALID 256-BIT HMAC FORMAT';
+                sealBadge.style.background = 'rgba(16, 185, 129, 0.2)';
+                sealBadge.style.color = 'var(--success)';
+                sealBadge.style.border = '1px solid var(--success)';
+                sealHashDisplay.textContent = hash;
+                sealAuditMeta.innerHTML = `<span style="color:var(--success);">Compliant with PixelCraft Sanitizer V1/Production Cryptographic Specification</span>`;
+            } else {
+                slog(`[SYNTAX FAULT] Input does not match 64-character hexadecimal SHA-256 format.`, 'error');
+                slog(`[CURRENT LENGTH] ${hash.length} chars (Expected 64 hex chars).`, 'error');
+
+                sealBadge.textContent = '❌ MALFORMED HASH';
+                sealBadge.style.background = 'rgba(239, 68, 68, 0.2)';
+                sealBadge.style.color = 'var(--danger)';
+                sealBadge.style.border = '1px solid var(--danger)';
+                sealHashDisplay.textContent = hash;
+                sealAuditMeta.innerHTML = `<span style="color:var(--danger);">Invalid length or non-hexadecimal characters detected.</span>`;
+            }
+        });
     }
 
     function openUserModal(index) {

@@ -1,4 +1,4 @@
-﻿# Builder for Batch 1 (Tools 1 to 4)
+# Builder for Batch 1 (Tools 1 to 4)
 import os, re
 
 def build_advanced_decoy():
