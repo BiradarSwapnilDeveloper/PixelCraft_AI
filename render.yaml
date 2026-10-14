@@ -15,3 +15,5 @@ services:
         sync: false
       - key: SESSION_SECRET
         generateValue: true
+      - key: SEAL_SECRET
+        generateValue: true

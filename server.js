@@ -20,6 +20,15 @@ const app = express();
 app.set('trust proxy', 1); // Trust the Render proxy to fix HTTP/HTTPS mismatch
 const PORT = process.env.PORT || 8080;
 
+// Auto-initialize SEAL_SECRET if missing or default in production environment to prevent startup warnings and runtime faults
+if (process.env.NODE_ENV === 'production' && (!process.env.SEAL_SECRET || process.env.SEAL_SECRET === 'Pixelcraft_Sanitizer_V1')) {
+  if (process.env.SESSION_SECRET && process.env.SESSION_SECRET !== 'Pixelcraft_Sanitizer_V1') {
+    process.env.SEAL_SECRET = crypto.createHmac('sha256', process.env.SESSION_SECRET).update('Pixelcraft_Seal_Salt').digest('hex');
+  } else {
+    process.env.SEAL_SECRET = crypto.randomBytes(32).toString('hex');
+  }
+}
+
 // --- SSRF & PRIVATE IP VALIDATOR ---
 function isPrivateOrReservedIp(ip) {
   if (!ip || !net.isIP(ip)) return true;
