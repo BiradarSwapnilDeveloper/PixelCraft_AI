@@ -2289,24 +2289,7 @@
         </div>
       </a>
 
-      <!-- TOOL 8: Filters & Effects -->
-      <a href="tools/image-filters.html" class="tool-card" data-cat="edit" data-tags="image filters effects brightness contrast saturation tint presets photo">
-        <div class="tool-card-header">
-          <div class="tool-icon-box icon-box-lavender">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="tool-category-label">Color &amp; Creative</div>
-        <h3>Filters &amp; Effects</h3>
-        <p>Fine-tune contrast, brightness, exposure, tint, and apply professional studio color presets. Zero loss of resolution, processed entirely on GPU/Canvas.</p>
-        <div class="tool-card-footer">
-          <span class="tool-launch-text">Launch Tool &rarr;</span>
-        </div>
-      </a>
-
-      <!-- TOOL 9: Watermark Adder -->
+      <!-- TOOL 8: Watermark Adder -->
       <a href="tools/watermark-adder.html" class="tool-card" data-cat="edit" data-tags="watermark adder copyright protection logo overlay opacity text brand">
         <div class="tool-card-header">
           <div class="tool-icon-box icon-box-blue">
@@ -3085,20 +3068,6 @@
           ]
         },
         {
-          id: 'image-filters',
-          name: 'Filters & Effects',
-          href: 'tools/image-filters.html',
-          category: 'edit',
-          categoryLabel: 'Color & Creative',
-          iconBoxClass: 'icon-box-lavender',
-          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>',
-          description: 'Fine-tune contrast, brightness, exposure, tint, and apply professional studio color presets on GPU/Canvas.',
-          keywords: [
-            'photo editor', 'image filters', 'photo effects', 'adjust brightness', 'increase contrast',
-            'vintage filter', 'photo presets', 'photo enhancer', 'edit photo'
-          ]
-        },
-        {
           id: 'color-palette',
           name: 'Color Palette Extractor',
           href: 'tools/color-palette.html',
@@ -3370,7 +3339,6 @@
         if (q.includes('photo') || q.includes('image') || q.includes('picture') || q.includes('pic') || q.includes('jpg') || q.includes('png')) {
           addTool('image-compressor');
           addTool('images-to-pdf');
-          addTool('image-filters');
           addTool('watermark-adder');
         }
         if (q.includes('security') || q.includes('privacy') || q.includes('link') || q.includes('url') || q.includes('safe') || q.includes('scam') || q.includes('malware')) {
