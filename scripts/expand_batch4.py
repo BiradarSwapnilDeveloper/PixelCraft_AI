@@ -1,4 +1,4 @@
-# Expansion Builder for Batch 4:
+﻿# Expansion Builder for Batch 4:
 # 1. phishing-scanner.html
 # 2. qr-generator.html
 # 3. smart-resize.html
@@ -17,7 +17,7 @@ def expand_phishing_scanner():
       <div style="margin-top: 24px; padding: 22px; background: var(--surface-subtle); border-radius: 12px; border-left: 4px solid var(--primary);">
         <h4 style="color: var(--text-heading); font-size: 1.2rem; margin-bottom: 10px;">Punycode RFC 3492 &amp; Unicode Homoglyph Attack Physics</h4>
         <p style="margin-bottom: 10px; color: var(--text-body); font-size: 0.95rem;">
-          In modern credential harvesting campaigns, cyber adversaries deploy <strong>Internationalized Domain Name (IDN) Homograph Attacks</strong>. To allow non-Latin alphabets in web addresses, RFC 3492 defines <em>Punycode</em>—an encoding algorithm that transforms Unicode strings into ASCII characters prefixed with <code>xn--</code>.
+          In modern credential harvesting campaigns, cyber adversaries deploy <strong>Internationalized Domain Name (IDN) Homograph Attacks</strong>. To allow non-Latin alphabets in web addresses, RFC 3492 defines <em>Punycode</em>-an encoding algorithm that transforms Unicode strings into ASCII characters prefixed with <code>xn--</code>.
         </p>
         <p style="margin-bottom: 10px; color: var(--text-body); font-size: 0.95rem;">
           Adversaries exploit visual twins across Unicode character sets. For example:

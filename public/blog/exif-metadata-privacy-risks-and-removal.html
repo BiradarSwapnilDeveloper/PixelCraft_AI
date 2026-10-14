@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -153,7 +153,7 @@
       <p>Every time you capture an image with a modern smartphone or digital camera, the device records far more than just light hitting a digital sensor. Injected invisibly into the header bytes of the file is a dense trove of forensic metadata known as <strong>EXIF (Exchangeable Image File Format)</strong>. Without your conscious knowledge, an innocent picture uploaded to a public repository can pinpoint your exact geographic coordinates down to a three-meter radius.</p>
 
       <div class="callout-box">
-        <strong>Privacy Risk Warning:</strong> While platforms like X (Twitter) and Instagram strip EXIF data on upload, uncompressed sharing methods—including Discord original attachments, Google Drive links, Telegram uncompressed documents, and personal blogs—preserve full metadata by default.
+        <strong>Privacy Risk Warning:</strong> While platforms like X (Twitter) and Instagram strip EXIF data on upload, uncompressed sharing methods-including Discord original attachments, Google Drive links, Telegram uncompressed documents, and personal blogs-preserve full metadata by default.
       </div>
 
       <h2>1. The Anatomy of an EXIF Payload</h2>
@@ -226,7 +226,7 @@
       <p>Many users attempt to remove metadata by opening the image in a basic photo viewer and re-saving it. Unfortunately, many editors simply clone the existing EXIF and XMP blocks into the newly saved file.</p>
 
       <h3>Method A: Client-Side Canvas Re-Rasterization</h3>
-      <p>The safest, zero-knowledge technique is <em>canvas re-rasterization</em>. By loading the image pixels onto an HTML5 Canvas element inside a sandboxed browser environment and exporting only the raw decoded RGBA pixel buffer back into a clean JPEG or PNG container, all auxiliary header tags—including GPS, camera serials, and thumbnail caches—are irreversibly eliminated.</p>
+      <p>The safest, zero-knowledge technique is <em>canvas re-rasterization</em>. By loading the image pixels onto an HTML5 Canvas element inside a sandboxed browser environment and exporting only the raw decoded RGBA pixel buffer back into a clean JPEG or PNG container, all auxiliary header tags-including GPS, camera serials, and thumbnail caches-are irreversibly eliminated.</p>
 
       <h3>Method B: Command-Line Sanitation (ExifTool)</h3>
       <p>For bulk processing on local workstations, security professionals rely on the open-source <code>exiftool</code> utility:</p>
@@ -249,8 +249,8 @@ exiftool photo.jpg
         <h3>Clean Your Photos Before Sharing</h3>
         <p>Inspect and eliminate dangerous metadata using PixelCraft AI's specialized privacy tools:</p>
         <p>
-          👉 <a href="../tools/exif-viewer.html" style="color: #fda4af; font-weight: 600;">EXIF Data Inspector</a> — See the hidden GPS and camera markers embedded in your pictures.<br>
-          👉 <a href="../tools/digital-fingerprint-wiper.html" style="color: #fda4af; font-weight: 600;">Digital Fingerprint Wiper</a> — Completely scrub EXIF, IPTC, and sensor PRNU noise.
+          👉 <a href="../tools/exif-viewer.html" style="color: #fda4af; font-weight: 600;">EXIF Data Inspector</a> - See the hidden GPS and camera markers embedded in your pictures.<br>
+          👉 <a href="../tools/digital-fingerprint-wiper.html" style="color: #fda4af; font-weight: 600;">Digital Fingerprint Wiper</a> - Completely scrub EXIF, IPTC, and sensor PRNU noise.
         </p>
       </div>
 
@@ -258,7 +258,7 @@ exiftool photo.jpg
         <h3 style="color: #e2e8f0; font-size: 1.1rem; margin-bottom: 12px;">Standards, Specifications & Research Citations</h3>
         <ol style="padding-left: 20px; font-size: 0.9rem; color: #94a3b8; line-height: 1.7;">
           <li style="margin-bottom: 8px;">Japan Electronics and Information Technology Industries Association (JEITA). (2019). <em>Exchangeable Image File Format for Digital Still Cameras: Exif Version 2.32 (CP-3451D)</em>. JEITA Standard.</li>
-          <li style="margin-bottom: 8px;">International Organization for Standardization (ISO). (2019). <em>ISO 16684-1:2019 - Graphic technology — Extensible metadata platform (XMP) specification — Part 1: Data model, serialization and core properties</em>. ISO Standard.</li>
+          <li style="margin-bottom: 8px;">International Organization for Standardization (ISO). (2019). <em>ISO 16684-1:2019 - Graphic technology - Extensible metadata platform (XMP) specification - Part 1: Data model, serialization and core properties</em>. ISO Standard.</li>
           <li style="margin-bottom: 8px;">Harvey, P. (2024). <em>ExifTool: Comprehensive Open-Source Metadata Reference Architecture</em>. SourceForge Repository.</li>
           <li style="margin-bottom: 8px;">National Institute of Standards and Technology (NIST). (2018). <em>NIST SP 800-188: De-Identifying Government Datasets</em>. U.S. Department of Commerce.</li>
           <li>Federal Trade Commission (FTC). (2020). <em>Location Data and Consumer Privacy: An In-Depth Regulatory Examination</em>. FTC Bureau of Consumer Protection.</li>

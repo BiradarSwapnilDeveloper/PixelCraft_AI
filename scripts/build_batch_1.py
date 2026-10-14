@@ -1,4 +1,4 @@
-# Builder for Batch 1 (Tools 1 to 4)
+﻿# Builder for Batch 1 (Tools 1 to 4)
 import os, re
 
 def build_advanced_decoy():
@@ -28,7 +28,7 @@ def build_advanced_decoy():
     </h2>
 
     <p style="font-size: 1.1rem; color: var(--text-body); margin-bottom: 24px; font-weight: 400;">
-      In an era where perimeter defenses, firewall rules, and zero-trust boundaries are continually challenged by sophisticated advanced persistent threats (APTs) and malicious insiders, waiting for an alert from an external sensor is no longer sufficient. <strong>Cyber deception technology</strong> turns the asymmetric advantage of attackers on its head. Instead of attempting to secure an infinite attack surface, defenders seed their internal environments with high-fidelity, weaponized decoy assets—often called <em>canaries</em>, <em>honey-tokens</em>, or <em>tripwires</em>. The moment an adversary touches, opens, or attempts to authenticate using a decoy asset, silent alarms trigger instantaneous containment protocols before critical enterprise data is compromised.
+      In an era where perimeter defenses, firewall rules, and zero-trust boundaries are continually challenged by sophisticated advanced persistent threats (APTs) and malicious insiders, waiting for an alert from an external sensor is no longer sufficient. <strong>Cyber deception technology</strong> turns the asymmetric advantage of attackers on its head. Instead of attempting to secure an infinite attack surface, defenders seed their internal environments with high-fidelity, weaponized decoy assets-often called <em>canaries</em>, <em>honey-tokens</em>, or <em>tripwires</em>. The moment an adversary touches, opens, or attempts to authenticate using a decoy asset, silent alarms trigger instantaneous containment protocols before critical enterprise data is compromised.
     </p>
 
     <div class="callout-box" style="margin: 28px 0;">
@@ -48,10 +48,10 @@ def build_advanced_decoy():
       Traditional cybersecurity tools rely on signature matching, heuristic analysis, or behavioral anomalies. However, adversaries who successfully harvest valid credentials or exploit zero-day vulnerabilities easily bypass these filters because their lateral movement blends in with legitimate administrative traffic. Deception technology operates on an entirely different premise: <strong>deterministic entrapment</strong>.
     </p>
     <p>
-      When you generate an Advanced Decoy using PixelCraft AI, the tool constructs an authentic file wrapper—such as a Microsoft Word document (<code>.docx</code>), an Excel financial spreadsheet (<code>.xlsx</code>), an AWS configuration file (<code>credentials</code>), or a database connection string. Inside this carrier file, two critical components are engineered:
+      When you generate an Advanced Decoy using PixelCraft AI, the tool constructs an authentic file wrapper-such as a Microsoft Word document (<code>.docx</code>), an Excel financial spreadsheet (<code>.xlsx</code>), an AWS configuration file (<code>credentials</code>), or a database connection string. Inside this carrier file, two critical components are engineered:
     </p>
     <ul>
-      <li><strong>Plausible Cognitive Camouflage:</strong> Attackers inspect file names, byte sizes, and preliminary text to evaluate whether a target is worth exfiltrating. PixelCraft AI crafts structurally authentic templates—such as "Q4_Executive_Compensation_Plan.xlsx" or "prod_db_backup_keys.json"—complete with realistic formatting, synthetic row counts, and plausible metadata timestamps.</li>
+      <li><strong>Plausible Cognitive Camouflage:</strong> Attackers inspect file names, byte sizes, and preliminary text to evaluate whether a target is worth exfiltrating. PixelCraft AI crafts structurally authentic templates-such as "Q4_Executive_Compensation_Plan.xlsx" or "prod_db_backup_keys.json"-complete with realistic formatting, synthetic row counts, and plausible metadata timestamps.</li>
       <li><strong>Out-of-Band (OOB) DNS &amp; HTTP Trigger Beacons:</strong> Deep within the document's XML hierarchy or network schemas, a unique, high-entropy cryptographic token is embedded. When opened, the file instructs the host operating system or productivity suite to resolve a unique subdomain (e.g., <code>[token_id].canary.internal.domain</code>) or issue an HTTP GET request to an ephemeral telemetry listener.</li>
       <li><strong>Zero-Noise Forensic Telemetry:</strong> Because the token hostname is cryptographically unique to that individual file, the listener instantly logs the attacker's public egress IP address, internal DNS forwarder, User-Agent string, and timestamp of access without alerting the attacker that their reconnaissance has been detected.</li>
     </ul>
@@ -158,7 +158,7 @@ def build_advanced_decoy():
           <tr>
             <td style="padding: 12px; font-weight: 600;">Subscription &amp; Cost</td>
             <td style="padding: 12px; color: var(--success); font-weight: 600;">100% Free / Unlimited</td>
-            <td style="padding: 12px; color: var(--danger);">$500 – $2,500/month enterprise minimum</td>
+            <td style="padding: 12px; color: var(--danger);">$500 - $2,500/month enterprise minimum</td>
             <td style="padding: 12px;">Cloud hosting compute costs</td>
           </tr>
         </tbody>

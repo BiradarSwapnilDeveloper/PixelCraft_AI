@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -1138,7 +1138,7 @@
       In digital audio, analog sound waves are digitized through pulse-code modulation (PCM). Standard CD-quality audio samples the waveform 44,100 times per second (44.1 kHz) at a bit depth of 16 bits per sample per channel. Each 16-bit signed integer represents an instantaneous amplitude value ranging from -32,768 to +32,767.
     </p>
     <p>
-      The <strong>Least Significant Bit (LSB)</strong> algorithm works by isolating the 16th bit (the bit with the smallest numerical weight, representing a change of just 1 in 65,536). When you modify the LSB to match a bit of your encrypted payload, the amplitude shift is less than 0.0015% of full scale—far below the threshold of human hearing and typical microphone noise floors.
+      The <strong>Least Significant Bit (LSB)</strong> algorithm works by isolating the 16th bit (the bit with the smallest numerical weight, representing a change of just 1 in 65,536). When you modify the LSB to match a bit of your encrypted payload, the amplitude shift is less than 0.0015% of full scale-far below the threshold of human hearing and typical microphone noise floors.
     </p>
     <ul>
       <li><strong>Payload Serialization:</strong> The message is converted to UTF-8 bytes, encrypted with AES-256-GCM, prepended with a 32-bit length header, and serialized into a stream of binary bits (0s and 1s).</li>
@@ -1166,17 +1166,17 @@
       To understand how audio steganography operates without corrupting playback software, inspect the precise byte layout of a 44-byte canonical WAV header:
     </p>
     <ul>
-      <li><strong>Bytes 0–3 ('RIFF'):</strong> Resource Interchange File Format signature.</li>
-      <li><strong>Bytes 4–7:</strong> Total file size minus 8 bytes (32-bit unsigned little-endian).</li>
-      <li><strong>Bytes 8–11 ('WAVE'):</strong> Audio format descriptor string.</li>
-      <li><strong>Bytes 12–15 ('fmt '):</strong> Format subchunk marker.</li>
-      <li><strong>Bytes 16–19 (16):</strong> Length of the format chunk for uncompressed PCM.</li>
-      <li><strong>Bytes 20–21 (1):</strong> Audio format category (1 = Linear PCM; 3 = IEEE Float).</li>
-      <li><strong>Bytes 22–23 (2):</strong> Number of channels (1 = Mono; 2 = Stereo).</li>
-      <li><strong>Bytes 24–27 (44100):</strong> Sampling rate in Hertz.</li>
-      <li><strong>Bytes 28–31 (176400):</strong> Byte rate: <code>SampleRate * NumChannels * BitsPerSample / 8</code>.</li>
-      <li><strong>Bytes 34–35 (16):</strong> Bits per sample.</li>
-      <li><strong>Bytes 36–39 ('data'):</strong> Subchunk 2 identifier marking the beginning of raw PCM audio samples.</li>
+      <li><strong>Bytes 0-3 ('RIFF'):</strong> Resource Interchange File Format signature.</li>
+      <li><strong>Bytes 4-7:</strong> Total file size minus 8 bytes (32-bit unsigned little-endian).</li>
+      <li><strong>Bytes 8-11 ('WAVE'):</strong> Audio format descriptor string.</li>
+      <li><strong>Bytes 12-15 ('fmt '):</strong> Format subchunk marker.</li>
+      <li><strong>Bytes 16-19 (16):</strong> Length of the format chunk for uncompressed PCM.</li>
+      <li><strong>Bytes 20-21 (1):</strong> Audio format category (1 = Linear PCM; 3 = IEEE Float).</li>
+      <li><strong>Bytes 22-23 (2):</strong> Number of channels (1 = Mono; 2 = Stereo).</li>
+      <li><strong>Bytes 24-27 (44100):</strong> Sampling rate in Hertz.</li>
+      <li><strong>Bytes 28-31 (176400):</strong> Byte rate: <code>SampleRate * NumChannels * BitsPerSample / 8</code>.</li>
+      <li><strong>Bytes 34-35 (16):</strong> Bits per sample.</li>
+      <li><strong>Bytes 36-39 ('data'):</strong> Subchunk 2 identifier marking the beginning of raw PCM audio samples.</li>
     </ul>
 
     
@@ -1222,7 +1222,7 @@
       <div style="margin-top: 18px; padding: 18px; background: var(--surface-subtle); border-radius: 10px; border-left: 3px solid #ef4444;">
         <h4 style="color: var(--text-heading); font-size: 1.1rem; margin-bottom: 8px;">Chi-Square &amp; Sample Pair Analysis (SPA) Countermeasures</h4>
         <p style="margin-bottom: 10px; color: var(--text-body); font-size: 0.95rem;">
-          Adversarial surveillance appliances employ statistical steganalysis tests—notably the <strong>Chi-Square (&chi;&sup2;) test</strong> and <strong>Sample Pair Analysis (SPA)</strong>. Because natural audio exhibits asymmetric sample transitions between adjacent even and odd integer values ($2k \leftrightarrow 2k+1$), sequential LSB replacement artificially equalizes these transition pairs (Pairs of Values - PoVs).
+          Adversarial surveillance appliances employ statistical steganalysis tests-notably the <strong>Chi-Square (&chi;&sup2;) test</strong> and <strong>Sample Pair Analysis (SPA)</strong>. Because natural audio exhibits asymmetric sample transitions between adjacent even and odd integer values ($2k \leftrightarrow 2k+1$), sequential LSB replacement artificially equalizes these transition pairs (Pairs of Values - PoVs).
         </p>
         <p style="margin-bottom: 0; color: var(--text-muted); font-size: 0.88rem;">
           To defeat PoV equalization, PixelCraft AI utilizes <strong>LSB Matching (also known as &plusmn;1 embedding)</strong>. Instead of directly overwriting the least significant bit, the sample amplitude is randomly incremented or decremented by 1 whenever the target bit differs from the carrier bit. This preserves the natural macroscopic histogram distribution of the WAV carrier file.
@@ -1297,7 +1297,7 @@
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
         <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How much text can I hide inside a 3-minute song?</strong>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
-          In a 3-minute stereo WAV recording at 44.1kHz, there are approximately 15.8 million audio samples. Using 1 bit per sample, the carrier can store roughly 1.9 Megabytes of data—enough to embed hundreds of pages of confidential text, spreadsheets, or small encrypted archives.
+          In a 3-minute stereo WAV recording at 44.1kHz, there are approximately 15.8 million audio samples. Using 1 bit per sample, the carrier can store roughly 1.9 Megabytes of data-enough to embed hundreds of pages of confidential text, spreadsheets, or small encrypted archives.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">

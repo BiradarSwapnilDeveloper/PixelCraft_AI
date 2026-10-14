@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
 dns.setServers(['8.8.8.8', '8.8.4.4']); // Force Google DNS to bypass ISP block on SRV records
@@ -214,7 +214,7 @@ app.use(async (req, res, next) => {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Account Paused — PixelCraft AI</title>
+    <title>Account Paused - PixelCraft AI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1978,7 +1978,7 @@ app.post('/api/admin/ban', requireAdminSession, async (req, res) => {
                     <a href="https://pixelcraftaitools.com/privacy-policy.html" style="color: #ef4444; text-decoration: none;">Privacy Policy</a>
                 </p>
                 
-                <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #2a1111; padding-top: 15px; text-align: center;">PixelCraft AI Security — Ref: ${Date.now()}-${Math.floor(Math.random() * 1000)}</p>
+                <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #2a1111; padding-top: 15px; text-align: center;">PixelCraft AI Security - Ref: ${Date.now()}-${Math.floor(Math.random() * 1000)}</p>
             </div>
         </div>`;
 
@@ -2042,7 +2042,7 @@ app.post('/api/admin/ban', requireAdminSession, async (req, res) => {
                     </a>
                 </div>
                 
-                <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #1e3a2f; padding-top: 15px; text-align: center;">PixelCraft AI Security — Ref: ${Date.now()}-${Math.floor(Math.random() * 1000)}</p>
+                <p style="margin-top: 30px; font-size: 12px; color: #475569; border-top: 1px solid #1e3a2f; padding-top: 15px; text-align: center;">PixelCraft AI Security - Ref: ${Date.now()}-${Math.floor(Math.random() * 1000)}</p>
             </div>
         </div>`;
 

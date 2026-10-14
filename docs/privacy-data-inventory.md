@@ -1,4 +1,4 @@
-# PixelCraft AI — Privacy & Data Processing Inventory
+﻿# PixelCraft AI - Privacy & Data Processing Inventory
 **Document Version:** 1.0.0  
 **Effective Date:** October 11, 2026  
 **Classification:** Technical Source of Truth  
@@ -91,7 +91,7 @@ The following tools transmit data to the PixelCraft AI backend server or third-p
 * **Retention Mechanism:** Ephemeral; discarded upon response delivery. `[VERIFIED IN CODE]`
 * **Authentication Required:** No. `[VERIFIED IN CODE]`
 
-#### Tool: Advanced QR Generator — 3D AI Feature (`public/tools/qr-generator.html`)
+#### Tool: Advanced QR Generator - 3D AI Feature (`public/tools/qr-generator.html`)
 * **Standard QR Mode:** 100% Client-side browser execution via `qr-code-styling.js`. Zero network traffic. `[VERIFIED IN CODE]`
 * **3D AI Feature Mode:** When user clicks "Generate 3D AI Background", text prompt is posted to `POST /api/generate-image` (`server.js:L986-1021`). `[VERIFIED IN CODE]`
 * **Third-Party Recipients:** Prompt is transmitted to **Hugging Face Inference API** (`models/stabilityai/stable-diffusion-xl-base-1.0`). `[VERIFIED IN CODE]`
