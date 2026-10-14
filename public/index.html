@@ -196,6 +196,7 @@
     }
     /* Enterprise Hero Search Bar */
     .hero-search-wrapper {
+      position: relative;
       background: var(--surface-card);
       border: 1.5px solid var(--border-color);
       border-radius: var(--radius-md);
@@ -257,6 +258,375 @@
     .hero-search-clear:hover {
       color: var(--text-heading);
     }
+
+    /* ===== SMART SEARCH SUGGESTIONS DROPDOWN ===== */
+    .hero-search-suggestions {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: 0 18px 40px -4px rgba(15, 23, 42, 0.18), 0 8px 16px -2px rgba(15, 23, 42, 0.08);
+      max-height: min(390px, 62vh);
+      overflow-y: auto;
+      z-index: 1050;
+      display: none;
+      text-align: left;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .suggestions-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--surface-subtle);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .suggestions-hint {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    .suggestions-hint kbd {
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.65rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-heading);
+    }
+    .search-suggestions-list {
+      list-style: none;
+      margin: 0;
+      padding: 4px 0;
+    }
+    .suggestion-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      text-decoration: none;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.15s ease;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+    .suggestion-item:hover,
+    .suggestion-item.active {
+      background: var(--surface-hover);
+    }
+    .suggestion-item.active {
+      border-left: 3.5px solid var(--primary);
+      padding-left: 10.5px;
+    }
+    .suggestion-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .suggestion-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .suggestion-top-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+    .suggestion-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .suggestion-badge {
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .suggestion-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.35;
+    }
+    .suggestion-match-tag {
+      font-size: 0.7rem;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-top: 2px;
+      display: inline-block;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .suggestion-arrow {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      flex-shrink: 0;
+      transition: transform 0.15s, color 0.15s;
+    }
+    .suggestion-item:hover .suggestion-arrow,
+    .suggestion-item.active .suggestion-arrow {
+      color: var(--primary);
+      transform: translateX(3px);
+    }
+    .search-highlight {
+      background: rgba(37, 99, 235, 0.15);
+      color: var(--primary);
+      font-weight: 700;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    /* ===== NO RESULTS EXPERIENCE IN DROPDOWN ===== */
+    .search-no-results {
+      padding: 22px 16px;
+      text-align: center;
+    }
+    .no-results-icon {
+      color: var(--text-light);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: center;
+    }
+    .no-results-title {
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      margin-bottom: 4px;
+    }
+    .no-results-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      line-height: 1.45;
+    }
+    .no-results-alternatives {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+    .alternatives-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .alternatives-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .alt-chip {
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .alt-chip:hover {
+      background: var(--primary-light);
+      border-color: var(--primary-border);
+      transform: translateY(-1px);
+    }
+    .btn-suggest-tool {
+      background: var(--primary);
+      color: #ffffff !important;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .btn-suggest-tool:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* ===== SUGGEST TOOL MODAL ===== */
+    .tool-suggest-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.68);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .tool-suggest-modal-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.25);
+      overflow: hidden;
+      animation: modalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalScaleIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--surface-subtle);
+    }
+    .modal-head h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .modal-close-btn:hover {
+      color: var(--text-heading);
+      background: var(--border-color);
+    }
+    .modal-body {
+      padding: 20px;
+    }
+    .modal-form-group {
+      margin-bottom: 14px;
+    }
+    .modal-form-group label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      margin-bottom: 5px;
+    }
+    .modal-form-group label span.required {
+      color: var(--danger);
+    }
+    .modal-input,
+    .modal-textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--surface-card);
+      color: var(--text-heading);
+      font-family: inherit;
+      font-size: 0.88rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      box-sizing: border-box;
+    }
+    .modal-input:focus,
+    .modal-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    .modal-textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+    .modal-privacy-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+    .modal-foot {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border-color);
+      background: var(--surface-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .modal-feedback-alert {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .modal-feedback-alert.error {
+      background: var(--danger-light);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+    }
+    .modal-feedback-alert.success {
+      background: var(--success-light);
+      border: 1px solid var(--success-border);
+      color: var(--success);
+    }
+
     .hero-quick-tags {
       display: flex;
       align-items: center;
@@ -1551,6 +1921,36 @@
           <input type="text" id="hero-tool-search" class="hero-search-input" placeholder="Search 15+ AI tools (e.g. steganography, PDF, EXIF, compressor)..." autocomplete="off" />
           <button id="hero-search-clear" class="hero-search-clear" aria-label="Clear search">&times;</button>
           <div class="hero-search-shortcut">⌘K</div>
+
+          <!-- Smart Search Suggestions Dropdown -->
+          <div class="hero-search-suggestions" id="hero-search-suggestions" role="listbox" aria-label="Tool Suggestions" style="display: none;">
+            <div class="suggestions-header" id="suggestions-header">
+              <span id="suggestions-count-label">Matching Tools</span>
+              <span class="suggestions-hint"><kbd>↑</kbd><kbd>↓</kbd> navigate &nbsp;<kbd>↵</kbd> select &nbsp;<kbd>Esc</kbd> close</span>
+            </div>
+            <div class="search-suggestions-list" id="search-suggestions-list" role="list"></div>
+            <div class="search-no-results" id="search-no-results" style="display: none;">
+              <div class="no-results-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </div>
+              <div class="no-results-title">No exact match found for <span id="no-match-query" style="color:var(--primary);"></span></div>
+              <p class="no-results-desc" id="no-match-desc">We couldn't find an existing tool matching this exact query.</p>
+              <div class="no-results-alternatives" id="no-match-alternatives" style="display: none;">
+                <div class="alternatives-label">Suggested alternatives:</div>
+                <div class="alternatives-chips" id="no-match-chips"></div>
+              </div>
+              <div style="margin-top: 14px;">
+                <button type="button" class="btn-suggest-tool" id="btn-trigger-suggest-modal">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+                  Suggest This Tool
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Quick Filter Tags -->
@@ -1733,9 +2133,20 @@
 
     <!-- Empty State -->
     <div class="tools-empty-state" id="tools-empty-state" style="display: none;">
-      <h3>No tools found matching your search</h3>
-      <p>Try searching for "steganography", "PDF", "EXIF", "compressor", or "QR".</p>
-      <button class="btn btn-secondary" id="reset-empty-search-btn">Show All 15 Tools</button>
+      <div style="font-size: 2.2rem; margin-bottom: 8px;">🔍</div>
+      <h3 id="empty-state-title" style="font-size: 1.25rem; font-weight: 700; color: var(--text-heading); margin-bottom: 6px;">No tools found matching your search</h3>
+      <p id="empty-state-desc" style="color: var(--text-muted); font-size: 0.92rem; max-width: 520px; margin: 0 auto 14px; line-height: 1.5;">Try searching for "compressor", "PDF", "steganography", "EXIF", or "QR code".</p>
+      <div id="empty-state-alternatives" style="display: none; margin: 16px auto; max-width: 560px;">
+        <span style="font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 8px;">Related tools you might find helpful:</span>
+        <div id="empty-state-chips" style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;"></div>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px;">
+        <button class="btn btn-primary" id="empty-suggest-tool-btn" type="button" style="padding: 8px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+          Suggest This Tool
+        </button>
+        <button class="btn btn-secondary" id="reset-empty-search-btn" type="button" style="padding: 8px 18px; font-size: 0.88rem;">Show All Tools</button>
+      </div>
     </div>
 
     <!-- Tools Grid -->
@@ -2475,38 +2886,664 @@
     </div>
   </footer>
 
+  <!-- Suggest a Tool Modal (Zero UI disruption) -->
+  <div class="tool-suggest-modal-overlay" id="tool-suggest-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="suggest-modal-title">
+    <div class="tool-suggest-modal-card">
+      <div class="modal-head">
+        <h3 id="suggest-modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary);"><path d="M12 5v14M5 12h14"></path></svg>
+          Suggest a Tool
+        </h3>
+        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="tool-suggest-form" novalidate>
+        <div class="modal-body">
+          <div id="modal-alert" class="modal-feedback-alert"></div>
+
+          <div class="modal-form-group">
+            <label for="suggest-tool-name">Tool / Feature Name <span class="required">*</span></label>
+            <input type="text" id="suggest-tool-name" class="modal-input" placeholder="e.g. Video to GIF Converter, Audio Enhancer" maxlength="120" required autocomplete="off" />
+          </div>
+
+          <div class="modal-form-group">
+            <label for="suggest-tool-desc">What should this tool do? <span class="required">*</span></label>
+            <textarea id="suggest-tool-desc" class="modal-textarea" placeholder="Briefly describe what tasks this tool should solve, expected input files, or key features you need..." maxlength="1500" required></textarea>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="suggest-tool-email">Your Email <span style="font-weight: 400; color: var(--text-muted);">(Optional - if you'd like an alert when launched)</span></label>
+            <input type="email" id="suggest-tool-email" class="modal-input" placeholder="you@example.com" maxlength="120" autocomplete="email" />
+          </div>
+
+          <div class="modal-privacy-notice">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0; color:var(--success);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>PixelCraft Privacy: We never collect passwords, file contents, or sell email addresses.</span>
+          </div>
+        </div>
+
+        <div class="modal-foot">
+          <button type="button" class="btn btn-secondary" id="modal-cancel-btn" style="padding: 8px 16px; font-size: 0.88rem;">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="modal-submit-btn" style="padding: 8px 18px; font-size: 0.88rem;">
+            <span id="modal-submit-text">Submit Request</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Core Shared Utilities (Theme Switcher, Settings Drawer, PWA) -->
   <script src="js/utils.js"></script>
 
-  <!-- Interactive Homepage Logic -->
+  <!-- Interactive Homepage Logic (Enhanced Smart Search) -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Live Instant Tool Filtering (Search Bar + Category Pills)
+      // 1. Catalog of All PixelCraft Tools with Synonyms & Natural Language Keywords
+      const TOOLS_CATALOG = [
+        {
+          id: 'image-compressor',
+          name: 'Image Compressor',
+          href: 'tools/image-compressor.html',
+          category: 'convert edit',
+          categoryLabel: 'Web Optimization',
+          iconBoxClass: 'icon-box-indigo',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>',
+          description: 'Shrink image weights up to 80% without visible fidelity reduction. Live comparison slider.',
+          keywords: [
+            'make image smaller', 'compress photo', 'reduce mb size', 'reduce file size', 'shrink photo',
+            'compressor', 'reduce size in kb', 'optimize image', 'shrink jpg', 'shrink png', 'lossless',
+            'tinypng', 'image optimizer', 'compress picture', 'photo compressor', 'image compressor'
+          ]
+        },
+        {
+          id: 'images-to-pdf',
+          name: 'Images to PDF',
+          href: 'tools/images-to-pdf.html',
+          category: 'convert',
+          categoryLabel: 'Document Utility',
+          iconBoxClass: 'icon-box-indigo',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
+          description: 'Compile multiple image assets into a unified, encrypted PDF with drag-and-drop ordering.',
+          keywords: [
+            'convert pictures to pdf', 'photos to pdf', 'images to pdf', 'jpg to pdf', 'png to pdf',
+            'merge photos to pdf', 'combine images to pdf', 'image to pdf maker', 'create pdf from images',
+            'compile images', 'batch images to pdf', 'image to pdf'
+          ]
+        },
+        {
+          id: 'phishing-scanner',
+          name: 'Phishing & Malware Link Scanner',
+          href: 'tools/phishing-scanner.html',
+          category: 'security ai',
+          categoryLabel: 'AI Threat Intelligence',
+          iconBoxClass: 'icon-box-blue',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
+          description: 'Heuristic & neural link analysis detecting Cyrillic homograph attacks, scam domains, and redirects.',
+          keywords: [
+            'check suspicious link', 'scan url', 'phishing link check', 'malware scanner', 'is link safe',
+            'url checker', 'scam detector', 'fraud link', 'virus link', 'homograph attack', 'verify link',
+            'domain threat', 'malicious link test', 'phishing'
+          ]
+        },
+        {
+          id: 'exif-viewer',
+          name: 'EXIF Data Viewer',
+          href: 'tools/exif-viewer.html',
+          category: 'security edit',
+          categoryLabel: 'Metadata Forensics',
+          iconBoxClass: 'icon-box-emerald',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+          description: 'Inspect hidden metadata: camera model, aperture, shutter speed, timestamps, and GPS telemetry.',
+          keywords: [
+            'see image metadata', 'view exif', 'photo info', 'camera settings', 'gps coordinates in photo',
+            'photo details', 'inspect exif tags', 'location from photo', 'metadata viewer', 'exif data inspect',
+            'photo telemetry', 'exif viewer'
+          ]
+        },
+        {
+          id: 'watermark-adder',
+          name: 'Watermark Adder',
+          href: 'tools/watermark-adder.html',
+          category: 'edit',
+          categoryLabel: 'Brand Protection',
+          iconBoxClass: 'icon-box-blue',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>',
+          description: 'Superimpose custom copyright text, vector badges, or transparent logos with precise opacity control.',
+          keywords: [
+            'add logo on image', 'add watermark', 'put logo on photo', 'copyright protection', 'brand stamp',
+            'watermark maker', 'image watermark', 'stamp logo', 'overlay logo on photo', 'protect photo copyright',
+            'watermark adder'
+          ]
+        },
+        {
+          id: 'audio-steganography',
+          name: 'Audio & Video Steganography',
+          href: 'tools/audio-steganography.html',
+          category: 'security ai',
+          categoryLabel: 'Security & Cryptography',
+          iconBoxClass: 'icon-box-indigo',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>',
+          description: 'Conceal confidential ciphertext inside MP3, WAV, or MP4 files using AES-256 and LSB bit-scattering.',
+          keywords: [
+            'hide text in audio', 'audio steganography', 'hide message in sound', 'mp3 stego', 'video steganography',
+            'cipher text in music', 'secret message in wav', 'lsb encryption', 'secret audio payload', 'steganography'
+          ]
+        },
+        {
+          id: 'digital-fingerprint-wiper',
+          name: 'Digital Fingerprint Wiper',
+          href: 'tools/digital-fingerprint-wiper.html',
+          category: 'security edit',
+          categoryLabel: 'Privacy & Forensics',
+          iconBoxClass: 'icon-box-emerald',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>',
+          description: 'Scrub hidden metadata, EXIF tags, GPS coordinates, and camera sensor PRNU noise from photos.',
+          keywords: [
+            'remove gps from photo', 'wipe exif', 'scrub metadata', 'delete photo location', 'fingerprint wiper',
+            'prnu noise removal', 'anonymize photo', 'clean image data', 'strip gps tags', 'photo privacy'
+          ]
+        },
+        {
+          id: 'advanced-decoy',
+          name: 'Advanced Decoy Steganography',
+          href: 'tools/advanced-decoy.html',
+          category: 'security edit',
+          categoryLabel: 'Cryptographic Defense',
+          iconBoxClass: 'icon-box-lavender',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
+          description: 'Embed dual payloads for plausible deniability: provide harmless decoy under duress, true payload hidden with AES-256.',
+          keywords: [
+            'decoy steganography', 'plausible deniability', 'dual password', 'fake secret', 'duress password',
+            'hidden payload', 'double encryption', 'deniable cryptography'
+          ]
+        },
+        {
+          id: 'ai-dubbing',
+          name: 'AI Audio & Video Dubbing',
+          href: 'tools/ai-dubbing.html',
+          category: 'ai',
+          categoryLabel: 'AI Multimedia',
+          iconBoxClass: 'icon-box-lavender',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>',
+          description: 'Translate and clone voices across multiple languages with natural pitch-matching and speech synchronization.',
+          keywords: [
+            'voice clone', 'dub video', 'translate voice', 'ai dubbing', 'voiceover translator', 'change voice language',
+            'multilingual video', 'speech to speech', 'audio dub'
+          ]
+        },
+        {
+          id: 'pdf-to-link',
+          name: 'PDF to Link Converter',
+          href: 'tools/pdf-to-link.html',
+          category: 'convert',
+          categoryLabel: 'Document Distribution',
+          iconBoxClass: 'icon-box-blue',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
+          description: 'Generate a shareable, responsive link and instant QR code for any PDF document with 24-hr automatic purging.',
+          keywords: [
+            'share pdf as link', 'pdf to url', 'pdf link generator', 'upload pdf get link', 'shareable pdf link',
+            'pdf qr code', 'send pdf online', 'ephemeral pdf sharing'
+          ]
+        },
+        {
+          id: 'image-filters',
+          name: 'Filters & Effects',
+          href: 'tools/image-filters.html',
+          category: 'edit',
+          categoryLabel: 'Color & Creative',
+          iconBoxClass: 'icon-box-lavender',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>',
+          description: 'Fine-tune contrast, brightness, exposure, tint, and apply professional studio color presets on GPU/Canvas.',
+          keywords: [
+            'photo editor', 'image filters', 'photo effects', 'adjust brightness', 'increase contrast',
+            'vintage filter', 'photo presets', 'photo enhancer', 'edit photo'
+          ]
+        },
+        {
+          id: 'color-palette',
+          name: 'Color Palette Extractor',
+          href: 'tools/color-palette.html',
+          category: 'edit',
+          categoryLabel: 'Design Utility',
+          iconBoxClass: 'icon-box-lavender',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path></svg>',
+          description: 'Sample dominant tonal schemes and harmonized palettes from any photograph. Export HEX, RGB, and CSS.',
+          keywords: [
+            'color palette generator', 'extract colors from image', 'hex color picker', 'color codes',
+            'dominant colors', 'sample photo colors', 'palette extractor', 'rgb picker'
+          ]
+        },
+        {
+          id: 'qr-generator',
+          name: 'Custom QR Generator',
+          href: 'tools/qr-generator.html',
+          category: 'convert',
+          categoryLabel: 'Digital Codes',
+          iconBoxClass: 'icon-box-blue',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="5" height="5" x="3" y="3" rx="1"></rect><rect width="5" height="5" x="16" y="3" rx="1"></rect><rect width="5" height="5" x="3" y="16" rx="1"></rect><path d="M21 16h-3a2 2 0 0 0-2 2v3"></path><path d="M21 21v.01"></path></svg>',
+          description: 'Convert URLs, vCards, Wi-Fi credentials, or text into high-resolution scannable QR codes with custom logos.',
+          keywords: [
+            'qr code maker', 'make qr code', 'wifi qr generator', 'create qr code', 'custom qr code',
+            'qr code with logo', 'barcode generator', 'url to qr', 'qr generator'
+          ]
+        },
+        {
+          id: 'format-converter',
+          name: 'Format Converter',
+          href: 'tools/format-converter.html',
+          category: 'convert',
+          categoryLabel: 'Asset Conversion',
+          iconBoxClass: 'icon-box-blue',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>',
+          description: 'Convert files between PNG, JPG, WebP, AVIF, and SVG standards on the fly directly in your browser.',
+          keywords: [
+            'convert png to jpg', 'convert jpg to webp', 'change image format', 'webp to png', 'avif to jpg',
+            'image converter', 'photo format changer', 'format switch', 'format converter'
+          ]
+        },
+        {
+          id: 'smart-resize',
+          name: 'Smart Social Resize',
+          href: 'tools/smart-resize.html',
+          category: 'edit',
+          categoryLabel: 'Social Media Asset',
+          iconBoxClass: 'icon-box-lavender',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"></path><path d="M9 21H3v-6"></path><path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path></svg>',
+          description: 'Adapt photos for Instagram Stories, YouTube Banners, Twitter Posts, and LinkedIn headers without distortion.',
+          keywords: [
+            'resize for instagram', 'social media resizer', 'youtube banner size', 'instagram post dimensions',
+            'crop photo', 'aspect ratio resize', 'change resolution', 'photo resize', 'smart resize'
+          ]
+        },
+        {
+          id: 'forensic-sanitizer',
+          name: 'Forensic Sanitizer',
+          href: 'tools/forensic-sanitizer.html',
+          category: 'security edit',
+          categoryLabel: 'Forensic Defense',
+          iconBoxClass: 'icon-box-emerald',
+          iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+          description: 'Deep sanitize digital images by stripping hidden metadata, color profiles, and forensic tracking markers.',
+          keywords: [
+            'forensic sanitizer', 'sanitize image', 'strip forensic markers', 'wipe tracking data', 'photo sanitizer',
+            'deep clean image', 'remove hidden metadata', 'forensic cleaner'
+          ]
+        }
+      ];
+
+      // DOM Elements
       const searchInput = document.getElementById('hero-tool-search');
       const searchClearBtn = document.getElementById('hero-search-clear');
+      const searchWrapper = document.getElementById('hero-search-wrapper');
+      const suggestionsDropdown = document.getElementById('hero-search-suggestions');
+      const suggestionsList = document.getElementById('search-suggestions-list');
+      const suggestionsCountLabel = document.getElementById('suggestions-count-label');
+      const searchNoResults = document.getElementById('search-no-results');
+      const noMatchQuery = document.getElementById('no-match-query');
+      const noMatchDesc = document.getElementById('no-match-desc');
+      const noMatchAlternatives = document.getElementById('no-match-alternatives');
+      const noMatchChips = document.getElementById('no-match-chips');
+      const btnTriggerSuggest = document.getElementById('btn-trigger-suggest-modal');
+
       const filterPills = document.querySelectorAll('.filter-btn-pill');
       const toolCards = Array.from(document.querySelectorAll('.tool-card'));
       const emptyState = document.getElementById('tools-empty-state');
+      const emptyStateTitle = document.getElementById('empty-state-title');
+      const emptyStateDesc = document.getElementById('empty-state-desc');
+      const emptyStateAlternatives = document.getElementById('empty-state-alternatives');
+      const emptyStateChips = document.getElementById('empty-state-chips');
+      const emptySuggestToolBtn = document.getElementById('empty-suggest-tool-btn');
       const feedbackBar = document.getElementById('search-feedback-bar');
       const queryDisplay = document.getElementById('search-query-display');
       const clearFilterBtn = document.getElementById('clear-search-filter-btn');
       const resetEmptyBtn = document.getElementById('reset-empty-search-btn');
 
+      // Modal Elements
+      const suggestModalOverlay = document.getElementById('tool-suggest-modal-overlay');
+      const suggestModalForm = document.getElementById('tool-suggest-form');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+      const modalCancelBtn = document.getElementById('modal-cancel-btn');
+      const modalSubmitBtn = document.getElementById('modal-submit-btn');
+      const modalSubmitText = document.getElementById('modal-submit-text');
+      const modalAlert = document.getElementById('modal-alert');
+      const suggestToolName = document.getElementById('suggest-tool-name');
+      const suggestToolDesc = document.getElementById('suggest-tool-desc');
+      const suggestToolEmail = document.getElementById('suggest-tool-email');
+
       let currentCategory = 'all';
       let currentQuery = '';
+      let selectedSuggestionIndex = -1;
+      let currentSuggestions = [];
 
+      // Stop words for natural language extraction
+      const STOP_WORDS = new Set(['the', 'a', 'an', 'and', 'or', 'to', 'for', 'in', 'on', 'at', 'by', 'from', 'with', 'of', 'how', 'can', 'i', 'my', 'me', 'please', 'want', 'need', 'tools', 'tool', 'ai', 'is', 'it']);
+
+      // Fast Levenshtein distance for typo matching
+      function levenshtein(a, b) {
+        if (a.length === 0) return b.length;
+        if (b.length === 0) return a.length;
+        if (Math.abs(a.length - b.length) > 2) return 99;
+        const matrix = [];
+        for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+        for (let i = 1; i <= b.length; i++) {
+          for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+              matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+              matrix[i][j] = Math.min(
+                matrix[i - 1][j - 1] + 1,
+                matrix[i][j - 1] + 1,
+                matrix[i - 1][j] + 1
+              );
+            }
+          }
+        }
+        return matrix[b.length][a.length];
+      }
+
+      // Smart Tool Scoring Function
+      function scoreTool(tool, rawQuery) {
+        const q = rawQuery.trim().toLowerCase();
+        if (!q) return 1;
+
+        const nameLower = tool.name.toLowerCase();
+        const descLower = tool.description.toLowerCase();
+        const catLower = tool.category.toLowerCase();
+        let score = 0;
+        let matchReason = '';
+
+        // 1. Exact name match
+        if (nameLower === q) {
+          score += 150;
+          matchReason = 'Exact Name Match';
+        } else if (nameLower.startsWith(q)) {
+          score += 110;
+          matchReason = 'Name Match';
+        } else if (nameLower.includes(q)) {
+          score += 85;
+          matchReason = 'Name Match';
+        }
+
+        // 2. Keyword / Synonym phrase match
+        for (const kw of tool.keywords) {
+          const kwLower = kw.toLowerCase();
+          if (kwLower === q) {
+            score = Math.max(score, 140);
+            matchReason = `Match: "${kw}"`;
+            break;
+          } else if (kwLower.startsWith(q)) {
+            score = Math.max(score, 95);
+            if (!matchReason) matchReason = `Keyword: "${kw}"`;
+          } else if (q.includes(kwLower) || kwLower.includes(q)) {
+            score = Math.max(score, 80);
+            if (!matchReason) matchReason = `Synonym: "${kw}"`;
+          }
+        }
+
+        // 3. Token-based natural language analysis
+        const rawTokens = q.split(/[\s,._-]+/).filter(Boolean);
+        const significantTokens = rawTokens.filter(t => !STOP_WORDS.has(t));
+        const tokensToMatch = significantTokens.length > 0 ? significantTokens : rawTokens;
+
+        let tokensMatchedCount = 0;
+        tokensToMatch.forEach(tok => {
+          let tokenMatched = false;
+          // Check in name
+          if (nameLower.includes(tok)) {
+            score += 35;
+            tokenMatched = true;
+          }
+          // Check in keywords
+          for (const kw of tool.keywords) {
+            if (kw.toLowerCase().includes(tok)) {
+              score += 25;
+              tokenMatched = true;
+              break;
+            }
+          }
+          // Check in description
+          if (descLower.includes(tok)) {
+            score += 15;
+            tokenMatched = true;
+          }
+          // Check in category
+          if (catLower.includes(tok)) {
+            score += 15;
+            tokenMatched = true;
+          }
+
+          // Fuzzy match if token not yet matched and long enough (>= 4 chars)
+          if (!tokenMatched && tok.length >= 4) {
+            const nameWords = nameLower.split(/\s+/);
+            for (const nw of nameWords) {
+              if (nw.length >= 4 && levenshtein(tok, nw) <= (tok.length >= 6 ? 2 : 1)) {
+                score += 30;
+                tokenMatched = true;
+                if (!matchReason) matchReason = `Fuzzy Match: "${nw}"`;
+                break;
+              }
+            }
+          }
+
+          if (tokenMatched) tokensMatchedCount++;
+        });
+
+        // Boost if multiple tokens matched
+        if (tokensToMatch.length > 1 && tokensMatchedCount === tokensToMatch.length) {
+          score += 45;
+        }
+
+        return { score, matchReason: matchReason || 'Relevant Tool' };
+      }
+
+      // Find genuine related alternatives when direct search yields 0 matches
+      function findRelatedAlternatives(rawQuery) {
+        const q = rawQuery.trim().toLowerCase();
+        const alternatives = [];
+        const addedIds = new Set();
+
+        const addTool = (id) => {
+          if (!addedIds.has(id)) {
+            const found = TOOLS_CATALOG.find(t => t.id === id);
+            if (found) {
+              alternatives.push(found);
+              addedIds.add(id);
+            }
+          }
+        };
+
+        if (q.includes('video') || q.includes('movie') || q.includes('clip') || q.includes('media')) {
+          addTool('audio-steganography');
+          addTool('ai-dubbing');
+        }
+        if (q.includes('audio') || q.includes('sound') || q.includes('voice') || q.includes('music') || q.includes('mp3') || q.includes('speech')) {
+          addTool('ai-dubbing');
+          addTool('audio-steganography');
+        }
+        if (q.includes('compress') || q.includes('shrink') || q.includes('size') || q.includes('mb') || q.includes('kb')) {
+          addTool('image-compressor');
+        }
+        if (q.includes('pdf') || q.includes('document') || q.includes('doc')) {
+          addTool('images-to-pdf');
+          addTool('pdf-to-link');
+        }
+        if (q.includes('photo') || q.includes('image') || q.includes('picture') || q.includes('pic') || q.includes('jpg') || q.includes('png')) {
+          addTool('image-compressor');
+          addTool('images-to-pdf');
+          addTool('image-filters');
+          addTool('watermark-adder');
+        }
+        if (q.includes('security') || q.includes('privacy') || q.includes('link') || q.includes('url') || q.includes('safe') || q.includes('scam') || q.includes('malware')) {
+          addTool('phishing-scanner');
+          addTool('digital-fingerprint-wiper');
+          addTool('exif-viewer');
+        }
+        if (q.includes('qr') || q.includes('code') || q.includes('barcode')) {
+          addTool('qr-generator');
+        }
+        if (q.includes('resize') || q.includes('crop') || q.includes('instagram') || q.includes('banner')) {
+          addTool('smart-resize');
+        }
+        if (q.includes('convert') || q.includes('format')) {
+          addTool('format-converter');
+          addTool('images-to-pdf');
+        }
+
+        return alternatives.slice(0, 3);
+      }
+
+      // Highlight matched string in text safely
+      function highlightText(text, query) {
+        if (!query || !query.trim()) return text;
+        const cleanTokens = query.trim().split(/[\s,._-]+/).filter(t => t.length > 1 && !STOP_WORDS.has(t.toLowerCase()));
+        if (cleanTokens.length === 0) {
+          const single = query.trim();
+          if (single.length === 0) return text;
+          const escaped = single.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark class="search-highlight">$1</mark>');
+        }
+        const pattern = cleanTokens.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+        return text.replace(new RegExp(`(${pattern})`, 'gi'), '<mark class="search-highlight">$1</mark>');
+      }
+
+      // Render Dropdown Suggestions
+      function renderSuggestions(matches, query) {
+        suggestionsList.innerHTML = '';
+        currentSuggestions = matches;
+        selectedSuggestionIndex = -1;
+
+        if (matches.length > 0) {
+          suggestionsHeader.style.display = 'flex';
+          suggestionsList.style.display = 'block';
+          searchNoResults.style.display = 'none';
+          suggestionsCountLabel.textContent = `${matches.length} matching tool${matches.length > 1 ? 's' : ''}`;
+
+          matches.slice(0, 6).forEach((tool, index) => {
+            const item = document.createElement('a');
+            item.href = tool.href;
+            item.className = 'suggestion-item';
+            item.setAttribute('role', 'option');
+            item.setAttribute('id', `suggestion-${index}`);
+            item.setAttribute('tabindex', '-1');
+
+            const titleHighlighted = highlightText(tool.name, query);
+            const descHighlighted = highlightText(tool.description, query);
+
+            item.innerHTML = `
+              <div class="suggestion-icon ${tool.iconBoxClass}">
+                ${tool.iconSvg}
+              </div>
+              <div class="suggestion-content">
+                <div class="suggestion-top-row">
+                  <span class="suggestion-title">${titleHighlighted}</span>
+                  <span class="suggestion-badge">${tool.categoryLabel}</span>
+                </div>
+                <div class="suggestion-desc">${descHighlighted}</div>
+                ${tool.matchReason ? `<span class="suggestion-match-tag">${tool.matchReason}</span>` : ''}
+              </div>
+              <span class="suggestion-arrow">&rarr;</span>
+            `;
+
+            item.addEventListener('mouseenter', () => {
+              updateSelectedSuggestion(index);
+            });
+
+            suggestionsList.appendChild(item);
+          });
+
+          suggestionsDropdown.style.display = 'block';
+        } else {
+          // No direct matches
+          suggestionsHeader.style.display = 'none';
+          suggestionsList.style.display = 'none';
+          searchNoResults.style.display = 'block';
+          noMatchQuery.textContent = `"${query}"`;
+
+          const alternatives = findRelatedAlternatives(query);
+          if (alternatives.length > 0) {
+            noMatchDesc.textContent = "We don't have an exact match, but these related tools might help:";
+            noMatchAlternatives.style.display = 'block';
+            noMatchChips.innerHTML = '';
+            alternatives.forEach(alt => {
+              const chip = document.createElement('a');
+              chip.href = alt.href;
+              chip.className = 'alt-chip';
+              chip.innerHTML = `${alt.name} &rarr;`;
+              noMatchChips.appendChild(chip);
+            });
+          } else {
+            noMatchDesc.textContent = "The requested functionality is not currently available on PixelCraft AI. Suggest it below to let our team know!";
+            noMatchAlternatives.style.display = 'none';
+            noMatchChips.innerHTML = '';
+          }
+
+          suggestionsDropdown.style.display = 'block';
+        }
+      }
+
+      function updateSelectedSuggestion(index) {
+        selectedSuggestionIndex = index;
+        const items = suggestionsList.querySelectorAll('.suggestion-item');
+        items.forEach((el, idx) => {
+          if (idx === index) {
+            el.classList.add('active');
+            el.scrollIntoView({ block: 'nearest' });
+          } else {
+            el.classList.remove('active');
+          }
+        });
+      }
+
+      function hideSuggestions() {
+        suggestionsDropdown.style.display = 'none';
+        selectedSuggestionIndex = -1;
+      }
+
+      // 2. Filter Tools on Homepage Grid & Synchronize Smart Suggestions
       function filterTools() {
         let visibleCount = 0;
         const q = currentQuery.trim().toLowerCase();
 
+        // Calculate score for each catalog tool
+        const scoredCatalog = TOOLS_CATALOG.map(tool => {
+          const res = scoreTool(tool, q);
+          return { ...tool, score: res.score, matchReason: res.matchReason };
+        });
+
+        // Filter for category if applicable
+        const categoryMatches = scoredCatalog.filter(tool => {
+          if (currentCategory === 'all') return true;
+          return tool.category.split(/\s+/).includes(currentCategory);
+        });
+
+        // Qualified matches have score > 0
+        const queryMatches = q ? categoryMatches.filter(t => t.score > 0).sort((a, b) => b.score - a.score) : categoryMatches;
+
+        // Set of matched hrefs/ids for homepage card filtering
+        const matchedHrefSet = new Set(queryMatches.map(t => t.href));
+
+        // Filter homepage cards
         toolCards.forEach(card => {
+          const cardHref = card.getAttribute('href') || '';
           const cardCat = card.getAttribute('data-cat') || '';
           const cardCats = cardCat.split(/\s+/);
           const cardTags = (card.getAttribute('data-tags') || '').toLowerCase();
           const cardText = (card.innerText || '').toLowerCase();
 
           const matchesCategory = (currentCategory === 'all') || cardCats.includes(currentCategory);
-          const matchesQuery = !q || cardTags.includes(q) || cardText.includes(q);
+
+          let matchesQuery = false;
+          if (!q) {
+            matchesQuery = true;
+          } else {
+            // Check smart matched set first
+            if (matchedHrefSet.has(cardHref)) {
+              matchesQuery = true;
+            } else if (cardTags.includes(q) || cardText.includes(q)) {
+              // Fallback to legacy tag or text includes
+              matchesQuery = true;
+            }
+          }
 
           if (matchesCategory && matchesQuery) {
             card.style.display = 'flex';
@@ -2516,21 +3553,46 @@
           }
         });
 
-        // Toggle Empty State
+        // Update Homepage Empty State
         if (visibleCount === 0) {
           emptyState.style.display = 'block';
+          if (q) {
+            emptyStateTitle.textContent = `No tools found matching "${currentQuery}"`;
+            const alts = findRelatedAlternatives(q);
+            if (alts.length > 0) {
+              emptyStateDesc.textContent = "We couldn't find an exact match for this task. Check out these related tools:";
+              emptyStateAlternatives.style.display = 'block';
+              emptyStateChips.innerHTML = '';
+              alts.forEach(alt => {
+                const chip = document.createElement('a');
+                chip.href = alt.href;
+                chip.className = 'alt-chip';
+                chip.innerHTML = `${alt.name} &rarr;`;
+                emptyStateChips.appendChild(chip);
+              });
+            } else {
+              emptyStateDesc.textContent = "The requested tool is not yet on PixelCraft AI. Click 'Suggest This Tool' to request it!";
+              emptyStateAlternatives.style.display = 'none';
+            }
+          } else {
+            emptyStateTitle.textContent = "No tools found matching your filter";
+            emptyStateDesc.textContent = 'Try searching for "compressor", "PDF", "steganography", "EXIF", or "QR code".';
+            emptyStateAlternatives.style.display = 'none';
+          }
         } else {
           emptyState.style.display = 'none';
         }
 
-        // Toggle Feedback Bar
+        // Feedback Bar & Clear Button Toggle
         if (q) {
-          feedbackBar.style.display = 'flex';
-          queryDisplay.innerText = `"${currentQuery}"`;
-          searchClearBtn.style.display = 'block';
+          if (feedbackBar) feedbackBar.style.display = 'flex';
+          if (queryDisplay) queryDisplay.innerText = `"${currentQuery}"`;
+          if (searchClearBtn) searchClearBtn.style.display = 'block';
+          renderSuggestions(queryMatches, currentQuery);
         } else {
-          feedbackBar.style.display = 'none';
-          searchClearBtn.style.display = 'none';
+          if (feedbackBar) feedbackBar.style.display = 'none';
+          if (searchClearBtn) searchClearBtn.style.display = 'none';
+          hideSuggestions();
         }
       }
 
@@ -2541,7 +3603,45 @@
           filterTools();
         });
 
-        // Keyboard Shortcut: / or Cmd+K / Ctrl+K focus search
+        searchInput.addEventListener('focus', () => {
+          if (currentQuery.trim()) {
+            filterTools();
+          }
+        });
+
+        // Keyboard Navigation for Suggestions & Shortcuts
+        searchInput.addEventListener('keydown', (e) => {
+          if (suggestionsDropdown.style.display === 'block') {
+            const items = suggestionsList.querySelectorAll('.suggestion-item');
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              if (items.length > 0) {
+                const nextIndex = (selectedSuggestionIndex + 1) % items.length;
+                updateSelectedSuggestion(nextIndex);
+              }
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              if (items.length > 0) {
+                const prevIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
+                updateSelectedSuggestion(prevIndex);
+              }
+            } else if (e.key === 'Enter') {
+              e.preventDefault();
+              if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < items.length) {
+                items[selectedSuggestionIndex].click();
+              } else if (items.length > 0) {
+                items[0].click();
+              } else {
+                openSuggestModal(currentQuery);
+              }
+            } else if (e.key === 'Escape') {
+              e.preventDefault();
+              hideSuggestions();
+            }
+          }
+        });
+
+        // Global Shortcuts: / or Cmd+K / Ctrl+K
         document.addEventListener('keydown', (e) => {
           if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
             e.preventDefault();
@@ -2555,11 +3655,19 @@
         });
       }
 
+      // Close suggestions on outside click
+      document.addEventListener('click', (e) => {
+        if (searchWrapper && !searchWrapper.contains(e.target)) {
+          hideSuggestions();
+        }
+      });
+
       // Clear search
       function resetSearch() {
         if (searchInput) searchInput.value = '';
         currentQuery = '';
         filterTools();
+        hideSuggestions();
       }
 
       if (searchClearBtn) searchClearBtn.addEventListener('click', resetSearch);
@@ -2589,6 +3697,142 @@
           filterTools();
         });
       });
+
+      // 3. Tool Suggestion Modal Handling
+      function openSuggestModal(prefillQuery = '') {
+        hideSuggestions();
+        modalAlert.style.display = 'none';
+        modalAlert.className = 'modal-feedback-alert';
+        suggestModalForm.reset();
+        modalSubmitBtn.disabled = false;
+        modalSubmitText.textContent = 'Submit Request';
+
+        if (prefillQuery && prefillQuery.trim()) {
+          suggestToolName.value = prefillQuery.trim();
+        } else if (searchInput && searchInput.value.trim()) {
+          suggestToolName.value = searchInput.value.trim();
+        }
+
+        suggestModalOverlay.style.display = 'flex';
+        setTimeout(() => {
+          if (suggestToolName.value) {
+            suggestToolDesc.focus();
+          } else {
+            suggestToolName.focus();
+          }
+        }, 80);
+      }
+
+      function closeSuggestModal() {
+        suggestModalOverlay.style.display = 'none';
+      }
+
+      if (btnTriggerSuggest) btnTriggerSuggest.addEventListener('click', () => openSuggestModal(currentQuery));
+      if (emptySuggestToolBtn) emptySuggestToolBtn.addEventListener('click', () => openSuggestModal(currentQuery));
+      if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeSuggestModal);
+      if (modalCancelBtn) modalCancelBtn.addEventListener('click', closeSuggestModal);
+
+      // Close modal on Escape or overlay background click
+      suggestModalOverlay.addEventListener('click', (e) => {
+        if (e.target === suggestModalOverlay) closeSuggestModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && suggestModalOverlay.style.display === 'flex') {
+          closeSuggestModal();
+        }
+      });
+
+      // Handle Suggestion Form Submit
+      if (suggestModalForm) {
+        suggestModalForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = suggestToolName.value.trim();
+          const desc = suggestToolDesc.value.trim();
+          const email = suggestToolEmail.value.trim();
+
+          // Validation
+          if (!name || name.length < 2) {
+            modalAlert.className = 'modal-feedback-alert error';
+            modalAlert.textContent = 'Please enter a valid tool name (minimum 2 characters).';
+            modalAlert.style.display = 'block';
+            suggestToolName.focus();
+            return;
+          }
+          if (!desc || desc.length < 5) {
+            modalAlert.className = 'modal-feedback-alert error';
+            modalAlert.textContent = 'Please describe what this tool should do (minimum 5 characters).';
+            modalAlert.style.display = 'block';
+            suggestToolDesc.focus();
+            return;
+          }
+
+          // Duplicate prevention check via sessionStorage
+          const recentKey = `suggested_${name.toLowerCase()}`;
+          if (sessionStorage.getItem(recentKey)) {
+            modalAlert.className = 'modal-feedback-alert error';
+            modalAlert.textContent = 'You have already submitted this tool request. Thank you for your feedback!';
+            modalAlert.style.display = 'block';
+            return;
+          }
+
+          modalSubmitBtn.disabled = true;
+          modalSubmitText.textContent = 'Submitting...';
+          modalAlert.style.display = 'none';
+
+          try {
+            const res = await fetch('/api/suggest-tool', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                toolName: name,
+                description: desc,
+                email: email,
+                searchQuery: currentQuery
+              })
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+              sessionStorage.setItem(recentKey, 'true');
+              modalAlert.className = 'modal-feedback-alert success';
+              modalAlert.textContent = data.message || `Thank you! Your suggestion for "${name}" has been recorded.`;
+              modalAlert.style.display = 'block';
+              suggestModalForm.reset();
+
+              setTimeout(() => {
+                closeSuggestModal();
+              }, 2500);
+            } else {
+              modalAlert.className = 'modal-feedback-alert error';
+              modalAlert.textContent = data.error || 'Failed to submit suggestion. Please try again.';
+              modalAlert.style.display = 'block';
+              modalSubmitBtn.disabled = false;
+              modalSubmitText.textContent = 'Submit Request';
+            }
+          } catch (networkErr) {
+            // Local offline fallback
+            try {
+              const pending = JSON.parse(localStorage.getItem('pixelcraft_pending_tool_requests') || '[]');
+              pending.push({ toolName: name, description: desc, email, date: new Date() });
+              localStorage.setItem('pixelcraft_pending_tool_requests', JSON.stringify(pending));
+              sessionStorage.setItem(recentKey, 'true');
+
+              modalAlert.className = 'modal-feedback-alert success';
+              modalAlert.textContent = 'Your suggestion has been saved securely! Thank you for helping improve PixelCraft AI.';
+              modalAlert.style.display = 'block';
+              suggestModalForm.reset();
+              setTimeout(() => { closeSuggestModal(); }, 2500);
+            } catch (storageErr) {
+              modalAlert.className = 'modal-feedback-alert error';
+              modalAlert.textContent = 'Network error. Please check your connection and try again.';
+              modalAlert.style.display = 'block';
+              modalSubmitBtn.disabled = false;
+              modalSubmitText.textContent = 'Submit Request';
+            }
+          }
+        });
+      }
     });
 
     // Live Floating Hero Engine Simulation & 3D Tilt

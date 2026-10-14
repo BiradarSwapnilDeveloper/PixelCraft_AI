@@ -1402,6 +1402,108 @@ ${message}
   }
 });
 
+// ===== TOOL FEATURE SUGGESTIONS ENDPOINT =====
+const ToolSuggestion = require('./models/ToolSuggestion');
+const toolSuggestionLimiter = new Map();
+
+function checkToolSuggestionLimit(ip) {
+  const now = Date.now();
+  const windowMs = 15 * 60 * 1000; // 15 mins
+  const maxSubmissions = 5;
+  const record = toolSuggestionLimiter.get(ip) || { count: 0, resetTime: now + windowMs, lastHash: '' };
+
+  if (now > record.resetTime) {
+    record.count = 0;
+    record.resetTime = now + windowMs;
+  }
+
+  if (record.count >= maxSubmissions) {
+    return { allowed: false, retryAfter: Math.ceil((record.resetTime - now) / 1000) };
+  }
+
+  return { allowed: true, record };
+}
+
+app.post('/api/suggest-tool', async (req, res) => {
+  const clientIp = req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0].trim() : (req.socket.remoteAddress || req.ip || '127.0.0.1');
+  const rateCheck = checkToolSuggestionLimit(clientIp);
+  if (!rateCheck.allowed) {
+    return res.status(429).json({ error: "Too many suggestions submitted. Please wait before suggesting another tool.", retryAfter: rateCheck.retryAfter });
+  }
+
+  const { toolName, description, email, searchQuery } = req.body || {};
+
+  const cleanName = (typeof toolName === 'string' ? toolName.trim() : '').slice(0, 150);
+  const cleanDesc = (typeof description === 'string' ? description.trim() : '').slice(0, 2000);
+  const cleanEmail = (typeof email === 'string' ? email.trim() : '').slice(0, 150);
+  const cleanQuery = (typeof searchQuery === 'string' ? searchQuery.trim() : '').slice(0, 150);
+
+  if (!cleanName || cleanName.length < 2) {
+    return res.status(400).json({ error: "Please enter a valid tool name." });
+  }
+  if (!cleanDesc || cleanDesc.length < 5) {
+    return res.status(400).json({ error: "Please describe what this tool should do (minimum 5 characters)." });
+  }
+
+  // Duplicate prevention check (same submission content within 5 minutes)
+  const submissionHash = crypto.createHash('md5').update(`${cleanName.toLowerCase()}|${cleanDesc.toLowerCase()}`).digest('hex');
+  if (rateCheck.record.lastHash === submissionHash && (Date.now() - (rateCheck.record.lastTime || 0)) < 300000) {
+    return res.status(409).json({ error: "You have already submitted this tool request. Thank you for your feedback!" });
+  }
+
+  rateCheck.record.count++;
+  rateCheck.record.lastHash = submissionHash;
+  rateCheck.record.lastTime = Date.now();
+  toolSuggestionLimiter.set(clientIp, rateCheck.record);
+
+  const entry = {
+    toolName: cleanName,
+    description: cleanDesc,
+    email: cleanEmail,
+    searchQuery: cleanQuery,
+    clientIp,
+    userAgent: (req.headers['user-agent'] || 'unknown').slice(0, 250),
+    createdAt: new Date()
+  };
+
+  // 1. Try to save to MongoDB
+  try {
+    if (mongoose.connection.readyState === 1) {
+      await ToolSuggestion.create(entry);
+    }
+  } catch (dbErr) {
+    console.warn("ToolSuggestion DB save warning (fallback to file):", dbErr.message);
+  }
+
+  // 2. Persistent file log fallback (data/tool_requests.json)
+  try {
+    const dataDir = path.join(__dirname, 'data');
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+    const logPath = path.join(dataDir, 'tool_requests.json');
+    let existingLogs = [];
+    if (fs.existsSync(logPath)) {
+      try {
+        existingLogs = JSON.parse(fs.readFileSync(logPath, 'utf8'));
+        if (!Array.isArray(existingLogs)) existingLogs = [];
+      } catch (e) {
+        existingLogs = [];
+      }
+    }
+    existingLogs.push(entry);
+    if (existingLogs.length > 500) existingLogs = existingLogs.slice(-500);
+    fs.writeFileSync(logPath, JSON.stringify(existingLogs, null, 2), 'utf8');
+  } catch (fsErr) {
+    console.error("Failed to write to tool_requests.json:", fsErr.message);
+  }
+
+  return res.json({
+    success: true,
+    message: "Thank you! Your tool suggestion has been received successfully."
+  });
+});
+
 // ===== PHISHING SCANNER ENDPOINT =====
 app.post('/api/scan-link', async (req, res) => {
   const { url } = req.body;
