@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -328,7 +328,7 @@ window.resetTool = resetTool;
     </h2>
 
     <p style="font-size: 1.1rem; color: var(--text-body); margin-bottom: 24px; font-weight: 400;">
-      Whenever a shutter clicks on a modern DSLR, mirrorless camera, smartphone, or drone, the resulting digital file contains much more than raw visual pixel data. Encoded within the file headers is an exhaustive technical biography: the <strong>Exchangeable Image File Format (EXIF)</strong>. This embedded telemetry catalogs the camera manufacturer, lens model, exact optical exposure parameters, unique device serial numbers, software editing history, and—most critically—high-precision GPS satellite coordinates. PixelCraft AI's <strong>EXIF Metadata Viewer</strong> delivers instant, zero-upload forensic inspection, allowing OSINT investigators, photographers, and security auditors to parse hidden metadata entirely within the local browser sandbox.
+      Whenever a shutter clicks on a modern DSLR, mirrorless camera, smartphone, or drone, the resulting digital file contains much more than raw visual pixel data. Encoded within the file headers is an exhaustive technical biography: the <strong>Exchangeable Image File Format (EXIF)</strong>. This embedded telemetry catalogs the camera manufacturer, lens model, exact optical exposure parameters, unique device serial numbers, software editing history, and-most critically-high-precision GPS satellite coordinates. PixelCraft AI's <strong>EXIF Metadata Viewer</strong> delivers instant, zero-upload forensic inspection, allowing OSINT investigators, photographers, and security auditors to parse hidden metadata entirely within the local browser sandbox.
     </p>
 
     <div class="callout-box" style="margin: 28px 0;">
@@ -347,10 +347,10 @@ window.resetTool = resetTool;
       In standard JPEG file structures, metadata is organized into discrete application markers following the Start of Image (SOI) marker (<code>0xFFD8</code>):
     </p>
     <ul>
-      <li><strong>APP1 (0xFFE1) – EXIF Standard:</strong> Contains TIFF header structures with Tagged Image File directories (IFD0, IFD1, ExifIFD, GPSInfo). Each entry defines a 2-byte tag identifier, data format type (ASCII, BYTE, SHORT, LONG, RATIONAL), component count, and byte offset.</li>
+      <li><strong>APP1 (0xFFE1) - EXIF Standard:</strong> Contains TIFF header structures with Tagged Image File directories (IFD0, IFD1, ExifIFD, GPSInfo). Each entry defines a 2-byte tag identifier, data format type (ASCII, BYTE, SHORT, LONG, RATIONAL), component count, and byte offset.</li>
       <li><strong>GPSInfo IFD:</strong> Specifically houses GPSLatitudeRef ('N' or 'S'), GPSLatitude (degrees, minutes, seconds as rational fractions), GPSLongitudeRef ('E' or 'W'), GPSLongitude, and GPSAltitude.</li>
       <li><strong>MakerNote Tag:</strong> A proprietary binary block written by camera manufacturers (Canon, Nikon, Sony, Apple, Samsung). MakerNotes often encode unencrypted internal serial numbers, sensor temperature, autofocus sensor calibration points, and facial recognition coordinates.</li>
-      <li><strong>APP1 (0xFFE1) – Adobe XMP:</strong> An XML-based metadata standard developed by Adobe that embeds copyright assertions, author names, rating stars, and complete Photoshop step-by-step editing histories.</li>
+      <li><strong>APP1 (0xFFE1) - Adobe XMP:</strong> An XML-based metadata standard developed by Adobe that embeds copyright assertions, author names, rating stars, and complete Photoshop step-by-step editing histories.</li>
     </ul>
 
     

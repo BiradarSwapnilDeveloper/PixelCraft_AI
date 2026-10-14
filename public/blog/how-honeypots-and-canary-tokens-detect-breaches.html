@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -150,7 +150,7 @@
         <strong>Editorial Disclosure:</strong> Researched and authored by the PixelCraft AI SecOps Defense Team. Fact-checked and technical review supervised by Swapnil Biradar (Lead Security Architect). Aligned with MITRE ATT&CK Deception Matrix and CERT-In Direction 2(iv) compliance guidelines. Feedback or corrections: <em>support.pixelcraft205@gmail.com</em>.
       </div>
 
-      <p>The average dwell time for cyber adversaries—the window between initial network penetration and detection—often stretches across weeks or even months. Traditional perimeter firewalls and endpoint detection solutions (EDR) frequently suffer from alerting fatigue, drowning security teams in thousands of false positives. <strong>Deception technology</strong> completely flips the asymmetry of modern warfare by deploying <strong>Honeytokens</strong>.</p>
+      <p>The average dwell time for cyber adversaries-the window between initial network penetration and detection-often stretches across weeks or even months. Traditional perimeter firewalls and endpoint detection solutions (EDR) frequently suffer from alerting fatigue, drowning security teams in thousands of false positives. <strong>Deception technology</strong> completely flips the asymmetry of modern warfare by deploying <strong>Honeytokens</strong>.</p>
 
       <div class="callout-box">
         <strong>The Zero False Positive Principle:</strong> Unlike legitimate database records or user credentials, a honeytoken serves absolutely no valid business purpose. Therefore, any interaction with a honeytoken is, with near 100% certainty, malicious activity in progress.
@@ -247,14 +247,14 @@ aws s3 ls --profile decoy
       <p>If an attacker opens a canary document in an air-gapped environment without external network connectivity, the HTTP or DNS callback cannot reach the alerting server immediately. However, if the document or extracted text is subsequently opened on an internet-connected workstation, the callback will fire immediately.</p>
 
       <h3>How does PixelCraft AI protect its own infrastructure using traps?</h3>
-      <p>PixelCraft AI employs an automated <code>HoneytokenTrap</code> middleware across its API gateways. Any attempt to interact with simulated administrative endpoints or falsified canary keys triggers immediate rate limiting, IP logging, and real-time security alerting—ensuring our public utilities remain resilient against automated exploitation.</p>
+      <p>PixelCraft AI employs an automated <code>HoneytokenTrap</code> middleware across its API gateways. Any attempt to interact with simulated administrative endpoints or falsified canary keys triggers immediate rate limiting, IP logging, and real-time security alerting-ensuring our public utilities remain resilient against automated exploitation.</p>
 
       <div class="related-tools">
         <h3>Fortify Your Digital Infrastructure</h3>
         <p>Explore tools designed to audit attack surfaces and secure critical data:</p>
         <p>
-          👉 <a href="../tools/advanced-decoy.html" style="color: #d8b4fe; font-weight: 600;">Advanced Decoy Generator</a> — Craft deceptive honeypot files to detect file system breaches.<br>
-          👉 <a href="../tools/phishing-scanner.html" style="color: #d8b4fe; font-weight: 600;">Phishing Threat Scanner</a> — Detect deceptive links before they fool your workforce.
+          👉 <a href="../tools/advanced-decoy.html" style="color: #d8b4fe; font-weight: 600;">Advanced Decoy Generator</a> - Craft deceptive honeypot files to detect file system breaches.<br>
+          👉 <a href="../tools/phishing-scanner.html" style="color: #d8b4fe; font-weight: 600;">Phishing Threat Scanner</a> - Detect deceptive links before they fool your workforce.
         </p>
       </div>
 

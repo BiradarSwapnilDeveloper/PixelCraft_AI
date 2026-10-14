@@ -1,4 +1,4 @@
-import os, re
+﻿import os, re
 import tool_content_batch1
 
 # Let's define the expansions for color-palette.html, audio-steganography.html, and ai-dubbing.html
@@ -194,7 +194,7 @@ def expand_audio_steganography():
       <div style="margin-top: 18px; padding: 18px; background: var(--surface-subtle); border-radius: 10px; border-left: 3px solid #ef4444;">
         <h4 style="color: var(--text-heading); font-size: 1.1rem; margin-bottom: 8px;">Chi-Square &amp; Sample Pair Analysis (SPA) Countermeasures</h4>
         <p style="margin-bottom: 10px; color: var(--text-body); font-size: 0.95rem;">
-          Adversarial surveillance appliances employ statistical steganalysis tests—notably the <strong>Chi-Square (&chi;&sup2;) test</strong> and <strong>Sample Pair Analysis (SPA)</strong>. Because natural audio exhibits asymmetric sample transitions between adjacent even and odd integer values ($2k \leftrightarrow 2k+1$), sequential LSB replacement artificially equalizes these transition pairs (Pairs of Values - PoVs).
+          Adversarial surveillance appliances employ statistical steganalysis tests-notably the <strong>Chi-Square (&chi;&sup2;) test</strong> and <strong>Sample Pair Analysis (SPA)</strong>. Because natural audio exhibits asymmetric sample transitions between adjacent even and odd integer values ($2k \leftrightarrow 2k+1$), sequential LSB replacement artificially equalizes these transition pairs (Pairs of Values - PoVs).
         </p>
         <p style="margin-bottom: 0; color: var(--text-muted); font-size: 0.88rem;">
           To defeat PoV equalization, PixelCraft AI utilizes <strong>LSB Matching (also known as &plusmn;1 embedding)</strong>. Instead of directly overwriting the least significant bit, the sample amplitude is randomly incremented or decremented by 1 whenever the target bit differs from the carrier bit. This preserves the natural macroscopic histogram distribution of the WAV carrier file.
