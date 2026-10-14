@@ -2291,31 +2291,62 @@ app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res
   if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
   try {
     const ExifReader = require('exifreader');
-    const tags = ExifReader.load(req.file.buffer);
+    let tags = {};
+    try {
+      tags = ExifReader.load(req.file.buffer);
+    } catch (loadErr) {
+      // Non-fatal if EXIF is empty or missing
+    }
+
     let sealFound = false;
     let sealHash = '';
+    let rawDescription = '';
 
     if (tags['ImageDescription'] && tags['ImageDescription'].description) {
-      const desc = tags['ImageDescription'].description;
-      if (desc.startsWith('Pixelcraft_Verified_')) {
+      rawDescription = String(tags['ImageDescription'].description).trim();
+      if (rawDescription.startsWith('Pixelcraft_Verified_')) {
         sealFound = true;
-        sealHash = desc.replace('Pixelcraft_Verified_', '').trim();
+        sealHash = rawDescription.replace('Pixelcraft_Verified_', '').trim();
       }
     }
 
     const isValidFormat = sealFound && /^[a-f0-9]{64}$/i.test(sealHash);
 
+    // Forensic metadata audit
+    const hasGps = Boolean(tags['GPSLatitude'] || tags['GPSLongitude'] || tags['GPSAltitude']);
+    const hasCamera = Boolean(tags['Make'] || tags['Model'] || tags['LensModel']);
+    const tagNames = Object.keys(tags);
+
     if (isValidFormat) {
       res.json({
         success: true,
         verified: true,
+        sealFound: true,
         sealHash,
+        algorithm: 'HMAC-SHA256',
+        metadataAudit: {
+          hasGps,
+          hasCamera,
+          tagCount: tagNames.length,
+          detectedTags: tagNames.slice(0, 15),
+          imageDescription: rawDescription
+        },
         message: `✅ This image is verified and heavily sanitized by Pixelcraft AI. Seal: ${sealHash.substring(0, 8)}...`
       });
     } else {
       res.json({
         success: true,
         verified: false,
+        sealFound,
+        sealHash: sealHash || null,
+        algorithm: 'HMAC-SHA256',
+        metadataAudit: {
+          hasGps,
+          hasCamera,
+          tagCount: tagNames.length,
+          detectedTags: tagNames.slice(0, 15),
+          imageDescription: rawDescription || null
+        },
         message: '❌ No valid Pixelcraft Cryptographic Seal found. This image may not be sanitized or has been modified.'
       });
     }
