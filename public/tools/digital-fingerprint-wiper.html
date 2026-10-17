@@ -20,8 +20,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
-  <title>Digital Fingerprint Wiper - Scrub PRNU & Sensor Noise Free | PixelCraft AI</title>
-  <meta name="description" content="Scrub device sensor noise, PRNU camera fingerprints, and forensic tracking artifacts from photos. Ensure complete digital anonymity before uploading media." />
+  <title>Digital Fingerprint Wiper - Scrub PRNU Camera Noise | PixelCraft AI</title>
+  <meta name="description" content="Scrub device sensor noise, PRNU camera fingerprints, and forensic tracking artifacts from photos. Ensure complete digital anonymity before uploading media."/>
   <meta name="keywords" content="digital fingerprint wiper, remove camera sensor noise, scrub prnu fingerprint, forensic photo cleaner, sanitize image metadata, photo privacy tool free, opsec media cleaner, pixelcraft ai" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -64,30 +64,117 @@
 
   <!-- Schema.org SoftwareApplication JSON-LD -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html#webpage",
-        "url": "https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html",
-        "name": "Digital Fingerprint Wiper - Scrub PRNU & Sensor Noise Free | PixelCraft AI",
-        "description": "Scrub device sensor noise, PRNU camera fingerprints, and forensic tracking artifacts from photos. Ensure complete digital anonymity before uploading media."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html#webpage",
+      "url": "https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html",
+      "name": "Digital Fingerprint Wiper - Scrub PRNU & Sensor Noise Free | PixelCraft AI",
+      "description": "Scrub device sensor noise, PRNU camera fingerprints, and forensic tracking artifacts from photos. Ensure complete digital anonymity before uploading media."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Digital Fingerprint Wiper",
+      "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
+      "applicationCategory": "SecurityApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "INR"
       },
-      {
-        "@type": "SoftwareApplication",
-        "name": "Digital Fingerprint Wiper",
-        "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
-        "applicationCategory": "SecurityApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "INR"
+      "featureList": [
+        "100% Free & No Signup Required",
+        "PRNU Camera Sensor Noise Scrubbing",
+        "EXIF & Geolocation Metadata Removal",
+        "100% Client-Side Processing",
+        "Zero Data Transmission"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html#faq",
+      "isPartOf": {
+        "@id": "https://pixelcraftaitools.com/tools/digital-fingerprint-wiper.html#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does re-saving an image in Photoshop remove the PRNU camera fingerprint?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Standard photo editors like Photoshop or GIMP preserve high-frequency pixel data by design to maintain image sharpness. Unless you apply specialized spatial noise perturbation algorithms, the sensor's physical noise matrix remains fully intact and forensically identifiable."
+          }
         },
-        "featureList": ["100% Free", "Privacy First", "Client-Side Processing", "No Signup Required"]
-      }
-    ]
-  }
+        {
+          "@type": "Question",
+          "name": "Will scrubbing the digital fingerprint alter the visible colors or details in my photo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. PixelCraft's perturbation operates at the sub-perceptual micro-dithering level (typically +/- 1-2 bits in the 8-bit color space). To the human eye, the sanitized image looks completely identical to the original high-resolution master file."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does taking a screenshot of a photo remove the PRNU fingerprint?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Taking a screenshot re-samples the image to your current screen resolution, but if the image is displayed at 100% scale, substantial high-frequency sensor noise survives. More importantly, taking a screenshot embeds your computer or phone's display color profile and screen dimensions, introducing a new device fingerprint!"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the tool wipe MakerNote serial numbers and lens profiles?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! By decoding only raw pixel color buffers into Canvas and discarding the entire file container, all proprietary MakerNote tags (which record camera body serials, lens IDs, and owner names) are completely discarded."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I verify the wipe using ExifTool?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. After downloading your sanitized file, runexiftool filename.jpgin your terminal. You will observe that all GPS coordinates, camera models, software tags, and timestamps have been completely eliminated."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can camera fingerprinting still work if an image is cropped or rotated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, under traditional conditions. Forensic PRNU algorithms test multiple spatial offsets and rotation angles using Circular Cross-Correlation via Fast Fourier Transforms (FFT). While cropping reduces the effective sensor area and lowers the Peak-to-Correlation Energy (PCE), a cropped area as small as 512x512 pixels can still yield statistically significant matches if the noise pattern is untouched. PixelCraft AI alters the noise matrix itself, rendering FFT correlation searches completely ineffective regardless of orientation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do multi-camera smartphones affect sensor fingerprinting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Modern smartphones possess 3 to 4 distinct physical camera sensors (wide, ultra-wide, telephoto, front selfie). Each physical sensor has its own distinct silicon wafer PRNU fingerprint. However, computational photography features (like Apple Deep Fusion, Smart HDR, and night mode) blend exposures from multiple physical cameras simultaneously, creating complex hybrid noise signatures that forensic software can track across multiple image collections. Our wiping engine sanitizes the composite raster buffer, dismantling multi-sensor hybrid artifacts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does fingerprint wiping modify or corrupt the visual quality of the photo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The modifications are executed strictly within the imperceptible high-frequency stochastic noise band (amplitudes +/- 1 to +/- 2 out of 255 discrete luminance steps). The Structural Similarity Index Measure (SSIM) between original and wiped images exceeds 0.994, meaning the visual contrast, color reproduction, edge sharpness, and human perception are mathematically indistinguishable from the pristine capture."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does PixelCraft AI verify the eradication of sensor fingerprints before export?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Before generating the final sanitized download blob, PixelCraft AI runs an internal statistical verification pass. The engine calculates the variance of high-frequency noise residuals across randomly sampled 64x64 pixel patches. If residual periodicity or non-uniform bias exceeds baseline thermal Gaussian noise limits, secondary spatial dithering is automatically applied to guarantee complete forensic neutralization."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -297,6 +384,21 @@
   <div style="padding-top: 90px;"></div>
   <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
     <a href="../index.html#tools" class="back-link">← Back to All Tools</a>
+
+    <div id="quick-start-guide" class="quick-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px auto 8px auto; max-width: 900px; text-align: left;">
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 1 • Upload Photo</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Select your JPG, PNG, or WebP image containing potential hardware sensor noise.</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 2 • Scrub Sensor Noise</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Apply localized high-frequency PRNU filtering and randomized dithering in-browser.</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 3 • Download Anonymized Media</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Save pristine, fingerprint-scrubbed media ready for anonymous sharing.</div>
+      </div>
+    </div>
   </div>
 
   <div class="container">
@@ -321,10 +423,10 @@
     <!-- RIGHT PANEL: Controls -->
     <div class="panel-right">
       <div class="control-box">
-        <h2 class="tool-header">
+        <h1 class="tool-header">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          Digital Privacy & Metadata Wiper
-        </h2>
+          Digital Fingerprint Wiper
+        </h1>
         <p class="tool-desc">
           Securely remove sensitive metadata (EXIF) and anonymize your images. This tool adds an invisible protective layer to help prevent unauthorized tracking while keeping your photos looking exactly the same.
         </p>
@@ -921,73 +1023,67 @@
       </table>
     </div>
 
-    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+        <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
       6. Frequently Asked Questions (FAQ)
     </h3>
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Does re-saving an image in Photoshop remove the PRNU camera fingerprint?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+    <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Does re-saving an image in Photoshop remove the PRNU camera fingerprint?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           No. Standard photo editors like Photoshop or GIMP preserve high-frequency pixel data by design to maintain image sharpness. Unless you apply specialized spatial noise perturbation algorithms, the sensor's physical noise matrix remains fully intact and forensically identifiable.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Will scrubbing the digital fingerprint alter the visible colors or details in my photo?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Will scrubbing the digital fingerprint alter the visible colors or details in my photo?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           No. PixelCraft's perturbation operates at the sub-perceptual micro-dithering level (typically +/- 1-2 bits in the 8-bit color space). To the human eye, the sanitized image looks completely identical to the original high-resolution master file.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Does taking a screenshot of a photo remove the PRNU fingerprint?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: Does taking a screenshot of a photo remove the PRNU fingerprint?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Taking a screenshot re-samples the image to your current screen resolution, but if the image is displayed at 100% scale, substantial high-frequency sensor noise survives. More importantly, taking a screenshot embeds your computer or phone's display color profile and screen dimensions, introducing a new device fingerprint!
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Does the tool wipe MakerNote serial numbers and lens profiles?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Does the tool wipe MakerNote serial numbers and lens profiles?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Yes! By decoding only raw pixel color buffers into Canvas and discarding the entire file container, all proprietary MakerNote tags (which record camera body serials, lens IDs, and owner names) are completely discarded.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can I verify the wipe using ExifTool?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
-          Absolutely. After downloading your sanitized file, run <code>exiftool filename.jpg</code> in your terminal. You will observe that all GPS coordinates, camera models, software tags, and timestamps have been completely eliminated.
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: Can I verify the wipe using ExifTool?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Absolutely. After downloading your sanitized file, runexiftool filename.jpgin your terminal. You will observe that all GPS coordinates, camera models, software tags, and timestamps have been completely eliminated.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: Can camera fingerprinting still work if an image is cropped or rotated?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Yes, under traditional conditions. Forensic PRNU algorithms test multiple spatial offsets and rotation angles using Circular Cross-Correlation via Fast Fourier Transforms (FFT). While cropping reduces the effective sensor area and lowers the Peak-to-Correlation Energy (PCE), a cropped area as small as 512x512 pixels can still yield statistically significant matches if the noise pattern is untouched. PixelCraft AI alters the noise matrix itself, rendering FFT correlation searches completely ineffective regardless of orientation.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: How do multi-camera smartphones affect sensor fingerprinting?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Modern smartphones possess 3 to 4 distinct physical camera sensors (wide, ultra-wide, telephoto, front selfie). Each physical sensor has its own distinct silicon wafer PRNU fingerprint. However, computational photography features (like Apple Deep Fusion, Smart HDR, and night mode) blend exposures from multiple physical cameras simultaneously, creating complex hybrid noise signatures that forensic software can track across multiple image collections. Our wiping engine sanitizes the composite raster buffer, dismantling multi-sensor hybrid artifacts.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q8: Does fingerprint wiping modify or corrupt the visual quality of the photo?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          No. The modifications are executed strictly within the imperceptible high-frequency stochastic noise band (amplitudes +/- 1 to +/- 2 out of 255 discrete luminance steps). The Structural Similarity Index Measure (SSIM) between original and wiped images exceeds 0.994, meaning the visual contrast, color reproduction, edge sharpness, and human perception are mathematically indistinguishable from the pristine capture.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q9: How does PixelCraft AI verify the eradication of sensor fingerprints before export?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Before generating the final sanitized download blob, PixelCraft AI runs an internal statistical verification pass. The engine calculates the variance of high-frequency noise residuals across randomly sampled 64x64 pixel patches. If residual periodicity or non-uniform bias exceeds baseline thermal Gaussian noise limits, secondary spatial dithering is automatically applied to guarantee complete forensic neutralization.
         </p>
       </div>
     </div>
 
-    
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q5: Can camera fingerprinting still work if an image is cropped or rotated?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Yes, under traditional conditions. Forensic PRNU algorithms test multiple spatial offsets and rotation angles using Circular Cross-Correlation via Fast Fourier Transforms (FFT). While cropping reduces the effective sensor area and lowers the Peak-to-Correlation Energy (PCE), a cropped area as small as 512x512 pixels can still yield statistically significant matches if the noise pattern is untouched. PixelCraft AI alters the noise matrix itself, rendering FFT correlation searches completely ineffective regardless of orientation.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q6: How do multi-camera smartphones affect sensor fingerprinting?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Modern smartphones possess 3 to 4 distinct physical camera sensors (wide, ultra-wide, telephoto, front selfie). Each physical sensor has its own distinct silicon wafer PRNU fingerprint. However, computational photography features (like Apple Deep Fusion, Smart HDR, and night mode) blend exposures from multiple physical cameras simultaneously, creating complex hybrid noise signatures that forensic software can track across multiple image collections. Our wiping engine sanitizes the composite raster buffer, dismantling multi-sensor hybrid artifacts.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q7: Does fingerprint wiping modify or corrupt the visual quality of the photo?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            No. The modifications are executed strictly within the imperceptible high-frequency stochastic noise band (amplitudes +/- 1 to +/- 2 out of 255 discrete luminance steps). The Structural Similarity Index Measure (SSIM) between original and wiped images exceeds 0.994, meaning the visual contrast, color reproduction, edge sharpness, and human perception are mathematically indistinguishable from the pristine capture.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q8: How does PixelCraft AI verify the eradication of sensor fingerprints before export?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Before generating the final sanitized download blob, PixelCraft AI runs an internal statistical verification pass. The engine calculates the variance of high-frequency noise residuals across randomly sampled 64x64 pixel patches. If residual periodicity or non-uniform bias exceeds baseline thermal Gaussian noise limits, secondary spatial dithering is automatically applied to guarantee complete forensic neutralization.
-          </p>
-        </div>
-
-
-<h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
       7. Operational Verification Checklist for Anonymous Publishing
     </h3>
     <ul style="padding-left: 20px; color: var(--text-body); margin-bottom: 28px;">

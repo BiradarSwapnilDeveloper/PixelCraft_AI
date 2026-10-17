@@ -20,8 +20,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
-  <title>Forensic Sanitizer - Sanitize Images & Wipe Forensic Traces | PixelCraft AI</title>
-  <meta name="description" content="Deep sanitize digital images by stripping hidden metadata, color profile tracking, and forensic markers. Maximize media OPSEC and confidentiality." />
+  <title>Forensic Sanitizer - Sanitize Images & Wipe Traces | PixelCraft AI</title>
+  <meta name="description" content="Deep sanitize digital images by stripping hidden metadata, color profile tracking, and forensic markers. Maximize media OPSEC and confidentiality."/>
   <meta name="keywords" content="forensic sanitizer online, photo forensic cleaner, wipe image tracking markers, metadata stripper online, digital security privacy tools, sanitize photos free, pixelcraft ai" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -64,30 +64,100 @@
 
   <!-- Schema.org SoftwareApplication JSON-LD -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://pixelcraftaitools.com/tools/forensic-sanitizer.html#webpage",
-        "url": "https://pixelcraftaitools.com/tools/forensic-sanitizer.html",
-        "name": "Forensic Sanitizer - Sanitize Images & Wipe Forensic Traces | PixelCraft AI",
-        "description": "Deep sanitize digital images by stripping hidden metadata, color profile tracking, and forensic markers. Maximize media OPSEC and confidentiality."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://pixelcraftaitools.com/tools/forensic-sanitizer.html#webpage",
+      "url": "https://pixelcraftaitools.com/tools/forensic-sanitizer.html",
+      "name": "Forensic Sanitizer - Sanitize Images & Wipe Forensic Traces | PixelCraft AI",
+      "description": "Deep sanitize digital images by stripping hidden metadata, color profile tracking, and forensic markers. Maximize media OPSEC and confidentiality."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Forensic Sanitizer",
+      "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
+      "applicationCategory": "SecurityApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "INR"
       },
-      {
-        "@type": "SoftwareApplication",
-        "name": "Forensic Sanitizer",
-        "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
-        "applicationCategory": "SecurityApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "INR"
+      "featureList": [
+        "100% Free",
+        "Privacy First",
+        "Client-Side Processing",
+        "No Signup Required"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://pixelcraftaitools.com/tools/forensic-sanitizer.html#faq",
+      "isPartOf": {
+        "@id": "https://pixelcraftaitools.com/tools/forensic-sanitizer.html#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a polyglot file and why is it dangerous?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A polyglot file is a valid binary in two or more completely distinct file formats simultaneously. For example, a file can be simultaneously a valid JPEG image and a valid ZIP file. If uploaded to an image hosting site, the site treats it as harmless, but an attacker with an LFI (Local File Inclusion) exploit can invoke it as an executable script. PixelCraft destroys polyglot structures by forcing strict rasterization."
+          }
         },
-        "featureList": ["100% Free", "Privacy First", "Client-Side Processing", "No Signup Required"]
-      }
-    ]
-  }
+        {
+          "@type": "Question",
+          "name": "Does forensic sanitization degrade visual image resolution?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The pixel dimensions, color fidelity, and visual composition remain pristine. Only non-image binary bloat, corrupted header chunks, and invisible steganographic noise layers are purged."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does PixelCraft handle malicious SVG files containing cross-site scripting (XSS)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SVG files are XML text documents that can contain malicioustags oronloadattributes. PixelCraft parses the XML DOM tree, strips all script tags and event handlers, or renders the vector directly to a flat PNG canvas, neutralizing script execution completely."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is forensic sanitization compliant with NIST SP 800-88 guidelines?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Under NIST Special Publication 800-88 Revision 1 (Guidelines for Media Sanitization), logical sanitization of digital documents requires destroying all residual data and unallocated file space before public release. PixelCraft's complete container reconstruction fully aligns with this standard."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does PixelCraft AI's server-assisted in-memory sanitization protect confidentiality?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PixelCraft AI sanitizes target files via a secure, zero-persistence in-memory server engine utilizing Sharp and ExifReader. Files are processed exclusively in volatile RAM without disk writes or session logging, and are cryptographically verified with an HMAC integrity seal before immediate memory release."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does forensic sanitization remove ICC color profiles?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Embedded ICC (International Color Consortium) color management profiles can harbor malicious exploit payloads (such as buffer overflows in color management engines like LittleCMS) and can also leak the specific operating system and calibration software used by the photographer. PixelCraft AI transforms image pixels into the standard sRGB color space and strips custom ICC profiles, ensuring secure rendering across all consumer displays."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens to embedded thumbnail images during sanitization?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Embedded thumbnails represent a severe forensic privacy loophole. When a user crops or redacts an image in basic photo editors, the editor frequently updates the main image display but forgets to re-render the embedded 160x120 EXIF thumbnail preview. Anyone downloading the cropped image can extract the thumbnail to see the full, uncropped original! PixelCraft AI completely purges all embedded thumbnail streams during re-rasterization."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <link rel="stylesheet" href="../css/style.css"/>
@@ -322,6 +392,20 @@
       </div>
       <h1>Forensic Image Sanitizer</h1>
       <p>Analyze structural hex payloads, scrub EXIF/IPTC/XMP tracking coordinates, and embed a verifiable cryptographic seal.</p>
+    <div id="quick-start-guide" class="quick-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px auto 8px auto; max-width: 900px; text-align: left;">
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 1 • Upload Target Image</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Select suspect or high-risk media files (JPEG, PNG, WebP, TIFF).</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 2 • In-Memory Sanitization</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Server engine neutralizes polyglot payloads, wipes metadata, and generates an HMAC seal.</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 3 • Download Verified Media</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Receive sterilized image and cryptographic provenance verification certificate.</div>
+      </div>
+    </div>
     </div>
 
     <div class="sanitizer-container">
@@ -810,32 +894,50 @@
       </table>
     </div>
 
-    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+        <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
       5. Frequently Asked Questions (FAQ)
     </h3>
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">What is a polyglot file and why is it dangerous?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+    <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: What is a polyglot file and why is it dangerous?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           A polyglot file is a valid binary in two or more completely distinct file formats simultaneously. For example, a file can be simultaneously a valid JPEG image and a valid ZIP file. If uploaded to an image hosting site, the site treats it as harmless, but an attacker with an LFI (Local File Inclusion) exploit can invoke it as an executable script. PixelCraft destroys polyglot structures by forcing strict rasterization.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Does forensic sanitization degrade visual image resolution?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Does forensic sanitization degrade visual image resolution?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           No. The pixel dimensions, color fidelity, and visual composition remain pristine. Only non-image binary bloat, corrupted header chunks, and invisible steganographic noise layers are purged.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How does PixelCraft handle malicious SVG files containing cross-site scripting (XSS)?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
-          SVG files are XML text documents that can contain malicious <code>&lt;script&gt;</code> tags or <code>onload</code> attributes. PixelCraft parses the XML DOM tree, strips all script tags and event handlers, or renders the vector directly to a flat PNG canvas, neutralizing script execution completely.
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: How does PixelCraft handle malicious SVG files containing cross-site scripting (XSS)?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          SVG files are XML text documents that can contain malicioustags oronloadattributes. PixelCraft parses the XML DOM tree, strips all script tags and event handlers, or renders the vector directly to a flat PNG canvas, neutralizing script execution completely.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Is forensic sanitization compliant with NIST SP 800-88 guidelines?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Is forensic sanitization compliant with NIST SP 800-88 guidelines?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Yes. Under NIST Special Publication 800-88 Revision 1 (Guidelines for Media Sanitization), logical sanitization of digital documents requires destroying all residual data and unallocated file space before public release. PixelCraft's complete container reconstruction fully aligns with this standard.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: How does PixelCraft AI's server-assisted in-memory sanitization protect confidentiality?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          PixelCraft AI sanitizes target files via a secure, zero-persistence in-memory server engine utilizing Sharp and ExifReader. Files are processed exclusively in volatile RAM without disk writes or session logging, and are cryptographically verified with an HMAC integrity seal before immediate memory release.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: Does forensic sanitization remove ICC color profiles?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Yes. Embedded ICC (International Color Consortium) color management profiles can harbor malicious exploit payloads (such as buffer overflows in color management engines like LittleCMS) and can also leak the specific operating system and calibration software used by the photographer. PixelCraft AI transforms image pixels into the standard sRGB color space and strips custom ICC profiles, ensuring secure rendering across all consumer displays.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: What happens to embedded thumbnail images during sanitization?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Embedded thumbnails represent a severe forensic privacy loophole. When a user crops or redacts an image in basic photo editors, the editor frequently updates the main image display but forgets to re-render the embedded 160x120 EXIF thumbnail preview. Anyone downloading the cropped image can extract the thumbnail to see the full, uncropped original! PixelCraft AI completely purges all embedded thumbnail streams during re-rasterization.
         </p>
       </div>
     </div>
@@ -845,30 +947,7 @@
       <span style="font-size: 0.85rem; color: var(--text-light);">PixelCraft Enterprise Defense • 2026 Edition</span>
     </div>
 
-  
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q5: Why is client-side in-browser sanitization superior to server-side APIs?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            When using server-side sanitization APIs, confidential or legally privileged image files must travel across the public Internet to a third-party vendor's cloud server. If that vendor suffers a data breach, retains temporary upload logs, or caches files on unencrypted EBS volumes, your organization faces immediate liability. PixelCraft AI runs 100% locally in your web browser via WebAssembly and HTML5 Canvas: files never leave your device, eliminating third-party attack surfaces.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q6: Does forensic sanitization remove ICC color profiles?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Yes. Embedded ICC (International Color Consortium) color management profiles can harbor malicious exploit payloads (such as buffer overflows in color management engines like LittleCMS) and can also leak the specific operating system and calibration software used by the photographer. PixelCraft AI transforms image pixels into the standard sRGB color space and strips custom ICC profiles, ensuring secure rendering across all consumer displays.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q7: What happens to embedded thumbnail images during sanitization?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Embedded thumbnails represent a severe forensic privacy loophole. When a user crops or redacts an image in basic photo editors, the editor frequently updates the main image display but forgets to re-render the embedded 160x120 EXIF thumbnail preview. Anyone downloading the cropped image can extract the thumbnail to see the full, uncropped original! PixelCraft AI completely purges all embedded thumbnail streams during re-rasterization.
-          </p>
-        </div>
-
-
-</article>
+  </article>
 </section>
 <!-- ========================================================
      END AUTHORITATIVE TECHNICAL GUIDE
