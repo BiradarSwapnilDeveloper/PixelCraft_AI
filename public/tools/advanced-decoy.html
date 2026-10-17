@@ -20,8 +20,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
-  <title>Advanced Decoy Steganography - Dual-Password Image Encryption | PixelCraft AI</title>
-  <meta name="description" content="Hide confidential secrets and innocent decoy messages inside images with dual-password plausible deniability. 100% private client-side AES-256 encryption." />
+  <title>Advanced Decoy Steganography - Dual Encryption | PixelCraft AI</title>
+  <meta name="description" content="Hide confidential secrets and innocent decoy messages inside images with dual-password encryption and honeypot canary tokens. 100% private in-browser tool."/>
   <meta name="keywords" content="decoy steganography, plausible deniability encryption, hide secret in image, dual password steganography, aes-256 image stego, pixelcraft ai" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -64,30 +64,93 @@
 
   <!-- Schema.org SoftwareApplication JSON-LD -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://pixelcraftaitools.com/tools/advanced-decoy.html#webpage",
-        "url": "https://pixelcraftaitools.com/tools/advanced-decoy.html",
-        "name": "Advanced Decoy Steganography - Dual-Password Image Encryption | PixelCraft AI",
-        "description": "Hide confidential secrets and innocent decoy messages inside images with dual-password plausible deniability. 100% private client-side AES-256 encryption."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://pixelcraftaitools.com/tools/advanced-decoy.html#webpage",
+      "url": "https://pixelcraftaitools.com/tools/advanced-decoy.html",
+      "name": "Advanced Decoy Steganography - Dual-Password Image Encryption | PixelCraft AI",
+      "description": "Hide confidential secrets and innocent decoy messages inside images with dual-password plausible deniability. 100% private client-side AES-256 encryption."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Advanced Decoy Steganography",
+      "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
+      "applicationCategory": "SecurityApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "INR"
       },
-      {
-        "@type": "SoftwareApplication",
-        "name": "Advanced Decoy Steganography",
-        "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
-        "applicationCategory": "SecurityApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "INR"
+      "featureList": [
+        "100% Free & No Signup Required",
+        "Dual-Password Image Encryption",
+        "Plausible Deniability Decoy Injection",
+        "Client-Side AES-256-GCM Cryptography",
+        "Zero Server Uploads"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://pixelcraftaitools.com/tools/advanced-decoy.html#faq",
+      "isPartOf": {
+        "@id": "https://pixelcraftaitools.com/tools/advanced-decoy.html#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can an antivirus or EDR solution trigger a false alarm on my canary file?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. PixelCraft decoys do not contain shellcode, exploit payloads, or malicious macros. They are strictly valid, passive file structures that leverage standard operating system network routines (such as resolving an external stylesheet or font URL). Consequently, standard endpoint protection systems recognize them as clean data files and will not generate false quarantine alerts."
+          }
         },
-        "featureList": ["100% Free", "Privacy First", "Client-Side Processing", "No Signup Required"]
-      }
-    ]
-  }
+        {
+          "@type": "Question",
+          "name": "What happens if a backup daemon or search indexer opens the canary?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Passive file backups (such as rsync, Veeam, or tar) read binary disk blocks without parsing the document layout or launching an application runtime, so they will not trigger the embedded network beacon. However, aggressive full-text indexing daemons (such as enterprise search crawlers) may open the document. To prevent false positives, we recommend excluding your decoy drop directories from internal indexing or whitelisting your internal crawler's IP address."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long do the generated canary tokens remain active?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because you provide your own webhook URL or internal alerting endpoint during generation, the token lifetime is entirely within your control. There is no vendor expiration date, license timeout, or artificial throttling imposed by PixelCraft AI."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can an attacker discover the webhook destination and flood it with fake alarms?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If an attacker manually deconstructs the XML payload using an offline hex editor, they can view the trigger URL. To prevent denial-of-service or alert flooding, your receiving webhook should implement token authentication, rate limiting, and HMAC signature verification on all incoming notifications."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between high-interaction and low-interaction decoys?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "High-interaction honeypots run full, active operating systems or containerized database daemons that let attackers interact deeply, but carry substantial risk of becoming pivoting bases. PixelCraft's tokens are low-interaction: passive, lightweight document and token triggers that alert immediately upon access with zero risk of attacker hijacking."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How should our security team test decoys without triggering alerts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When preparing decoys for production seeding, always test them in an isolated test environment with a dedicated staging webhook. Document the token ID in your incident response database before placing it in production directories so your SOC team can instantly identify the decoy location when an alert triggers."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <link rel="stylesheet" href="../css/style.css"/>
@@ -281,6 +344,20 @@
       </div>
       <h1>Advanced Decoy Steganography</h1>
       <p>Plausible deniability encryption with dual-channel payload injection using Quantization Index Modulation.</p>
+    <div id="quick-start-guide" class="quick-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px auto 8px auto; max-width: 900px; text-align: left;">
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 1 • Select Carrier</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Choose a carrier JPEG/PNG or document to embed the decoy payload.</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 2 • Set Dual Credentials</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Enter your primary password for genuine secret and decoy password for plausible deniability.</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 3 • Deploy & Monitor</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Download the steganographic file and configure optional canary token webhooks.</div>
+      </div>
+    </div>
     </div>
 
     <div class="decoy-card">
@@ -846,43 +923,43 @@
       </table>
     </div>
 
-    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+            <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
       7. Frequently Asked Questions (FAQ) &amp; Technical Troubleshooting
     </h3>
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can an antivirus or EDR solution trigger a false alarm on my canary file?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+    <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Can an antivirus or EDR solution trigger a false alarm on my canary file?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           No. PixelCraft decoys do not contain shellcode, exploit payloads, or malicious macros. They are strictly valid, passive file structures that leverage standard operating system network routines (such as resolving an external stylesheet or font URL). Consequently, standard endpoint protection systems recognize them as clean data files and will not generate false quarantine alerts.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">What happens if a backup daemon or search indexer opens the canary?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: What happens if a backup daemon or search indexer opens the canary?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Passive file backups (such as rsync, Veeam, or tar) read binary disk blocks without parsing the document layout or launching an application runtime, so they will not trigger the embedded network beacon. However, aggressive full-text indexing daemons (such as enterprise search crawlers) may open the document. To prevent false positives, we recommend excluding your decoy drop directories from internal indexing or whitelisting your internal crawler's IP address.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How long do the generated canary tokens remain active?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: How long do the generated canary tokens remain active?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Because you provide your own webhook URL or internal alerting endpoint during generation, the token lifetime is entirely within your control. There is no vendor expiration date, license timeout, or artificial throttling imposed by PixelCraft AI.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can an attacker discover the webhook destination and flood it with fake alarms?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Can an attacker discover the webhook destination and flood it with fake alarms?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           If an attacker manually deconstructs the XML payload using an offline hex editor, they can view the trigger URL. To prevent denial-of-service or alert flooding, your receiving webhook should implement token authentication, rate limiting, and HMAC signature verification on all incoming notifications.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">What is the difference between high-interaction and low-interaction decoys?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: What is the difference between high-interaction and low-interaction decoys?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           High-interaction honeypots run full, active operating systems or containerized database daemons that let attackers interact deeply, but carry substantial risk of becoming pivoting bases. PixelCraft's tokens are low-interaction: passive, lightweight document and token triggers that alert immediately upon access with zero risk of attacker hijacking.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How should our security team test decoys without triggering alerts?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: How should our security team test decoys without triggering alerts?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           When preparing decoys for production seeding, always test them in an isolated test environment with a dedicated staging webhook. Document the token ID in your incident response database before placing it in production directories so your SOC team can instantly identify the decoy location when an alert triggers.
         </p>
       </div>

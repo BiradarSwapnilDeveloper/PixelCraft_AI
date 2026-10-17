@@ -20,8 +20,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
-  <title>Phishing Link & URL Scanner - Check Malicious Links Free | PixelCraft AI</title>
-  <meta name="description" content="Scan suspicious URLs, detect homograph attacks, typosquatting domains, and phishing scams instantly using AI heuristic threat analysis." />
+  <title>Phishing Link & URL Scanner - Check Malicious Links | PixelCraft AI</title>
+  <meta name="description" content="Scan suspicious URLs, detect homograph attacks, typosquatting domains, and phishing scams instantly using heuristic threat intelligence analysis."/>
   <meta name="keywords" content="phishing link scanner online, check suspicious url free, malicious link checker, is this link safe to click, detect phishing scam website, url threat scanner, cyber security link checker, pixelcraft ai" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -64,30 +64,101 @@
 
   <!-- Schema.org SoftwareApplication JSON-LD -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://pixelcraftaitools.com/tools/phishing-scanner.html#webpage",
-        "url": "https://pixelcraftaitools.com/tools/phishing-scanner.html",
-        "name": "Phishing Link & URL Scanner - Check Malicious Links Free | PixelCraft AI",
-        "description": "Scan suspicious URLs, detect homograph attacks, typosquatting domains, and phishing scams instantly using AI heuristic threat analysis."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://pixelcraftaitools.com/tools/phishing-scanner.html#webpage",
+      "url": "https://pixelcraftaitools.com/tools/phishing-scanner.html",
+      "name": "Phishing Link & URL Scanner - Check Malicious Links Free | PixelCraft AI",
+      "description": "Scan suspicious URLs, detect homograph attacks, typosquatting domains, and phishing scams instantly using AI heuristic threat analysis."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Phishing Link & URL Scanner",
+      "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
+      "applicationCategory": "SecurityApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "INR"
       },
-      {
-        "@type": "SoftwareApplication",
-        "name": "Phishing Link & URL Scanner",
-        "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
-        "applicationCategory": "SecurityApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "INR"
+      "featureList": [
+        "100% Free & No Signup Required",
+        "Server-Side Heuristic Threat Inspection",
+        "IDN Homograph & Punycode Deobfuscation",
+        "Typosquatting & Threat Entropy Analysis",
+        "Zero-Log Ephemeral Threat Scanning"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://pixelcraftaitools.com/tools/phishing-scanner.html#faq",
+      "isPartOf": {
+        "@id": "https://pixelcraftaitools.com/tools/phishing-scanner.html#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the URL Phishing Scanner detect threats?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The scanner parses the URL string through multi-stage heuristics: calculating Shannon entropy for randomized strings, decomposing Punycode to reveal Cyrillic/Greek homograph characters, evaluating Levenshtein edit distances against Fortune 500 domains, and following HTTP redirect chains via server memory without executing malicious JavaScript."
+          }
         },
-        "featureList": ["100% Free", "Privacy First", "Client-Side Processing", "No Signup Required"]
-      }
-    ]
-  }
+        {
+          "@type": "Question",
+          "name": "Does scanning a link visit the malicious website on my machine?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. PixelCraft does not render or execute HTML, JavaScript, or external web elements from the suspect URL on your client browser. The tool performs purely structural, cryptographic, lexical, and Punycode parsing on the URL string itself. There is zero risk of drive-by malware execution."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does an HTTPS padlock icon not guarantee a website is safe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The browser padlock icon only signifies that the connection between your device and the remote web server is encrypted (SSL/TLS). It says nothing about the criminal intent of the domain owner. Today, over 80% of phishing landing pages utilize free Let's Encrypt SSL certificates to display a deceptive padlock."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the scanner identify embedded credential diversion attacks?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Under the RFC 1738 URL specification, a web address can include authentication credentials before an@symbol (e.g.,https://legitimate-bank.com@evil-site.com). In this structure, the browser ignoreslegitimate-bank.comas a username and navigates strictly toevil-site.com. Phishers use this to fool casual human inspection. PixelCraft AI isolates the authority component of the URI and explicitly warns users whenever the@delimiter is present."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is client-side URL parsing safer than visiting suspect links directly?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Navigating directly to a suspect website executes untrusted remote JavaScript, loads malicious web font files, exposes your public IP address and browser fingerprint to attackers, and can trigger drive-by browser zero-day exploit chains. PixelCraft AI parses the link strictly as an inert string inside a sandboxed client parser: zero HTTP connections to the destination server are made, completely insulating your device from attack."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are Top-Level Domain (TLD) risk coefficients?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Certain generic TLDs (such as.top,.xyz,.click,.country, and.stream) offer low-cost, bulk domain registrations without strict identity verification. Global threat intelligence telemetry reveals that over 75% of newly registered domains in these namespaces are associated with malicious spam, malware, or phishing campaigns. PixelCraft AI evaluates TLD reputation weights when calculating composite risk scores."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the tool calculate Levenshtein distance for typosquatting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Levenshtein distance measures the minimum number of single-character edits (insertions, deletions, or substitutions) required to transform one string into another. If a domain (such asg00gle.comorpaypai.com) has a Levenshtein edit distance of 1 or 2 from a major financial or tech brand, PixelCraft AI triggers an immediate \"High Typo-Squatting Probability\" warning."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <!-- Advanced JSON-LD Structured Data for High Ranking -->
@@ -277,6 +348,20 @@
     <div style="font-size:2.5rem;margin-bottom:12px;">🛡️</div>
     <h1>Deep Phishing & Malware Scanner</h1>
     <p>Advanced AI heuristic engine to detect homograph attacks, typosquatting, unmasked shorteners, and malicious domains. Scans are processed in isolated server memory and discarded immediately without logging browsing history.</p>
+    <div id="quick-start-guide" class="quick-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px auto 8px auto; max-width: 900px; text-align: left;">
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 1 • Paste Suspect URL</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Enter any suspicious link, shortened URL, or received web address.</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 2 • Heuristic Deep Scan</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">The engine evaluates Shannon entropy, Punycode homoglyphs, and TLD threat vectors.</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 3 • Review Threat Score</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Inspect risk score, domain age heuristics, and actionable security recommendations.</div>
+      </div>
+    </div>
   </div>
 
   <div class="threat-card">
@@ -771,7 +856,7 @@
           </tr>
           <tr>
             <td style="padding: 12px; font-weight: 600;">Privacy &amp; Query Confidentiality</td>
-            <td style="padding: 12px; color: var(--success);">100% In-Browser; No public threat logs</td>
+            <td style="padding: 12px; color: var(--success);">Server In-Memory Heuristics; No public threat logs</td>
             <td style="padding: 12px; color: var(--danger);">Public database logs query for all users</td>
             <td style="padding: 12px;">Telemetry transmitted to browser vendor</td>
           </tr>
@@ -779,63 +864,56 @@
       </table>
     </div>
 
-    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+        <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
       5. Frequently Asked Questions (FAQ)
     </h3>
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Does scanning a link visit the malicious website on my machine?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
-          No. PixelCraft does not render or execute HTML, JavaScript, or external web elements from the suspect URL. The tool performs purely structural, cryptographic, lexical, and Punycode parsing on the URL string itself. There is zero risk of drive-by malware execution.
+    <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: How does the URL Phishing Scanner detect threats?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          The scanner parses the URL string through multi-stage heuristics: calculating Shannon entropy for randomized strings, decomposing Punycode to reveal Cyrillic/Greek homograph characters, evaluating Levenshtein edit distances against Fortune 500 domains, and following HTTP redirect chains via server memory without executing malicious JavaScript.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Why does an HTTPS padlock icon not guarantee a website is safe?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Does scanning a link visit the malicious website on my machine?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          No. PixelCraft does not render or execute HTML, JavaScript, or external web elements from the suspect URL on your client browser. The tool performs purely structural, cryptographic, lexical, and Punycode parsing on the URL string itself. There is zero risk of drive-by malware execution.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: Why does an HTTPS padlock icon not guarantee a website is safe?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           The browser padlock icon only signifies that the connection between your device and the remote web server is encrypted (SSL/TLS). It says nothing about the criminal intent of the domain owner. Today, over 80% of phishing landing pages utilize free Let's Encrypt SSL certificates to display a deceptive padlock.
         </p>
       </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: How does the scanner identify embedded credential diversion attacks?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Under the RFC 1738 URL specification, a web address can include authentication credentials before an@symbol (e.g.,https://legitimate-bank.com@evil-site.com). In this structure, the browser ignoreslegitimate-bank.comas a username and navigates strictly toevil-site.com. Phishers use this to fool casual human inspection. PixelCraft AI isolates the authority component of the URI and explicitly warns users whenever the@delimiter is present.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: Why is client-side URL parsing safer than visiting suspect links directly?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Navigating directly to a suspect website executes untrusted remote JavaScript, loads malicious web font files, exposes your public IP address and browser fingerprint to attackers, and can trigger drive-by browser zero-day exploit chains. PixelCraft AI parses the link strictly as an inert string inside a sandboxed client parser: zero HTTP connections to the destination server are made, completely insulating your device from attack.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: What are Top-Level Domain (TLD) risk coefficients?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Certain generic TLDs (such as.top,.xyz,.click,.country, and.stream) offer low-cost, bulk domain registrations without strict identity verification. Global threat intelligence telemetry reveals that over 75% of newly registered domains in these namespaces are associated with malicious spam, malware, or phishing campaigns. PixelCraft AI evaluates TLD reputation weights when calculating composite risk scores.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: How does the tool calculate Levenshtein distance for typosquatting?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Levenshtein distance measures the minimum number of single-character edits (insertions, deletions, or substitutions) required to transform one string into another. If a domain (such asg00gle.comorpaypai.com) has a Levenshtein edit distance of 1 or 2 from a major financial or tech brand, PixelCraft AI triggers an immediate "High Typo-Squatting Probability" warning.
+        </p>
+      </div>
     </div>
 
-    <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-top: 32px; font-size: 0.95rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-      <span>Read our technical research paper: <a href="../blog/the-dangers-of-phishing-and-homograph-attacks.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">The Dangers of Phishing &amp; Homograph Attacks</a>.</span>
-      <span style="font-size: 0.85rem; color: var(--text-light);">PixelCraft Threat Intelligence • 2026 Edition</span>
-    </div>
-
-  
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q5: How does the scanner identify embedded credential diversion attacks?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Under the RFC 1738 URL specification, a web address can include authentication credentials before an <code>@</code> symbol (e.g., <code>https://legitimate-bank.com@evil-site.com</code>). In this structure, the browser ignores <code>legitimate-bank.com</code> as a username and navigates strictly to <code>evil-site.com</code>. Phishers use this to fool casual human inspection. PixelCraft AI isolates the authority component of the URI and explicitly warns users whenever the <code>@</code> delimiter is present.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q6: Why is client-side URL parsing safer than visiting suspect links directly?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Navigating directly to a suspect website executes untrusted remote JavaScript, loads malicious web font files, exposes your public IP address and browser fingerprint to attackers, and can trigger drive-by browser zero-day exploit chains. PixelCraft AI parses the link strictly as an inert string inside a sandboxed client parser: zero HTTP connections to the destination server are made, completely insulating your device from attack.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q7: What are Top-Level Domain (TLD) risk coefficients?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Certain generic TLDs (such as <code>.top</code>, <code>.xyz</code>, <code>.click</code>, <code>.country</code>, and <code>.stream</code>) offer low-cost, bulk domain registrations without strict identity verification. Global threat intelligence telemetry reveals that over 75% of newly registered domains in these namespaces are associated with malicious spam, malware, or phishing campaigns. PixelCraft AI evaluates TLD reputation weights when calculating composite risk scores.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q8: How does the tool calculate Levenshtein distance for typosquatting?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Levenshtein distance measures the minimum number of single-character edits (insertions, deletions, or substitutions) required to transform one string into another. If a domain (such as <code>g00gle.com</code> or <code>paypai.com</code>) has a Levenshtein edit distance of 1 or 2 from a major financial or tech brand, PixelCraft AI triggers an immediate "High Typo-Squatting Probability" warning.
-          </p>
-        </div>
-
-
-
-      <div style="margin-top: 24px; padding: 22px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.2rem; margin-bottom: 12px;">Operational Security Incident Response Checklist</h4>
-        <ul style="padding-left: 20px; color: var(--text-body); font-size: 0.95rem; line-height: 1.8;">
+    <h4 style="color: var(--text-heading); font-size: 1.2rem; margin-bottom: 12px;">Operational Security Incident Response Checklist</h4>
+    <ul style="padding-left: 20px; color: var(--text-body); font-size: 0.95rem; line-height: 1.8;">
           <li><strong>Punycode Verification:</strong> Verify that the host domain does not begin with <code>xn--</code> unless specifically expected from legitimate non-Latin regional organizations.</li>
           <li><strong>Entropy Scoring:</strong> Confirm that the domain Shannon entropy does not exceed 3.8, ruling out automated Domain Generation Algorithms (DGA).</li>
           <li><strong>IP-Literal Detection:</strong> Ensure the URL authority does not contain raw IPv4 or bracketed IPv6 addresses bypassing DNS reputation filters.</li>
@@ -844,8 +922,12 @@
         </ul>
       </div>
 
+    <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-top: 32px; font-size: 0.95rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <span>Read our technical research paper: <a href="../blog/the-dangers-of-phishing-and-homograph-attacks.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">The Dangers of Phishing &amp; Homograph Attacks</a>.</span>
+      <span style="font-size: 0.85rem; color: var(--text-light);">PixelCraft Threat Intelligence • 2026 Edition</span>
+    </div>
 
-</article>
+  </article>
 </section>
 <!-- ========================================================
      END AUTHORITATIVE TECHNICAL GUIDE

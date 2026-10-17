@@ -20,8 +20,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
-  <title>Color Palette Extractor - Extract Hex Codes from Image Free | PixelCraft AI</title>
-  <meta name="description" content="Extract dominant color palettes, HEX, RGB, and HSL codes from any photo or graphic instantly. Perfect for UI/UX designers, artists, and branding." />
+  <title>Color Palette Extractor - Extract Hex from Photos | PixelCraft AI</title>
+  <meta name="description" content="Extract dominant color palettes, HEX, RGB, and HSL codes from any photo or graphic instantly. Perfect for UI/UX designers, artists, and branding."/>
   <meta name="keywords" content="color palette extractor online, extract hex codes from image, photo color picker, dominant colors from picture, brand color palette generator, ui ux color extractor free, pixelcraft ai" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -64,30 +64,117 @@
 
   <!-- Schema.org SoftwareApplication JSON-LD -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://pixelcraftaitools.com/tools/color-palette.html#webpage",
-        "url": "https://pixelcraftaitools.com/tools/color-palette.html",
-        "name": "Color Palette Extractor - Extract Hex Codes from Image Free | PixelCraft AI",
-        "description": "Extract dominant color palettes, HEX, RGB, and HSL codes from any photo or graphic instantly. Perfect for UI/UX designers, artists, and branding."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://pixelcraftaitools.com/tools/color-palette.html#webpage",
+      "url": "https://pixelcraftaitools.com/tools/color-palette.html",
+      "name": "Color Palette Extractor - Extract Hex Codes from Image Free | PixelCraft AI",
+      "description": "Extract dominant color palettes, HEX, RGB, and HSL codes from any photo or graphic instantly. Perfect for UI/UX designers, artists, and branding."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Color Palette Extractor",
+      "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
+      "applicationCategory": "MultimediaApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "INR"
       },
-      {
-        "@type": "SoftwareApplication",
-        "name": "Color Palette Extractor",
-        "operatingSystem": "Browser, Web, Android, iOS, Windows, Mac",
-        "applicationCategory": "MultimediaApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0.00",
-          "priceCurrency": "INR"
+      "featureList": [
+        "100% Free & No Signup Required",
+        "Dominant Color Palette Extraction",
+        "HEX, RGB & HSL Color Codes",
+        "Client-Side Canvas Processing",
+        "Design System Token Export"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://pixelcraftaitools.com/tools/color-palette.html#faq",
+      "isPartOf": {
+        "@id": "https://pixelcraftaitools.com/tools/color-palette.html#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why does the extracted palette sometimes miss small, bright accent colors?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Standard quantization algorithms prioritize volume: if an image is 95% green foliage and 5% red berry, the dominant cluster boxes will naturally reflect green shades. To capture high-contrast accent colors, our algorithm incorporates a saturation-boosting pass that weights vivid hues during bounding-box calculation."
+          }
         },
-        "featureList": ["100% Free", "Privacy First", "Client-Side Processing", "No Signup Required"]
-      }
-    ]
-  }
+        {
+          "@type": "Question",
+          "name": "Can I use extracted colors directly in commercial design systems?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Color values, HEX codes, and RGB definitions are fundamental mathematical coordinates and are not subject to copyright. You can freely integrate any generated palette into your commercial applications, web designs, or brand guidelines."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between sRGB and Display P3 color gamuts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "sRGB is the legacy standard color space for web browsers, covering roughly 35% of the human visible spectrum. Modern Apple Retina displays support Display P3, which offers a 25% wider color space, particularly in saturated greens and reds. PixelCraft handles color extraction in standard linear space to ensure universal browser fidelity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I generate a dark mode theme from an extracted light palette?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To create a harmonious dark mode theme, invert the luminance values while preserving hue angles: dark background surfaces (e.g., #0f172a) replace light surfaces, while vibrant accent colors are slightly desaturated (by 10-15%) to prevent eye strain against dark backgrounds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I test extracted palettes for color blindness accessibility?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Roughly 8% of men and 0.5% of women have color vision deficiencies (Protanopia red-blindness, Deuteranopia green-blindness, or Tritanopia blue-blindness). Ensure that essential interface elements do not rely solely on color to communicate state-supplement color with icons, typography weight, and clear text labels."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I export extracted colors directly into Tailwind CSS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Copy the generated CSS variables directly into your root:rootstylesheet (e.g.,--brand-primary: #2563eb;). In yourtailwind.config.jsfile, map your theme colors usingcolors: { brand: 'var(--brand-primary)' }for instant utility class availability across your React, Vue, or HTML templates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Display P3 and wide color gamut impact extracted hexadecimal codes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Standard HTML canvas elements operate in the 8-bit sRGB color space by default. When an image captured on a modern Apple device (which records in Display P3 with 25% broader green and red chromaticity) is rendered, web browsers automatically map those coordinates into sRGB space. PixelCraft AI extracts precise sRGB hexadecimal hexes, ensuring universal rendering across all standard monitor hardware while avoiding out-of-gamut clipping artifacts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does Median Cut algorithm outperform basic histogram averaging?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simple histogram frequency analysis identifies the most frequent pixel values, which in typical photos are almost always background sky, white margins, or shadows. This ignores vibrant, visually defining accent colors that occupy only 2% of the canvas area. The Median Cut algorithm recursively subdivides the 3D RGB bounding box along its longest axis, ensuring every visual cluster receives equal volumetric representation regardless of pixel quantity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can extracted colors be verified against color vision deficiencies (Colorblindness)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Approximately 8% of men and 0.5% of women experience Color Vision Deficiency (CVD), primarily Deuteranopia (green weakness), Protanopia (red weakness), or Tritanopia (blue weakness). To simulate CVD, extracted RGB vectors are transformed into LMS cone response space via the Brettel-Vienot-Mollon matrix algorithm. If two palette colors collapse to identical LMS coordinates, they must not be used as sole differentiators for interactive states without accompanying text or icon indicators."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <!-- Extra Technical SEO -->
@@ -135,6 +222,20 @@
     <div style="font-size:2.5rem;margin-bottom:12px;"></div>
     <h1>Color Palette Extractor</h1>
     <p>Upload any image and instantly extract its dominant colors with HEX and RGB codes. Fast & secure. All processing happens locally on your device ensuring enhanced privacy. Enjoy premium features instantly, completely free and without any registration.</p>
+    <div id="quick-start-guide" class="quick-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px auto 8px auto; max-width: 900px; text-align: left;">
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 1 • Upload Image</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Drag and drop any photo, illustration, or UI screenshot (PNG, JPG, WebP, SVG).</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 2 • Inspect Swatches</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Explore extracted dominant colors, median cut clusters, and harmonic pairings.</div>
+      </div>
+      <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 3 • Copy & Export</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Click any swatch to copy HEX/RGB/HSL codes or export CSS, Tailwind, or JSON tokens.</div>
+      </div>
+    </div>
   </div>
   <div class="tool-workspace">
     <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
@@ -557,75 +658,67 @@ function resetTool() {
       </table>
     </div>
 
-    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+        <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
       7. Frequently Asked Questions (FAQ) &amp; Color Theory Tips
     </h3>
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Why does the extracted palette sometimes miss small, bright accent colors?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+    <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Why does the extracted palette sometimes miss small, bright accent colors?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Standard quantization algorithms prioritize volume: if an image is 95% green foliage and 5% red berry, the dominant cluster boxes will naturally reflect green shades. To capture high-contrast accent colors, our algorithm incorporates a saturation-boosting pass that weights vivid hues during bounding-box calculation.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">Can I use extracted colors directly in commercial design systems?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Can I use extracted colors directly in commercial design systems?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Yes! Color values, HEX codes, and RGB definitions are fundamental mathematical coordinates and are not subject to copyright. You can freely integrate any generated palette into your commercial applications, web designs, or brand guidelines.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">What is the difference between sRGB and Display P3 color gamuts?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: What is the difference between sRGB and Display P3 color gamuts?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           sRGB is the legacy standard color space for web browsers, covering roughly 35% of the human visible spectrum. Modern Apple Retina displays support Display P3, which offers a 25% wider color space, particularly in saturated greens and reds. PixelCraft handles color extraction in standard linear space to ensure universal browser fidelity.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How do I generate a dark mode theme from an extracted light palette?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: How do I generate a dark mode theme from an extracted light palette?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           To create a harmonious dark mode theme, invert the luminance values while preserving hue angles: dark background surfaces (e.g., #0f172a) replace light surfaces, while vibrant accent colors are slightly desaturated (by 10-15%) to prevent eye strain against dark backgrounds.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How can I test extracted palettes for color blindness accessibility?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: How can I test extracted palettes for color blindness accessibility?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Roughly 8% of men and 0.5% of women have color vision deficiencies (Protanopia red-blindness, Deuteranopia green-blindness, or Tritanopia blue-blindness). Ensure that essential interface elements do not rely solely on color to communicate state-supplement color with icons, typography weight, and clear text labels.
         </p>
       </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <strong style="color: var(--text-heading); font-size: 1.05rem; display: block; margin-bottom: 8px;">How do I export extracted colors directly into Tailwind CSS?</strong>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body);">
-          Copy the generated CSS variables directly into your root <code>:root</code> stylesheet (e.g., <code>--brand-primary: #2563eb;</code>). In your <code>tailwind.config.js</code> file, map your theme colors using <code>colors: { brand: 'var(--brand-primary)' }</code> for instant utility class availability across your React, Vue, or HTML templates.
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: How do I export extracted colors directly into Tailwind CSS?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Copy the generated CSS variables directly into your root:rootstylesheet (e.g.,--brand-primary: #2563eb;). In yourtailwind.config.jsfile, map your theme colors usingcolors: { brand: 'var(--brand-primary)' }for instant utility class availability across your React, Vue, or HTML templates.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: How does Display P3 and wide color gamut impact extracted hexadecimal codes?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Standard HTML canvas elements operate in the 8-bit sRGB color space by default. When an image captured on a modern Apple device (which records in Display P3 with 25% broader green and red chromaticity) is rendered, web browsers automatically map those coordinates into sRGB space. PixelCraft AI extracts precise sRGB hexadecimal hexes, ensuring universal rendering across all standard monitor hardware while avoiding out-of-gamut clipping artifacts.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q8: Why does Median Cut algorithm outperform basic histogram averaging?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Simple histogram frequency analysis identifies the most frequent pixel values, which in typical photos are almost always background sky, white margins, or shadows. This ignores vibrant, visually defining accent colors that occupy only 2% of the canvas area. The Median Cut algorithm recursively subdivides the 3D RGB bounding box along its longest axis, ensuring every visual cluster receives equal volumetric representation regardless of pixel quantity.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q9: How can extracted colors be verified against color vision deficiencies (Colorblindness)?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Approximately 8% of men and 0.5% of women experience Color Vision Deficiency (CVD), primarily Deuteranopia (green weakness), Protanopia (red weakness), or Tritanopia (blue weakness). To simulate CVD, extracted RGB vectors are transformed into LMS cone response space via the Brettel-Vienot-Mollon matrix algorithm. If two palette colors collapse to identical LMS coordinates, they must not be used as sole differentiators for interactive states without accompanying text or icon indicators.
         </p>
       </div>
     </div>
 
-    
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q5: How does Display P3 and wide color gamut impact extracted hexadecimal codes?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Standard HTML canvas elements operate in the 8-bit sRGB color space by default. When an image captured on a modern Apple device (which records in Display P3 with 25% broader green and red chromaticity) is rendered, web browsers automatically map those coordinates into sRGB space. PixelCraft AI extracts precise sRGB hexadecimal hexes, ensuring universal rendering across all standard monitor hardware while avoiding out-of-gamut clipping artifacts.
-          </p>
-          <p style="margin-bottom: 0; color: var(--text-muted); font-size: 0.88rem;">
-            For wide-gamut workflows, designers can utilize CSS Color Module Level 4 functions like <code>color(display-p3 r g b)</code> to preserve hyper-saturated primaries for compatible OLED and Retina displays.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q6: Why does Median Cut algorithm outperform basic histogram averaging?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Simple histogram frequency analysis identifies the most frequent pixel values, which in typical photos are almost always background sky, white margins, or shadows. This ignores vibrant, visually defining accent colors that occupy only 2% of the canvas area. The Median Cut algorithm recursively subdivides the 3D RGB bounding box along its longest axis, ensuring every visual cluster receives equal volumetric representation regardless of pixel quantity.
-          </p>
-        </div>
-
-        <div style="margin-bottom: 24px; padding: 18px; background: var(--surface-subtle); border-radius: 12px; border: 1px solid var(--border-color);">
-          <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 8px;">Q7: How can extracted colors be verified against color vision deficiencies (Colorblindness)?</h4>
-          <p style="margin-bottom: 8px; color: var(--text-body); font-size: 0.95rem;">
-            Approximately 8% of men and 0.5% of women experience Color Vision Deficiency (CVD), primarily Deuteranopia (green weakness), Protanopia (red weakness), or Tritanopia (blue weakness). To simulate CVD, extracted RGB vectors are transformed into LMS cone response space via the Brettel-Vienot-Mollon matrix algorithm. If two palette colors collapse to identical LMS coordinates, they must not be used as sole differentiators for interactive states without accompanying text or icon indicators.
-          </p>
-        </div>
-
-
-<h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
       8. Design System Implementation &amp; Production Checklist
     </h3>
     <ul style="padding-left: 20px; color: var(--text-body); margin-bottom: 28px;">

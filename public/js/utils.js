@@ -55,7 +55,6 @@ const TOOL_NAME_MAP = {
   'exif-viewer.html': { name: 'EXIF Data Viewer', icon: '🔍' },
   'watermark-adder.html': { name: 'Watermark Adder', icon: '🏷️' },
   'color-palette.html': { name: 'Color Palette Extractor', icon: '🎨' },
-  'image-filters.html': { name: 'Filters & Effects', icon: '✨' },
   'smart-resize.html': { name: 'Smart Social Resize', icon: '📐' },
   'phishing-scanner.html': { name: 'Phishing & Malware Scanner', icon: '🛡️' },
   'ai-dubbing.html': { name: 'AI Audio & Video Dubbing', icon: '🎙️' },
