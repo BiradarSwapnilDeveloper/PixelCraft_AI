@@ -2,7 +2,7 @@ name: PixelCraft AI DevSecOps Pipeline
 
 on:
   push:
-    branches: [ "main", "master", "feature/**" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -13,6 +13,7 @@ jobs:
   security-scans:
     name: "🔍 Scans & AI Reports"
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout Code
@@ -100,6 +101,7 @@ jobs:
   scan-and-remediate:
     name: "🔒 Snyk Scan & 🤖 AI Fix"
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     needs: security-scans
     permissions:
       contents: write
@@ -257,6 +259,7 @@ jobs:
   verify-after-fix:
     name: "✅ Verify Clean Scan (for Merge)"
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     needs: scan-and-remediate
 
     steps:
@@ -285,72 +288,95 @@ jobs:
   deploy-to-production:
     name: "🚀 Deploy to Production"
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     needs: verify-after-fix
+    environment:
+      name: production
+      url: https://pixelcraftaitools.com/
+    timeout-minutes: 90
     permissions:
-      contents: write
+      contents: read
+      issues: write
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: "👥 Require Two Production Approvals"
+        uses: trstringer/manual-approval@v1
+        timeout-minutes: 60
         with:
-          fetch-depth: 0
-
-      - name: "🔀 Auto-Merge to Main Branch"
-        if: github.ref_name != 'main'
-        continue-on-error: true
-        run: |
-          echo "Merging ${{ github.ref_name }} into main..."
-          git config --global user.name "AI CI/CD Bot"
-          git config --global user.email "bot@pixelcraft.com"
-          git fetch origin main
-          git checkout main
-          git merge origin/${{ github.ref_name }} --no-edit || true
-          git push origin main || echo "Merge push skipped or already up-to-date"
-          echo "✅ Auto-merge completed!"
+          secret: ${{ github.token }}
+          approvers: BiradarSwapnilDeveloper,vaseflamingoseguru205-debug
+          minimum-approvals: 2
+          issue-title: Approve PixelCraft AI production deployment
 
       - name: "🚢 Deploying Application to Render"
         env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
-          if [ -z "$RENDER_DEPLOY_HOOK" ]; then
-            echo "⚠️ RENDER_DEPLOY_HOOK_URL secret is not set! Skipping real deployment."
-            echo "Please add RENDER_DEPLOY_HOOK_URL in GitHub Secrets if you want live trigger."
-            exit 0
+          set -euo pipefail
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::error::RENDER_DEPLOY_HOOK_URL is not configured; refusing to report a skipped deployment as successful."
+            exit 1
           fi
-          echo "Triggering deployment to Render..."
-          curl -s -X POST "$RENDER_DEPLOY_HOOK"
-          sleep 5
-          echo "✅ Deployment webhook successfully triggered! App is building on Render."
+          echo "Triggering the Render deployment hook..."
+          hook_status="$(curl --silent --show-error --output /dev/null --connect-timeout 10 --max-time 30 --write-out '%{http_code}' --request POST "$RENDER_DEPLOY_HOOK_URL")"
+          case "$hook_status" in
+            2??) ;;
+            *)
+              echo "::error::Render deploy hook returned HTTP ${hook_status}."
+              exit 1
+              ;;
+          esac
+          echo "Render accepted the deployment request."
 
       - name: "🌐 Post-Deployment Health Check"
-        continue-on-error: true
+        id: health
+        env:
+          PRODUCTION_URL: https://pixelcraftaitools.com/
         run: |
-          echo "Checking if the live URL is reachable..."
-          HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" https://pixelcraftaitools.com/)
-          if [ "$HTTP_STATUS" -eq 200 ] || [ "$HTTP_STATUS" -eq 404 ]; then
-            echo "✅ Live Application is reachable! (HTTP $HTTP_STATUS)"
-            echo "HTTP_STATUS=$HTTP_STATUS" >> $GITHUB_ENV
-            echo "HEALTH_EMOJI=🟢" >> $GITHUB_ENV
-          else
-            echo "⚠️ Application returned HTTP $HTTP_STATUS"
-            echo "HTTP_STATUS=$HTTP_STATUS" >> $GITHUB_ENV
-            echo "HEALTH_EMOJI=🔴" >> $GITHUB_ENV
-          fi
+          set -euo pipefail
+          max_attempts=30
+          interval_seconds=20
+          http_status=""
+
+          echo "Allowing Render time to begin the deployment before checking ${PRODUCTION_URL}."
+          sleep 30
+
+          for attempt in $(seq 1 "$max_attempts"); do
+            http_status="$(curl --location --silent --show-error --output /dev/null \
+              --write-out '%{http_code}' --connect-timeout 10 --max-time 20 \
+              "$PRODUCTION_URL" || true)"
+
+            if [ "$http_status" = "200" ]; then
+              echo "Production health check passed (HTTP 200) on attempt ${attempt}/${max_attempts}."
+              echo "http_status=200" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            echo "Production health check attempt ${attempt}/${max_attempts} returned HTTP ${http_status:-no response}."
+            if [ "$attempt" -lt "$max_attempts" ]; then
+              sleep "$interval_seconds"
+            fi
+          done
+
+          echo "http_status=${http_status:-no response}" >> "$GITHUB_OUTPUT"
+          echo "::error::Production did not return HTTP 200 after ${max_attempts} attempts."
+          exit 1
 
       - name: "📊 Generate Final Deployment Summary"
         if: always()
         run: |
           echo "## 🚀 Final Deployment & Security Report" >> $GITHUB_STEP_SUMMARY
-          echo "> Successfully deployed to **Production** on Render 🚢" >> $GITHUB_STEP_SUMMARY
+          echo "> Deployment job result: **${{ job.status }}**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📊 DevSecOps Pipeline Flow" >> $GITHUB_STEP_SUMMARY
           echo '```mermaid' >> $GITHUB_STEP_SUMMARY
           echo "graph TD;" >> $GITHUB_STEP_SUMMARY
-          echo "    A[💻 Code Push] -->|Scans| B(🛡️ Trivy & Snyk);" >> $GITHUB_STEP_SUMMARY
-          echo "    B --> C{🤖 AI Healer};" >> $GITHUB_STEP_SUMMARY
-          echo "    C -->|Auto-Fix| E((👤 Manual Approval));" >> $GITHUB_STEP_SUMMARY
-          echo "    E -->|Approved| F[🚀 Render Production];" >> $GITHUB_STEP_SUMMARY
-          echo "    style F fill:#2ea44f,stroke:#fff,stroke-width:2px,color:#fff" >> $GITHUB_STEP_SUMMARY
+          echo "    A[💻 Main branch run] --> B[🛡️ Security reports];" >> $GITHUB_STEP_SUMMARY
+          echo "    B --> C[🤖 AI reports and remediation];" >> $GITHUB_STEP_SUMMARY
+          echo "    C --> D[🔒 Final Snyk scan];" >> $GITHUB_STEP_SUMMARY
+          echo "    D --> E((👥 Two approvals));" >> $GITHUB_STEP_SUMMARY
+          echo "    E --> F[🚀 Render deploy hook];" >> $GITHUB_STEP_SUMMARY
+          echo "    F --> G[🌐 HTTP 200 health check];" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📡 Live Health Status" >> $GITHUB_STEP_SUMMARY
@@ -358,11 +384,4 @@ jobs:
           echo "| :--- | :--- |" >> $GITHUB_STEP_SUMMARY
           echo "| **Environment** | \`Production\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **URL** | [pixelcraftaitools.com](https://pixelcraftaitools.com/) |" >> $GITHUB_STEP_SUMMARY
-          echo "| **HTTP Status** | ${{ env.HEALTH_EMOJI }} \`${{ env.HTTP_STATUS }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📈 Security Posture Overview" >> $GITHUB_STEP_SUMMARY
-          echo '```mermaid' >> $GITHUB_STEP_SUMMARY
-          echo "pie title Automated Security Gates" >> $GITHUB_STEP_SUMMARY
-          echo '  "Passed (Snyk/Trivy)" : 70' >> $GITHUB_STEP_SUMMARY
-          echo '  "AI Remediated" : 30' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "| **HTTP Status** | \`${{ steps.health.outputs.http_status || 'not healthy' }}\` |" >> $GITHUB_STEP_SUMMARY
