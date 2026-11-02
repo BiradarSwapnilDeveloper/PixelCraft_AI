@@ -77,7 +77,51 @@
   }
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">  <style>    :root {      /* Google Brand Colors */      --g-blue: #4285F4;      --g-red: #EA4335;      --g-yellow: #FBBC05;      --g-green: #34A853;      --glass-bg: rgba(255, 255, 255, 0.05);      --glass-border: rgba(255, 255, 255, 0.1);      --text-main: #f8fafc;      --text-muted: #94a3b8;    }    * {      box-sizing: border-box;      margin: 0;      padding: 0;    }    body {      font-family: 'Inter', sans-serif;      background-color: #111827; /* Slightly lighter background */      color: var(--text-main);      min-height: 100vh;      display: flex;      align-items: center;      justify-content: center;      overflow: hidden;      position: relative;    }    /* Beautiful background gradient using Google colors */    .bg-gradient {      position: absolute;      top: 0;      left: 0;      width: 100%;      height: 100%;      background: radial-gradient(circle at 20% 30%, rgba(66, 133, 244, 0.25) 0%, transparent 50%),                  radial-gradient(circle at 80% 20%, rgba(234, 67, 53, 0.25) 0%, transparent 50%),                  radial-gradient(circle at 80% 80%, rgba(251, 188, 5, 0.25) 0%, transparent 50%),                  radial-gradient(circle at 20% 80%, rgba(52, 168, 83, 0.25) 0%, transparent 50%);      z-index: 0;      animation: pulseBg 10s ease-in-out infinite alternate;    }    @keyframes pulseBg {      0% { transform: scale(1); opacity: 0.8; }      100% { transform: scale(1.1); opacity: 1; }    }    /* Animated Border Wrapper */    .login-wrapper {      position: relative;      z-index: 10;      padding: 3px;      border-radius: 24px;      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(66, 133, 244, 0.3);      overflow: hidden;      animation: floatPopup 6s ease-in-out infinite;    }    .login-wrapper::before {      content: '';      position: absolute;      top: -50%; left: -50%;      width: 200%; height: 200%;      background: conic-gradient(from 0deg, var(--g-blue), var(--g-red), var(--g-yellow), var(--g-green), var(--g-blue));      animation: spinBorder 4s linear infinite;      z-index: -1;    }    @keyframes spinBorder {      0% { transform: rotate(0deg); }      100% { transform: rotate(360deg); }    }    @keyframes floatPopup {      0%, 100% { transform: translateY(0); }      50% { transform: translateY(-15px); }    }    /* Center Square Glassmorphism Container */    .login-container {      background: rgba(15, 23, 42, 0.85);      backdrop-filter: blur(24px);      -webkit-backdrop-filter: blur(24px);      border-radius: 21px; /* slightly smaller than wrapper */      width: 100%;      max-width: 400px;      padding: 30px 35px;      text-align: center;      position: relative;    }    /* Floating Animation for the logo */    .logo-container {      margin-bottom: 15px;    }    .logo-icon {      font-size: 3rem;      display: inline-block;      filter: drop-shadow(0 4px 15px rgba(66,133,244,0.4));    }    h1 {      font-family: 'Outfit', sans-serif;      font-size: 1.8rem;      font-weight: 800;      margin-bottom: 15px;      position: relative;      display: inline-block;      color: #e2e8f0; /* Silver text */      overflow: hidden;      padding: 0 10px;      border-radius: 4px;    }    /* Silver shine effect on hover */    h1::after {      content: '';      position: absolute;      top: 0; left: -100%;      width: 50%; height: 100%;      background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);      transform: skewX(-20deg);      transition: 0.5s ease-in-out;    }    h1:hover::after {      left: 150%;    }    .intro-text {      color: var(--text-muted);      font-size: 0.9rem;      line-height: 1.6;      margin-bottom: 25px;    }    .info-box {      background: var(--glass-bg);      border: 1px solid var(--glass-border);      border-radius: 12px;      padding: 12px 15px;      margin-bottom: 25px;      font-size: 0.85rem;      color: var(--text-muted);      text-align: left;    }    .info-box ul {      padding-left: 20px;      margin-top: 5px;    }    .info-box li {      margin-bottom: 5px;    }    /* Google Button Wrapper (Spinning Border) */    .google-btn-wrapper {      position: relative;      display: block;      padding: 2px;      border-radius: 12px;      cursor: pointer;      text-decoration: none;      transition: all 0.3s;      overflow: hidden;      z-index: 1;    }    .google-btn-wrapper::before {      content: '';      position: absolute;      top: -100%; left: -50%;      width: 200%; height: 300%;      background: conic-gradient(from 0deg, var(--g-blue), var(--g-red), var(--g-yellow), var(--g-green), var(--g-blue));      animation: spinBorder 4s linear infinite;      z-index: -1;    }    .google-btn-wrapper:hover {      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);      transform: scale(1.02);    }    /* Glassmorphism Google Button */    .google-btn {      display: flex;      align-items: center;      justify-content: center;      gap: 12px;      background: rgba(255, 255, 255, 0.85); /* Slightly transparent */      backdrop-filter: blur(10px);      -webkit-backdrop-filter: blur(10px);      color: #1e293b;      padding: 12px 20px;      border-radius: 10px;      font-family: 'Outfit', sans-serif;      font-size: 1.05rem;      font-weight: 700;      text-decoration: none;      width: 100%;    }    .google-btn img {      width: 22px;      height: 22px;    }    .legal-links {      margin-top: 20px;      font-size: 0.8rem;      color: var(--text-muted);    }    .legal-links a {      color: var(--g-blue);      text-decoration: none;      transition: color 0.2s;    }    .legal-links a:hover {      color: #60a5fa;      text-decoration: underline;    }    /* Back link */    .back-home {      display: inline-block;      margin-top: 15px;      color: #64748b;      font-size: 0.85rem;      text-decoration: none;      transition: color 0.2s;    }    .back-home:hover {      color: var(--text-muted);    }  </style><link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">  <style>    :root {      /* Google Brand Colors */      --g-blue: #4285F4;      --g-red: #EA4335;      --g-yellow: #FBBC05;      --g-green: #34A853;      --glass-bg: rgba(255, 255, 255, 0.05);      --glass-border: rgba(255, 255, 255, 0.1);      --text-main: #f8fafc;      --text-muted: #94a3b8;    }    * {      box-sizing: border-box;      margin: 0;      padding: 0;    }    body {      font-family: 'Inter', sans-serif;      background-color: #111827; /* Slightly lighter background */      color: var(--text-main);      min-height: 100vh;      min-height: 100svh;      display: flex;      align-items: center;      justify-content: center;      overflow-x: hidden;      overflow-y: auto;      padding: 24px 16px;      position: relative;    }    /* Beautiful background gradient using Google colors */    .bg-gradient {      position: absolute;      top: 0;      left: 0;      width: 100%;      height: 100%;      background: radial-gradient(circle at 20% 30%, rgba(66, 133, 244, 0.25) 0%, transparent 50%),                  radial-gradient(circle at 80% 20%, rgba(234, 67, 53, 0.25) 0%, transparent 50%),                  radial-gradient(circle at 80% 80%, rgba(251, 188, 5, 0.25) 0%, transparent 50%),                  radial-gradient(circle at 20% 80%, rgba(52, 168, 83, 0.25) 0%, transparent 50%);      z-index: 0;      animation: pulseBg 10s ease-in-out infinite alternate;    }    @keyframes pulseBg {      0% { transform: scale(1); opacity: 0.8; }      100% { transform: scale(1.1); opacity: 1; }    }    /* Animated Border Wrapper */    .login-wrapper {      position: relative;      z-index: 10;      padding: 3px;      border-radius: 24px;      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(66, 133, 244, 0.3);      overflow: hidden;      animation: floatPopup 6s ease-in-out infinite;      width: min(100%, 406px);      margin: auto;    }    .login-wrapper::before {      content: '';      position: absolute;      top: -50%; left: -50%;      width: 200%; height: 200%;      background: conic-gradient(from 0deg, var(--g-blue), var(--g-red), var(--g-yellow), var(--g-green), var(--g-blue));      animation: spinBorder 4s linear infinite;      z-index: -1;    }    @keyframes spinBorder {      0% { transform: rotate(0deg); }      100% { transform: rotate(360deg); }    }    @keyframes floatPopup {      0%, 100% { transform: translateY(0); }      50% { transform: translateY(-15px); }    }    /* Center Square Glassmorphism Container */    .login-container {      background: rgba(15, 23, 42, 0.85);      backdrop-filter: blur(24px);      -webkit-backdrop-filter: blur(24px);      border-radius: 21px; /* slightly smaller than wrapper */      width: 100%;      padding: 30px 35px;      text-align: center;      position: relative;    }    /* Floating Animation for the logo */    .logo-container {      margin-bottom: 15px;    }    .logo-icon {      font-size: 3rem;      display: inline-block;      filter: drop-shadow(0 4px 15px rgba(66,133,244,0.4));    }    h1 {      font-family: 'Outfit', sans-serif;      font-size: 1.8rem;      font-weight: 800;      margin-bottom: 15px;      position: relative;      display: inline-block;      color: #e2e8f0; /* Silver text */      overflow: hidden;      padding: 0 10px;      border-radius: 4px;    }    /* Silver shine effect on hover */    h1::after {      content: '';      position: absolute;      top: 0; left: -100%;      width: 50%; height: 100%;      background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);      transform: skewX(-20deg);      transition: 0.5s ease-in-out;    }    h1:hover::after {      left: 150%;    }    .intro-text {      color: var(--text-muted);      font-size: 0.9rem;      line-height: 1.6;      margin-bottom: 25px;    }    .info-box {      background: var(--glass-bg);      border: 1px solid var(--glass-border);      border-radius: 12px;      padding: 12px 15px;      margin-bottom: 25px;      font-size: 0.85rem;      color: var(--text-muted);      text-align: left;    }    .info-box ul {      padding-left: 20px;      margin-top: 5px;    }    .info-box li {      margin-bottom: 5px;    }    /* Google Button Wrapper (Spinning Border) */    .google-btn-wrapper {      position: relative;      display: block;      padding: 2px;      border-radius: 12px;      text-decoration: none;      transition: all 0.3s;      overflow: hidden;      z-index: 1;    }    .google-btn-wrapper::before {      content: '';      position: absolute;      top: -100%; left: -50%;      width: 200%; height: 300%;      background: conic-gradient(from 0deg, var(--g-blue), var(--g-red), var(--g-yellow), var(--g-green), var(--g-blue));      animation: spinBorder 4s linear infinite;      z-index: -1;    }    .google-btn-wrapper:hover {      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);      transform: scale(1.02);    }    /* Glassmorphism Google Button */    .google-btn {      display: flex;      align-items: center;      justify-content: center;      gap: 12px;      background: rgba(255, 255, 255, 0.85); /* Slightly transparent */      backdrop-filter: blur(10px);      -webkit-backdrop-filter: blur(10px);      color: #1e293b;      padding: 12px 20px;      border-radius: 10px;      font-family: 'Outfit', sans-serif;      font-size: 1.05rem;      font-weight: 700;      text-decoration: none;      width: 100%;
+      min-height: 48px;
+      border: 0;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .google-btn:hover:not(:disabled) {
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-1px);
+    }
+    .google-btn:disabled { cursor: wait; opacity: 0.75; }
+    .google-btn:focus-visible,
+    .session-actions a:focus-visible,
+    .legal-links a:focus-visible,
+    .back-home:focus-visible {
+      outline: 3px solid #93c5fd;
+      outline-offset: 4px;
+    }
+    .auth-message { min-height: 1.4em; margin-top: 12px; color: #fca5a5; font-size: 0.85rem; line-height: 1.5; text-align: left; }
+    .auth-message:empty { display: none; }
+    .auth-message a { color: #bfdbfe; font-weight: 600; }
+    .auth-message button {
+      padding: 0;
+      border: 0;
+      background: none;
+      color: #bfdbfe;
+      font: inherit;
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .session-message { margin: 0 0 18px; padding: 10px 12px; border: 1px solid rgba(34, 197, 94, 0.35); border-radius: 10px; background: rgba(34, 197, 94, 0.12); color: #bbf7d0; font-size: 0.9rem; line-height: 1.5; overflow-wrap: anywhere; }
+    .session-actions { display: grid; gap: 10px; margin-top: 15px; }
+    .session-message[hidden], .session-actions[hidden] { display: none; }
+    .session-actions a { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 16px; border: 1px solid var(--glass-border); border-radius: 10px; color: var(--text-main); background: rgba(255, 255, 255, 0.08); text-decoration: none; font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 600; transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+    .session-actions a:hover { background: rgba(255, 255, 255, 0.14); transform: translateY(-1px); }
+    .session-actions .continue-link { border-color: var(--g-blue); color: #fff; background: var(--g-blue); }
+    .session-actions .continue-link:hover { background: #2f70d5; }
+    .session-actions .logout-link { border-color: rgba(239, 68, 68, 0.45); color: #fecaca; background: rgba(239, 68, 68, 0.12); }
+    @media (max-width: 480px) { .login-container { padding: 26px 20px; } .intro-text, .info-box { margin-bottom: 20px; } }
+    @media (max-height: 620px) { body { align-items: flex-start; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
+    .google-btn img {      width: 22px;      height: 22px;    }    .legal-links {      margin-top: 20px;      font-size: 0.8rem;      color: var(--text-muted);    }    .legal-links a {      color: var(--g-blue);      text-decoration: none;      transition: color 0.2s;    }    .legal-links a:hover {      color: #60a5fa;      text-decoration: underline;    }    /* Back link */    .back-home {      display: inline-block;      margin-top: 15px;      color: #64748b;      font-size: 0.85rem;      text-decoration: none;      transition: color 0.2s;    }    .back-home:hover {      color: var(--text-muted);    }    @media (max-width: 360px) { .login-container { padding: 22px 16px; } }
+  </style><link rel="stylesheet" href="css/style.css">
 
 </head>
 <body>
@@ -86,13 +130,13 @@
 
   <div class="login-wrapper">
     <div class="login-container">
-      
+
       <div class="logo-container">
         <img src="logo.jpg?v=5" alt="PixelCraft Logo" style="height: 50px; border-radius: 50%;">
       </div>
-      
+
       <h1>PixelCraft AI</h1>
-      
+
       <p class="intro-text">
         Welcome to the decentralized privacy & digital security toolset. Sign in to unlock advanced tools and protect your digital footprint.
       </p>
@@ -108,7 +152,7 @@
       </div>
 
       <div class="google-btn-wrapper" id="google-login">
-        <div class="google-btn">
+        <button class="google-btn" id="google-login-button" type="button" aria-label="Sign in with Google">
           <!-- Google SVG Logo -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="22px" height="22px">
             <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
@@ -117,71 +161,92 @@
             <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
           </svg>
           Sign in with Google
-        </div>
+        </button>
       </div>
+      <p class="auth-message" id="auth-message" role="alert"></p>
+      <p class="session-message" id="session-message" role="status" hidden></p>
+      <div class="session-actions" id="session-actions" hidden></div>
 
       <div class="legal-links">
         By signing in, you agree to our <br>
         <a href="terms-conditions.html">Terms & Conditions</a> and <a href="privacy-policy.html">Privacy Policy</a>.
       </div>
-      
+
       <a href="index.html" class="back-home">← Back to Home</a>
-      
+
     </div>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const loginBtn = document.getElementById("google-login");
+      const loginButton = document.getElementById("google-login-button");
+      const loginWrapper = document.getElementById("google-login");
+      const authMessage = document.getElementById("auth-message");
+      const sessionMessage = document.getElementById("session-message");
+      const sessionActions = document.getElementById("session-actions");
 
-      // Check if user is already authenticated
-      fetch('/api/auth/status', { credentials: 'same-origin' })
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.authenticated && data.user) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const returnTo = urlParams.get('returnTo');
-            if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
-              window.location.replace(returnTo);
+      function showAuthError(message) {
+        authMessage.replaceChildren();
+        authMessage.append(document.createTextNode(message + " "));
+        const retryButton = document.createElement("button");
+        retryButton.type = "button";
+        retryButton.className = "back-home";
+        retryButton.textContent = "Retry";
+        retryButton.addEventListener("click", checkAuthStatus, { once: true });
+        authMessage.append(retryButton);
+      }
+
+      function addSessionAction(href, label, className) {
+        const link = document.createElement("a");
+        link.href = href;
+        link.className = className;
+        link.textContent = label;
+        sessionActions.append(link);
+      }
+
+      async function checkAuthStatus() {
+        authMessage.replaceChildren();
+        try {
+          const response = await fetch("/api/auth/status", { credentials: "same-origin" });
+          if (!response.ok) throw new Error("Authentication status request failed.");
+          const data = await response.json();
+          if (!data || !data.authenticated || !data.user) return;
+
+          const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+          if (returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//")) {
+            const target = new URL(returnTo, window.location.origin);
+            if (target.origin === window.location.origin) {
+              window.location.replace(target.href);
               return;
             }
-            const userEmail = data.user.email || 'Google User';
-            const intro = document.querySelector('.intro-text');
-            if (intro) {
-              intro.innerHTML = `<span style="display:inline-block; padding: 6px 12px; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; color: #4ade80; font-weight: 500;">✓ Active Session: <strong>${userEmail}</strong></span>`;
-            }
-            if (loginBtn) {
-              loginBtn.outerHTML = `
-                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
-                  <a href="/logout" class="google-btn" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); text-decoration: none; justify-content: center;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                      <polyline points="16 17 21 12 16 7"></polyline>
-                      <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
-                    Sign Out of PixelCraft
-                  </a>
-                  <a href="/auth/switch-account" class="google-btn" style="background: rgba(255, 255, 255, 0.08); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.15); text-decoration: none; justify-content: center;">
-                    Switch Google Account
-                  </a>
-                  <a href="/" class="google-btn" style="background: var(--g-blue); color: #ffffff; text-decoration: none; justify-content: center;">
-                    Continue to Dashboard & Tools →
-                  </a>
-                </div>
-              `;
-            }
           }
-        })
-        .catch(() => {});
 
-      if (loginBtn) {
-        loginBtn.addEventListener("click", () => {
-          loginBtn.innerHTML = '<div class="google-btn">Redirecting to Google...</div>';
-          setTimeout(() => {
-            window.location.href = "/auth/google";
-          }, 800);
+          const email = typeof data.user.email === "string" && data.user.email.trim()
+            ? data.user.email.trim()
+            : "Google User";
+          sessionMessage.textContent = `? Active session: ${email}`;
+          sessionMessage.hidden = false;
+          loginWrapper.hidden = true;
+          sessionActions.hidden = false;
+          addSessionAction("/logout", "Sign out of PixelCraft", "logout-link");
+          addSessionAction("/auth/switch-account", "Switch Google account", "account-link");
+          addSessionAction("/", "Continue to Dashboard & Tools ?", "continue-link");
+        } catch (error) {
+          console.error("Could not check authentication status:", error);
+          showAuthError("We couldn't check your sign-in status. Please retry or continue with Google.");
+        }
+      }
+
+      if (loginButton) {
+        loginButton.addEventListener("click", () => {
+          loginButton.disabled = true;
+          loginButton.setAttribute("aria-busy", "true");
+          loginButton.textContent = "Redirecting to Google?";
+          window.location.assign("/auth/google");
         });
       }
+
+      checkAuthStatus();
     });
   </script>
 <script src="./js/cookie-consent.js"></script>
