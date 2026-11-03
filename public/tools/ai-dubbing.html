@@ -701,6 +701,12 @@ function resetTool() {
           Quantized 8-bit ONNX and WebGPU runtimes enable lightweight neural acoustic models to synthesize audio at a Real-Time Factor (RTF) of 0.15 on consumer Apple Silicon or modern NVIDIA GPUs. This means a 60-second video snippet is processed in less than 9 seconds directly within browser worker threads without round-trip network transmission.
         </p>
       </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q10: Are voice biometric prints and generated audio clones permanently deleted?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Security and user biometric privacy are fundamental cornerstones of PixelCraft AI. All acoustic voice embeddings, neural pitch vectors, and synthesized waveform chunks are ephemeral and processed in volatile working memory. No audio waveforms, facial phoneme recordings, or vocal characteristics are ever retained on persistent database storage, sold to third-party machine learning aggregators, or utilized for non-consensual voice model retraining. Upon closing your browser session or clearing the workspace queue, all temporary in-memory buffers are cryptographically shredded.
+        </p>
+      </div>
     </div>
     
     </section>

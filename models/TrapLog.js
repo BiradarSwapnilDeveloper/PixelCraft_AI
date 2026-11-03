@@ -38,7 +38,10 @@ const TrapLogSchema = new mongoose.Schema({
   },
   expiresAt: {
     type: Date,
-    default: () => new Date(Date.now() + 180 * 24 * 60 * 60 * 1000)
+    default: function() {
+      // If legalHold is true at creation, do not set expiresAt (exempt from TTL)
+      return this.legalHold ? null : new Date(Date.now() + 180 * 24 * 60 * 60 * 1000);
+    }
   },
   legalHold: {
     type: Boolean,
@@ -58,7 +61,23 @@ const TrapLogSchema = new mongoose.Schema({
   }
 });
 
+// Enforce exemption in pre-save: if legalHold is true, expiresAt must be null/unset
+TrapLogSchema.pre('save', function(next) {
+  if (this.legalHold) {
+    this.expiresAt = null;
+  }
+  next();
+});
+
 // Safe TTL index on expiresAt (MongoDB TTL ignores missing or null dates)
-TrapLogSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0, background: true });
+// Added partialFilterExpression: only index documents where legalHold is NOT true
+TrapLogSchema.index(
+  { expiresAt: 1 },
+  {
+    expireAfterSeconds: 0,
+    background: true,
+    partialFilterExpression: { legalHold: { $ne: true } }
+  }
+);
 
 module.exports = mongoose.model('TrapLog', TrapLogSchema);
