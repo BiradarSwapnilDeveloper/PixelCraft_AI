@@ -119,6 +119,36 @@ async function runTests() {
     assert.ok(log.expiresAt.getTime() > Date.now());
   });
 
+  // TEST 3B: TrapLog Index and Pre-Save Exemption Verification
+  test('TrapLog schema defines TTL index with partialFilterExpression exempting legal holds', () => {
+    const TrapLog = require('./models/TrapLog');
+    const indexes = TrapLog.schema.indexes();
+    const ttlIndexEntry = indexes.find(idx => idx[0] && idx[0].expiresAt === 1);
+
+    assert.ok(ttlIndexEntry, 'TTL index on expiresAt must exist');
+    const options = ttlIndexEntry[1];
+    assert.strictEqual(options.expireAfterSeconds, 0, 'expireAfterSeconds must be 0');
+    assert.deepStrictEqual(
+      options.partialFilterExpression,
+      { legalHold: { $ne: true } },
+      'partialFilterExpression must exempt legalHold=true'
+    );
+  });
+
+  test('TrapLog instantiated with legalHold: true defaults expiresAt to null', () => {
+    const TrapLog = require('./models/TrapLog');
+    const logWithHold = new TrapLog({
+      tokenId: new mongoose.Types.ObjectId(),
+      ipAddress: '127.0.0.1',
+      endpoint: '/api/test',
+      legalHold: true,
+      legalHoldReason: 'Investigation Active'
+    });
+
+    assert.strictEqual(logWithHold.legalHold, true);
+    assert.strictEqual(logWithHold.expiresAt, null, 'expiresAt must be null when created with legalHold=true');
+  });
+
   // TEST 4: Constant-Time Admin Key Verification
   test('Admin key verification uses constant-time comparison safely', () => {
     const expected = 'PxlCrft_Admin_8x9vZapL2qWkmN5jR_cF1yT';
