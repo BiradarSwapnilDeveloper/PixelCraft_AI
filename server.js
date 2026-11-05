@@ -2298,7 +2298,7 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
 
 // Scale-Invariant WhatsApp-Immune Cryptographic Watermarking Engine
 function embedPixelSeal(rawBuffer, width, height, channels, sealHex) {
-  const COLS = 40, ROWS = 40, DELTA = 16;
+  const COLS = 40, ROWS = 40, DELTA = 14;
   const sealBytes = Buffer.from(sealHex, 'hex');
   const bits = [];
   // 16-bit sync magic: 0x534C ('SL')
@@ -2318,16 +2318,29 @@ function embedPixelSeal(rawBuffer, width, height, channels, sealHex) {
 
     let sumA = 0, countA = 0;
     let sumB = 0, countB = 0;
+    let sumLum = 0, countTot = 0;
     for (let y = y0; y < y1; y++) {
       for (let x = x0; x < x1; x++) {
         const off = (y * width + x) * channels;
         const lum = 0.299 * rawBuffer[off] + 0.587 * rawBuffer[off + 1] + 0.114 * rawBuffer[off + 2];
+        sumLum += lum; countTot++;
         if (x < xMid) { sumA += lum; countA++; } else { sumB += lum; countB++; }
       }
     }
     const diff = (sumA / (countA || 1)) - (sumB / (countB || 1));
-    const targetDiff = (bits[i] === 0) ? DELTA : -DELTA;
-    const adjust = (targetDiff - diff) / 2;
+    const meanLum = sumLum / (countTot || 1);
+
+    // Adaptive modulation for smooth/white surfaces & edges
+    let targetDelta = DELTA;
+    let maxAdjust = 14;
+    if (meanLum > 245 || meanLum < 10) {
+      targetDelta = 7;
+      maxAdjust = 5;
+    }
+
+    const targetDiff = (bits[i] === 0) ? targetDelta : -targetDelta;
+    let adjust = (targetDiff - diff) / 2;
+    adjust = Math.max(-maxAdjust, Math.min(maxAdjust, adjust));
 
     for (let y = y0; y < y1; y++) {
       for (let x = x0; x < x1; x++) {
