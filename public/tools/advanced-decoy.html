@@ -372,35 +372,39 @@
         <div class="form-group-item" style="margin-bottom: 20px;">
           <label style="display:flex; justify-content:space-between; align-items:center;">
             <span>🛡️ Steganographic Engine Architecture</span>
-            <span style="font-size:0.78rem; color:var(--primary); font-weight:700;">NEW: WhatsApp-Immune Engine</span>
+            <span style="font-size:0.78rem; color:var(--primary); font-weight:700;">NEW: Social-Immune Engine</span>
           </label>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:8px;">
-            <div id="mode-whatsapp" class="mode-card active" onclick="selectStegoMode('whatsapp')" style="border: 2px solid var(--primary); background: rgba(37,99,235,0.06); border-radius: var(--radius-sm); padding: 14px; cursor: pointer; transition: var(--transition-smooth);">
-              <div style="font-weight: 700; color: var(--text-heading); font-size: 0.95rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                <span>🛡️</span> WhatsApp &amp; Social Immune
+            <div id="mode-whatsapp" class="mode-card active" onclick="selectStegoMode('whatsapp')" style="position: relative; border: 2px solid var(--primary); background: rgba(37,99,235,0.06); border-radius: var(--radius-sm); padding: 16px 14px 14px 14px; cursor: pointer; transition: var(--transition-smooth);">
+              <div style="position: absolute; top: -10px; right: 12px; background: linear-gradient(135deg, var(--primary), #4f46e5); color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(37,99,235,0.3);">
+                ⭐ RECOMMENDED
               </div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
-                Scale-Invariant Luminance Grid. Immune to WhatsApp lossy JPEG Q~65 compression, resizing, and metadata stripping.
+              <div style="font-weight: 700; color: var(--text-heading); font-size: 0.95rem; margin-bottom: 5px; display: flex; align-items: center; gap: 6px;">
+                <span>🛡️</span> Social Safe Mode
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45;">
+                Scale-Invariant Macro-Grid. Immune to social media compression, auto-resizing, and metadata stripping. Send directly as a normal photo.
               </div>
             </div>
-            <div id="mode-lossless" class="mode-card" onclick="selectStegoMode('lossless')" style="border: 1px solid var(--border-color); background: var(--surface-subtle); border-radius: var(--radius-sm); padding: 14px; cursor: pointer; transition: var(--transition-smooth);">
-              <div style="font-weight: 700; color: var(--text-heading); font-size: 0.95rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <div id="mode-lossless" class="mode-card" onclick="selectStegoMode('lossless')" style="border: 1px solid var(--border-color); background: var(--surface-subtle); border-radius: var(--radius-sm); padding: 16px 14px 14px 14px; cursor: pointer; transition: var(--transition-smooth);">
+              <div style="font-weight: 700; color: var(--text-heading); font-size: 0.95rem; margin-bottom: 5px; display: flex; align-items: center; gap: 6px;">
                 <span>💎</span> Ultra-HD Lossless Mode
               </div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
-                Spatial LSB Dual-Channel. Massive payload capacity for long texts and docs. Send via WhatsApp as <code>📎 Document</code>.
+              <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45;">
+                High-Capacity Pixel-Perfect Storage. Ideal for hiding large secrets, long letters, full documents, or high-res photos without any size limit. Send as an uncompressed file or document attachment.
               </div>
             </div>
           </div>
         </div>
 
-        <!-- WHATSAPP PRO-TIP CALLOUT -->
+        <!-- DELIVERY PRO-TIP CALLOUT -->
         <div id="whatsapp-tip-banner" style="background: rgba(37, 99, 235, 0.08); border: 1px solid var(--primary-border); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 22px;">
           <div style="font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.92rem;">
-            <span>💡</span> WhatsApp &amp; Social Media Delivery Pro-Tip
+            <span>💡</span> Delivery &amp; Sharing Pro-Tip: Which mode should you use?
           </div>
-          <div style="font-size: 0.85rem; color: var(--text-body); line-height: 1.55;">
-            <strong>WhatsApp photo sharing ready:</strong> Images encoded in <em>WhatsApp &amp; Social Immune</em> mode can be sent directly as regular photos or emails. The secret message survives WhatsApp's aggressive compression and resizing! For sending massive files, switch to <em>Ultra-HD Lossless</em> and attach via <code>📎 Document</code>.
+          <div style="font-size: 0.84rem; color: var(--text-body); line-height: 1.55;">
+            <strong>• Social Safe Mode (Recommended):</strong> Best for sharing directly as a regular photo on social networks, chat apps, and email. The secret message survives heavy lossy compression, metadata wiping, and auto-resizing.<br>
+            <strong>• Ultra-HD Lossless Mode:</strong> Best when you have large secrets, multi-page letters, source codes, or high-resolution photos where zero image changes are desired. Send as an uncompressed file or <code>📎 Document</code>.
           </div>
         </div>
 
@@ -417,7 +421,7 @@
         <div class="form-group-item">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <label style="margin-bottom:0;">Real Secret Message</label>
-            <span id="real-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 60 chars (WhatsApp Safe)</span>
+            <span id="real-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 60 chars (Social Safe - Recommended)</span>
           </div>
           <textarea id="enc-real-msg" placeholder="The confidential message you want to protect..."></textarea>
         </div>
@@ -433,7 +437,7 @@
         <div class="form-group-item">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <label style="margin-bottom:0;">Decoy Message (Fake Message for Plausible Deniability)</label>
-            <span id="decoy-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 60 chars (WhatsApp Safe)</span>
+            <span id="decoy-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 60 chars (Social Safe - Recommended)</span>
           </div>
           <textarea id="enc-decoy-msg" placeholder="A fake innocent message to reveal if forced to give up a password..."></textarea>
         </div>
@@ -450,7 +454,7 @@
             <span style="font-size: 1.2rem;">🛡️</span>
             <div>
               <div id="quality-gate-title" style="color: #10b981;">Quality Gate: Passed (Zero Grid Artifacts)</div>
-              <div id="quality-gate-metrics" style="font-size: 0.78rem; font-weight: 400; color: var(--text-muted); margin-top: 2px;">PSNR: 35+ dB | Feathered Texture-Aware Lattice | WhatsApp Safe</div>
+              <div id="quality-gate-metrics" style="font-size: 0.78rem; font-weight: 400; color: var(--text-muted); margin-top: 2px;">PSNR: 35+ dB | Feathered Texture-Aware Lattice | Social Safe Quality Gate Passed</div>
             </div>
           </div>
           <button class="btn btn-success" id="btn-download" style="width: 100%; padding: 14px; font-size: 1rem;">Download Secure Image</button>
@@ -629,13 +633,13 @@
             const rLen = rEl.value.length;
             if (isWa) {
                 if (rLen <= 60) {
-                    rCount.innerText = `${rLen} / 60 chars (WhatsApp Safe)`;
+                    rCount.innerText = `${rLen} / 60 chars (Social Safe - Recommended)`;
                     rCount.style.color = 'var(--text-muted)';
                 } else if (rLen <= 200) {
-                    rCount.innerText = `${rLen} / 200 chars (Extended WhatsApp - recommend Ultra-HD for long text)`;
+                    rCount.innerText = `${rLen} / 200 chars (Extended Social - for longer text, use Ultra-HD)`;
                     rCount.style.color = '#f59e0b';
                 } else {
-                    rCount.innerText = `${rLen} chars (Exceeds WhatsApp limit - switch to Ultra-HD Lossless Mode)`;
+                    rCount.innerText = `${rLen} chars (Exceeds Social limit - switch to Ultra-HD Lossless Mode)`;
                     rCount.style.color = 'var(--danger)';
                 }
             } else {
@@ -647,13 +651,13 @@
             const dLen = dEl.value.length;
             if (isWa) {
                 if (dLen <= 60) {
-                    dCount.innerText = `${dLen} / 60 chars (WhatsApp Safe)`;
+                    dCount.innerText = `${dLen} / 60 chars (Social Safe - Recommended)`;
                     dCount.style.color = 'var(--text-muted)';
                 } else if (dLen <= 200) {
-                    dCount.innerText = `${dLen} / 200 chars (Extended WhatsApp - recommend Ultra-HD for long text)`;
+                    dCount.innerText = `${dLen} / 200 chars (Extended Social - for longer text, use Ultra-HD)`;
                     dCount.style.color = '#f59e0b';
                 } else {
-                    dCount.innerText = `${dLen} chars (Exceeds WhatsApp limit - switch to Ultra-HD Lossless Mode)`;
+                    dCount.innerText = `${dLen} chars (Exceeds Social limit - switch to Ultra-HD Lossless Mode)`;
                     dCount.style.color = 'var(--danger)';
                 }
             } else {
@@ -1030,7 +1034,7 @@
 
         if (currentStegoMode === 'whatsapp') {
             if (rMsg.length > 200) {
-                return alert(`Your real secret is ${rMsg.length} characters. For WhatsApp & Social Immune mode, secrets should be 200 characters or fewer to guarantee survival through WhatsApp JPEG compression. For massive text or documents, switch to "Ultra-HD Lossless Mode" and send as a Document (📎 Document).`);
+                return alert(`Your real secret is ${rMsg.length} characters. For Social Safe mode, secrets should be 200 characters or fewer to guarantee survival through social media lossy compression. For massive text or documents, switch to "Ultra-HD Lossless Mode" and send as an uncompressed file or document attachment (📎 Document).`);
             }
             if (dMsg && dMsg.length > 200) {
                 return alert(`Your decoy message is ${dMsg.length} characters. Please shorten it to 200 characters or switch to Ultra-HD Lossless Mode.`);
@@ -1054,7 +1058,7 @@
             const dCipher = (dMsg && dPwd) ? aesEncrypt('PXC_DECOY::' + dMsg, dPwd) : null;
 
             if (currentStegoMode === 'whatsapp') {
-                // 1. Embed adaptive dispersed texture-aware WhatsApp macro-grid
+                // 1. Embed adaptive dispersed texture-aware Social Safe macro-grid
                 embedWhatsAppGrid(imgData.data, cvs.width, cvs.height, rCipher, dCipher);
                 // 2. Also embed spatial LSB as dual-layer fallback
                 try {
@@ -1101,7 +1105,7 @@
             document.getElementById('btn-download').onclick = () => {
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = currentStegoMode === 'whatsapp' ? 'pixelcraft_whatsapp_secure.png' : 'pixelcraft_secure_decoy.png';
+                a.download = currentStegoMode === 'whatsapp' ? 'pixelcraft_social_secure.png' : 'pixelcraft_secure_decoy.png';
                 a.click();
                 if (typeof showToast === 'function') {
                     showToast('Secure image downloaded!', 'success');
@@ -1110,7 +1114,7 @@
             document.getElementById('enc-result').style.display = 'block';
             hideLoading();
             if (typeof showToast === 'function') {
-                showToast(currentStegoMode === 'whatsapp' ? 'WhatsApp-Immune carrier generated!' : 'Ultra-HD carrier generated!', 'success');
+                showToast(currentStegoMode === 'whatsapp' ? 'Social Safe carrier generated!' : 'Ultra-HD carrier generated!', 'success');
             }
         } catch(e) {
             hideLoading();
@@ -1234,12 +1238,12 @@
                 const badge = document.getElementById('dec-badge');
                 if (badge) {
                     if (extractedPayload.type === 'real_wa') {
-                        badge.innerText = '🛡️ Real Secret (WhatsApp-Resilient Engine)';
+                        badge.innerText = '🛡️ Real Secret (Social Safe Mode)';
                         badge.style.background = 'var(--success-light, #ecfdf5)';
                         badge.style.color = 'var(--success, #059669)';
                         badge.style.border = '1px solid var(--success-border, #a7f3d0)';
                     } else if (extractedPayload.type === 'decoy_wa') {
-                        badge.innerText = '🎭 Decoy Payload (WhatsApp-Resilient Engine)';
+                        badge.innerText = '🎭 Decoy Payload (Social Safe Mode)';
                         badge.style.background = 'var(--warning-light, #fffbeb)';
                         badge.style.color = 'var(--warning, #d97706)';
                         badge.style.border = '1px solid rgba(217, 119, 6, 0.3)';
