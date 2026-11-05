@@ -368,6 +368,20 @@
 
       <!-- ENCRYPT PANEL -->
       <div id="panel-encrypt" class="panel active">
+
+        <!-- PRE-PROCESSING DATA TRANSPARENCY & PRIVACY NOTICE -->
+        <div id="stego-privacy-notice" style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px; font-size: 0.83rem; color: var(--text-body); line-height: 1.55;">
+          <div style="font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.9rem;">
+            <span>🔒</span> Data Transparency &amp; Privacy Notice
+          </div>
+          <div>
+            <strong>100% In-Browser Execution:</strong> Your carrier image, secret text, decoy message, and passwords are processed entirely inside your browser's local sandbox memory. Zero bytes are transmitted to PixelCraft AI servers. Payload encryption employs military-grade AES-256-CBC with Encrypt-then-MAC (HMAC-SHA256) authenticated integrity.
+          </div>
+          <div style="margin-top: 6px; color: var(--text-muted); font-size: 0.78rem;">
+            <em>Operational Notice:</em> Social Safe Mode is engineered to survive social media lossy JPEG compression and resizing. Ultra-HD Lossless Mode requires uncompressed delivery (as a file or <code>📎 Document</code>). Steganography minimizes detection but is not a guarantee of absolute forensic invisibility. Always retain unencrypted backups of your originals. Review our <a href="../privacy-policy.html" style="color: var(--primary); text-decoration: underline;" target="_blank">Privacy Policy</a> and <a href="../data-practices.html" style="color: var(--primary); text-decoration: underline;" target="_blank">Data Practices</a>.
+          </div>
+        </div>
+
         <!-- STEGANOGRAPHIC ARCHITECTURE SELECTOR -->
         <div class="form-group-item" style="margin-bottom: 20px;">
           <label style="display:flex; justify-content:space-between; align-items:center;">
@@ -403,7 +417,7 @@
             <span>💡</span> Delivery &amp; Sharing Pro-Tip: Which mode should you use?
           </div>
           <div style="font-size: 0.84rem; color: var(--text-body); line-height: 1.55;">
-            <strong>• Social Safe Mode (Recommended):</strong> Best for sharing directly as a regular photo on social networks, chat apps, and email. The secret message survives heavy lossy compression, metadata wiping, and auto-resizing.<br>
+            <strong>• Social Safe Mode (Recommended):</strong> Best for sharing directly as a regular photo on social networks, chat apps, and email. Survives heavy lossy compression, auto-resizing, and metadata stripping. Features 3 adaptive tiers: <strong>Ultra-Resilience (up to 30 chars, R=5)</strong>, <strong>Balanced (31–75 chars, R=3)</strong>, and <strong>Extended (76–200 chars, R=1)</strong>.<br>
             <strong>• Ultra-HD Lossless Mode:</strong> Best when you have large secrets, multi-page letters, source codes, or high-resolution photos where zero image changes are desired. Send as an uncompressed file or <code>📎 Document</code>.
           </div>
         </div>
@@ -421,7 +435,7 @@
         <div class="form-group-item">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <label style="margin-bottom:0;">Real Secret Message</label>
-            <span id="real-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 60 chars (Social Safe - Recommended)</span>
+            <span id="real-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 30 chars (Ultra-Resilience: R=5 - Recommended)</span>
           </div>
           <textarea id="enc-real-msg" placeholder="The confidential message you want to protect..."></textarea>
         </div>
@@ -437,7 +451,7 @@
         <div class="form-group-item">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <label style="margin-bottom:0;">Decoy Message (Fake Message for Plausible Deniability)</label>
-            <span id="decoy-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 60 chars (Social Safe - Recommended)</span>
+            <span id="decoy-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 30 chars (Ultra-Resilience: R=5 - Recommended)</span>
           </div>
           <textarea id="enc-decoy-msg" placeholder="A fake innocent message to reveal if forced to give up a password..."></textarea>
         </div>
@@ -454,7 +468,7 @@
             <span style="font-size: 1.2rem;">🛡️</span>
             <div>
               <div id="quality-gate-title" style="color: #10b981;">Quality Gate: Passed (Zero Grid Artifacts)</div>
-              <div id="quality-gate-metrics" style="font-size: 0.78rem; font-weight: 400; color: var(--text-muted); margin-top: 2px;">PSNR: 35+ dB | Feathered Texture-Aware Lattice | Social Safe Quality Gate Passed</div>
+              <div id="quality-gate-metrics" style="font-size: 0.78rem; font-weight: 400; color: var(--text-muted); margin-top: 2px;">PSNR: 33.51 dB (Threshold: ≥ 30.0 dB) | Feathered Texture-Aware Lattice | Quality Gate Passed</div>
             </div>
           </div>
           <button class="btn btn-success" id="btn-download" style="width: 100%; padding: 14px; font-size: 1rem;">Download Secure Image</button>
@@ -629,41 +643,30 @@
         const dCount = document.getElementById('decoy-char-count');
         const isWa = (currentStegoMode === 'whatsapp');
 
-        if (rEl && rCount) {
-            const rLen = rEl.value.length;
-            if (isWa) {
-                if (rLen <= 60) {
-                    rCount.innerText = `${rLen} / 60 chars (Social Safe - Recommended)`;
-                    rCount.style.color = 'var(--text-muted)';
-                } else if (rLen <= 200) {
-                    rCount.innerText = `${rLen} / 200 chars (Extended Social - for longer text, use Ultra-HD)`;
-                    rCount.style.color = '#f59e0b';
-                } else {
-                    rCount.innerText = `${rLen} chars (Exceeds Social limit - switch to Ultra-HD Lossless Mode)`;
-                    rCount.style.color = 'var(--danger)';
-                }
+        function formatCount(len) {
+            if (!isWa) {
+                return { text: `${len} chars (Unlimited Ultra-HD)`, color: 'var(--text-muted)' };
+            }
+            if (len <= 30) {
+                return { text: `${len} / 30 chars (Ultra-Resilience: R=5 - Max Social Immunity)`, color: '#10b981' };
+            } else if (len <= 75) {
+                return { text: `${len} / 75 chars (Balanced Social: R=3)`, color: 'var(--primary)' };
+            } else if (len <= 200) {
+                return { text: `${len} / 200 chars (Extended Social: R=1 - recommend Ultra-HD for long text)`, color: '#f59e0b' };
             } else {
-                rCount.innerText = `${rLen} chars (Unlimited HD)`;
-                rCount.style.color = 'var(--text-muted)';
+                return { text: `${len} chars (Exceeds 200-char limit - switch to Ultra-HD Lossless Mode)`, color: 'var(--danger)' };
             }
         }
+
+        if (rEl && rCount) {
+            const res = formatCount(rEl.value.length);
+            rCount.innerText = res.text;
+            rCount.style.color = res.color;
+        }
         if (dEl && dCount) {
-            const dLen = dEl.value.length;
-            if (isWa) {
-                if (dLen <= 60) {
-                    dCount.innerText = `${dLen} / 60 chars (Social Safe - Recommended)`;
-                    dCount.style.color = 'var(--text-muted)';
-                } else if (dLen <= 200) {
-                    dCount.innerText = `${dLen} / 200 chars (Extended Social - for longer text, use Ultra-HD)`;
-                    dCount.style.color = '#f59e0b';
-                } else {
-                    dCount.innerText = `${dLen} chars (Exceeds Social limit - switch to Ultra-HD Lossless Mode)`;
-                    dCount.style.color = 'var(--danger)';
-                }
-            } else {
-                dCount.innerText = `${dLen} chars (Unlimited HD)`;
-                dCount.style.color = 'var(--text-muted)';
-            }
+            const res = formatCount(dEl.value.length);
+            dCount.innerText = res.text;
+            dCount.style.color = res.color;
         }
     }
 
@@ -672,16 +675,74 @@
     if (realMsgInput) realMsgInput.addEventListener('input', updateCharCounters);
     if (decoyMsgInput) decoyMsgInput.addEventListener('input', updateCharCounters);
 
-    // Cryptography Helpers (AES-256 via CryptoJS)
-    function aesEncrypt(text, pwd) {
-        return CryptoJS.AES.encrypt(text, pwd).toString();
+    // Cryptography Helpers: AES-256 with Encrypt-then-MAC (HMAC-SHA256)
+    // Provides full cryptographic authentication and tamper detection
+    function uint8ToWordArray(u8) {
+        const words = [];
+        for (let i = 0; i < u8.length; i++) {
+            words[i >>> 2] |= (u8[i] & 0xff) << (24 - (i % 4) * 8);
+        }
+        return CryptoJS.lib.WordArray.create(words, u8.length);
     }
-    function aesDecrypt(cipher, pwd) {
+
+    function aesEncrypt(text, pwd) {
+        const key = CryptoJS.SHA256(pwd);
+        const macKey = CryptoJS.SHA256(pwd + '::PixelCraft_Auth_MAC');
+        const iv = CryptoJS.lib.WordArray.random(16);
+        const encrypted = CryptoJS.AES.encrypt(text, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+        
+        // Compute HMAC-SHA256 over IV + Ciphertext for Authenticated Integrity
+        const ivCipher = iv.clone().concat(encrypted.ciphertext);
+        const hmac = CryptoJS.HmacSHA256(ivCipher, macKey);
+        const macWords = [hmac.words[0], hmac.words[1]];
+        const macTrunc = CryptoJS.lib.WordArray.create(macWords, 8); // 64-bit authentication tag
+        
+        const magic = CryptoJS.enc.Hex.parse('4554'); // 'ET' (0x45, 0x54) header
+        const payload = magic.concat(iv).concat(macTrunc).concat(encrypted.ciphertext);
+        return CryptoJS.enc.Latin1.stringify(payload);
+    }
+
+    function aesDecrypt(cipherStr, pwd) {
         try {
-            const bytes = CryptoJS.AES.decrypt(cipher, pwd);
+            if (!cipherStr) return null;
+            const raw = CryptoJS.enc.Latin1.parse(cipherStr);
+            // Check for Authenticated 'ET' header (0x45, 0x54)
+            if (raw.sigBytes >= 26 && (raw.words[0] >>> 16) === 0x4554) {
+                const key = CryptoJS.SHA256(pwd);
+                const macKey = CryptoJS.SHA256(pwd + '::PixelCraft_Auth_MAC');
+                
+                const allBytes = [];
+                for (let i = 0; i < raw.sigBytes; i++) {
+                    const word = raw.words[i >>> 2];
+                    allBytes.push((word >>> (24 - (i % 4) * 8)) & 0xff);
+                }
+                
+                const ivWA = uint8ToWordArray(allBytes.slice(2, 18));
+                const macWA = uint8ToWordArray(allBytes.slice(18, 26));
+                const cipherWA = uint8ToWordArray(allBytes.slice(26));
+                
+                // Verify HMAC tag BEFORE attempting decryption
+                const ivCipher = ivWA.clone().concat(cipherWA);
+                const hmac = CryptoJS.HmacSHA256(ivCipher, macKey);
+                const expectedMac = CryptoJS.lib.WordArray.create([hmac.words[0], hmac.words[1]], 8);
+                
+                if (macWA.toString() !== expectedMac.toString()) {
+                    // Authenticated integrity verification failed
+                    return null;
+                }
+                
+                const decrypted = CryptoJS.AES.decrypt({ ciphertext: cipherWA }, key, { iv: ivWA, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+                const text = decrypted.toString(CryptoJS.enc.Utf8);
+                return text || null;
+            }
+            
+            // Backward-compatible fallback for legacy unauthenticated OpenSSL Base64 payloads
+            const bytes = CryptoJS.AES.decrypt(cipherStr, pwd);
             const text = bytes.toString(CryptoJS.enc.Utf8);
             return text || null;
-        } catch(e) { return null; }
+        } catch(e) {
+            return null;
+        }
     }
 
     function strToBytes(str) {
@@ -1054,8 +1115,8 @@
             const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height);
             const origBytes = new Uint8ClampedArray(imgData.data);
 
-            const rCipher = aesEncrypt('PXC_REAL::' + rMsg, rPwd);
-            const dCipher = (dMsg && dPwd) ? aesEncrypt('PXC_DECOY::' + dMsg, dPwd) : null;
+            const rCipher = aesEncrypt('R:' + rMsg, rPwd);
+            const dCipher = (dMsg && dPwd) ? aesEncrypt('D:' + dMsg, dPwd) : null;
 
             if (currentStegoMode === 'whatsapp') {
                 // 1. Embed adaptive dispersed texture-aware Social Safe macro-grid
@@ -1089,14 +1150,14 @@
             const qGateTitle = document.getElementById('quality-gate-title');
             const qGateMetrics = document.getElementById('quality-gate-metrics');
             if (qGateTitle && qGateMetrics) {
-                if (psnr >= 30) {
+                if (psnr >= 30.0) {
                     qGateTitle.innerText = 'Quality Gate: Passed (Zero Grid Artifacts)';
                     qGateTitle.style.color = '#10b981';
-                    qGateMetrics.innerText = `PSNR: ${psnr.toFixed(1)} dB | Max Pixel Diff: ${maxDiff} | Feathered Texture-Aware Lattice`;
+                    qGateMetrics.innerText = `PSNR: ${psnr.toFixed(2)} dB (Threshold: ≥ 30.0 dB) | Max Pixel Diff: ${maxDiff} | Feathered Texture-Aware Lattice`;
                 } else {
                     qGateTitle.innerText = 'Quality Gate: Moderate Modulation Detected';
                     qGateTitle.style.color = '#f59e0b';
-                    qGateMetrics.innerText = `PSNR: ${psnr.toFixed(1)} dB | Recommend switching to Ultra-HD Lossless Mode for pristine quality.`;
+                    qGateMetrics.innerText = `PSNR: ${psnr.toFixed(2)} dB (Below 30.0 dB Threshold) | Recommend switching to Ultra-HD Lossless Mode.`;
                 }
             }
 
@@ -1162,14 +1223,14 @@
 
             let extractedPayload = null;
 
-            // 1. Primary Probe: WhatsApp-Immune Luminance Grid (Survives WhatsApp compression, resizing & metadata stripping)
+            // 1. Primary Probe: Social Safe Macro-Grid (Survives social media compression & resizing)
             const wa0 = extractWhatsAppGrid(imgData.data, cvs.width, cvs.height, 0);
             if (wa0) {
                 const dec0 = aesDecrypt(wa0, pwd);
-                if (dec0 && dec0.startsWith('PXC_REAL::')) {
-                    extractedPayload = { type: 'real_wa', text: dec0.substring(10) };
-                } else if (dec0 && dec0.startsWith('PXC_DECOY::')) {
-                    extractedPayload = { type: 'decoy_wa', text: dec0.substring(11) };
+                if (dec0 && (dec0.startsWith('R:') || dec0.startsWith('PXC_REAL::'))) {
+                    extractedPayload = { type: 'real_wa', text: dec0.startsWith('R:') ? dec0.substring(2) : dec0.substring(10) };
+                } else if (dec0 && (dec0.startsWith('D:') || dec0.startsWith('PXC_DECOY::'))) {
+                    extractedPayload = { type: 'decoy_wa', text: dec0.startsWith('D:') ? dec0.substring(2) : dec0.substring(11) };
                 }
             }
 
@@ -1177,10 +1238,10 @@
                 const wa1 = extractWhatsAppGrid(imgData.data, cvs.width, cvs.height, 1);
                 if (wa1) {
                     const dec1 = aesDecrypt(wa1, pwd);
-                    if (dec1 && dec1.startsWith('PXC_DECOY::')) {
-                        extractedPayload = { type: 'decoy_wa', text: dec1.substring(11) };
-                    } else if (dec1 && dec1.startsWith('PXC_REAL::')) {
-                        extractedPayload = { type: 'real_wa', text: dec1.substring(10) };
+                    if (dec1 && (dec1.startsWith('D:') || dec1.startsWith('PXC_DECOY::'))) {
+                        extractedPayload = { type: 'decoy_wa', text: dec1.startsWith('D:') ? dec1.substring(2) : dec1.substring(11) };
+                    } else if (dec1 && (dec1.startsWith('R:') || dec1.startsWith('PXC_REAL::'))) {
+                        extractedPayload = { type: 'real_wa', text: dec1.startsWith('R:') ? dec1.substring(2) : dec1.substring(10) };
                     }
                 }
             }
@@ -1190,11 +1251,11 @@
                 const s0 = extractSlot(imgData, 0);
                 if (s0) {
                     const dec0 = aesDecrypt(s0, pwd);
-                    if (dec0 && dec0.startsWith('PXC_REAL::')) {
-                        extractedPayload = { type: 'real', text: dec0.substring(10) };
-                    } else if (dec0 && dec0.startsWith('PXC_DECOY::')) {
-                        extractedPayload = { type: 'decoy', text: dec0.substring(11) };
-                    } else if (dec0 && !dec0.startsWith('PXC_')) {
+                    if (dec0 && (dec0.startsWith('R:') || dec0.startsWith('PXC_REAL::'))) {
+                        extractedPayload = { type: 'real', text: dec0.startsWith('R:') ? dec0.substring(2) : dec0.substring(10) };
+                    } else if (dec0 && (dec0.startsWith('D:') || dec0.startsWith('PXC_DECOY::'))) {
+                        extractedPayload = { type: 'decoy', text: dec0.startsWith('D:') ? dec0.substring(2) : dec0.substring(11) };
+                    } else if (dec0 && !dec0.startsWith('PXC_') && !dec0.startsWith('R:') && !dec0.startsWith('D:')) {
                         extractedPayload = { type: 'real', text: dec0 };
                     }
                 }
@@ -1205,11 +1266,11 @@
                 const s1 = extractSlot(imgData, 1);
                 if (s1) {
                     const dec1 = aesDecrypt(s1, pwd);
-                    if (dec1 && dec1.startsWith('PXC_DECOY::')) {
-                        extractedPayload = { type: 'decoy', text: dec1.substring(11) };
-                    } else if (dec1 && dec1.startsWith('PXC_REAL::')) {
-                        extractedPayload = { type: 'real', text: dec1.substring(10) };
-                    } else if (dec1 && !dec1.startsWith('PXC_')) {
+                    if (dec1 && (dec1.startsWith('D:') || dec1.startsWith('PXC_DECOY::'))) {
+                        extractedPayload = { type: 'decoy', text: dec1.startsWith('D:') ? dec1.substring(2) : dec1.substring(11) };
+                    } else if (dec1 && (dec1.startsWith('R:') || dec1.startsWith('PXC_REAL::'))) {
+                        extractedPayload = { type: 'real', text: dec1.startsWith('R:') ? dec1.substring(2) : dec1.substring(10) };
+                    } else if (dec1 && !dec1.startsWith('PXC_') && !dec1.startsWith('R:') && !dec1.startsWith('D:')) {
                         extractedPayload = { type: 'decoy', text: dec1 };
                     }
                 }

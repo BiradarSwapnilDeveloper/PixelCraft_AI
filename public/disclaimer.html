@@ -125,26 +125,29 @@
         provided "as is" and "as available" without any guarantees or warranties of any kind, either express or implied.
       </p>
 
-      <h2>2. Security and Cryptography Disclaimer</h2>
-      <p>While our steganography and encryption tools utilize industry-standard algorithms (such as AES-256), the field
-        of cryptography is constantly evolving. We cannot guarantee that our tools are immune to future cryptanalysis,
-        quantum computing attacks, or undiscovered zero-day vulnerabilities. Furthermore, because our tools run entirely
-        in the browser environment, they may be susceptible to local malware, keyloggers, or compromised operating
-        systems present on your specific device.</p>
-      <p><strong>PixelCraft AI is not a substitute for comprehensive endpoint security or professional OPSEC
-          consulting.</strong> You should not rely on these tools alone to protect life-critical or highly sensitive
-        classified information against state-level adversaries.</p>
+                  <h2>2. Security and Cryptography Disclaimer</h2>
+      <p>While our steganography and encryption tools utilize industry-standard algorithms (such as AES-256 with Encrypt-then-MAC HMAC-SHA256 authentication), the field of cryptography and digital forensics is constantly evolving. We cannot guarantee that our tools are immune to future cryptanalysis, quantum computing attacks, or undiscovered zero-day vulnerabilities. Furthermore, because client-side tools run entirely in the browser environment, they may be susceptible to local malware, keyloggers, screen recorders, or compromised operating systems present on your specific device.</p>
+      <p><strong>PixelCraft AI is not a substitute for comprehensive endpoint security or professional OPSEC consulting.</strong> You should not rely on these tools alone to protect life-critical or classified information against state-level adversaries.</p>
 
-      <h2>3. Professional Advice</h2>
-      <p>The content published on our blog regarding cybersecurity, OPSEC, and digital forensics is intended for general
-        knowledge and educational use. It does not constitute formal legal or professional cybersecurity advice. If you
-        require specialized assistance, you should consult a certified cybersecurity professional or legal counsel.</p>
+      <h2>3. Steganography, Social Media &amp; Delivery Disclaimer</h2>
+      <p>Steganography functions by embedding encrypted data within subtle visual noise variations of an image carrier. Users must be fully aware of the following technical boundaries:</p>
+      <ul>
+        <li><strong>No Guarantee of Undetectability:</strong> Steganography reduces casual detectability but does not guarantee mathematical invisibility against specialized forensic steganalysis tools (e.g., chi-square tests, sample-pair analysis, or machine-learning neural steganalysers).</li>
+        <li><strong>Plausible Deniability Limitations:</strong> The separation of Real and Decoy channels via dual passwords is a software-level coercion mitigation feature. It is not an absolute legal defense or guaranteed protection against court-ordered disclosure.</li>
+        <li><strong>External Transmission Limitations:</strong> Third-party platforms (including WhatsApp, Telegram, social media networks, and email clients) routinely recompress, resize, and re-encode images. While PixelCraft AI's <em>Social Safe Mode</em> is engineered for lossy JPEG resilience, <strong>recovery is not guaranteed</strong> across all third-party platforms or following aggressive geometric cropping, rotation, or heavy compression (Q&lt;50).</li>
+        <li><strong>No Data Recovery:</strong> Because encryption keys and plaintext messages are processed purely in local browser memory and never stored, PixelCraft AI cannot recover lost passwords or reconstruct corrupted files. Users must maintain unencrypted original backups.</li>
+      </ul>
 
-      <h2>4. External Links</h2>
-      <p>Our website may contain links to external websites that are not provided or maintained by or in any way
-        affiliated with PixelCraft AI. Please note that PixelCraft AI does not guarantee the accuracy, relevance,
-        timeliness, or completeness of any information on these external websites.</p>
+      <h2>4. Forensic Sanitization &amp; Cryptographic Seal Disclaimer</h2>
+      <p>Forensic Sanitizer provides deep EXIF/GPS metadata stripping and dual-anchor HMAC-SHA256 cryptographic sealing. Users acknowledge and accept the following boundaries:</p>
+      <ul>
+        <li><strong>Seal Verification Scope:</strong> Successful verification confirms that an authentic PixelCraft HMAC seal was recovered from metadata or the pixel domain. It does not certify that the image has never been modified outside the monitored luminance carrier, nor does it serve as a government-recognized digital signature or legal proof of chain-of-custody.</li>
+        <li><strong>Metadata Removal Scope:</strong> Metadata sanitization removes standard EXIF, XMP, IPTC, and trailing EOF chunks. It cannot eliminate physical camera sensor imperfections (PRNU noise) or watermarks embedded within the visual pixel content itself.</li>
+        <li><strong>Image Quality Metrics:</strong> Quality scores (such as PSNR &ge; 30.0 dB) are mathematical measurements of pixel deviation. They do not constitute a subjective aesthetic guarantee or promise of identical visual perception across all display hardware.</li>
+      </ul>
 
+      <h2>5. Professional Advice &amp; External Services</h2>
+      <p>The content published across PixelCraft AI regarding cybersecurity, steganography, and digital forensics is intended for general knowledge and educational use. It does not constitute formal legal, forensic, or professional cybersecurity advice. Furthermore, PixelCraft AI exercises zero control over third-party platforms (such as messaging apps or cloud services) and assumes no liability for their handling of your files.</p>
     </article>
   </main>
 

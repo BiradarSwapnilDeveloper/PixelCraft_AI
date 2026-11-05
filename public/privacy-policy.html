@@ -120,12 +120,22 @@
 <h2>1. Introduction</h2>
 <p>Welcome to PixelCraft AI. Your privacy is of paramount importance to us. This Privacy Policy outlines our strict operational standards regarding your personal information. Because our platform is fundamentally built on decentralized, client-side processing, our policy is incredibly simple: <strong>We do not collect, store, or sell your files.</strong></p>
 
-<h2>2. Information Processing</h2>
-<p>PixelCraft AI operates via a transparent hybrid architecture. While many of our core tools run entirely within your browser (client-side), certain advanced features require server processing. For an itemized, tool-by-tool data processing breakdown, please consult our dedicated <a href="data-practices.html" style="color: #38bdf8;">Privacy & Data Practices Inventory</a>.</p>
+<h2>2. Information Processing Architecture</h2>
+<p>PixelCraft AI operates via a transparent, purpose-limited hybrid architecture. We strictly distinguish between client-side local execution and ephemeral server-assisted processing. For an itemized, tool-by-tool technical breakdown, please review our dedicated <a href="data-practices.html" style="color: #38bdf8;">Privacy &amp; Data Practices Inventory</a>.</p>
+
+<h3>2.1 Client-Side Local Tools (Zero Server Upload)</h3>
+<p>The vast majority of PixelCraft AI utilities—including <strong>Advanced Decoy Steganography</strong>, <strong>Audio Steganography</strong>, <strong>Digital Fingerprint Wiper</strong>, <strong>Format Converter</strong>, <strong>Smart Image Compressor</strong>, and <strong>QR Code Generator</strong>—execute 100% locally within your device's browser memory (HTML5 Canvas, Web Audio API, Web Workers, and Web Crypto APIs).</p>
 <ul>
-  <li><strong>Fully Local Tools:</strong> Tools like Image Encryption, Steganography, Format Converter, and Metadata Removal process everything directly on your device. Your files never leave your browser sandbox.</li>
-  <li><strong>Server-Processed Tools:</strong> Tools such as AI Dubbing, Forensic Sanitizer, and PDF Link Generator require secure server processing. For these tools, your files are transmitted to our servers and/or trusted third-party AI providers (Groq and Google Cloud) under ephemeral processing rules.</li>
-  <li><strong>Your Output Data:</strong> Any generated media is rendered locally or securely downloaded to your device.</li>
+  <li><strong>Zero Network Transmission:</strong> Your carrier images, audio files, confidential secret messages, decoy messages, and passwords remain in local browser RAM and are never transmitted across the network to PixelCraft AI servers (0 bytes transmitted).</li>
+  <li><strong>Memory-Only Lifecycle:</strong> All processing buffers exist solely in volatile browser heap memory and are automatically cleared when the browser tab is closed or navigated away.</li>
+</ul>
+
+<h3>2.2 Server-Assisted Ephemeral Tools</h3>
+<p>Certain advanced security and AI features require server-side execution. For these specific tools, media is transmitted securely over encrypted HTTPS connections under strict zero-persistence or ephemeral lifecycles:</p>
+<ul>
+  <li><strong>Forensic Sanitizer &amp; Cryptographic Scanner:</strong> Uploaded images are transmitted to <span style="font-family: monospace;">/api/tools/forensic-sanitize</span> and <span style="font-family: monospace;">/api/tools/verify-seal</span>. Processing operates exclusively in volatile server RAM (<span style="font-family: monospace;">multer.memoryStorage()</span>, 50MB limit) to inspect EXIF/GPS metadata, scan for trailing binary malware/stego payloads, strip non-conforming headers via Libvips (<span style="font-family: monospace;">sharp</span>), and embed an HMAC-SHA256 dual-anchor cryptographic seal. <strong>Uploaded files are never written to persistent disk</strong> and are discarded immediately upon HTTP response completion.</li>
+  <li><strong>PDF-to-Link Sharing:</strong> Uploaded PDF files are stored on isolated server storage for a strict, maximum lifecycle of <strong>24 hours</strong> to serve user-requested public download links. An automated hourly cron job permanently unlinks all expired files.</li>
+  <li><strong>AI Dubbing &amp; Translation:</strong> Audio and video chunks are written to temporary system storage (<span style="font-family: monospace;">os.tmpdir()</span>) and deleted (<span style="font-family: monospace;">unlinkSync</span>) immediately after processing. Transcripts and synthesized speech are passed to trusted AI APIs (Groq for speech-to-text, Google Cloud for TTS) under transient inference rules.</li>
 </ul>
 
 <h2>3. Log Files & Basic Analytics</h2>
@@ -155,7 +165,31 @@
 </ul>
 <p>We do not share any personally identifiable information (PII) with these services. We strictly limit the data shared to only what is necessary to perform the requested AI operation.</p>
 
-<h2>7. GDPR Privacy Rights (For EEA Users)</h2>
+<h2>5. Steganography, Plausible Deniability &amp; Cryptographic Seals</h2>
+<p>To ensure informed consent and prevent misunderstandings regarding technical capabilities, PixelCraft AI transparently documents the operational realities of its cryptographic and forensic systems:</p>
+<ul>
+  <li><strong>Authenticated Encryption (Encrypt-then-MAC):</strong> In Advanced Decoy Steganography, user messages are encrypted using AES-256-CBC with PKCS#7 padding. To guarantee ciphertext integrity and eliminate bit-flipping vulnerabilities, an HMAC-SHA256 authentication tag is computed over the ciphertext and initialization vector (IV). The HMAC tag is cryptographically verified before decryption; tampered payloads or incorrect passwords cause decryption to safely fail immediately. HMAC proves ciphertext integrity and correct key derivation; it does not attest to the legal identity of the sender.</li>
+  <li><strong>Plausible Deniability Architecture:</strong> The tool supports separate Real and Decoy payload channels mapped to distinct passwords. While this provides plausible deniability against casual inspection, it does not constitute an absolute mathematical guarantee of undetectability against deep statistical steganalysis (e.g., chi-square or sample-pair analysis) conducted by forensic laboratories.</li>
+  <li><strong>Cryptographic Seal Verification Scope:</strong> Forensic Sanitizer embeds an HMAC-SHA256 seal across EXIF metadata and the pixel luminance domain. Verification via <span style="font-family: monospace;">/api/tools/verify-seal</span> confirms that a valid PixelCraft seal was successfully extracted. Recovering a seal verifies that the image underwent sanitization and seal generation; it does not serve as a legally certified digital signature or an absolute guarantee that unmonitored visual elements were not altered after export.</li>
+</ul>
+
+<h2>6. Third-Party Platforms, Social Networks &amp; Email Delivery</h2>
+<p>PixelCraft AI tools allow users to prepare images for personal privacy and social sharing. However, once an image is exported and shared through external third-party services (such as WhatsApp, Telegram, Instagram, email gateways, or cloud storage):</p>
+<ul>
+  <li><strong>Independent Platform Processing:</strong> External platforms operate under their own independent terms of service and privacy policies. They routinely recompress media (e.g., lossy JPEG Q~65), downsample pixel resolutions, convert color profiles, or strip metadata.</li>
+  <li><strong>No Universal Delivery Guarantee:</strong> While PixelCraft AI's <em>Social Safe Mode</em> is specifically engineered with 2D prime-stride dispersion and majority voting (R=5, 3, 1) to survive lossy JPEG compression and resizing, transmission survival cannot be universally guaranteed across all third-party platforms or under arbitrary image transformations (such as aggressive cropping, rotation, or Q&lt;50 recompression).</li>
+  <li><strong>PixelCraft AI Independence:</strong> PixelCraft AI exercises zero control over third-party platforms and assumes no responsibility for how external services process, inspect, or retain shared content.</li>
+</ul>
+
+<h2>7. User Responsibilities &amp; Legal Data Hygiene</h2>
+<p>Users of PixelCraft AI are expected to exercise sound operational security and adhere to acceptable use standards:</p>
+<ul>
+  <li><strong>Authorization:</strong> You must possess all necessary legal permissions, copyrights, or authorizations before embedding messages inside image carriers or uploading images for forensic sanitization.</li>
+  <li><strong>Sensitive Information:</strong> Do not upload classified government information, non-consensual personal imagery, or mission-critical confidential business records unless you have reviewed and accepted the specific tool's processing architecture and retention limits.</li>
+  <li><strong>Backup Requirement:</strong> Because client-side encryption and lossy compression are technically irreversible if keys are lost or images corrupted, users are strictly responsible for maintaining unencrypted original backups of all source media.</li>
+</ul>
+
+<h2>8. GDPR & International Privacy Rights (For EEA Users)</h2>
 <p>If you are a resident of the European Economic Area (EEA), you have certain data protection rights under the General Data Protection Regulation (GDPR). Our legal basis for processing your information relies on your consent and our legitimate interest in providing our services.</p>
 <ul>
   <li><strong>Right to Access:</strong> You have the right to request copies of your personal data.</li>
@@ -165,7 +199,7 @@
 </ul>
 <p>To exercise any of these rights, please contact us. We will respond to your request within 30 days.</p>
 
-<h2>8. Consent</h2>
+<h2>9. Consent</h2>
 <p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
 
     </article>
