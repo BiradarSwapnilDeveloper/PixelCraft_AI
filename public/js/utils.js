@@ -509,11 +509,16 @@ function setupDragDrop(area, onFile) {
   });
 }
 
-function drawImageToCanvas(canvas, img, maxW = 800, maxH = 600) {
-  let w = img.naturalWidth, h = img.naturalHeight;
-  if (w > maxW) { h = h * maxW / w; w = maxW; }
-  if (h > maxH) { h = h * maxH / h; h = maxH; }
-  canvas.width = w; canvas.height = h;
+function drawImageToCanvas(canvas, img, maxW, maxH) {
+  let w = img.naturalWidth || img.width;
+  let h = img.naturalHeight || img.height;
+  if (maxW && maxH && (w > maxW || h > maxH)) {
+    const scale = Math.min(maxW / w, maxH / h);
+    w = Math.round(w * scale);
+    h = Math.round(h * scale);
+  }
+  canvas.width = w;
+  canvas.height = h;
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, w, h);
   ctx.drawImage(img, 0, 0, w, h);

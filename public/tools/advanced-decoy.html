@@ -414,7 +414,7 @@
           <div style="font-size: 2.2rem; margin-bottom: 8px;">🔓</div>
           <strong>Drag & Drop Encrypted Image Here</strong><br>
           <span style="font-size: 0.88rem; color: var(--text-muted);">or click to browse PNG</span>
-          <input type="file" id="dec-file" accept="image/png" style="display:none;">
+          <input type="file" id="dec-file" accept="image/png, image/jpeg" style="display:none;">
         </div>
         <div class="preview-container" id="dec-preview-container">
           <img id="dec-preview" src="" alt="Preview">
@@ -427,9 +427,15 @@
 
         <button class="btn btn-primary" id="btn-decrypt" style="width: 100%; padding: 14px; font-size: 1rem;">Extract Message</button>
 
+        <div id="dec-error" class="error-box" style="display: none; margin-top: 16px;"></div>
+
         <div id="dec-result" style="display: none; margin-top: 24px; text-align: left;">
-          <label style="color: var(--text-heading); font-weight: 600; margin-bottom: 8px; display: block;">Extracted Message:</label>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+            <label style="color: var(--text-heading); font-weight: 600; margin-bottom: 0;">Extracted Message:</label>
+            <span id="dec-badge" style="display:inline-block; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px;"></span>
+          </div>
           <div id="dec-text" style="background: var(--surface-subtle); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); color: var(--text-heading); white-space: pre-wrap; font-family: monospace; font-size: 0.95rem;"></div>
+          <button class="btn btn-secondary" id="btn-copy-dec" style="width: 100%; margin-top: 12px; padding: 10px; justify-content:center;">📋 Copy Extracted Message</button>
         </div>
       </div>
     </div>
@@ -445,14 +451,18 @@
   <script>
     // TABS
     function switchTab(tab) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        const tabBtns = document.querySelectorAll('.tab-btn-item');
+        const panels = document.querySelectorAll('.panel');
+        tabBtns.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
         if(tab === 'encrypt') {
-            document.querySelectorAll('.tab')[0].classList.add('active');
-            document.getElementById('panel-encrypt').classList.add('active');
+            if(tabBtns[0]) tabBtns[0].classList.add('active');
+            const pEnc = document.getElementById('panel-encrypt');
+            if(pEnc) pEnc.classList.add('active');
         } else {
-            document.querySelectorAll('.tab')[1].classList.add('active');
-            document.getElementById('panel-decrypt').classList.add('active');
+            if(tabBtns[1]) tabBtns[1].classList.add('active');
+            const pDec = document.getElementById('panel-decrypt');
+            if(pDec) pDec.classList.add('active');
         }
     }
 
@@ -465,11 +475,15 @@
         document.getElementById('loading').style.display = 'none';
     }
 
-    // File Handlers
+    // File Handlers & Drag-and-Drop
     let targetImage = null;
     let decryptImage = null;
 
     function handleFile(file, isEncrypt) {
+        if (!file || !file.type.startsWith('image/')) {
+            alert('Please select an image file (PNG or JPEG).');
+            return;
+        }
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = new Image();
@@ -478,10 +492,14 @@
                     targetImage = img;
                     document.getElementById('enc-preview').src = img.src;
                     document.getElementById('enc-preview-container').style.display = 'block';
+                    document.getElementById('enc-result').style.display = 'none';
                 } else {
                     decryptImage = img;
                     document.getElementById('dec-preview').src = img.src;
                     document.getElementById('dec-preview-container').style.display = 'block';
+                    document.getElementById('dec-result').style.display = 'none';
+                    const errBox = document.getElementById('dec-error');
+                    if (errBox) errBox.style.display = 'none';
                 }
             };
             img.src = e.target.result;
@@ -489,30 +507,119 @@
         reader.readAsDataURL(file);
     }
 
-    document.getElementById('enc-drop').onclick = () => document.getElementById('enc-file').click();
-    document.getElementById('enc-file').onchange = (e) => handleFile(e.target.files[0], true);
-    
-    document.getElementById('dec-drop').onclick = () => document.getElementById('dec-file').click();
-    document.getElementById('dec-file').onchange = (e) => handleFile(e.target.files[0], false);
+    function initDropZone(dropZoneId, fileInputId, isEncrypt) {
+        const dropZone = document.getElementById(dropZoneId);
+        const fileInput = document.getElementById(fileInputId);
+        if (!dropZone || !fileInput) return;
 
-    // Cryptography Admin Public Key (For Police Forensics)
-    const ADMIN_PUBLIC_KEY = {
-        "alg": "RSA-OAEP-256", "e": "AQAB", "ext": true,
-        "key_ops": ["encrypt"], "kty": "RSA",
-        "n": "v1gO_1f0kXpUXY2cR5K3y2cR5K3..." // Dummy shortened for simplicity in this demo build
-    };
+        dropZone.onclick = () => fileInput.click();
+        fileInput.onchange = (e) => {
+            if (e.target.files && e.target.files[0]) handleFile(e.target.files[0], isEncrypt);
+        };
 
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handleFile(e.dataTransfer.files[0], isEncrypt);
+            }
+        });
+    }
+
+    initDropZone('enc-drop', 'enc-file', true);
+    initDropZone('dec-drop', 'dec-file', false);
+
+    // Cryptography Helpers (AES-256 via CryptoJS)
     function aesEncrypt(text, pwd) {
         return CryptoJS.AES.encrypt(text, pwd).toString();
     }
     function aesDecrypt(cipher, pwd) {
         try {
             const bytes = CryptoJS.AES.decrypt(cipher, pwd);
-            return bytes.toString(CryptoJS.enc.Utf8);
+            const text = bytes.toString(CryptoJS.enc.Utf8);
+            return text || null;
         } catch(e) { return null; }
     }
 
-    // QIM Engine Math
+    // High-Fidelity Dual-Slot Steganography Engine
+    // Slot 0 (Even pixels) = Real Secret Channel
+    // Slot 1 (Odd pixels)  = Decoy Channel (Plausible Deniability)
+    // Both slots are completely disjoint, preventing collision with 100% mathematical guarantee.
+    const textEnc = new TextEncoder();
+    const textDec = new TextDecoder();
+
+    function embedSlot(imgData, text, slot) {
+        const data = imgData.data;
+        const totalPixels = data.length / 4;
+        const bytes = textEnc.encode(text);
+        const len = bytes.length;
+
+        // 32-bit length prefix + payload
+        let bits = [];
+        for (let b = 31; b >= 0; b--) bits.push((len >> b) & 1);
+        for (let i = 0; i < len; i++) {
+            for (let b = 7; b >= 0; b--) bits.push((bytes[i] >> b) & 1);
+        }
+
+        const slotPixels = Math.floor(totalPixels / 2);
+        if (bits.length > slotPixels * 3) {
+            throw new Error(`Carrier capacity exceeded for this slot. Max size: ${Math.floor((slotPixels * 3 - 32) / 8)} bytes.`);
+        }
+
+        let bitIdx = 0;
+        for (let p = slot; p < totalPixels && bitIdx < bits.length; p += 2) {
+            const offset = p * 4;
+            for (let c = 0; c < 3 && bitIdx < bits.length; c++) {
+                data[offset + c] = (data[offset + c] & 0xFE) | bits[bitIdx++];
+            }
+        }
+    }
+
+    function extractSlot(imgData, slot) {
+        const data = imgData.data;
+        const totalPixels = data.length / 4;
+        let bits = [];
+        let p = slot;
+        let targetLength = 32;
+        let len = null;
+
+        for (; p < totalPixels; p += 2) {
+            const offset = p * 4;
+            for (let c = 0; c < 3; c++) {
+                bits.push(data[offset + c] & 1);
+                if (bits.length === 32 && len === null) {
+                    len = 0;
+                    for (let i = 0; i < 32; i++) len = (len * 2) + bits[i];
+                    if (len <= 0 || len > 500000) return null;
+                    targetLength = 32 + (len * 8);
+                }
+                if (len !== null && bits.length >= targetLength) {
+                    const bytes = new Uint8Array(len);
+                    let byteIdx = 0;
+                    for (let i = 32; i < targetLength; i += 8) {
+                        let b = 0;
+                        for (let bit = 0; bit < 8; bit++) b = (b << 1) | bits[i + bit];
+                        bytes[byteIdx++] = b;
+                    }
+                    try {
+                        return textDec.decode(bytes);
+                    } catch(e) {
+                        return null;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    // Legacy QIM Fallback (For older images)
     function mulberry32(a) {
         return function() {
             var t = a += 0x6D2B79F5;
@@ -527,65 +634,14 @@
         return hash;
     }
 
-    const BLOCK_SIZE = 8;
-    const Q_STEP = 16;
-    const REDUNDANCY = 25;
-
-    function embedQIM(data, width, height, binaryStr, seedStr) {
-        const blocksX = Math.floor(width / BLOCK_SIZE);
-        const blocksY = Math.floor(height / BLOCK_SIZE);
-        const totalBlocks = blocksX * blocksY;
-        
-        let fullBinaryStr = '';
-        const len16 = Math.floor(binaryStr.length / 8); // length in bytes
-        for(let b=15; b>=0; b--) fullBinaryStr += ((len16 >> b) & 1).toString();
-        fullBinaryStr += binaryStr;
-        
-        if (totalBlocks < fullBinaryStr.length * REDUNDANCY) throw new Error("Image too small.");
-
-        let prng = mulberry32(hashString(seedStr));
-        let indices = new Uint32Array(totalBlocks);
-        for(let i=0; i<totalBlocks; i++) indices[i] = i;
-        for(let i=totalBlocks-1; i>0; i--) {
-            const j = Math.floor(prng() * (i + 1));
-            const t = indices[i]; indices[i] = indices[j]; indices[j] = t;
-        }
-
-        let ptr = 0;
-        for(let i=0; i<fullBinaryStr.length; i++) {
-            const bit = parseInt(fullBinaryStr[i]);
-            for(let r=0; r<REDUNDANCY; r++) {
-                const idx = indices[ptr++];
-                const bx = idx % blocksX;
-                const by = Math.floor(idx / blocksX);
-                const sx = bx * BLOCK_SIZE;
-                const sy = by * BLOCK_SIZE;
-
-                let sum=0, count=0;
-                for(let y=sy; y<sy+BLOCK_SIZE; y++) {
-                    for(let x=sx; x<sx+BLOCK_SIZE; x++) {
-                        sum += data[(y*width+x)*4+2];
-                        count++;
-                    }
-                }
-                const avg = sum/count;
-                const q_avg = Math.round((avg - bit*(Q_STEP/2))/Q_STEP)*Q_STEP + bit*(Q_STEP/2);
-                const adj = q_avg - avg;
-
-                for(let y=sy; y<sy+BLOCK_SIZE; y++) {
-                    for(let x=sx; x<sx+BLOCK_SIZE; x++) {
-                        const p = (y*width+x)*4+2;
-                        data[p] = Math.max(0, Math.min(255, data[p] + adj));
-                    }
-                }
-            }
-        }
-    }
-
     function extractQIM(data, width, height, seedStr) {
+        const BLOCK_SIZE = 8;
+        const Q_STEP = 16;
+        const REDUNDANCY = 25;
         const blocksX = Math.floor(width / BLOCK_SIZE);
         const blocksY = Math.floor(height / BLOCK_SIZE);
         const totalBlocks = blocksX * blocksY;
+        if (totalBlocks < 50) return null;
 
         let prng = mulberry32(hashString(seedStr));
         let indices = new Uint32Array(totalBlocks);
@@ -639,98 +695,210 @@
 
     // Handlers
     document.getElementById('btn-encrypt').addEventListener('click', async () => {
-        if(!targetImage) return alert('Select image');
-        const rMsg = document.getElementById('enc-real-msg').value;
+        if(!targetImage) return alert('Please select a carrier image first.');
+        const rMsg = document.getElementById('enc-real-msg').value.trim();
         const rPwd = document.getElementById('enc-real-pwd').value;
-        const dMsg = document.getElementById('enc-decoy-msg').value;
+        const dMsg = document.getElementById('enc-decoy-msg').value.trim();
         const dPwd = document.getElementById('enc-decoy-pwd').value;
 
-        if(!rMsg || !rPwd) return alert('Real message and password required.');
+        if(!rMsg || !rPwd) return alert('Real message and Real password are required.');
+        if((dMsg && !dPwd) || (!dMsg && dPwd)) {
+            return alert('To enable Decoy channel, both Decoy message and Decoy password must be provided.');
+        }
+        if(dMsg && dPwd && rPwd === dPwd) {
+            return alert('Decoy password must be different from Real password to ensure plausible deniability.');
+        }
 
-        showLoading('Applying Advanced QIM Engine...');
-        await new Promise(r => setTimeout(r, 50));
+        showLoading('Encrypting & Embedding Dual-Slot Payload...');
+        await new Promise(r => setTimeout(r, 60));
 
         try {
             const cvs = document.getElementById('hidden-canvas');
-            cvs.width = targetImage.width;
-            cvs.height = targetImage.height;
+            cvs.width = targetImage.naturalWidth || targetImage.width;
+            cvs.height = targetImage.naturalHeight || targetImage.height;
             const ctx = cvs.getContext('2d');
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
             ctx.drawImage(targetImage, 0, 0);
             const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height);
 
-            const sid = "PX-" + Math.random().toString(36).substr(2,6).toUpperCase();
-            
-            // 1. Real
-            const rCipher = aesEncrypt(rMsg, rPwd);
-            let rBin = '';
-            for(let i=0; i<rCipher.length; i++) rBin += rCipher.charCodeAt(i).toString(2).padStart(8,'0');
-            embedQIM(imgData.data, cvs.width, cvs.height, rBin, rPwd);
+            // 1. Embed Real Message into Slot 0
+            const rCipher = aesEncrypt('PXC_REAL::' + rMsg, rPwd);
+            embedSlot(imgData, rCipher, 0);
 
-            // 2. Decoy
+            // 2. Embed Decoy Message into Slot 1 (if provided)
             if (dMsg && dPwd) {
-                const dCipher = aesEncrypt(dMsg, dPwd);
-                let dBin = '';
-                for(let i=0; i<dCipher.length; i++) dBin += dCipher.charCodeAt(i).toString(2).padStart(8,'0');
-                embedQIM(imgData.data, cvs.width, cvs.height, dBin, dPwd);
+                const dCipher = aesEncrypt('PXC_DECOY::' + dMsg, dPwd);
+                embedSlot(imgData, dCipher, 1);
             }
 
             ctx.putImageData(imgData, 0, 0);
             const url = cvs.toDataURL('image/png');
             document.getElementById('btn-download').onclick = () => {
-                const a = document.createElement('a'); a.href = url; a.download = 'secure.png'; a.click();
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'pixelcraft_secure_decoy.png';
+                a.click();
+                if (typeof showToast === 'function') {
+                    showToast('Secure image downloaded!', 'success');
+                }
             };
             document.getElementById('enc-result').style.display = 'block';
             hideLoading();
+            if (typeof showToast === 'function') {
+                showToast('Encrypted carrier generated successfully!', 'success');
+            }
         } catch(e) {
             hideLoading();
-            alert('Error: ' + e.message);
+            alert('Encryption failed: ' + (e.message || e));
         }
     });
 
     document.getElementById('btn-decrypt').addEventListener('click', async () => {
-        if(!decryptImage) return alert('Select image');
-        const pwd = document.getElementById('dec-pwd').value;
-        if(!pwd) return alert('Password required');
+        const errBox = document.getElementById('dec-error');
+        const resBox = document.getElementById('dec-result');
+        if (errBox) errBox.style.display = 'none';
+        if (resBox) resBox.style.display = 'none';
 
-        showLoading('Extracting QIM Blocks...');
-        await new Promise(r => setTimeout(r, 50));
+        if(!decryptImage) {
+            if (errBox) {
+                errBox.innerText = 'Please select or drop an encrypted image first.';
+                errBox.style.display = 'block';
+            } else {
+                alert('Please select an encrypted image first.');
+            }
+            return;
+        }
+        const pwd = document.getElementById('dec-pwd').value;
+        if(!pwd) {
+            if (errBox) {
+                errBox.innerText = 'Please enter your password to extract payload.';
+                errBox.style.display = 'block';
+            } else {
+                alert('Password is required.');
+            }
+            return;
+        }
+
+        showLoading('Extracting & Decrypting Secret Payload...');
+        await new Promise(r => setTimeout(r, 60));
 
         try {
             const cvs = document.getElementById('hidden-canvas');
-            cvs.width = decryptImage.width;
-            cvs.height = decryptImage.height;
+            cvs.width = decryptImage.naturalWidth || decryptImage.width;
+            cvs.height = decryptImage.naturalHeight || decryptImage.height;
             const ctx = cvs.getContext('2d');
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
             ctx.drawImage(decryptImage, 0, 0);
             const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height);
 
-            const bin = extractQIM(imgData.data, cvs.width, cvs.height, pwd);
-            if(!bin) {
-                hideLoading();
-                return alert('Wrong password or corrupted image.');
-            }
-            
-            let cipher = '';
-            for(let i=0; i<bin.length; i+=8) {
-                const byte = bin.substr(i,8);
-                if(byte.length===8) cipher += String.fromCharCode(parseInt(byte,2));
+            let extractedPayload = null;
+
+            // 1. Try Slot 0 (Primary / Real Payload)
+            const s0 = extractSlot(imgData, 0);
+            if (s0) {
+                const dec0 = aesDecrypt(s0, pwd);
+                if (dec0 && dec0.startsWith('PXC_REAL::')) {
+                    extractedPayload = { type: 'real', text: dec0.substring(10) };
+                } else if (dec0 && dec0.startsWith('PXC_DECOY::')) {
+                    extractedPayload = { type: 'decoy', text: dec0.substring(11) };
+                } else if (dec0 && !dec0.startsWith('PXC_')) {
+                    extractedPayload = { type: 'real', text: dec0 };
+                }
             }
 
-            // Cleanup padding
-            cipher = cipher.replace(/\0/g, '');
-
-            const msg = aesDecrypt(cipher, pwd);
-            if(msg) {
-                document.getElementById('dec-text').innerText = msg;
-                document.getElementById('dec-result').style.display = 'block';
-            } else {
-                alert('Wrong password or corrupted image.');
+            // 2. Try Slot 1 (Decoy Payload)
+            if (!extractedPayload) {
+                const s1 = extractSlot(imgData, 1);
+                if (s1) {
+                    const dec1 = aesDecrypt(s1, pwd);
+                    if (dec1 && dec1.startsWith('PXC_DECOY::')) {
+                        extractedPayload = { type: 'decoy', text: dec1.substring(11) };
+                    } else if (dec1 && dec1.startsWith('PXC_REAL::')) {
+                        extractedPayload = { type: 'real', text: dec1.substring(10) };
+                    } else if (dec1 && !dec1.startsWith('PXC_')) {
+                        extractedPayload = { type: 'decoy', text: dec1 };
+                    }
+                }
             }
+
+            // 3. Fallback to Legacy QIM format
+            if (!extractedPayload) {
+                const legacyBin = extractQIM(imgData.data, cvs.width, cvs.height, pwd);
+                if (legacyBin) {
+                    let cipher = '';
+                    for (let i = 0; i < legacyBin.length; i += 8) {
+                        const byte = legacyBin.substr(i, 8);
+                        if (byte.length === 8) cipher += String.fromCharCode(parseInt(byte, 2));
+                    }
+                    cipher = cipher.replace(/\0/g, '');
+                    const decLegacy = aesDecrypt(cipher, pwd);
+                    if (decLegacy) {
+                        extractedPayload = { type: 'legacy', text: decLegacy };
+                    }
+                }
+            }
+
             hideLoading();
+
+            if (extractedPayload) {
+                const badge = document.getElementById('dec-badge');
+                if (badge) {
+                    if (extractedPayload.type === 'real') {
+                        badge.innerText = '🔒 Real Secret Payload';
+                        badge.style.background = 'var(--success-light, #ecfdf5)';
+                        badge.style.color = 'var(--success, #059669)';
+                        badge.style.border = '1px solid var(--success-border, #a7f3d0)';
+                    } else if (extractedPayload.type === 'decoy') {
+                        badge.innerText = '🎭 Decoy Payload (Plausible Deniability)';
+                        badge.style.background = 'var(--warning-light, #fffbeb)';
+                        badge.style.color = 'var(--warning, #d97706)';
+                        badge.style.border = '1px solid rgba(217, 119, 6, 0.3)';
+                    } else {
+                        badge.innerText = 'Decrypted Payload';
+                        badge.style.background = 'var(--primary-light, #eff6ff)';
+                        badge.style.color = 'var(--primary, #2563eb)';
+                        badge.style.border = '1px solid var(--primary-border, #bfdbfe)';
+                    }
+                }
+                document.getElementById('dec-text').innerText = extractedPayload.text;
+                resBox.style.display = 'block';
+                if (typeof showToast === 'function') {
+                    showToast('Secret payload extracted successfully!', 'success');
+                }
+            } else {
+                if (errBox) {
+                    errBox.innerText = 'Extraction failed: Incorrect password or image does not contain an encrypted payload.';
+                    errBox.style.display = 'block';
+                } else {
+                    alert('Wrong password or corrupted image.');
+                }
+            }
         } catch(e) {
             hideLoading();
-            alert('Extraction failed.');
+            if (errBox) {
+                errBox.innerText = 'Extraction failed: ' + (e.message || e);
+                errBox.style.display = 'block';
+            } else {
+                alert('Extraction failed: ' + (e.message || e));
+            }
         }
     });
+
+    // Copy extracted text
+    const btnCopy = document.getElementById('btn-copy-dec');
+    if (btnCopy) {
+        btnCopy.addEventListener('click', () => {
+            const text = document.getElementById('dec-text').innerText;
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                if (typeof showToast === 'function') {
+                    showToast('Message copied to clipboard!', 'success');
+                } else {
+                    alert('Copied to clipboard!');
+                }
+            });
+        });
+    }
   </script>
 
   
