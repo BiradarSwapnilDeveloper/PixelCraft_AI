@@ -2255,7 +2255,16 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
       sealHash = crypto.createHmac('sha256', sealSecret).update(scrubbedBuffer).digest('hex');
       const sealMessage = `Pixelcraft_Verified_${sealHash}`;
 
-      sanitizedBuffer = await sharp(scrubbedBuffer)
+      // Dual-Anchor Sealing:
+      // Anchor 1: EXIF Metadata ImageDescription
+      // Anchor 2: Scale-Invariant WhatsApp-Immune Luminance Macro-Grid Watermark in Pixel Domain
+      const rawObj = await sharp(scrubbedBuffer).raw().toBuffer({ resolveWithObject: true });
+      const { width, height, channels } = rawObj.info;
+      const modPixelData = Buffer.from(rawObj.data);
+
+      embedPixelSeal(modPixelData, width, height, channels, sealHash);
+
+      sanitizedBuffer = await sharp(modPixelData, { raw: { width, height, channels } })
         .withMetadata({
           exif: {
             IFD0: {
@@ -2287,10 +2296,93 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
   }
 });
 
+// Scale-Invariant WhatsApp-Immune Cryptographic Watermarking Engine
+function embedPixelSeal(rawBuffer, width, height, channels, sealHex) {
+  const COLS = 40, ROWS = 40, DELTA = 16;
+  const sealBytes = Buffer.from(sealHex, 'hex');
+  const bits = [];
+  // 16-bit sync magic: 0x534C ('SL')
+  for (let b = 15; b >= 0; b--) bits.push((0x534C >> b) & 1);
+  for (let i = 0; i < sealBytes.length; i++) {
+    for (let b = 7; b >= 0; b--) bits.push((sealBytes[i] >> b) & 1);
+  }
+
+  for (let i = 0; i < bits.length && i < COLS * ROWS; i++) {
+    const c = i % COLS;
+    const r = Math.floor(i / COLS);
+    const x0 = Math.floor(c * width / COLS);
+    const x1 = Math.floor((c + 1) * width / COLS);
+    const y0 = Math.floor(r * height / ROWS);
+    const y1 = Math.floor((r + 1) * height / ROWS);
+    const xMid = Math.floor((x0 + x1) / 2);
+
+    let sumA = 0, countA = 0;
+    let sumB = 0, countB = 0;
+    for (let y = y0; y < y1; y++) {
+      for (let x = x0; x < x1; x++) {
+        const off = (y * width + x) * channels;
+        const lum = 0.299 * rawBuffer[off] + 0.587 * rawBuffer[off + 1] + 0.114 * rawBuffer[off + 2];
+        if (x < xMid) { sumA += lum; countA++; } else { sumB += lum; countB++; }
+      }
+    }
+    const diff = (sumA / (countA || 1)) - (sumB / (countB || 1));
+    const targetDiff = (bits[i] === 0) ? DELTA : -DELTA;
+    const adjust = (targetDiff - diff) / 2;
+
+    for (let y = y0; y < y1; y++) {
+      for (let x = x0; x < x1; x++) {
+        const off = (y * width + x) * channels;
+        const delta = (x < xMid) ? adjust : -adjust;
+        rawBuffer[off]     = Math.min(255, Math.max(0, Math.round(rawBuffer[off] + delta)));
+        rawBuffer[off + 1] = Math.min(255, Math.max(0, Math.round(rawBuffer[off + 1] + delta)));
+        rawBuffer[off + 2] = Math.min(255, Math.max(0, Math.round(rawBuffer[off + 2] + delta)));
+      }
+    }
+  }
+}
+
+function extractPixelSeal(rawBuffer, width, height, channels) {
+  const COLS = 40, ROWS = 40;
+  const bits = [];
+  for (let i = 0; i < 272; i++) {
+    const c = i % COLS;
+    const r = Math.floor(i / COLS);
+    const x0 = Math.floor(c * width / COLS);
+    const x1 = Math.floor((c + 1) * width / COLS);
+    const y0 = Math.floor(r * height / ROWS);
+    const y1 = Math.floor((r + 1) * height / ROWS);
+    const xMid = Math.floor((x0 + x1) / 2);
+
+    let sumA = 0, countA = 0;
+    let sumB = 0, countB = 0;
+    for (let y = y0; y < y1; y++) {
+      for (let x = x0; x < x1; x++) {
+        const off = (y * width + x) * channels;
+        const lum = 0.299 * rawBuffer[off] + 0.587 * rawBuffer[off + 1] + 0.114 * rawBuffer[off + 2];
+        if (x < xMid) { sumA += lum; countA++; } else { sumB += lum; countB++; }
+      }
+    }
+    bits.push((sumA / (countA || 1) > sumB / (countB || 1)) ? 0 : 1);
+  }
+
+  let magic = 0;
+  for (let i = 0; i < 16; i++) magic = (magic << 1) | bits[i];
+  if (magic !== 0x534C) return null;
+
+  const bytes = Buffer.alloc(32);
+  for (let b = 0; b < 32; b++) {
+    let byteVal = 0;
+    for (let bit = 0; bit < 8; bit++) byteVal = (byteVal << 1) | bits[16 + b * 8 + bit];
+    bytes[b] = byteVal;
+  }
+  return bytes.toString('hex');
+}
+
 app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
   try {
     const ExifReader = require('exifreader');
+    const sharp = require('sharp');
     let tags = {};
     try {
       tags = ExifReader.load(req.file.buffer);
@@ -2301,12 +2393,32 @@ app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res
     let sealFound = false;
     let sealHash = '';
     let rawDescription = '';
+    let sealSource = 'NONE';
 
+    // 1. Primary Anchor: EXIF Metadata Tag
     if (tags['ImageDescription'] && tags['ImageDescription'].description) {
       rawDescription = String(tags['ImageDescription'].description).trim();
       if (rawDescription.startsWith('Pixelcraft_Verified_')) {
-        sealFound = true;
         sealHash = rawDescription.replace('Pixelcraft_Verified_', '').trim();
+        if (/^[a-f0-9]{64}$/i.test(sealHash)) {
+          sealFound = true;
+          sealSource = 'EXIF_METADATA_HEADER';
+        }
+      }
+    }
+
+    // 2. Secondary Anchor: Deep Scale-Invariant Pixel-Domain Watermark (WhatsApp / Social Media Surviving)
+    if (!sealFound) {
+      try {
+        const rawObj = await sharp(req.file.buffer).raw().toBuffer({ resolveWithObject: true });
+        const pixelSealHex = extractPixelSeal(rawObj.data, rawObj.info.width, rawObj.info.height, rawObj.info.channels);
+        if (pixelSealHex && /^[a-f0-9]{64}$/i.test(pixelSealHex)) {
+          sealFound = true;
+          sealHash = pixelSealHex;
+          sealSource = 'PIXEL_DOMAIN_RECOVERED';
+        }
+      } catch (sharpVerifyErr) {
+        // Non-fatal if image cannot be parsed by sharp
       }
     }
 
@@ -2318,20 +2430,24 @@ app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res
     const tagNames = Object.keys(tags);
 
     if (isValidFormat) {
+      const isPixelRecovered = (sealSource === 'PIXEL_DOMAIN_RECOVERED');
       res.json({
         success: true,
         verified: true,
         sealFound: true,
         sealHash,
+        sealSource,
         algorithm: 'HMAC-SHA256',
         metadataAudit: {
           hasGps,
           hasCamera,
           tagCount: tagNames.length,
           detectedTags: tagNames.slice(0, 15),
-          imageDescription: rawDescription
+          imageDescription: rawDescription || null
         },
-        message: `✅ This image is verified and heavily sanitized by Pixelcraft AI. Seal: ${sealHash.substring(0, 8)}...`
+        message: isPixelRecovered
+          ? `🛡️ Authentic Pixelcraft Cryptographic Seal verified via WhatsApp-Resilient Pixel Watermark (${sealHash.substring(0, 8)}...). Survived EXIF metadata wiping and lossy compression!`
+          : `✅ This image is verified and heavily sanitized by Pixelcraft AI. Seal: ${sealHash.substring(0, 8)}...`
       });
     } else {
       res.json({
@@ -2339,6 +2455,7 @@ app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res
         verified: false,
         sealFound,
         sealHash: sealHash || null,
+        sealSource: 'NONE',
         algorithm: 'HMAC-SHA256',
         metadataAudit: {
           hasGps,

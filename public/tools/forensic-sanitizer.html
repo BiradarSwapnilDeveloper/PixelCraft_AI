@@ -653,7 +653,13 @@
             if (data.error) throw new Error(data.error);
             
             if (data.verified) {
-                logTerminal(data.message, 'success');
+                if (data.sealSource === 'PIXEL_DOMAIN_RECOVERED') {
+                    logTerminal('🔍 EXIF Analysis: Metadata stripped by messaging app (e.g., WhatsApp).', 'warn');
+                    logTerminal('🛡️ Deep Pixel Engine: Recovered authentic Cryptographic Seal from Luminance Macro-Grid!', 'sys');
+                    logTerminal(data.message, 'success');
+                } else {
+                    logTerminal(data.message, 'success');
+                }
             } else {
                 logTerminal(data.message, 'err');
             }

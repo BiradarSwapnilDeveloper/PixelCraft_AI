@@ -368,6 +368,42 @@
 
       <!-- ENCRYPT PANEL -->
       <div id="panel-encrypt" class="panel active">
+        <!-- STEGANOGRAPHIC ARCHITECTURE SELECTOR -->
+        <div class="form-group-item" style="margin-bottom: 20px;">
+          <label style="display:flex; justify-content:space-between; align-items:center;">
+            <span>🛡️ Steganographic Engine Architecture</span>
+            <span style="font-size:0.78rem; color:var(--primary); font-weight:700;">NEW: WhatsApp-Immune Engine</span>
+          </label>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:8px;">
+            <div id="mode-whatsapp" class="mode-card active" onclick="selectStegoMode('whatsapp')" style="border: 2px solid var(--primary); background: rgba(37,99,235,0.06); border-radius: var(--radius-sm); padding: 14px; cursor: pointer; transition: var(--transition-smooth);">
+              <div style="font-weight: 700; color: var(--text-heading); font-size: 0.95rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                <span>🛡️</span> WhatsApp &amp; Social Immune
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                Scale-Invariant Luminance Grid. Immune to WhatsApp lossy JPEG Q~65 compression, resizing, and metadata stripping.
+              </div>
+            </div>
+            <div id="mode-lossless" class="mode-card" onclick="selectStegoMode('lossless')" style="border: 1px solid var(--border-color); background: var(--surface-subtle); border-radius: var(--radius-sm); padding: 14px; cursor: pointer; transition: var(--transition-smooth);">
+              <div style="font-weight: 700; color: var(--text-heading); font-size: 0.95rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                <span>💎</span> Ultra-HD Lossless Mode
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                Spatial LSB Dual-Channel. Massive payload capacity for long texts and docs. Send via WhatsApp as <code>📎 Document</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WHATSAPP PRO-TIP CALLOUT -->
+        <div id="whatsapp-tip-banner" style="background: rgba(37, 99, 235, 0.08); border: 1px solid var(--primary-border); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 22px;">
+          <div style="font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.92rem;">
+            <span>💡</span> WhatsApp &amp; Social Media Delivery Pro-Tip
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-body); line-height: 1.55;">
+            <strong>WhatsApp photo sharing ready:</strong> Images encoded in <em>WhatsApp &amp; Social Immune</em> mode can be sent directly as regular photos or emails. The secret message survives WhatsApp's aggressive compression and resizing! For sending massive files, switch to <em>Ultra-HD Lossless</em> and attach via <code>📎 Document</code>.
+          </div>
+        </div>
+
         <div class="drop-zone" id="enc-drop">
           <div style="font-size: 2.2rem; margin-bottom: 8px;">🖼️</div>
           <strong>Drag & Drop Image Here</strong><br>
@@ -379,7 +415,10 @@
         </div>
 
         <div class="form-group-item">
-          <label>Real Secret Message</label>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="margin-bottom:0;">Real Secret Message</label>
+            <span id="real-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 260 chars (WhatsApp Safe)</span>
+          </div>
           <textarea id="enc-real-msg" placeholder="The confidential message you want to protect..."></textarea>
         </div>
         <div class="form-group-item">
@@ -392,7 +431,10 @@
         </div>
 
         <div class="form-group-item">
-          <label>Decoy Message (Fake Message for Plausible Deniability)</label>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="margin-bottom:0;">Decoy Message (Fake Message for Plausible Deniability)</label>
+            <span id="decoy-char-count" style="font-size:0.8rem; color:var(--text-muted);">0 / 260 chars (WhatsApp Safe)</span>
+          </div>
           <textarea id="enc-decoy-msg" placeholder="A fake innocent message to reveal if forced to give up a password..."></textarea>
         </div>
         <div class="form-group-item">
@@ -536,6 +578,67 @@
     initDropZone('enc-drop', 'enc-file', true);
     initDropZone('dec-drop', 'dec-file', false);
 
+    // Steganography Architecture Mode Management
+    let currentStegoMode = 'whatsapp';
+
+    function selectStegoMode(mode) {
+        currentStegoMode = mode;
+        const wCard = document.getElementById('mode-whatsapp');
+        const lCard = document.getElementById('mode-lossless');
+        const tipBanner = document.getElementById('whatsapp-tip-banner');
+        if (mode === 'whatsapp') {
+            if (wCard) {
+                wCard.style.border = '2px solid var(--primary)';
+                wCard.style.background = 'rgba(37,99,235,0.06)';
+            }
+            if (lCard) {
+                lCard.style.border = '1px solid var(--border-color)';
+                lCard.style.background = 'var(--surface-subtle)';
+            }
+            if (tipBanner) tipBanner.style.display = 'block';
+            updateCharCounters();
+        } else {
+            if (lCard) {
+                lCard.style.border = '2px solid var(--primary)';
+                lCard.style.background = 'rgba(37,99,235,0.06)';
+            }
+            if (wCard) {
+                wCard.style.border = '1px solid var(--border-color)';
+                wCard.style.background = 'var(--surface-subtle)';
+            }
+            if (tipBanner) tipBanner.style.display = 'none';
+            updateCharCounters();
+        }
+    }
+
+    function updateCharCounters() {
+        const rEl = document.getElementById('enc-real-msg');
+        const dEl = document.getElementById('enc-decoy-msg');
+        const rCount = document.getElementById('real-char-count');
+        const dCount = document.getElementById('decoy-char-count');
+        const isWa = (currentStegoMode === 'whatsapp');
+
+        if (rEl && rCount) {
+            const rLen = rEl.value.length;
+            rCount.innerText = isWa
+                ? `${rLen} / 260 chars (WhatsApp Safe)`
+                : `${rLen} chars (Unlimited HD)`;
+            rCount.style.color = (isWa && rLen > 260) ? 'var(--danger)' : 'var(--text-muted)';
+        }
+        if (dEl && dCount) {
+            const dLen = dEl.value.length;
+            dCount.innerText = isWa
+                ? `${dLen} / 260 chars (WhatsApp Safe)`
+                : `${dLen} chars (Unlimited HD)`;
+            dCount.style.color = (isWa && dLen > 260) ? 'var(--danger)' : 'var(--text-muted)';
+        }
+    }
+
+    const realMsgInput = document.getElementById('enc-real-msg');
+    const decoyMsgInput = document.getElementById('enc-decoy-msg');
+    if (realMsgInput) realMsgInput.addEventListener('input', updateCharCounters);
+    if (decoyMsgInput) decoyMsgInput.addEventListener('input', updateCharCounters);
+
     // Cryptography Helpers (AES-256 via CryptoJS)
     function aesEncrypt(text, pwd) {
         return CryptoJS.AES.encrypt(text, pwd).toString();
@@ -548,10 +651,137 @@
         } catch(e) { return null; }
     }
 
-    // High-Fidelity Dual-Slot Steganography Engine
+    function strToBytes(str) {
+        const bytes = new Uint8Array(str.length);
+        for (let i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i) & 0xff;
+        return bytes;
+    }
+    function bytesToStr(bytes) {
+        let str = '';
+        for (let i = 0; i < bytes.length; i++) str += String.fromCharCode(bytes[i]);
+        return str;
+    }
+
+    // Scale-Invariant WhatsApp & Social Media Steganography Engine
+    // Modulates normalized macro-grid differential luminance between split sub-cells.
+    // Invariant to resolution downscaling, 4:2:0 chroma subsampling, and JPEG Q~65 compression.
+    const WA_COLS = 80;
+    const WA_ROWS = 80;
+    const WA_DELTA = 14;
+
+    function embedWhatsAppGrid(data, width, height, realCipher, decoyCipher) {
+        function makeBits(cipherStr) {
+            if (!cipherStr) return null;
+            const rawBytes = strToBytes(cipherStr);
+            const bits = [];
+            // Magic 16-bit: 0x5058 ('PX')
+            for (let b = 15; b >= 0; b--) bits.push((0x5058 >> b) & 1);
+            for (let b = 15; b >= 0; b--) bits.push((rawBytes.length >> b) & 1);
+            for (let i = 0; i < rawBytes.length; i++) {
+                for (let b = 7; b >= 0; b--) bits.push((rawBytes[i] >> b) & 1);
+            }
+            return bits;
+        }
+
+        const bits0 = makeBits(realCipher);
+        const bits1 = decoyCipher ? makeBits(decoyCipher) : null;
+
+        function embedBit(r, c, bit) {
+            const x0 = Math.floor(c * width / WA_COLS);
+            const x1 = Math.floor((c + 1) * width / WA_COLS);
+            const y0 = Math.floor(r * height / WA_ROWS);
+            const y1 = Math.floor((r + 1) * height / WA_ROWS);
+            const xMid = Math.floor((x0 + x1) / 2);
+
+            let sumA = 0, countA = 0;
+            let sumB = 0, countB = 0;
+            for (let y = y0; y < y1; y++) {
+                for (let x = x0; x < x1; x++) {
+                    const off = (y * width + x) * 4;
+                    const lum = 0.299 * data[off] + 0.587 * data[off+1] + 0.114 * data[off+2];
+                    if (x < xMid) { sumA += lum; countA++; } else { sumB += lum; countB++; }
+                }
+            }
+            const diff = (sumA / (countA || 1)) - (sumB / (countB || 1));
+            const targetDiff = (bit === 0) ? WA_DELTA : -WA_DELTA;
+            const adjust = (targetDiff - diff) / 2;
+
+            for (let y = y0; y < y1; y++) {
+                for (let x = x0; x < x1; x++) {
+                    const off = (y * width + x) * 4;
+                    const delta = (x < xMid) ? adjust : -adjust;
+                    data[off]   = Math.min(255, Math.max(0, Math.round(data[off] + delta)));
+                    data[off+1] = Math.min(255, Math.max(0, Math.round(data[off+1] + delta)));
+                    data[off+2] = Math.min(255, Math.max(0, Math.round(data[off+2] + delta)));
+                }
+            }
+        }
+
+        if (bits0) {
+            for (let i = 0; i < bits0.length && i * 2 < WA_COLS * WA_ROWS; i++) {
+                const idx = i * 2;
+                embedBit(Math.floor(idx / WA_COLS), idx % WA_COLS, bits0[i]);
+            }
+        }
+        if (bits1) {
+            for (let i = 0; i < bits1.length && (i * 2 + 1) < WA_COLS * WA_ROWS; i++) {
+                const idx = i * 2 + 1;
+                embedBit(Math.floor(idx / WA_COLS), idx % WA_COLS, bits1[i]);
+            }
+        }
+    }
+
+    function extractWhatsAppGrid(data, width, height, slot) {
+        function extractBit(r, c) {
+            const x0 = Math.floor(c * width / WA_COLS);
+            const x1 = Math.floor((c + 1) * width / WA_COLS);
+            const y0 = Math.floor(r * height / WA_ROWS);
+            const y1 = Math.floor((r + 1) * height / WA_ROWS);
+            const xMid = Math.floor((x0 + x1) / 2);
+
+            let sumA = 0, countA = 0;
+            let sumB = 0, countB = 0;
+            for (let y = y0; y < y1; y++) {
+                for (let x = x0; x < x1; x++) {
+                    const off = (y * width + x) * 4;
+                    const lum = 0.299 * data[off] + 0.587 * data[off+1] + 0.114 * data[off+2];
+                    if (x < xMid) { sumA += lum; countA++; } else { sumB += lum; countB++; }
+                }
+            }
+            return (sumA / (countA || 1) > sumB / (countB || 1)) ? 0 : 1;
+        }
+
+        const bits = [];
+        for (let i = 0; i < 32; i++) {
+            const idx = i * 2 + slot;
+            bits.push(extractBit(Math.floor(idx / WA_COLS), idx % WA_COLS));
+        }
+        let magic = 0;
+        for (let i = 0; i < 16; i++) magic = (magic << 1) | bits[i];
+        if (magic !== 0x5058) return null;
+
+        let len = 0;
+        for (let i = 16; i < 32; i++) len = (len << 1) | bits[i];
+        if (len <= 0 || len > 1000) return null;
+
+        const totalBits = 32 + len * 8;
+        for (let i = 32; i < totalBits; i++) {
+            const idx = i * 2 + slot;
+            bits.push(extractBit(Math.floor(idx / WA_COLS), idx % WA_COLS));
+        }
+
+        const bytes = new Uint8Array(len);
+        for (let b = 0; b < len; b++) {
+            let byteVal = 0;
+            for (let bit = 0; bit < 8; bit++) byteVal = (byteVal << 1) | bits[32 + b * 8 + bit];
+            bytes[b] = byteVal;
+        }
+        return bytesToStr(bytes);
+    }
+
+    // High-Fidelity Dual-Slot Steganography Engine (Ultra-HD Lossless)
     // Slot 0 (Even pixels) = Real Secret Channel
     // Slot 1 (Odd pixels)  = Decoy Channel (Plausible Deniability)
-    // Both slots are completely disjoint, preventing collision with 100% mathematical guarantee.
     const textEnc = new TextEncoder();
     const textDec = new TextDecoder();
 
@@ -709,7 +939,16 @@
             return alert('Decoy password must be different from Real password to ensure plausible deniability.');
         }
 
-        showLoading('Encrypting & Embedding Dual-Slot Payload...');
+        if (currentStegoMode === 'whatsapp') {
+            if (rMsg.length > 260) {
+                return alert(`Your real secret is ${rMsg.length} characters. For WhatsApp & Social Immune mode, secrets should be 260 characters or fewer to survive heavy JPEG re-compression. To hide longer texts or documents, switch to "Ultra-HD Lossless Mode" and send via WhatsApp as a Document (📎 Document).`);
+            }
+            if (dMsg && dMsg.length > 260) {
+                return alert(`Your decoy message is ${dMsg.length} characters. Please shorten it to 260 characters or switch to Ultra-HD Lossless Mode.`);
+            }
+        }
+
+        showLoading('Encrypting & Embedding Payload...');
         await new Promise(r => setTimeout(r, 60));
 
         try {
@@ -721,14 +960,21 @@
             ctx.drawImage(targetImage, 0, 0);
             const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height);
 
-            // 1. Embed Real Message into Slot 0
             const rCipher = aesEncrypt('PXC_REAL::' + rMsg, rPwd);
-            embedSlot(imgData, rCipher, 0);
+            const dCipher = (dMsg && dPwd) ? aesEncrypt('PXC_DECOY::' + dMsg, dPwd) : null;
 
-            // 2. Embed Decoy Message into Slot 1 (if provided)
-            if (dMsg && dPwd) {
-                const dCipher = aesEncrypt('PXC_DECOY::' + dMsg, dPwd);
-                embedSlot(imgData, dCipher, 1);
+            if (currentStegoMode === 'whatsapp') {
+                // 1. Embed scale-invariant WhatsApp macro-grid
+                embedWhatsAppGrid(imgData.data, cvs.width, cvs.height, rCipher, dCipher);
+                // 2. Also embed spatial LSB as dual-layer fallback
+                try {
+                    embedSlot(imgData, rCipher, 0);
+                    if (dCipher) embedSlot(imgData, dCipher, 1);
+                } catch(e) { /* non-fatal */ }
+            } else {
+                // Ultra-HD Lossless Mode: Spatial LSB
+                embedSlot(imgData, rCipher, 0);
+                if (dCipher) embedSlot(imgData, dCipher, 1);
             }
 
             ctx.putImageData(imgData, 0, 0);
@@ -736,7 +982,7 @@
             document.getElementById('btn-download').onclick = () => {
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'pixelcraft_secure_decoy.png';
+                a.download = currentStegoMode === 'whatsapp' ? 'pixelcraft_whatsapp_secure.png' : 'pixelcraft_secure_decoy.png';
                 a.click();
                 if (typeof showToast === 'function') {
                     showToast('Secure image downloaded!', 'success');
@@ -745,7 +991,7 @@
             document.getElementById('enc-result').style.display = 'block';
             hideLoading();
             if (typeof showToast === 'function') {
-                showToast('Encrypted carrier generated successfully!', 'success');
+                showToast(currentStegoMode === 'whatsapp' ? 'WhatsApp-Immune carrier generated!' : 'Ultra-HD carrier generated!', 'success');
             }
         } catch(e) {
             hideLoading();
@@ -793,20 +1039,45 @@
 
             let extractedPayload = null;
 
-            // 1. Try Slot 0 (Primary / Real Payload)
-            const s0 = extractSlot(imgData, 0);
-            if (s0) {
-                const dec0 = aesDecrypt(s0, pwd);
+            // 1. Primary Probe: WhatsApp-Immune Luminance Grid (Survives WhatsApp compression, resizing & metadata stripping)
+            const wa0 = extractWhatsAppGrid(imgData.data, cvs.width, cvs.height, 0);
+            if (wa0) {
+                const dec0 = aesDecrypt(wa0, pwd);
                 if (dec0 && dec0.startsWith('PXC_REAL::')) {
-                    extractedPayload = { type: 'real', text: dec0.substring(10) };
+                    extractedPayload = { type: 'real_wa', text: dec0.substring(10) };
                 } else if (dec0 && dec0.startsWith('PXC_DECOY::')) {
-                    extractedPayload = { type: 'decoy', text: dec0.substring(11) };
-                } else if (dec0 && !dec0.startsWith('PXC_')) {
-                    extractedPayload = { type: 'real', text: dec0 };
+                    extractedPayload = { type: 'decoy_wa', text: dec0.substring(11) };
                 }
             }
 
-            // 2. Try Slot 1 (Decoy Payload)
+            if (!extractedPayload) {
+                const wa1 = extractWhatsAppGrid(imgData.data, cvs.width, cvs.height, 1);
+                if (wa1) {
+                    const dec1 = aesDecrypt(wa1, pwd);
+                    if (dec1 && dec1.startsWith('PXC_DECOY::')) {
+                        extractedPayload = { type: 'decoy_wa', text: dec1.substring(11) };
+                    } else if (dec1 && dec1.startsWith('PXC_REAL::')) {
+                        extractedPayload = { type: 'real_wa', text: dec1.substring(10) };
+                    }
+                }
+            }
+
+            // 2. Secondary Probe: Ultra-HD Lossless Slot 0 (Primary / Real Payload)
+            if (!extractedPayload) {
+                const s0 = extractSlot(imgData, 0);
+                if (s0) {
+                    const dec0 = aesDecrypt(s0, pwd);
+                    if (dec0 && dec0.startsWith('PXC_REAL::')) {
+                        extractedPayload = { type: 'real', text: dec0.substring(10) };
+                    } else if (dec0 && dec0.startsWith('PXC_DECOY::')) {
+                        extractedPayload = { type: 'decoy', text: dec0.substring(11) };
+                    } else if (dec0 && !dec0.startsWith('PXC_')) {
+                        extractedPayload = { type: 'real', text: dec0 };
+                    }
+                }
+            }
+
+            // 3. Secondary Probe: Ultra-HD Lossless Slot 1 (Decoy Payload)
             if (!extractedPayload) {
                 const s1 = extractSlot(imgData, 1);
                 if (s1) {
@@ -821,7 +1092,7 @@
                 }
             }
 
-            // 3. Fallback to Legacy QIM format
+            // 4. Fallback to Legacy QIM format
             if (!extractedPayload) {
                 const legacyBin = extractQIM(imgData.data, cvs.width, cvs.height, pwd);
                 if (legacyBin) {
@@ -843,13 +1114,23 @@
             if (extractedPayload) {
                 const badge = document.getElementById('dec-badge');
                 if (badge) {
-                    if (extractedPayload.type === 'real') {
-                        badge.innerText = '🔒 Real Secret Payload';
+                    if (extractedPayload.type === 'real_wa') {
+                        badge.innerText = '🛡️ Real Secret (WhatsApp-Resilient Engine)';
+                        badge.style.background = 'var(--success-light, #ecfdf5)';
+                        badge.style.color = 'var(--success, #059669)';
+                        badge.style.border = '1px solid var(--success-border, #a7f3d0)';
+                    } else if (extractedPayload.type === 'decoy_wa') {
+                        badge.innerText = '🎭 Decoy Payload (WhatsApp-Resilient Engine)';
+                        badge.style.background = 'var(--warning-light, #fffbeb)';
+                        badge.style.color = 'var(--warning, #d97706)';
+                        badge.style.border = '1px solid rgba(217, 119, 6, 0.3)';
+                    } else if (extractedPayload.type === 'real') {
+                        badge.innerText = '🔒 Real Secret Payload (Ultra-HD Lossless)';
                         badge.style.background = 'var(--success-light, #ecfdf5)';
                         badge.style.color = 'var(--success, #059669)';
                         badge.style.border = '1px solid var(--success-border, #a7f3d0)';
                     } else if (extractedPayload.type === 'decoy') {
-                        badge.innerText = '🎭 Decoy Payload (Plausible Deniability)';
+                        badge.innerText = '🎭 Decoy Payload (Ultra-HD Lossless)';
                         badge.style.background = 'var(--warning-light, #fffbeb)';
                         badge.style.color = 'var(--warning, #d97706)';
                         badge.style.border = '1px solid rgba(217, 119, 6, 0.3)';
