@@ -156,6 +156,58 @@
   <!-- Extra Technical SEO -->
   <!-- Advanced JSON-LD Structured Data for High Ranking -->
   <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 768px) {
+      .before-after {
+        grid-template-columns: 1fr;
+      }
+    }
+    .preview-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .preview-card label {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-heading);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .preview-img-wrap {
+      width: 100%;
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-subtle);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      padding: 8px;
+    }
+    .preview-img-wrap img,
+    .preview-img-wrap canvas {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto !important;
+      height: auto !important;
+      object-fit: contain;
+      display: block;
+      border-radius: 4px;
+    }
+  </style>
     <!-- AMP Auto Ads Head -->
 
 </head>
@@ -195,7 +247,7 @@
 <div class="tool-page">
   <div class="tool-page-header">
     <a href="../index.html" class="back-link">← Back to All Tools</a>
-    <div style="font-size:2.5rem;margin-bottom:12px;"></div>
+    <div style="font-size:2.5rem;margin-bottom:12px;">🗜️</div>
     <h1>Image Compressor</h1>
     <p>Reduce image file size without visible quality loss. See real-time before/after size comparison. Fast & secure. All processing happens locally on your device ensuring enhanced privacy. Enjoy premium features instantly, completely free and without any registration.</p>
     <div id="quick-start-guide" class="quick-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px auto 8px auto; max-width: 900px; text-align: left;">
@@ -216,7 +268,7 @@
   <div class="tool-workspace">
     <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
       <input type="file" id="file-input" accept="image/*" style="display:none"/>
-      <div class="upload-icon"></div>
+      <div class="upload-icon">🗜️</div>
       <h3>Drop image here or click to upload</h3>
       <p>JPG, PNG, WebP supported</p>
     </div>
@@ -242,24 +294,40 @@
             </div>
           </div>
           <!-- Size comparison -->
-          <div style="background:var(--bg);border-radius:12px;padding:20px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;text-align:center;">
+          <div style="background:var(--surface-subtle);border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;text-align:center;">
             <div>
-              <div style="font-size:0.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Original</div>
-              <div style="font-size:1.4rem;font-weight:800;color:var(--dark);" id="orig-size">-</div>
+              <div style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Original Size</div>
+              <div style="font-size:1.4rem;font-weight:800;color:var(--text-heading);" id="orig-size">-</div>
             </div>
-            <div style="font-size:1.5rem;">→</div>
+            <div style="font-size:1.5rem;color:var(--text-muted);">→</div>
             <div>
-              <div style="font-size:0.75rem;font-weight:700;color:var(--success);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Compressed</div>
+              <div style="font-size:0.75rem;font-weight:700;color:var(--success);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Compressed Size</div>
               <div style="font-size:1.4rem;font-weight:800;color:var(--success);" id="comp-size">-</div>
-              <div style="font-size:0.8rem;color:var(--text-light);" id="savings-pct"></div>
+              <div style="font-size:0.85rem;font-weight:600;margin-top:2px;" id="savings-pct"></div>
             </div>
           </div>
           <div class="before-after">
-            <div><label>Original</label><img id="orig-img" src="" alt="Original"/></div>
-            <div><label>Compressed Preview</label><canvas id="result-canvas"></canvas></div>
+            <div class="preview-card">
+              <label>
+                <span>Original Image</span>
+                <span id="orig-dims" style="font-weight: 500; font-size: 0.8rem; color: var(--text-muted);">-</span>
+              </label>
+              <div class="preview-img-wrap">
+                <img id="orig-img" src="" alt="Original"/>
+              </div>
+            </div>
+            <div class="preview-card">
+              <label>
+                <span>Compressed Preview</span>
+                <span id="comp-dims" style="font-weight: 500; font-size: 0.8rem; color: var(--text-muted);">-</span>
+              </label>
+              <div class="preview-img-wrap">
+                <canvas id="result-canvas"></canvas>
+              </div>
+            </div>
           </div>
-          <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-            <button class="btn btn-green" id="btn-download">Download Compressed</button>
+          <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
+            <button class="btn btn-green" id="btn-download" style="flex:1;padding:14px;font-size:1rem;font-weight:600;justify-content:center;">⬇️ Download Compressed Image</button>
           </div>
         </div>
       </div>
@@ -267,21 +335,10 @@
   </div>
 </div>
 
-  
-      
-
-  
-
-      
-
-
-  
-  
-
-
 <script src="../js/utils.js"></script>
 <script>
 let currentFile = null, currentImg = null;
+let currentBlobUrl = null;
 const fileInput = document.getElementById('file-input');
 const uploadArea = document.getElementById('upload-area');
 const editor = document.getElementById('editor');
@@ -295,10 +352,17 @@ setupDragDrop(uploadArea, handleFile);
 fileInput.addEventListener('change', e =>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
 
 async function handleFile(file) {
+  if (!file) return;
   currentFile = file;
   currentImg = await fileToImage(file);
   origImg.src = URL.createObjectURL(file);
+  
+  const w = currentImg.naturalWidth || currentImg.width;
+  const h = currentImg.naturalHeight || currentImg.height;
+  document.getElementById('orig-dims').textContent = `${w} × ${h} px`;
+  document.getElementById('comp-dims').textContent = `${w} × ${h} px`;
   document.getElementById('orig-size').textContent = formatFileSize(file.size);
+  
   uploadArea.style.display = 'none';
   editor.style.display = 'block';
   compress();
@@ -308,30 +372,102 @@ function compress() {
   if (!currentImg) return;
   const q = parseInt(qualitySlider.value) / 100;
   const fmt = formatSelect.value;
-  drawImageToCanvas(resultCanvas, currentImg, 1200, 900);
-  const dataUrl = resultCanvas.toDataURL(fmt, q);
-  // estimate size
-  const base64 = dataUrl.split(',')[1];
-  const bytes = Math.round((base64.length * 3) / 4);
-  document.getElementById('comp-size').textContent = formatFileSize(bytes);
-  const savings = Math.round((1 - bytes / currentFile.size) * 100);
-  document.getElementById('savings-pct').textContent = savings >0 ? `${savings}% smaller` : 'Larger than original (try lower quality)';
-  document.getElementById('savings-pct').style.color = savings >0 ? 'var(--success)' : 'var(--error)';
+  
+  // Keep original dimensions, strictly preserving aspect ratio
+  let w = currentImg.naturalWidth || currentImg.width;
+  let h = currentImg.naturalHeight || currentImg.height;
+  const maxDim = 4096;
+  if (w > maxDim || h > maxDim) {
+    const scale = Math.min(maxDim / w, maxDim / h);
+    w = Math.round(w * scale);
+    h = Math.round(h * scale);
+  }
+  
+  resultCanvas.width = w;
+  resultCanvas.height = h;
+  const ctx = resultCanvas.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+  ctx.drawImage(currentImg, 0, 0, w, h);
+  
+  document.getElementById('comp-dims').textContent = `${w} × ${h} px`;
+
+  if (resultCanvas.toBlob) {
+    resultCanvas.toBlob((blob) => {
+      if (!blob) {
+        fallbackDataUrl(fmt, q);
+        return;
+      }
+      if (currentBlobUrl && currentBlobUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(currentBlobUrl);
+      }
+      currentBlobUrl = URL.createObjectURL(blob);
+      updateCompStats(blob.size);
+    }, fmt, q);
+  } else {
+    fallbackDataUrl(fmt, q);
+  }
 }
 
-qualitySlider.addEventListener('input', () =>{ qualityVal.textContent = qualitySlider.value + '%'; compress(); });
+function fallbackDataUrl(fmt, q) {
+  const dataUrl = resultCanvas.toDataURL(fmt, q);
+  const base64 = dataUrl.split(',')[1];
+  const bytes = Math.round((base64.length * 3) / 4);
+  if (currentBlobUrl && currentBlobUrl.startsWith('blob:')) {
+    URL.revokeObjectURL(currentBlobUrl);
+  }
+  currentBlobUrl = dataUrl;
+  updateCompStats(bytes);
+}
+
+function updateCompStats(bytes) {
+  document.getElementById('comp-size').textContent = formatFileSize(bytes);
+  const savings = Math.round((1 - bytes / currentFile.size) * 100);
+  const savingsEl = document.getElementById('savings-pct');
+  if (savings > 0) {
+    savingsEl.textContent = `${savings}% smaller`;
+    savingsEl.style.color = 'var(--success)';
+  } else if (savings === 0) {
+    savingsEl.textContent = 'Same as original';
+    savingsEl.style.color = 'var(--text-muted)';
+  } else {
+    savingsEl.textContent = `${Math.abs(savings)}% larger (try lower quality or WebP)`;
+    savingsEl.style.color = 'var(--warning, #d97706)';
+  }
+}
+
+qualitySlider.addEventListener('input', () =>{ 
+  qualityVal.textContent = qualitySlider.value + '%'; 
+  compress(); 
+});
 formatSelect.addEventListener('change', compress);
 
 document.getElementById('btn-download').addEventListener('click', () =>{
+  if (!currentImg) return;
   const fmt = formatSelect.value;
   const ext = fmt === 'image/jpeg' ? 'jpg' : fmt === 'image/webp' ? 'webp' : 'png';
-  const q = parseInt(qualitySlider.value) / 100;
-  downloadFile(resultCanvas.toDataURL(fmt, q), `pixelcraft-compressed.${ext}`);
+  const origName = currentFile && currentFile.name ? currentFile.name : 'image.jpg';
+  const dotIndex = origName.lastIndexOf('.');
+  const baseName = dotIndex > 0 ? origName.substring(0, dotIndex) : origName;
+  const filename = `${baseName}-compressed.${ext}`;
+  
+  if (currentBlobUrl) {
+    downloadFile(currentBlobUrl, filename);
+  } else {
+    const q = parseInt(qualitySlider.value) / 100;
+    downloadFile(resultCanvas.toDataURL(fmt, q), filename);
+  }
 });
 
 function resetTool() {
-  currentFile = null; currentImg = null;
-  uploadArea.style.display = 'block'; editor.style.display = 'none'; fileInput.value = '';
+  if (currentBlobUrl && currentBlobUrl.startsWith('blob:')) {
+    URL.revokeObjectURL(currentBlobUrl);
+  }
+  currentBlobUrl = null;
+  currentFile = null; 
+  currentImg = null;
+  uploadArea.style.display = 'block'; 
+  editor.style.display = 'none'; 
+  fileInput.value = '';
 }
 </script>
 
