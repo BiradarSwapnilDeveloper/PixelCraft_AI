@@ -443,12 +443,17 @@
             Performs deep threat OSINT (GPS reverse-geocoding, device serial extraction) and hex payload analysis. The tool scrubs all metadata and embeds an invisible <strong>PixelCraft Cryptographic Seal</strong>.
           </p>
 
-          <!-- Pre-Submission Data Transparency Notice -->
-          <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 18px; font-size: 0.82rem; color: var(--text-body); line-height: 1.5;">
-            <strong style="color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-              <span>🔒</span> Server-Assisted Processing Notice
+          <!-- Pre-Submission Data Transparency & Privacy Notice -->
+          <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 18px; font-size: 0.82rem; color: var(--text-body); line-height: 1.55;">
+            <strong style="color: var(--primary); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 0.88rem;">
+              <span>🔒</span> Server-Assisted Ephemeral Processing Notice
             </strong>
-            Images are uploaded via <code>/api/tools/forensic-sanitize</code> and analyzed ephemerally in volatile RAM buffers to calculate cryptographic seal hashes and detect payload threats. Files are never stored on persistent disk and are discarded immediately upon completion. For 100% browser-only client-side metadata stripping, use our <a href="digital-fingerprint-wiper.html" style="color: var(--primary); text-decoration: underline;">Digital Fingerprint Wiper</a>.
+            <p style="margin: 0 0 6px 0;">
+              Images are uploaded securely via <span style="font-family: monospace;">/api/tools/forensic-sanitize</span> and analyzed strictly in <strong>volatile server RAM buffers</strong> (<span style="font-family: monospace;">multer.memoryStorage()</span>, max 50MB). Files are <strong>never stored on persistent disk</strong> and are discarded immediately upon request completion.
+            </p>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;">
+              <strong>Sanitization Scope:</strong> Deep-scrubs standard EXIF/GPS/device metadata and trailing EOF payloads, embedding a dual-anchor HMAC-SHA256 seal. <em>Notice:</em> Seal verification confirms seal recovery; it does not constitute a government-certified signature or whole-image tamper-proof guarantee. For 100% browser-only client-side metadata stripping with zero server transmission, use our <a href="digital-fingerprint-wiper.html" style="color: var(--primary); text-decoration: underline;">Digital Fingerprint Wiper</a>. Review our <a href="../privacy-policy.html" style="color: var(--primary); text-decoration: underline;" target="_blank">Privacy Policy</a> and <a href="../data-practices.html" style="color: var(--primary); text-decoration: underline;" target="_blank">Data Practices</a>.
+            </div>
           </div>
           
           <div style="display: flex; flex-direction: column; gap: 10px;">
