@@ -172,6 +172,7 @@
   <li><strong>Plausible Deniability Architecture:</strong> The tool supports separate Real and Decoy payload channels mapped to distinct passwords. While this provides plausible deniability against casual inspection, it does not constitute an absolute mathematical guarantee of undetectability against deep statistical steganalysis (e.g., chi-square or sample-pair analysis) conducted by forensic laboratories.</li>
   <li><strong>Cryptographic Seal Verification Scope:</strong> Forensic Sanitizer embeds an HMAC-SHA256 seal across EXIF metadata and the pixel luminance domain. Verification via <span style="font-family: monospace;">/api/tools/verify-seal</span> confirms that a valid PixelCraft seal was successfully extracted. Recovering a seal verifies that the image underwent sanitization and seal generation; it does not serve as a legally certified digital signature or an absolute guarantee that unmonitored visual elements were not altered after export.</li>
 </ul>
+<p>For full architectural specifications, mathematical definitions, and security threat models, read the <a href="security-whitepaper.html"><strong>PixelCraft AI Cryptographic Architecture &amp; Security Whitepaper</strong></a>.</p>
 
 <h2>6. Third-Party Platforms, Social Networks &amp; Email Delivery</h2>
 <p>PixelCraft AI tools allow users to prepare images for personal privacy and social sharing. However, once an image is exported and shared through external third-party services (such as WhatsApp, Telegram, Instagram, email gateways, or cloud storage):</p>
@@ -213,6 +214,8 @@
       <a href="about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
       <a href="privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
       <a href="terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+      <a href="data-practices.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Data Practices</a>
+      <a href="security-whitepaper.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Security Whitepaper</a>
       <a href="disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
       <a href="cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
       <a href="blog/index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
