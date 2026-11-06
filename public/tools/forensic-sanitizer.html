@@ -760,7 +760,7 @@
       <li><strong>End-of-File (EOF) Appended Payloads:</strong> A JPEG file strictly terminates at the End of Image (EOI) marker: <code>0xFFD9</code>. Many web servers read only up to the EOI marker, but subsequent execution environments (such as PHP includes or reverse shell extractors) parse bytes appended past the EOI marker. Threat actors append ZIP archives, PowerShell scripts, or WebShells to bypass file upload filters.</li>
       <li><strong>PNG Anomaly Chunks:</strong> The PNG specification allows custom chunks. Attackers inject executable scripts into ancillary chunks (e.g., <code>tEXt</code>, <code>zTXt</code>, or unrecognized 4-byte uppercase chunk types) which execute if an unhardened backend parser processes the image.</li>
       <li><strong>Polyglot Executables (GIFAR / JPEAR):</strong> By carefully aligning magic bytes, an attacker crafts a file whose first bytes satisfy the JPEG or GIF header standard, while its 30th byte starts an uncompressed Java JAR or Windows PE executable header.</li>
-      <li><strong>PixelCraft Sterilization Guarantee:</strong> Our Forensic Sanitizer truncates all bytes following legitimate container termination, validates chunk CRC32 checksums, and forces rasterization through an HTML5 canvas context, rendering polyglots completely non-executable.</li>
+      <li><strong>PixelCraft Sterilization Protocol:</strong> Our Forensic Sanitizer truncates all bytes following legitimate container termination, validates chunk CRC32 checksums, and forces rasterization through an HTML5 canvas context, rendering polyglots completely non-executable.</li>
     </ul>
 
     
