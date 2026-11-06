@@ -257,7 +257,49 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   flex-shrink: 0;
 }
 
-/* NAVBAR HOVER FIX: NEVER WHITE ON HOVER - ELEGANT VIBRANT GRADIENT */
+/* ===== DYNAMIC LIVE-MOTION PIXEL GRADIENT & CYBER GLOW ===== */
+@keyframes pixelGradientStream {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pixelGlowDrift {
+  0% {
+    filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.5));
+  }
+  33% {
+    filter: drop-shadow(0 0 9px rgba(139, 92, 246, 0.6));
+  }
+  66% {
+    filter: drop-shadow(0 0 9px rgba(236, 72, 153, 0.6));
+  }
+  100% {
+    filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.5));
+  }
+}
+
+@keyframes pixelLogoPulse {
+  0% {
+    transform: scale(1.08) rotate(0deg);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.5), 0 0 20px rgba(139, 92, 246, 0.35);
+  }
+  50% {
+    transform: scale(1.12) rotate(-2deg);
+    box-shadow: 0 0 18px rgba(236, 72, 153, 0.65), 0 0 26px rgba(16, 185, 129, 0.45);
+  }
+  100% {
+    transform: scale(1.08) rotate(0deg);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.5), 0 0 20px rgba(139, 92, 246, 0.35);
+  }
+}
+
 .nav-logo:hover,
 .nav-logo:focus {
   text-decoration: none !important;
@@ -265,29 +307,62 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 
 .nav-logo span {
   color: var(--text-heading);
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap !important;
+  display: inline-block;
 }
 
 .nav-logo:hover span:not(.nav-logo-badge) {
-  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%) !important;
+  background: linear-gradient(
+    90deg, 
+    #06b6d4 0%, 
+    #3b82f6 18%, 
+    #8b5cf6 36%, 
+    #ec4899 54%, 
+    #f59e0b 72%, 
+    #10b981 88%, 
+    #06b6d4 100%
+  ) !important;
+  background-size: 300% 300% !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  color: #2563eb !important;
+  color: #06b6d4 !important;
+  animation: pixelGradientStream 3s ease infinite, pixelGlowDrift 3s ease infinite !important;
 }
 
 [data-theme="dark"] .nav-logo:hover span:not(.nav-logo-badge) {
-  background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #c084fc 100%) !important;
+  background: linear-gradient(
+    90deg, 
+    #22d3ee 0%, 
+    #60a5fa 18%, 
+    #a78bfa 36%, 
+    #f472b6 54%, 
+    #fbbf24 72%, 
+    #34d399 88%, 
+    #22d3ee 100%
+  ) !important;
+  background-size: 300% 300% !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  color: #60a5fa !important;
+  color: #22d3ee !important;
+  animation: pixelGradientStream 3s ease infinite, pixelGlowDrift 3s ease infinite !important;
+}
+
+.nav-logo img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .nav-logo:hover img {
-  transform: scale(1.06);
-  transition: transform 0.2s ease;
+  animation: pixelLogoPulse 2.5s ease-in-out infinite !important;
+  border-color: rgba(6, 182, 212, 0.6) !important;
 }
 
 .nav-links {
