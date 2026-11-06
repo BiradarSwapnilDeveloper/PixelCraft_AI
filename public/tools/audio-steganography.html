@@ -362,6 +362,31 @@
       animation: spin 1s linear infinite;
       margin-bottom: 16px;
     }
+    .sound-wave-bars {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 48px;
+      margin-bottom: 14px;
+    }
+    .sound-wave-bars span {
+      display: inline-block;
+      width: 6px;
+      height: 14px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #38bdf8 0%, #8b5cf6 100%);
+      animation: soundWavePulse 1.1s ease-in-out infinite;
+    }
+    .sound-wave-bars span:nth-child(1) { animation-delay: 0.0s; }
+    .sound-wave-bars span:nth-child(2) { animation-delay: 0.18s; }
+    .sound-wave-bars span:nth-child(3) { animation-delay: 0.36s; }
+    .sound-wave-bars span:nth-child(4) { animation-delay: 0.54s; }
+    .sound-wave-bars span:nth-child(5) { animation-delay: 0.72s; }
+    @keyframes soundWavePulse {
+      0%, 100% { height: 10px; opacity: 0.35; }
+      50% { height: 42px; opacity: 1; filter: drop-shadow(0 0 10px #38bdf8); }
+    }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     @media (max-width: 768px) {
       .input-grid { grid-template-columns: 1fr; }
@@ -445,15 +470,17 @@
 
   <div class="tool-workspace">
     <div class="loading-overlay" id="loading-overlay">
-        <div class="spinner"></div>
-        <h3 style="color: #38bdf8;" id="loading-title">Processing File...</h3>
+        <div class="sound-wave-bars">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <h3 style="color: #38bdf8; margin: 0 0 8px; font-family: 'Outfit', sans-serif;" id="loading-title">Processing File...</h3>
         
-        <div style="width: 80%; max-width: 400px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 15px 0; overflow: hidden; display: none;" id="progress-bar-container">
-            <div id="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8, #8b5cf6); transition: width 0.3s ease;"></div>
+        <div style="width: 82%; max-width: 420px; height: 7px; background: rgba(255,255,255,0.12); border-radius: 10px; margin: 12px 0 10px; overflow: hidden; display: none;" id="progress-bar-container">
+            <div id="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8, #8b5cf6); transition: width 0.25s ease;"></div>
         </div>
         
-        <p style="color: #a1a1aa; font-size: 0.9rem;" id="loading-subtext">This may take a few seconds.</p>
-        <p style="color: #34d399; font-size: 0.8rem; margin-top: 5px; font-family: monospace; display: none;" id="loading-active-text">> Analyzing media stream...</p>
+        <p style="color: #cbd5e1; font-size: 0.92rem; margin: 0 0 6px;" id="loading-subtext">This may take a few seconds.</p>
+        <p style="color: #34d399; font-size: 0.82rem; margin-top: 4px; font-family: monospace; display: none;" id="loading-active-text">> Initializing audio processing...</p>
     </div>
 
     <div class="tabs-container">
@@ -651,6 +678,12 @@
         document.getElementById('progress-bar-fill').style.width = percent + '%';
     }
 
+    function updateLoadingStatus(subtext, percent) {
+        const sub = document.getElementById('loading-subtext');
+        if (sub && subtext) sub.innerText = subtext;
+        if (percent !== undefined) updateProgress(percent);
+    }
+
     function hideLoading() {
         document.getElementById('loading-overlay').style.display = 'none';
         if(activeTextInterval) clearInterval(activeTextInterval);
@@ -793,12 +826,26 @@
       draw();
     }
 
-    // Advanced Audio Steganography Engine (Robust QIM)
+    function gcd(a, b) {
+        while (b) { let t = b; b = a % b; a = t; }
+        return a;
+    }
+
+    function getCoprime(L, prng) {
+        let stride = Math.floor(prng() * (L - 2)) + 1;
+        while (gcd(stride, L) !== 1) {
+            stride = (stride + 1) % L || 1;
+        }
+        return stride;
+    }
+
+    // Advanced Audio Steganography Engine (Robust Coprime QIM - Instant Zero-Freeze)
     function encodeSpreadSpectrumToAudio(audioBuffer, bits, password) {
         const prng = mulberry32(hashString(password));
         const channelData = audioBuffer.getChannelData(0);
         const Q_STEP = 0.008; // Step size for robust embedding
         const REDUNDANCY = 5;
+        const L = channelData.length;
 
         // Embed 16-bit length prefix first
         let fullBits = [];
@@ -806,20 +853,17 @@
         for(let b=15; b>=0; b--) fullBits.push((len16 >> b) & 1);
         fullBits = fullBits.concat(bits);
 
-        if(fullBits.length * REDUNDANCY > channelData.length) throw new Error("Audio too short for this payload length!");
+        if(fullBits.length * REDUNDANCY > L) throw new Error("Audio too short for this payload length!");
 
-        let indices = new Uint32Array(channelData.length);
-        for(let i=0; i<channelData.length; i++) indices[i] = i;
-        for(let i = channelData.length - 1; i > 0; i--) {
-            const j = Math.floor(prng() * (i + 1));
-            const temp = indices[i]; indices[i] = indices[j]; indices[j] = temp;
-        }
+        const seed = Math.floor(prng() * L);
+        const stride = getCoprime(L, prng);
 
-        let ptr = 0;
+        let step = 0;
         for(let i=0; i<fullBits.length; i++) {
             const bit = fullBits[i];
             for(let r=0; r<REDUNDANCY; r++) {
-                const idx = indices[ptr++];
+                const idx = (seed + step * stride) % L;
+                step++;
                 const val = channelData[idx];
                 // Quantize
                 const q_val = Math.round((val - bit*(Q_STEP/2))/Q_STEP)*Q_STEP + bit*(Q_STEP/2);
@@ -833,13 +877,10 @@
         const channelData = audioBuffer.getChannelData(0);
         const Q_STEP = 0.008;
         const REDUNDANCY = 5;
-        
-        let indices = new Uint32Array(channelData.length);
-        for(let i=0; i<channelData.length; i++) indices[i] = i;
-        for(let i = channelData.length - 1; i > 0; i--) {
-            const j = Math.floor(prng() * (i + 1));
-            const temp = indices[i]; indices[i] = indices[j]; indices[j] = temp;
-        }
+        const L = channelData.length;
+
+        const seed = Math.floor(prng() * L);
+        const stride = getCoprime(L, prng);
 
         const extractBit = (idx) => {
             const val = channelData[idx];
@@ -848,18 +889,19 @@
             return Math.abs(val-v1) < Math.abs(val-v0) ? 1 : 0;
         };
 
-        let ptr = 0;
+        let step = 0;
         let len16 = 0;
         for(let b=15; b>=0; b--) {
             let votes = 0;
             for(let r=0; r<REDUNDANCY; r++) {
-                if (ptr >= channelData.length) return null;
-                votes += extractBit(indices[ptr++]) ? 1 : -1;
+                const idx = (seed + step * stride) % L;
+                step++;
+                votes += extractBit(idx) ? 1 : -1;
             }
             if(votes > 0) len16 |= (1 << b);
         }
         
-        if (len16 <= 0 || len16 > 10000 || ptr + (len16 * 8 * REDUNDANCY) > channelData.length) return null;
+        if (len16 <= 0 || len16 > 10000 || (16 + len16 * 8) * REDUNDANCY > L) return null;
 
         const extractedBytes = [];
         for(let i=0; i<len16; i++) {
@@ -867,7 +909,9 @@
             for(let b=7; b>=0; b--) {
                 let votes = 0;
                 for(let r=0; r<REDUNDANCY; r++) {
-                    votes += extractBit(indices[ptr++]) ? 1 : -1;
+                    const idx = (seed + step * stride) % L;
+                    step++;
+                    votes += extractBit(idx) ? 1 : -1;
                 }
                 if(votes > 0) currentByte |= (1 << b);
             }
@@ -1040,7 +1084,7 @@
     /* =======================================================
        SHARED BUTTON HANDLERS
        ======================================================= */
-    document.getElementById('btn-encode').onclick = () => {
+    document.getElementById('btn-encode').onclick = async () => {
         const realMsg = document.getElementById('real-msg').value;
         const realPass = document.getElementById('real-password').value;
         const fakeMsg = document.getElementById('fake-msg').value;
@@ -1050,115 +1094,149 @@
 
         if (currentMode === 'audio') {
             if(!loadedAudioBuffer) return alert("Please upload an audio file first!");
-            showLoading("Encrypting & Encoding Audio...");
-            setTimeout(() => {
-                try {
-                    const numOfChan = loadedAudioBuffer.numberOfChannels;
-                    const length = loadedAudioBuffer.length * numOfChan * 2;
-                    const buffer = new ArrayBuffer(44 + length);
-                    const view = new DataView(buffer);
-                    const channels = [];
-                    for(let i=0; i<numOfChan; i++) channels.push(loadedAudioBuffer.getChannelData(i));
+            showLoading("Encrypting & Encoding Audio...", "Initializing cryptographic PRNG & carrier mapping...", true);
+            updateLoadingStatus("Calculating Coprime Permutation carrier stride...", 15);
+            // Allow UI to render the loading overlay and soundwave bars smoothly
+            await new Promise(r => setTimeout(r, 50));
 
-                    writeString(view, 0, 'RIFF');
-                    view.setUint32(4, 36 + length, true);
-                    writeString(view, 8, 'WAVE');
-                    writeString(view, 12, 'fmt ');
-                    view.setUint32(16, 16, true);
-                    view.setUint16(20, 1, true);
-                    view.setUint16(22, numOfChan, true);
-                    view.setUint32(24, loadedAudioBuffer.sampleRate, true);
-                    view.setUint32(28, loadedAudioBuffer.sampleRate * 2 * numOfChan, true);
-                    view.setUint16(32, numOfChan * 2, true);
-                    view.setUint16(34, 16, true);
-                    writeString(view, 36, 'data');
-                    view.setUint32(40, length, true);
+            try {
+                const numOfChan = loadedAudioBuffer.numberOfChannels;
+                const length = loadedAudioBuffer.length * numOfChan * 2;
+                const buffer = new ArrayBuffer(44 + length);
+                const view = new DataView(buffer);
+                const channels = [];
+                for(let i=0; i<numOfChan; i++) channels.push(loadedAudioBuffer.getChannelData(i));
 
-                    const sessionId = generateSessionId('PX-AUD-');
+                writeString(view, 0, 'RIFF');
+                view.setUint32(4, 36 + length, true);
+                writeString(view, 8, 'WAVE');
+                writeString(view, 12, 'fmt ');
+                view.setUint32(16, 16, true);
+                view.setUint16(20, 1, true);
+                view.setUint16(22, numOfChan, true);
+                view.setUint32(24, loadedAudioBuffer.sampleRate, true);
+                view.setUint32(28, loadedAudioBuffer.sampleRate * 2 * numOfChan, true);
+                view.setUint16(32, numOfChan * 2, true);
+                view.setUint16(34, 16, true);
+                writeString(view, 36, 'data');
+                view.setUint32(40, length, true);
 
-                    // 1. Real Msg
-                    const telemetryTagReal = `[PixelCraft AI Software - Session: ${sessionId} ]`;
-                    const encReal = CryptoJS.AES.encrypt(telemetryTagReal + realMsg, realPass).toString();
-                    const payloadReal = "PXC|" + encReal.length + "|" + encReal;
-                    const bytesReal = strToBytes(payloadReal);
-                    const bitsReal = [];
-                    for(let i=0; i<bytesReal.length; i++) for(let j=7; j>=0; j--) bitsReal.push((bytesReal[i] >> j) & 1);
-                    encodeSpreadSpectrumToAudio(loadedAudioBuffer, bitsReal, realPass);
+                const sessionId = generateSessionId('PX-AUD-');
 
-                    // 2. Fake Msg
-                    if (fakeMsg && fakePass) {
-                        const telemetryTagFake = `[PixelCraft AI Software - Session: ${sessionId} ]`;
-                        const encFake = CryptoJS.AES.encrypt(telemetryTagFake + fakeMsg, fakePass).toString();
-                        const payloadFake = "PXC|" + encFake.length + "|" + encFake;
-                        const bytesFake = strToBytes(payloadFake);
-                        const bitsFake = [];
-                        for(let i=0; i<bytesFake.length; i++) for(let j=7; j>=0; j--) bitsFake.push((bytesFake[i] >> j) & 1);
-                        encodeSpreadSpectrumToAudio(loadedAudioBuffer, bitsFake, fakePass);
-                    }
+                // 1. Real Msg
+                updateLoadingStatus("Encrypting primary payload via AES-256...", 35);
+                await new Promise(r => setTimeout(r, 20));
 
-                    // 3. Admin Blind Watermark (For Forensics Hub)
-                    const adminPayload = "PXCADMIN|" + sessionId + "|END";
-                    const adminBytes = strToBytes(adminPayload);
-                    const adminBits = [];
-                    for(let i=0; i<adminBytes.length; i++) for(let j=7; j>=0; j--) adminBits.push((adminBytes[i] >> j) & 1);
-                    encodeSpreadSpectrumToAudio(loadedAudioBuffer, adminBits, "PIXELCRAFT_ADMIN_KEY");
+                const telemetryTagReal = `[PixelCraft AI Software - Session: ${sessionId} ]`;
+                const encReal = CryptoJS.AES.encrypt(telemetryTagReal + realMsg, realPass).toString();
+                const payloadReal = "PXC|" + encReal.length + "|" + encReal;
+                const bytesReal = strToBytes(payloadReal);
+                const bitsReal = [];
+                for(let i=0; i<bytesReal.length; i++) for(let j=7; j>=0; j--) bitsReal.push((bytesReal[i] >> j) & 1);
+                encodeSpreadSpectrumToAudio(loadedAudioBuffer, bitsReal, realPass);
 
-                    // Write float32 buffer to WAV
-                    let offset = 44;
-                    for(let i=0; i<loadedAudioBuffer.length; i++){
-                        for(let channel=0; channel<numOfChan; channel++){
-                            let sample = Math.max(-1, Math.min(1, channels[channel][i]));
+                // 2. Fake Msg
+                if (fakeMsg && fakePass) {
+                    updateLoadingStatus("Injecting plausible deniability decoy layer...", 55);
+                    await new Promise(r => setTimeout(r, 20));
+                    const telemetryTagFake = `[PixelCraft AI Software - Session: ${sessionId} ]`;
+                    const encFake = CryptoJS.AES.encrypt(telemetryTagFake + fakeMsg, fakePass).toString();
+                    const payloadFake = "PXC|" + encFake.length + "|" + encFake;
+                    const bytesFake = strToBytes(payloadFake);
+                    const bitsFake = [];
+                    for(let i=0; i<bytesFake.length; i++) for(let j=7; j>=0; j--) bitsFake.push((bytesFake[i] >> j) & 1);
+                    encodeSpreadSpectrumToAudio(loadedAudioBuffer, bitsFake, fakePass);
+                }
+
+                // 3. Admin Blind Watermark (For Forensics Hub)
+                updateLoadingStatus("Embedding forensic carrier watermark...", 70);
+                await new Promise(r => setTimeout(r, 20));
+                const adminPayload = "PXCADMIN|" + sessionId + "|END";
+                const adminBytes = strToBytes(adminPayload);
+                const adminBits = [];
+                for(let i=0; i<adminBytes.length; i++) for(let j=7; j>=0; j--) adminBits.push((adminBytes[i] >> j) & 1);
+                encodeSpreadSpectrumToAudio(loadedAudioBuffer, adminBits, "PIXELCRAFT_ADMIN_KEY");
+
+                // Write float32 buffer to WAV in asynchronous non-blocking chunks
+                updateLoadingStatus("Synthesizing 16-bit PCM WAV stream...", 85);
+                await new Promise(r => setTimeout(r, 20));
+
+                let offset = 44;
+                const totalSamples = loadedAudioBuffer.length;
+                const chunkSize = 250000;
+                for (let i = 0; i < totalSamples; i += chunkSize) {
+                    const end = Math.min(i + chunkSize, totalSamples);
+                    for (let s = i; s < end; s++) {
+                        for (let channel = 0; channel < numOfChan; channel++) {
+                            let sample = Math.max(-1, Math.min(1, channels[channel][s]));
                             sample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
                             view.setInt16(offset, sample, true);
                             offset += 2;
                         }
                     }
-
-                    const blob = new Blob([view], { type: 'audio/wav' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'secret_audio.wav';
-                    a.click();
-                    hideLoading();
-                } catch(err) {
-                    hideLoading();
-                    alert(err.message || "Encoding error.");
+                    if (end < totalSamples) {
+                        await new Promise(r => setTimeout(r, 0));
+                    }
                 }
-            }, 500);
+
+                updateLoadingStatus("Finalizing cryptographic audio container...", 100);
+                await new Promise(r => setTimeout(r, 60));
+
+                const blob = new Blob([view], { type: 'audio/wav' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'secret_audio.wav';
+                a.click();
+                hideLoading();
+            } catch(err) {
+                hideLoading();
+                alert(err.message || "Encoding error.");
+            }
         } else {
             if(!loadedVideoFile) return alert("Please upload a video file first!");
             handleVideoEncode(realMsg, realPass, fakeMsg, fakePass);
         }
     };
 
-    document.getElementById('btn-decode').onclick = () => {
+    document.getElementById('btn-decode').onclick = async () => {
       const pass = document.getElementById('dec-password').value;
       if(!pass) return alert("Password required!");
 
       if (currentMode === 'audio') {
           const file = document.getElementById('audio-input').files[0];
           if(!file) return alert("Please upload audio file!");
-          showLoading("Extracting Audio Secret...");
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            const arrayBuffer = ev.target.result;
-            audioCtx.decodeAudioData(arrayBuffer, (buffer) => {
-                try {
-                    let decoded = attemptSpreadSpectrumDecode(buffer, pass);
-                    
-                    if(decoded) {
-                        document.getElementById('extracted-msg').value = decoded;
-                        document.getElementById('extracted-msg').style.color = '#4ade80';
-                    } else {
-                        document.getElementById('extracted-msg').value = "No secret found or wrong password.";
-                        document.getElementById('extracted-msg').style.color = '#ef4444';
-                    }
-                    hideLoading();
-                } catch(e) { hideLoading(); alert("Error reading file."); }
-            }, (e) => { hideLoading(); alert("Error decoding audio for extraction."); });
-          };
-          reader.readAsArrayBuffer(file);
+          showLoading("Extracting Audio Secret...", "Reading audio wave structure...", true);
+          updateLoadingStatus("Reading audio file stream...", 20);
+          await new Promise(r => setTimeout(r, 50));
+
+          try {
+              const arrayBuffer = await file.arrayBuffer();
+              updateLoadingStatus("Decoding PCM samples via Web Audio...", 45);
+              await new Promise(r => setTimeout(r, 30));
+
+              const dAc = new (window.AudioContext || window.webkitAudioContext)();
+              const buffer = await dAc.decodeAudioData(arrayBuffer);
+
+              updateLoadingStatus("Extracting spread spectrum carrier bits...", 75);
+              await new Promise(r => setTimeout(r, 30));
+
+              let decoded = attemptSpreadSpectrumDecode(buffer, pass);
+              updateLoadingStatus("Decrypting cryptographic payload...", 100);
+              await new Promise(r => setTimeout(r, 50));
+              hideLoading();
+              
+              if(decoded) {
+                  document.getElementById('extracted-msg').value = decoded;
+                  document.getElementById('extracted-msg').style.color = '#4ade80';
+              } else {
+                  document.getElementById('extracted-msg').value = "No secret found or wrong password.";
+                  document.getElementById('extracted-msg').style.color = '#ef4444';
+              }
+          } catch(e) {
+              hideLoading();
+              alert("Error decoding audio for extraction: " + (e.message || e));
+          }
       } else {
           const file = document.getElementById('video-input').files[0];
           if(!file) return alert("Please upload video file!");

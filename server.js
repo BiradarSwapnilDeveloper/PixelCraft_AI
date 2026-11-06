@@ -2264,7 +2264,9 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
 
       embedPixelSeal(modPixelData, width, height, channels, sealHash);
 
+      // Encode into a pristine, fully-formed PNG container with embedded EXIF seal
       sanitizedBuffer = await sharp(modPixelData, { raw: { width, height, channels } })
+        .png({ compressionLevel: 6, adaptiveFiltering: true })
         .withMetadata({
           exif: {
             IFD0: {
@@ -2287,7 +2289,7 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
       success: true,
       threats,
       sealHash,
-      sanitizedImageBase64: `data:${req.file.mimetype};base64,${sanitizedBuffer.toString('base64')}`
+      sanitizedImageBase64: `data:image/png;base64,${sanitizedBuffer.toString('base64')}`
     });
 
   } catch (err) {

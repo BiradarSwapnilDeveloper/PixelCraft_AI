@@ -191,8 +191,32 @@
       font-size: 1.12rem;
       color: var(--text-muted);
       line-height: 1.65;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
       max-width: 580px;
+    }
+    .hero-inline-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1.5px solid rgba(99, 102, 241, 0.4);
+      padding-bottom: 1px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .hero-inline-link:hover {
+      color: var(--primary-hover);
+      border-bottom-color: var(--primary);
+    }
+    .hero-inline-highlight {
+      color: #38bdf8;
+      border-bottom-color: rgba(56, 189, 248, 0.45);
+    }
+    .hero-inline-highlight:hover {
+      color: #0ea5e9;
+      border-bottom-color: #38bdf8;
+    }
+    [data-theme="dark"] .hero-inline-highlight {
+      color: #38bdf8;
     }
     /* Enterprise Hero Search Bar */
     .hero-search-wrapper {
@@ -1574,55 +1598,207 @@
     .seo-content-block li {
       margin-bottom: 10px;
     }
-    /* Contact Section */
+    /* Contact & Support Section (Enterprise Cyber Design) */
     .contact-section-wrap {
       background: var(--surface-card);
       border-top: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
-      padding: 80px 24px;
+      padding: 85px 24px;
+      position: relative;
     }
     .contact-card-box {
-      max-width: 800px;
+      max-width: 760px;
       margin: 0 auto;
-      background: var(--bg-body);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-xl);
-      padding: 48px 36px;
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid rgba(99, 102, 241, 0.22);
+      border-radius: 24px;
+      padding: 46px 36px 38px;
       text-align: center;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 16px 36px -10px rgba(99, 102, 241, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      position: relative;
+      overflow: hidden;
     }
-    .contact-card-box h2 {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--text-heading);
-      margin-bottom: 12px;
+    [data-theme="dark"] .contact-card-box {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.92) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.32);
+      box-shadow: 0 20px 48px -15px rgba(0, 0, 0, 0.65), 0 0 32px -8px rgba(99, 102, 241, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
-    .contact-card-box p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 540px;
-      margin: 0 auto 32px;
+    .contact-card-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 320px;
+      height: 120px;
+      background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.25), transparent 70%);
+      pointer-events: none;
     }
-    .contact-email-btn {
+    .contact-badge-pill {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 7px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: var(--primary);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 14px;
+    }
+    .contact-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      display: inline-block;
+      animation: pulseRadar 2s infinite ease-in-out;
+    }
+    .contact-card-box h2 {
+      font-size: clamp(1.85rem, 3.8vw, 2.3rem);
+      font-weight: 800;
+      color: var(--text-heading);
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .contact-card-box p.contact-subtext {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 540px;
+      margin: 0 auto 28px;
+    }
+
+    /* Email Interactive Card */
+    .contact-email-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      max-width: 620px;
+      margin: 0 auto 16px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+    }
+    [data-theme="dark"] .contact-email-card {
+      background: rgba(15, 23, 42, 0.7);
+      border-color: rgba(255, 255, 255, 0.09);
+    }
+    .contact-email-card:hover {
+      border-color: rgba(99, 102, 241, 0.45);
+      box-shadow: 0 8px 24px -6px rgba(99, 102, 241, 0.2);
+    }
+    .contact-email-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      min-width: 0;
+    }
+    .contact-email-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+    .contact-email-meta {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .contact-email-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .contact-email-address {
+      font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      text-decoration: none;
+      word-break: break-all;
+      transition: color 0.15s ease;
+    }
+    .contact-email-address:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    .contact-email-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .contact-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      border: none;
+      font-family: inherit;
+    }
+    .contact-btn-send {
+      background: var(--primary);
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+    }
+    .contact-btn-send:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.45);
+    }
+    .contact-btn-copy {
       background: var(--surface-card);
       border: 1px solid var(--border-color);
       color: var(--text-heading);
-      padding: 14px 28px;
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      font-size: 1rem;
-      text-decoration: none;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.2s ease;
     }
-    .contact-email-btn:hover {
+    [data-theme="dark"] .contact-btn-copy {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+    .contact-btn-copy:hover {
       border-color: var(--primary-border);
       color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-card);
+      transform: translateY(-1px);
+    }
+    .contact-btn-copy.copied {
+      background: rgba(16, 185, 129, 0.15) !important;
+      border-color: rgba(16, 185, 129, 0.4) !important;
+      color: #10b981 !important;
+    }
+    .contact-notice-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
     /* Enterprise Footer */
     .saas-footer {
@@ -1741,15 +1917,26 @@
       .hero-left {
         text-align: center !important;
       }
+      .hero-badge-pill {
+        font-size: 0.74rem !important;
+        padding: 5px 12px !important;
+        margin-bottom: 14px !important;
+        letter-spacing: 0.2px !important;
+      }
       .hero h1 {
-        font-size: clamp(1.85rem, 6.5vw, 2.4rem) !important;
+        font-size: clamp(1.8rem, 6.2vw, 2.3rem) !important;
         line-height: 1.2 !important;
+        letter-spacing: -0.025em !important;
+        margin-bottom: 14px !important;
       }
       .hero-subheadline {
-        font-size: 0.96rem !important;
-        line-height: 1.6 !important;
+        font-size: 0.93rem !important;
+        line-height: 1.62 !important;
+        max-width: 95% !important;
         margin-left: auto !important;
         margin-right: auto !important;
+        margin-bottom: 22px !important;
+        text-wrap: pretty !important;
       }
       .hero-search-wrapper {
         margin-left: auto !important;
@@ -1829,6 +2016,68 @@
       .footer-grid-nav {
         grid-template-columns: 1fr !important;
       }
+      /* Contact Section Responsive */
+      .contact-section-wrap {
+        padding: 48px 16px !important;
+      }
+      .contact-card-box {
+        padding: 30px 16px 24px !important;
+        border-radius: 20px !important;
+      }
+      .contact-card-box h2 {
+        font-size: 1.65rem !important;
+        margin-bottom: 8px !important;
+      }
+      .contact-card-box p.contact-subtext {
+        font-size: 0.92rem !important;
+        line-height: 1.55 !important;
+        margin-bottom: 22px !important;
+      }
+      .contact-email-card {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 16px 14px !important;
+        gap: 14px !important;
+        border-radius: 14px !important;
+      }
+      .contact-email-left {
+        justify-content: center !important;
+        text-align: center !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+      .contact-email-icon-box {
+        margin: 0 auto !important;
+        width: 38px !important;
+        height: 38px !important;
+      }
+      .contact-email-meta {
+        align-items: center !important;
+        text-align: center !important;
+      }
+      .contact-email-address {
+        font-size: 0.88rem !important;
+        letter-spacing: -0.2px !important;
+      }
+      .contact-email-actions {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        width: 100% !important;
+      }
+      .contact-action-btn {
+        width: 100% !important;
+        padding: 10px 12px !important;
+        font-size: 0.82rem !important;
+        justify-content: center !important;
+      }
+      .contact-notice-pill {
+        font-size: 0.74rem !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        line-height: 1.4 !important;
+        text-align: center !important;
+      }
     }
   </style>
 
@@ -1906,11 +2155,11 @@
         </div>
 
         <h1>
-          Private, Fast &amp; Local <span class="gradient-text">AI Tools</span> for Media &amp; Security
+          Private, High-Speed <span class="gradient-text">AI Tools</span> for Media &amp; Security
         </h1>
 
         <p class="hero-subheadline">
-          Privacy-conscious AI tools with transparent, tool-specific data handling. Many tools process data in your browser, while selected advanced tools use server-side processing or third-party services. Review our <a href="data-practices.html" style="color: var(--primary); text-decoration: underline;">Data Practices</a> page for details, or consult our <a href="security-whitepaper.html" style="color: var(--primary); text-decoration: underline; font-weight: 600;">Security Whitepaper</a> for deep mathematical formulations, Encrypt-then-MAC proofs, scale-invariant macro-grid algorithms, and zero-storage forensic specifications.
+          High-speed privacy and multimedia utilities engineered with zero permanent storage. Browser tools process in local memory, while cloud tools execute in ephemeral RAM. Explore our <a href="data-practices.html" class="hero-inline-link">Data Practices</a> or read the <a href="security-whitepaper.html" class="hero-inline-link hero-inline-highlight">Security Whitepaper &rarr;</a>
         </p>
 
         <!-- Live Instant Search Bar -->
@@ -2796,16 +3045,59 @@
        ======================================================== -->
   <section class="contact-section-wrap" id="contact">
     <div class="contact-card-box">
-      <h2>Let's Connect</h2>
-      <p>Questions regarding our cryptography implementation, security vulnerability reports, or enterprise utility inquiries? Get in touch with our engineering team directly.</p>
-      <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-        <a href="mailto:support.pixelcraft205@gmail.com" class="contact-email-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-          </svg>
-          <span>support.pixelcraft205@gmail.com</span>
-        </a>
+      <!-- Glow ambient background -->
+      <div class="contact-ambient-glow" aria-hidden="true"></div>
+
+      <div class="contact-badge-pill">
+        <span class="contact-pulse-dot"></span>
+        <span>Direct Engineering Support</span>
+      </div>
+
+      <h2 class="contact-title">Let's Connect</h2>
+      <p class="contact-subtext">
+        Questions regarding cryptography protocols, security vulnerability disclosures, or enterprise utility inquiries? Reach our engineering team directly.
+      </p>
+
+      <!-- Modern Cyber Email Box -->
+      <div class="contact-email-card" id="contact-email-container">
+        <div class="contact-email-left">
+          <div class="contact-email-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+          </div>
+          <div class="contact-email-meta">
+            <span class="contact-email-tag">OFFICIAL SUPPORT INBOX</span>
+            <a href="mailto:support.pixelcraft205@gmail.com" class="contact-email-address" id="contact-email-text" title="Send email to support">support.pixelcraft205@gmail.com</a>
+          </div>
+        </div>
+
+        <div class="contact-email-actions">
+          <a href="mailto:support.pixelcraft205@gmail.com" class="contact-action-btn contact-btn-send" title="Open Mail Client" aria-label="Send email">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            <span>Send Mail</span>
+          </a>
+
+          <button type="button" class="contact-action-btn contact-btn-copy" id="contact-copy-email-btn" title="Copy email address" aria-label="Copy Email Address">
+            <svg class="copy-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="contact-copy-btn-text">Copy</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Security Notice Pill below email -->
+      <div class="contact-notice-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>PGP-encrypted emails welcome for sensitive disclosures &bull; Typical response &lt; 24h</span>
       </div>
     </div>
   </section>
@@ -3902,6 +4194,45 @@
           windowEl.style.animationPlayState = 'running';
         });
       }
+    })();
+
+    // Contact Section Copy Email Action
+    (function initContactCopyAction() {
+      const copyBtn = document.getElementById('contact-copy-email-btn');
+      const copyText = document.getElementById('contact-copy-btn-text');
+      const email = 'support.pixelcraft205@gmail.com';
+      if (!copyBtn) return;
+
+      copyBtn.addEventListener('click', async () => {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(email);
+          } else {
+            const ta = document.createElement('textarea');
+            ta.value = email;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+          }
+          if (copyText) copyText.textContent = 'Copied! ✓';
+          copyBtn.classList.add('copied');
+          if (typeof showToast === 'function') {
+            showToast('Support email copied to clipboard!', 'success');
+          }
+          setTimeout(() => {
+            if (copyText) copyText.textContent = 'Copy';
+            copyBtn.classList.remove('copied');
+          }, 2400);
+        } catch (err) {
+          if (copyText) copyText.textContent = 'Copied!';
+          setTimeout(() => {
+            if (copyText) copyText.textContent = 'Copy';
+          }, 2000);
+        }
+      });
     })();
   </script>
 
