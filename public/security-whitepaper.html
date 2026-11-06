@@ -1,6 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+  <script>
+    (function() {
+      var explicitTheme = localStorage.getItem('pixelcraft-theme-whitepaper');
+      document.documentElement.setAttribute('data-theme', explicitTheme || 'dark');
+    })();
+  </script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-9EK2GY31YP" id="ga-script"></script>
   <script>
@@ -1124,5 +1130,32 @@
 
   <script src="./js/cookie-consent.js"></script>
   <script src="js/utils.js"></script>
+  <script>
+    // Enforce dark theme default for security whitepaper
+    (function enforceDarkWhitepaperTheme() {
+      var explicitTheme = localStorage.getItem('pixelcraft-theme-whitepaper');
+      var targetTheme = explicitTheme || 'dark';
+      document.documentElement.setAttribute('data-theme', targetTheme);
+      
+      var themeBtn = document.getElementById('theme-toggle-btn');
+      if (themeBtn) {
+        themeBtn.innerHTML = targetTheme === 'dark' 
+          ? '<span style="font-size: 1.15rem;">☀️</span>' 
+          : '<span style="font-size: 1.15rem;">🌙</span>';
+        themeBtn.title = targetTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        
+        themeBtn.addEventListener('click', function() {
+          setTimeout(function() {
+            var current = document.documentElement.getAttribute('data-theme') || 'dark';
+            localStorage.setItem('pixelcraft-theme-whitepaper', current);
+            themeBtn.innerHTML = current === 'dark' 
+              ? '<span style="font-size: 1.15rem;">☀️</span>' 
+              : '<span style="font-size: 1.15rem;">🌙</span>';
+            themeBtn.title = current === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+          }, 40);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
