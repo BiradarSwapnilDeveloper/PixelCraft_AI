@@ -257,46 +257,43 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
   flex-shrink: 0;
 }
 
-/* ===== DYNAMIC LIVE-MOTION PIXEL GRADIENT & CYBER GLOW ===== */
-@keyframes pixelGradientStream {
+/* ===== HIGH-VOLTAGE RGB PIXEL LIGHTNING STREAM & CYBER GLOW ===== */
+@keyframes rgbLightningStream {
   0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
+    background-position: 0% center;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: -200% center;
   }
 }
 
-@keyframes pixelGlowDrift {
+@keyframes rgbLightningGlow {
   0% {
-    filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.5));
+    filter: drop-shadow(0 0 4px #00f0ff) drop-shadow(0 0 10px rgba(0, 255, 102, 0.7));
   }
-  33% {
-    filter: drop-shadow(0 0 9px rgba(139, 92, 246, 0.6));
-  }
-  66% {
-    filter: drop-shadow(0 0 9px rgba(236, 72, 153, 0.6));
+  50% {
+    filter: drop-shadow(0 0 7px #ff003c) drop-shadow(0 0 15px rgba(255, 230, 0, 0.8)) drop-shadow(0 0 22px #00f0ff);
   }
   100% {
-    filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.5));
+    filter: drop-shadow(0 0 5px #00ff66) drop-shadow(0 0 12px rgba(255, 0, 127, 0.8));
   }
 }
 
-@keyframes pixelLogoPulse {
+@keyframes rgbLogoLightning {
   0% {
     transform: scale(1.08) rotate(0deg);
-    box-shadow: 0 0 12px rgba(6, 182, 212, 0.5), 0 0 20px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 0 14px #00f0ff, 0 0 26px rgba(255, 0, 60, 0.7);
+    border-color: #00f0ff;
   }
   50% {
-    transform: scale(1.12) rotate(-2deg);
-    box-shadow: 0 0 18px rgba(236, 72, 153, 0.65), 0 0 26px rgba(16, 185, 129, 0.45);
+    transform: scale(1.13) rotate(-2deg);
+    box-shadow: 0 0 18px #00ff66, 0 0 30px rgba(255, 230, 0, 0.8);
+    border-color: #00ff66;
   }
   100% {
-    transform: scale(1.08) rotate(0deg);
-    box-shadow: 0 0 12px rgba(6, 182, 212, 0.5), 0 0 20px rgba(139, 92, 246, 0.35);
+    transform: scale(1.08) rotate(2deg);
+    box-shadow: 0 0 16px #ff007f, 0 0 28px rgba(0, 240, 255, 0.7);
+    border-color: #ff007f;
   }
 }
 
@@ -307,7 +304,7 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 
 .nav-logo span {
   color: var(--text-heading);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap !important;
   display: inline-block;
 }
@@ -315,39 +312,43 @@ h1, h2, h3, h4, h5, h6, .nav-logo {
 .nav-logo:hover span:not(.nav-logo-badge) {
   background: linear-gradient(
     90deg, 
-    #06b6d4 0%, 
-    #3b82f6 18%, 
-    #8b5cf6 36%, 
-    #ec4899 54%, 
-    #f59e0b 72%, 
-    #10b981 88%, 
-    #06b6d4 100%
+    #ff003c 0%, 
+    #ffe600 16%, 
+    #00ff66 33%, 
+    #00f0ff 50%, 
+    #0044ff 66%, 
+    #ff007f 83%, 
+    #ff003c 100%
   ) !important;
-  background-size: 300% 300% !important;
+  background-size: 200% 100% !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  color: #06b6d4 !important;
-  animation: pixelGradientStream 3s ease infinite, pixelGlowDrift 3s ease infinite !important;
+  color: #00f0ff !important;
+  animation: rgbLightningStream 0.85s linear infinite, rgbLightningGlow 0.45s ease-in-out infinite alternate !important;
 }
 
 [data-theme="dark"] .nav-logo:hover span:not(.nav-logo-badge) {
   background: linear-gradient(
     90deg, 
-    #22d3ee 0%, 
-    #60a5fa 18%, 
-    #a78bfa 36%, 
-    #f472b6 54%, 
-    #fbbf24 72%, 
-    #34d399 88%, 
-    #22d3ee 100%
+    #ff0055 0%, 
+    #ffea00 16%, 
+    #00ff66 33%, 
+    #00f0ff 50%, 
+    #3b82f6 66%, 
+    #ff00aa 83%, 
+    #ff0055 100%
   ) !important;
-  background-size: 300% 300% !important;
+  background-size: 200% 100% !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  color: #22d3ee !important;
-  animation: pixelGradientStream 3s ease infinite, pixelGlowDrift 3s ease infinite !important;
+  color: #00f0ff !important;
+  animation: rgbLightningStream 0.85s linear infinite, rgbLightningGlow 0.45s ease-in-out infinite alternate !important;
+}
+
+.nav-logo:hover img {
+  animation: rgbLogoLightning 0.5s ease-in-out infinite alternate !important;
 }
 
 .nav-logo img {
