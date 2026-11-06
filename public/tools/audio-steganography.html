@@ -670,7 +670,6 @@
 
     // Legal Check
     const legalCheck = document.getElementById('legal-check');
-    const btnEncode = document.getElementById('btn-encode');
     legalCheck.addEventListener('change', () => {
         if(legalCheck.checked) {
             btnEncode.style.opacity = '1';
@@ -698,7 +697,6 @@
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let loadedAudioBuffer = null;
-    let loadedVideoFile = null;
 
     // Tabs
     document.getElementById('tab-encode').onclick = () => {
