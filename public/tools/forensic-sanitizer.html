@@ -572,10 +572,20 @@
         formData.append('image', currentFile);
         
         try {
-            const res = await fetch('/api/tools/forensic-sanitize', {
+            let res = await fetch('/api/tools/forensic-sanitize', {
                 method: 'POST',
                 body: formData
             });
+
+            // If cloud container (e.g., Render free tier) was cold-starting (502/503/504), wait 3.5s and retry once
+            if (res.status === 502 || res.status === 503 || res.status === 504) {
+                logTerminal(`Cloud instance initializing (Status ${res.status}). Auto-retrying in 3.5s...`, 'warn');
+                await new Promise(r => setTimeout(r, 3500));
+                res = await fetch('/api/tools/forensic-sanitize', {
+                    method: 'POST',
+                    body: formData
+                });
+            }
             
             const rawText = await res.text();
             let data;
@@ -583,7 +593,10 @@
                 data = JSON.parse(rawText);
             } catch (parseErr) {
                 console.error("Raw response:", rawText);
-                throw new Error(`Invalid JSON response (Status ${res.status}). Body: ${rawText.substring(0, 50)}...`);
+                if (res.status === 502 || res.status === 503 || res.status === 504) {
+                    throw new Error(`Cloud server is booting up from cold sleep (HTTP ${res.status}). Free cloud instances take ~30s to initialize. Please click '1. Scan & Sanitize Image' once more.`);
+                }
+                throw new Error(`Server returned non-JSON response (HTTP ${res.status}). Please verify server status.`);
             }
             
             if (data.error) throw new Error(data.error);
@@ -635,9 +648,7 @@
         
         // Convert base64 to blob if we are verifying the currently sanitized image
         // Or if the user uploaded an already sanitized image, just use currentFile
-        
         let fileToVerify = currentFile;
-        // if user just sanitized, let's verify the output
         if (sanitizedDataUrl) {
             logTerminal('Note: Verifying the newly sanitized image buffer.', 'warn');
             const res = await fetch(sanitizedDataUrl);
@@ -649,11 +660,30 @@
         formData.append('image', fileToVerify);
         
         try {
-            const res = await fetch('/api/tools/verify-seal', {
+            let res = await fetch('/api/tools/verify-seal', {
                 method: 'POST',
                 body: formData
             });
-            const data = await res.json();
+
+            if (res.status === 502 || res.status === 503 || res.status === 504) {
+                logTerminal(`Cloud instance initializing (Status ${res.status}). Auto-retrying in 3.5s...`, 'warn');
+                await new Promise(r => setTimeout(r, 3500));
+                res = await fetch('/api/tools/verify-seal', {
+                    method: 'POST',
+                    body: formData
+                });
+            }
+
+            const rawText = await res.text();
+            let data;
+            try {
+                data = JSON.parse(rawText);
+            } catch (parseErr) {
+                if (res.status === 502 || res.status === 503 || res.status === 504) {
+                    throw new Error(`Cloud server is booting up from cold sleep (HTTP ${res.status}). Please try again in a few moments.`);
+                }
+                throw new Error(`Server returned non-JSON response (HTTP ${res.status}).`);
+            }
             
             if (data.error) throw new Error(data.error);
             

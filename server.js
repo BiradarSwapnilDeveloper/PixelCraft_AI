@@ -2247,8 +2247,10 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
 
     try {
       // Re-encode through sharp to deep-scrub EXIF metadata and hidden non-conforming chunks
+      // Resize giant photos exceeding 4096px to protect low-RAM server containers (e.g., Render free 512MB RAM cap)
       const scrubbedBuffer = await sharp(buffer)
         .rotate()
+        .resize(4096, 4096, { fit: 'inside', withoutEnlargement: true })
         .toBuffer();
 
       // Cryptographic seal generated using HMAC over scrubbed buffer content
@@ -2260,13 +2262,13 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
       // Anchor 2: Scale-Invariant WhatsApp-Immune Luminance Macro-Grid Watermark in Pixel Domain
       const rawObj = await sharp(scrubbedBuffer).raw().toBuffer({ resolveWithObject: true });
       const { width, height, channels } = rawObj.info;
-      const modPixelData = Buffer.from(rawObj.data);
 
-      embedPixelSeal(modPixelData, width, height, channels, sealHash);
+      // In-place modulation of pixel data without redundant buffer cloning
+      embedPixelSeal(rawObj.data, width, height, channels, sealHash);
 
       // Encode into a pristine, fully-formed PNG container with embedded EXIF seal
-      sanitizedBuffer = await sharp(modPixelData, { raw: { width, height, channels } })
-        .png({ compressionLevel: 6, adaptiveFiltering: true })
+      sanitizedBuffer = await sharp(rawObj.data, { raw: { width, height, channels } })
+        .png({ compressionLevel: 6, adaptiveFiltering: false })
         .withMetadata({
           exif: {
             IFD0: {
@@ -2300,6 +2302,7 @@ app.post('/api/tools/forensic-sanitize', uploadMemory.single('image'), async (re
 
 // Scale-Invariant WhatsApp-Immune Cryptographic Watermarking Engine
 function embedPixelSeal(rawBuffer, width, height, channels, sealHex) {
+  if (!rawBuffer || width < 40 || height < 40 || channels < 3) return;
   const COLS = 40, ROWS = 40, DELTA = 14;
   const sealBytes = Buffer.from(sealHex, 'hex');
   const bits = [];
@@ -2357,6 +2360,7 @@ function embedPixelSeal(rawBuffer, width, height, channels, sealHex) {
 }
 
 function extractPixelSeal(rawBuffer, width, height, channels) {
+  if (!rawBuffer || width < 40 || height < 40 || channels < 3) return null;
   const COLS = 40, ROWS = 40;
   const bits = [];
   for (let i = 0; i < 272; i++) {
