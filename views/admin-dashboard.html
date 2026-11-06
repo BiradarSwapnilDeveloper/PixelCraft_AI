@@ -535,8 +535,8 @@
                                 <span id="seal-badge" style="font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;">-</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 11px;">
-                                <span style="color: var(--text-muted);">HMAC-SHA256 Hash:</span>
-                                <span style="color: var(--warning); font-family: 'JetBrains Mono', monospace;">256-bit</span>
+                                <span style="color: var(--text-muted);">HMAC-SHA256 Hash (256-bit):</span>
+                                <button id="btn-copy-seal-hash" type="button" style="background: rgba(0,242,254,0.1); border: 1px solid rgba(0,242,254,0.3); color: var(--accent); font-size: 11px; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono', monospace;">📋 Copy Hash</button>
                             </div>
                             <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; word-break: break-all; color: var(--accent); background: rgba(0,242,254,0.05); padding: 6px 8px; border-radius: 4px; border: 1px solid rgba(0,242,254,0.1);" id="seal-hash-display">-</div>
                             <div id="seal-audit-meta" style="margin-top: 8px; font-size: 11px; color: var(--text-muted); display: flex; gap: 10px; flex-wrap: wrap;"></div>
@@ -1435,6 +1435,7 @@
                 sealBadge.style.color = 'var(--success)';
                 sealBadge.style.border = '1px solid var(--success)';
                 sealHashDisplay.textContent = data.sealHash;
+                if (manualHashInput) manualHashInput.value = data.sealHash;
 
                 if (data.metadataAudit) {
                     const gpsStatus = data.metadataAudit.hasGps ? '⚠️ GPS LEAK DETECTED' : '🛡️ GPS STRIPPED (CLEAN)';
@@ -1514,6 +1515,19 @@
                 sealBadge.style.border = '1px solid var(--danger)';
                 sealHashDisplay.textContent = hash;
                 sealAuditMeta.innerHTML = `<span style="color:var(--danger);">Invalid length or non-hexadecimal characters detected.</span>`;
+            }
+        });
+    }
+
+    const btnCopySealHash = document.getElementById('btn-copy-seal-hash');
+    if (btnCopySealHash) {
+        btnCopySealHash.addEventListener('click', () => {
+            const h = sealHashDisplay.textContent.trim();
+            if (h && h !== '-' && !h.includes('NO SEAL')) {
+                navigator.clipboard.writeText(h).then(() => {
+                    btnCopySealHash.textContent = '✓ Copied!';
+                    setTimeout(() => { btnCopySealHash.textContent = '📋 Copy Hash'; }, 2000);
+                });
             }
         });
     }
