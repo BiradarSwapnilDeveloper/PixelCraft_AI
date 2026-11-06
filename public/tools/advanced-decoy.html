@@ -1095,7 +1095,7 @@
 
         if (currentStegoMode === 'whatsapp') {
             if (rMsg.length > 200) {
-                return alert(`Your real secret is ${rMsg.length} characters. For Social Safe mode, secrets should be 200 characters or fewer to guarantee survival through social media lossy compression. For massive text or documents, switch to "Ultra-HD Lossless Mode" and send as an uncompressed file or document attachment (📎 Document).`);
+                return alert(`Your real secret is ${rMsg.length} characters. For Social Safe mode, secrets should be 200 characters or fewer for optimal resilience against social media lossy compression. For massive text or documents, switch to "Ultra-HD Lossless Mode" and send as an uncompressed file or document attachment (📎 Document).`);
             }
             if (dMsg && dMsg.length > 200) {
                 return alert(`Your decoy message is ${dMsg.length} characters. Please shorten it to 200 characters or switch to Ultra-HD Lossless Mode.`);
