@@ -610,35 +610,6 @@
             Test Decryption →
           </button>
         </div>
-
-        <!-- WhatsApp Survivability Protocol Alert Box -->
-        <div style="margin-top: 20px; padding: 16px 20px; background: rgba(37, 211, 102, 0.07); border: 1.5px solid rgba(37, 211, 102, 0.4); border-radius: 12px; display: flex; align-items: flex-start; gap: 14px;">
-          <div style="font-size: 1.8rem; line-height: 1;">🛡️</div>
-          <div style="flex: 1;">
-            <div style="font-size: 0.95rem; font-weight: 700; color: #25d366; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-              <span>WhatsApp Transmission Protection Protocol</span>
-              <span style="background: #25d366; color: #000; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">100% Anti-Compression</span>
-            </div>
-            <p style="margin: 0; font-size: 0.88rem; color: var(--text-body); line-height: 1.6;">
-              <strong>Kyun delete hota hai WhatsApp pe?</strong> WhatsApp jab video/audio ko "Gallery" se bhejta hai, to server-side pe re-encode (compress) karke secret atoms ko destroy kar deta hai.<br>
-              <strong>Secret 100% Bachane Ka Tariqa:</strong>
-            </p>
-            <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.83rem;">
-              <span style="background: var(--surface-card); padding: 6px 12px; border-radius: 6px; color: var(--text-body); border: 1px solid var(--border-color);">
-                1️⃣ WhatsApp Chat Kholein
-              </span>
-              <span style="background: var(--surface-card); padding: 6px 12px; border-radius: 6px; color: var(--text-body); border: 1px solid var(--border-color);">
-                2️⃣ 📎 Paperclip / Plus (+) Dabayein
-              </span>
-              <span style="background: rgba(37, 211, 102, 0.2); padding: 6px 12px; border-radius: 6px; color: #25d366; font-weight: 700; border: 1px solid #25d366;">
-                3️⃣ 📄 "Document" (दस्तावेज़) Choose Karein — (Gallery Nahi!)
-              </span>
-            </div>
-            <p style="margin: 8px 0 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
-              Ya direct <strong>"🛡️ WhatsApp Armor (.ZIP)"</strong> download karke bhejein. WhatsApp Document mode me binary stream bit-for-bit exact match ke sath transfer hota hai aur secret kabhi delete nahi hota.
-            </p>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -670,6 +641,7 @@
     let loadedVideoFile = null;
     let currentStegoBlob = null;
     let currentStegoFilename = '';
+    let currentStegoFile = null;
     let currentArmorBlob = null;
     let currentArmorFilename = '';
 
@@ -793,6 +765,69 @@
                 console.warn("DecompressionStream error:", decErr);
             }
         }
+        return null;
+    }
+
+    function extractVideoPayload(bytes) {
+        if (!bytes || bytes.length < 24) return null;
+
+        // 1. Trailer Search (scan backwards from end)
+        const magic = [0x50, 0x58, 0x43, 0x53, 0x54, 0x45, 0x47, 0x4f, 0x56, 0x49, 0x44, 0x45, 0x4f, 0x58, 0x58, 0x02];
+        const len = bytes.length - 20;
+        for (let i = len; i >= 0; i--) {
+            if (bytes[i] === 0x50 && bytes[i + 1] === 0x58 && bytes[i + 2] === 0x43) {
+                let match = true;
+                for (let m = 3; m < 16; m++) {
+                    if (bytes[i + m] !== magic[m]) { match = false; break; }
+                }
+                if (match && i + 20 <= bytes.length) {
+                    const payloadLen = ((bytes[i + 16] << 24) >>> 0) + (bytes[i + 17] << 16) + (bytes[i + 18] << 8) + bytes[i + 19];
+                    if (payloadLen > 0 && i >= payloadLen) {
+                        try {
+                            const pBytes = bytes.subarray(i - payloadLen, i);
+                            const jsonStr = new TextDecoder().decode(pBytes);
+                            const obj = JSON.parse(jsonStr);
+                            if (obj && (obj.real || obj.v)) return obj;
+                        } catch(e) {}
+                    }
+                }
+            }
+        }
+
+        // 2. UUID Box Search
+        const uuidMagic = [0x50, 0x58, 0x43, 0x52, 0x41, 0x46, 0x54, 0x2d, 0x53, 0x54, 0x45, 0x47, 0x4f, 0x2d, 0x56, 0x31];
+        for (let k = 8; k <= bytes.length - 36; k++) {
+            if (bytes[k] === 0x50 && bytes[k + 1] === 0x58 && bytes[k + 2] === 0x43) {
+                let match = true;
+                for (let m = 3; m < 16; m++) {
+                    if (bytes[k + m] !== uuidMagic[m]) { match = false; break; }
+                }
+                if (match && k >= 8) {
+                    const boxSize = ((bytes[k - 8] << 24) >>> 0) + (bytes[k - 7] << 16) + (bytes[k - 6] << 8) + bytes[k - 5];
+                    const start = k + 16;
+                    const end = (k - 8) + boxSize - 20;
+                    if (boxSize > 44 && end > start && end <= bytes.length) {
+                        try {
+                            const pBytes = bytes.subarray(start, end);
+                            const jsonStr = new TextDecoder().decode(pBytes);
+                            const obj = JSON.parse(jsonStr);
+                            if (obj && (obj.real || obj.v)) return obj;
+                        } catch(e) {}
+                    }
+                }
+            }
+        }
+
+        // 3. Fallback direct JSON pattern search
+        try {
+            const textSnippet = new TextDecoder('utf-8', { fatal: false }).decode(bytes.subarray(Math.max(0, bytes.length - 2000000)));
+            const jsonMatch = textSnippet.match(/\{[\s\S]*?\"sid\":\"PX-VID-[A-Z0-9-]+\"[\s\S]*?\}/);
+            if (jsonMatch) {
+                const obj = JSON.parse(jsonMatch[0]);
+                if (obj && (obj.real || obj.v)) return obj;
+            }
+        } catch(e) {}
+
         return null;
     }
 
@@ -1354,6 +1389,13 @@
             const baseName = dotIdx !== -1 ? origName.substring(0, dotIdx) : 'video';
             const ext = dotIdx !== -1 ? origName.substring(dotIdx + 1) : 'mp4';
             currentStegoFilename = `${baseName}_stego.${ext}`;
+            currentStegoFile = new File([finalBytes], currentStegoFilename, { type: mimeType });
+            loadedVideoFile = currentStegoFile;
+            try {
+                const dt = new DataTransfer();
+                dt.items.add(currentStegoFile);
+                videoInput.files = dt.files;
+            } catch(e) {}
 
             // Build pure-JS WhatsApp Armor .ZIP container (100% Anti-Compression)
             updateLoadingStatus("Forging WhatsApp Armor .ZIP container...", 96);
@@ -1411,7 +1453,7 @@
     }
 
     async function handleVideoDecode(pass) {
-        const file = document.getElementById('video-input').files[0];
+        let file = loadedVideoFile || (document.getElementById('video-input').files && document.getElementById('video-input').files[0]) || currentStegoFile || currentStegoBlob;
         if (!file) {
             alert("Please select the video file to extract from!");
             return;
@@ -1432,77 +1474,28 @@
             let bytes = new Uint8Array(arrayBuffer);
 
             // Auto-Unpack WhatsApp Armor ZIP container if uploaded directly
-            if (bytes[0] === 0x50 && bytes[1] === 0x4B && bytes[2] === 0x03 && bytes[3] === 0x04) {
+            if (bytes.length >= 4 && bytes[0] === 0x50 && bytes[1] === 0x4B && bytes[2] === 0x03 && bytes[3] === 0x04) {
                 updateLoadingStatus("Auto-Unpacking WhatsApp Armor ZIP container in memory...", 35);
-                await new Promise(r => setTimeout(r, 200));
+                await new Promise(r => setTimeout(r, 180));
                 try {
                     const unpacked = await extractFromZip(bytes);
                     if (unpacked && unpacked.bytes) {
                         bytes = unpacked.bytes;
                         const sizeMb = (bytes.length / (1024 * 1024)).toFixed(2);
                         updateLoadingStatus(`Armor ZIP Unpacked: ${unpacked.filename} (${sizeMb} MB)...`, 48);
-                        await new Promise(r => setTimeout(r, 200));
+                        await new Promise(r => setTimeout(r, 180));
                     }
                 } catch(zipErr) {
                     console.warn("ZIP unpack fallback:", zipErr);
                 }
             }
 
-            updateLoadingStatus("Searching for steganographic sync atom...", 55);
+            updateLoadingStatus("Searching for steganographic sync atom...", 60);
             await new Promise(r => setTimeout(r, 200));
 
-            // Magic trailer: "PXCSTEGOVIDEOXX\x02"
-            const magicTrailer = [0x50, 0x58, 0x43, 0x53, 0x54, 0x45, 0x47, 0x4f, 0x56, 0x49, 0x44, 0x45, 0x4f, 0x58, 0x58, 0x02];
-            
-            // Backwards search in the last 1MB of the file (or full file if < 1MB)
-            const searchLimit = Math.max(0, bytes.length - 1048576);
-            let magicPos = -1;
-            for (let i = bytes.length - 20; i >= searchLimit; i--) {
-                let match = true;
-                for (let m = 0; m < 16; m++) {
-                    if (bytes[i + m] !== magicTrailer[m]) {
-                        match = false;
-                        break;
-                    }
-                }
-                if (match) {
-                    magicPos = i;
-                    break;
-                }
-            }
+            const payloadObj = extractVideoPayload(bytes);
 
-            let payloadJson = null;
-            if (magicPos !== -1) {
-                const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-                const payloadLen = dv.getUint32(magicPos + 16, false);
-                if (payloadLen > 0 && magicPos - payloadLen >= 0) {
-                    const payloadBytes = bytes.slice(magicPos - payloadLen, magicPos);
-                    payloadJson = new TextDecoder().decode(payloadBytes);
-                }
-            } else {
-                // Secondary fallback: search for UUID: "PXCRAFT-STEGO-V1"
-                const uuidMagic = [0x50, 0x58, 0x43, 0x52, 0x41, 0x46, 0x54, 0x2d, 0x53, 0x54, 0x45, 0x47, 0x4f, 0x2d, 0x56, 0x31];
-                for (let i = 0; i <= bytes.length - 36; i++) {
-                    let match = true;
-                    for (let m = 0; m < 16; m++) {
-                        if (bytes[i + m] !== uuidMagic[m]) {
-                            match = false;
-                            break;
-                        }
-                    }
-                    if (match) {
-                        const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-                        const boxSize = dv.getUint32(i - 8, false);
-                        if (boxSize > 44) {
-                            const payloadBytes = bytes.slice(i + 16, (i - 8) + boxSize - 20);
-                            payloadJson = new TextDecoder().decode(payloadBytes);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (!payloadJson) {
+            if (!payloadObj) {
                 hideLoading();
                 document.getElementById('extracted-msg').value = "No PixelCraft steganographic payload found in this video.";
                 document.getElementById('extracted-msg').style.color = '#ef4444';
@@ -1518,15 +1511,6 @@
 
             updateLoadingStatus("Authenticating HMAC seal & decrypting AES-256 vault...", 85);
             await new Promise(r => setTimeout(r, 220));
-
-            let payloadObj;
-            try {
-                payloadObj = JSON.parse(payloadJson);
-            } catch(e) {
-                hideLoading();
-                alert("Corrupt container payload format.");
-                return;
-            }
 
             let decryptedSecret = null;
             let isDecoy = false;
@@ -1701,11 +1685,17 @@
                 currentStegoBlob = new Blob([view], { type: 'audio/wav' });
                 const url = URL.createObjectURL(currentStegoBlob);
                 currentStegoFilename = 'secret_audio.wav';
+                const wavBytes = new Uint8Array(view.buffer);
+                currentStegoFile = new File([wavBytes], 'secret_audio.wav', { type: 'audio/wav' });
+                try {
+                    const dt = new DataTransfer();
+                    dt.items.add(currentStegoFile);
+                    document.getElementById('audio-input').files = dt.files;
+                } catch(e) {}
 
                 // Build pure-JS WhatsApp Armor .ZIP container for audio
                 updateLoadingStatus("Forging WhatsApp Armor .ZIP container...", 96);
                 await new Promise(r => setTimeout(r, 180));
-                const wavBytes = new Uint8Array(view.buffer);
                 const audioZipBytes = createZip('secret_audio.wav', wavBytes);
                 currentArmorBlob = new Blob([audioZipBytes], { type: 'application/zip' });
                 currentArmorFilename = 'secret_audio_armor.zip';
@@ -1766,7 +1756,7 @@
       if(!pass) return alert("Password required!");
 
       if (currentMode === 'audio') {
-          const file = document.getElementById('audio-input').files[0];
+          let file = (document.getElementById('audio-input').files && document.getElementById('audio-input').files[0]) || currentStegoFile || currentStegoBlob;
           if(!file) return alert("Please upload audio file!");
 
           const statusBadge = document.getElementById('decode-status-badge');
@@ -1844,7 +1834,7 @@
               alert("Error decoding audio for extraction: " + (e.message || e));
           }
       } else {
-          const file = document.getElementById('video-input').files[0];
+          let file = loadedVideoFile || (document.getElementById('video-input').files && document.getElementById('video-input').files[0]) || currentStegoFile || currentStegoBlob;
           if(!file) return alert("Please upload video file!");
           handleVideoDecode(pass);
       }
@@ -1896,6 +1886,34 @@
     if (switchDecodeBtn) {
         switchDecodeBtn.onclick = () => {
             document.getElementById('tab-decode').click();
+            
+            // Auto pre-fill password from encode section so test decryption is instant 1-click
+            const realPassVal = document.getElementById('real-password').value;
+            const decPass = document.getElementById('dec-password');
+            if (decPass && realPassVal) {
+                decPass.value = realPassVal;
+            }
+
+            if (currentMode === 'video') {
+                const targetFile = currentStegoFile || loadedVideoFile;
+                if (targetFile) {
+                    loadedVideoFile = targetFile;
+                    const nameDisplay = document.getElementById('video-name-display');
+                    if (nameDisplay) {
+                        nameDisplay.innerText = `Ready to Extract: 🔐 ${targetFile.name || 'Encrypted Video Carrier'}`;
+                    }
+                    const metaEl = document.getElementById('video-meta-display');
+                    if (metaEl) {
+                        metaEl.innerText = `Container: Encrypted Carrier Attached • Ready to Decrypt`;
+                    }
+                }
+            } else if (currentMode === 'audio') {
+                const nameDisplay = document.getElementById('audio-name-display');
+                if (nameDisplay) {
+                    nameDisplay.innerText = `Ready to Extract: 🎧 ${currentStegoFilename || 'secret_audio.wav'}`;
+                }
+            }
+
             document.getElementById('decode-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
     }
