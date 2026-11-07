@@ -44,7 +44,6 @@ function updateThemeUI() {
 
 // 2. RECENT TOOLS TRACKING
 const TOOL_NAME_MAP = {
-  'video-steganography.html': { name: 'Video Steganography (WCTSE)', icon: '🎥' },
   'audio-steganography.html': { name: 'Audio & Video Steganography', icon: '🎬' },
   'digital-fingerprint-wiper.html': { name: 'Digital Fingerprint Wiper', icon: '🛡️' },
   'advanced-decoy.html': { name: 'Decoy Steganography', icon: '🎭' },

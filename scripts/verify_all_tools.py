@@ -47,6 +47,6 @@ for f in files:
 
 print("-" * 95)
 if all_passed:
-    print("ALL 16 TOOLS FULLY VERIFIED! Every page contains an in-depth 10-minute read (~1,900 to 2,100 words), complete design-system markup, and zero issues.")
+    print(f"ALL {len(files)} TOOLS FULLY VERIFIED! Every page contains an in-depth 10-minute read (~1,900 to 2,100 words), complete design-system markup, and zero issues.")
 else:
     print("Some tools failed verification.")

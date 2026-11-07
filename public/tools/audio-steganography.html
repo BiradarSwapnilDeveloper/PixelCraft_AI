@@ -578,7 +578,7 @@
           </div>
       </div>
 
-      <button class="btn-glow" id="btn-encode" style="opacity: 0.5; pointer-events: none;">Encrypt &amp; Hide Message(s)</button>
+      <button class="btn-glow" id="btn-encode">Encrypt &amp; Hide Message(s)</button>
 
       <!-- Encode Success Result Card -->
       <div id="encode-result-card" style="display: none; margin-top: 24px; padding: 22px; background: rgba(34, 197, 94, 0.08); border: 1.5px solid #22c55e; border-radius: 14px; animation: fadeInSlideUp 0.4s ease forwards;">
@@ -821,10 +821,10 @@
         // 3. Fallback direct JSON pattern search
         try {
             const textSnippet = new TextDecoder('utf-8', { fatal: false }).decode(bytes.subarray(Math.max(0, bytes.length - 2000000)));
-            const jsonMatch = textSnippet.match(/\{[\s\S]*?\"sid\":\"PX-VID-[A-Z0-9-]+\"[\s\S]*?\}/);
+            const jsonMatch = textSnippet.match(/\{[\s\S]*?\"sid\":\"PX-[A-Z0-9-]+\"[\s\S]*?\}/);
             if (jsonMatch) {
                 const obj = JSON.parse(jsonMatch[0]);
-                if (obj && (obj.real || obj.v)) return obj;
+                if (obj && (obj.real || obj.v || obj.env)) return obj;
             }
         } catch(e) {}
 
@@ -870,13 +870,7 @@
     // Legal Check
     const legalCheck = document.getElementById('legal-check');
     legalCheck.addEventListener('change', () => {
-        if(legalCheck.checked) {
-            btnEncode.style.opacity = '1';
-            btnEncode.style.pointerEvents = 'auto';
-        } else {
-            btnEncode.style.opacity = '0.5';
-            btnEncode.style.pointerEvents = 'none';
-        }
+        btnEncode.style.opacity = legalCheck.checked ? '1' : '0.85';
     });
 
     // PRNG for Audio LSB
@@ -1581,6 +1575,12 @@
        SHARED BUTTON HANDLERS
        ======================================================= */
     document.getElementById('btn-encode').onclick = async () => {
+        if (!document.getElementById('legal-check').checked) {
+            alert("Please check the 'Terms & Privacy Policy' checkbox before proceeding.");
+            document.getElementById('legal-check').focus();
+            return;
+        }
+
         const realMsg = document.getElementById('real-msg').value;
         const realPass = document.getElementById('real-password').value;
         const fakeMsg = document.getElementById('fake-msg').value;
