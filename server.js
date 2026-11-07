@@ -2492,6 +2492,185 @@ app.post('/api/tools/verify-seal', uploadMemory.single('image'), async (req, res
   }
 });
 
+// ============================================================================
+// WCTSE: WhatsApp-Calibrated Temporal Steganography Engine API Endpoints
+// ============================================================================
+const wctseUploadDir = path.join(__dirname, 'tmp', 'wctse_uploads');
+try { fs.mkdirSync(wctseUploadDir, { recursive: true }); } catch (e) {}
+
+const wctseUpload = multer({
+  dest: wctseUploadDir,
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100 MB max video carrier
+  fileFilter: (req, file, cb) => {
+    const allowedExts = ['.mp4', '.mov', '.webm', '.mkv', '.avi', '.zip'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowedExts.includes(ext) || file.mimetype.startsWith('video/') || file.mimetype === 'application/zip') {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid video carrier format. Supported: MP4, MOV, WebM, MKV, AVI, ZIP.'));
+    }
+  }
+});
+
+function runWctseCommand(args, timeoutMs = 60000) {
+  return new Promise((resolve, reject) => {
+    const pythonBin = process.platform === 'win32' ? 'python' : 'python3';
+    const proc = spawn(pythonBin, ['-m', 'utils.wctse.wctse_engine', ...args], {
+      cwd: __dirname,
+      windowsHide: true
+    });
+    let stdout = '';
+    let stderr = '';
+    const timer = setTimeout(() => {
+      try { proc.kill('SIGKILL'); } catch (e) {}
+      reject(new Error('WCTSE video processing timed out (exceeded 60s limit).'));
+    }, timeoutMs);
+
+    proc.stdout.on('data', d => { stdout += d.toString(); });
+    proc.stderr.on('data', d => { stderr += d.toString(); });
+
+    proc.on('close', code => {
+      clearTimeout(timer);
+      if (code !== 0) {
+        return reject(new Error(stderr.trim() || `WCTSE process failed with code ${code}`));
+      }
+      try {
+        const json = JSON.parse(stdout.trim());
+        resolve(json);
+      } catch (e) {
+        reject(new Error(`Invalid JSON from WCTSE engine: ${stdout}`));
+      }
+    });
+
+    proc.on('error', err => {
+      clearTimeout(timer);
+      reject(err);
+    });
+  });
+}
+
+// 1. Analyze Video Carrier
+app.post('/api/tools/wctse/analyze', wctseUpload.single('video'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, error: 'No video carrier uploaded' });
+  const uploadedPath = req.file.path;
+  try {
+    const analysis = await runWctseCommand(['analyze', uploadedPath], 30000);
+    res.json({ success: true, ...analysis });
+  } catch (err) {
+    console.error('WCTSE analyze error:', err);
+    res.status(500).json({ success: false, error: err.message || 'Failed to analyze video' });
+  } finally {
+    fs.unlink(uploadedPath, () => {});
+  }
+});
+
+// 2. Embed Secret Message
+app.post('/api/tools/wctse/embed', wctseUpload.single('video'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, error: 'No video carrier uploaded' });
+  const uploadedPath = req.file.path;
+  const secretText = String(req.body.secretText || '').trim();
+  const password = String(req.body.password || '').trim();
+  const profileId = String(req.body.profileId || '1');
+  const decoyText = String(req.body.decoyText || '').trim() || 'null';
+  const decoyPass = String(req.body.decoyPassword || '').trim() || 'null';
+
+  if (!secretText || !password) {
+    fs.unlink(uploadedPath, () => {});
+    return res.status(400).json({ success: false, error: 'Secret message and password are required.' });
+  }
+
+  const outId = crypto.randomUUID();
+  const outputPath = path.join(wctseUploadDir, `wctse_${outId}.mp4`);
+
+  try {
+    const embedResult = await runWctseCommand([
+      'embed',
+      uploadedPath,
+      secretText,
+      password,
+      profileId,
+      outputPath,
+      decoyText,
+      decoyPass
+    ], 60000);
+
+    if (!embedResult.success || !fs.existsSync(outputPath)) {
+      throw new Error(embedResult.error || 'Embedding failed.');
+    }
+
+    const downloadFileName = `pixelcraft_wctse_${profileId === '4' ? 'document' : 'stego'}.mp4`;
+    res.setHeader('Content-Disposition', `attachment; filename="${downloadFileName}"`);
+    res.setHeader('Content-Type', 'video/mp4');
+    res.setHeader('X-WCTSE-Session', embedResult.session_id || 'PX-WCTSE');
+    res.setHeader('X-WCTSE-Mode', embedResult.mode || 'MODE_A');
+
+    const readStream = fs.createReadStream(outputPath);
+    readStream.pipe(res);
+    readStream.on('close', () => {
+      fs.unlink(outputPath, () => {});
+    });
+  } catch (err) {
+    console.error('WCTSE embed error:', err);
+    res.status(500).json({ success: false, error: err.message || 'Failed to embed secret in video carrier.' });
+    if (fs.existsSync(outputPath)) fs.unlink(outputPath, () => {});
+  } finally {
+    fs.unlink(uploadedPath, () => {});
+  }
+});
+
+// 3. Extract Secret Message (Blind Dual Recovery Path)
+app.post('/api/tools/wctse/extract', wctseUpload.single('video'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, error: 'No video carrier uploaded' });
+  const uploadedPath = req.file.path;
+  const password = String(req.body.password || '').trim();
+  const isSimulated = String(req.body.isSimulated || 'false');
+
+  if (!password) {
+    fs.unlink(uploadedPath, () => {});
+    return res.status(400).json({ success: false, error: 'Decryption password is required.' });
+  }
+
+  try {
+    const extractResult = await runWctseCommand(['extract', uploadedPath, password, isSimulated], 45000);
+    res.json(extractResult);
+  } catch (err) {
+    console.error('WCTSE extract error:', err);
+    res.status(500).json({ success: false, error: err.message || 'Failed to extract payload.' });
+  } finally {
+    fs.unlink(uploadedPath, () => {});
+  }
+});
+
+// 4. Simulate WhatsApp Compression & Transcoding
+app.post('/api/tools/wctse/simulate', wctseUpload.single('video'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, error: 'No video carrier uploaded' });
+  const uploadedPath = req.file.path;
+  const profileName = String(req.body.profileName || 'standard').toLowerCase();
+  const password = String(req.body.password || '').trim();
+
+  const simId = crypto.randomUUID();
+  const simOutputPath = path.join(wctseUploadDir, `sim_${simId}.mp4`);
+
+  try {
+    const simResult = await runWctseCommand(['simulate', uploadedPath, simOutputPath, profileName], 45000);
+    let extractReport = null;
+    if (password) {
+      extractReport = await runWctseCommand(['extract', simOutputPath, password, 'true'], 45000);
+    }
+    res.json({
+      success: true,
+      simulation: simResult,
+      confidence_report: extractReport
+    });
+  } catch (err) {
+    console.error('WCTSE simulation error:', err);
+    res.status(500).json({ success: false, error: err.message || 'WhatsApp simulation failed.' });
+  } finally {
+    fs.unlink(uploadedPath, () => {});
+    if (fs.existsSync(simOutputPath)) fs.unlink(simOutputPath, () => {});
+  }
+});
+
 // Gated Control Room: Unauthenticated visitors receive minimal login gate; authenticated admins receive dashboard
 app.get(['/controlroommanage', '/controlroommanage.html'], (req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
