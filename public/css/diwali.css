@@ -1,0 +1,432 @@
+/* ==========================================================================
+   PIXELCRAFT AI — CELESTIAL DIWALI MODAL POPUP (OVERLAY ON LIVE WEBSITE)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+/* 1. Backdrop: Translucent so the live website is visible underneath */
+#diwali-splash {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999999;
+  background: rgba(8, 3, 16, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+#diwali-splash.fade-out {
+  opacity: 0 !important;
+  filter: blur(10px) !important;
+  pointer-events: none !important;
+}
+
+/* Fullscreen Canvas for Fireworks bursting over the entire website */
+#diwali-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 2. Floating Celestial Modal Card */
+.diwali-modal-box {
+  position: relative;
+  z-index: 10;
+  width: min(520px, 92vw);
+  max-height: min(720px, 92vh);
+  background: radial-gradient(circle at 50% 18%, #2e0842 0%, #180329 55%, #0c0216 100%);
+  border: 1.5px solid rgba(255, 215, 0, 0.45);
+  border-radius: 32px;
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(245, 158, 11, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 0 35px rgba(255, 215, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 36px 28px 30px 28px;
+  box-sizing: border-box;
+  animation: diwaliModalEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+}
+
+@keyframes diwaliModalEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(25px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Modal Inner Floating Levitation */
+.diwali-modal-box::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 32px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, transparent 40%, rgba(245, 158, 11, 0.3) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Top Close Cross Button (✕) */
+.diwali-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 30;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 215, 0, 0.4);
+  color: #fde047;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  outline: none;
+  padding: 0;
+}
+
+.diwali-close-btn:hover {
+  background: rgba(239, 68, 68, 0.85);
+  border-color: #fca5a5;
+  color: #ffffff;
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+.diwali-close-btn:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+/* Sound Toggle Pill inside Modal */
+.diwali-modal-sound-pill {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  z-index: 25;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  color: #ffd700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.diwali-modal-sound-pill:hover {
+  background: rgba(255, 215, 0, 0.15);
+  transform: scale(1.04);
+}
+
+/* Sacred Geometric Mandala inside Modal */
+.modal-mandala-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 215, 0, 0.16);
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.12), inset 0 0 35px rgba(168, 85, 247, 0.15);
+  pointer-events: none;
+  z-index: 2;
+  animation: modalSpin 40s linear infinite;
+}
+
+@keyframes modalSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Glowing Diya Relic */
+.diya-container {
+  position: relative;
+  width: 150px;
+  height: 115px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.diya-sacred-aura {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 110px;
+  background: radial-gradient(circle, rgba(255, 230, 120, 0.85) 0%, rgba(255, 140, 0, 0.6) 35%, rgba(255, 30, 0, 0.25) 60%, transparent 75%);
+  filter: blur(14px);
+  border-radius: 50%;
+  animation: auraPulse 1.6s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+@keyframes auraPulse {
+  0% { transform: translateX(-50%) scale(0.85); opacity: 0.75; }
+  100% { transform: translateX(-50%) scale(1.28); opacity: 1; filter: blur(20px); }
+}
+
+.diya-svg {
+  position: relative;
+  z-index: 4;
+  width: 135px;
+  height: 105px;
+  filter: drop-shadow(0 10px 25px rgba(255, 140, 0, 0.65));
+}
+
+/* Flame Organic Flicker */
+.flame-divine-group {
+  transform-origin: 50% 90%;
+  animation: divineFlameFlicker 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes divineFlameFlicker {
+  0% { transform: scale(1) rotate(-1.5deg); }
+  33% { transform: scale(1.09, 0.95) rotate(2deg); }
+  66% { transform: scale(0.95, 1.07) rotate(-2deg); }
+  100% { transform: scale(1.12, 1.02) rotate(1.5deg); }
+}
+
+/* Sanskrit Greeting */
+.diwali-sanskrit-title {
+  font-size: clamp(1.15rem, 3.8vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #ffffff 0%, #fff7b0 30%, #fde047 65%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 16px rgba(253, 224, 71, 0.7), 0 0 35px rgba(249, 115, 22, 0.5);
+  z-index: 5;
+}
+
+/* 3D Liquid Gold "HAPPY DIWALI" Headline */
+.diwali-main-title {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: clamp(2.3rem, 7.5vw, 3.6rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  margin: 0;
+  line-height: 1.1;
+  text-transform: uppercase;
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #fff8cc 15%,
+    #ffd700 35%,
+    #ffae00 55%,
+    #ff6200 75%,
+    #fff3a0 90%,
+    #ffffff 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: liquidGoldSheen 3.2s linear infinite;
+  filter: drop-shadow(0 4px 20px rgba(255, 170, 0, 0.75));
+  z-index: 5;
+}
+
+@keyframes liquidGoldSheen {
+  0% { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
+
+/* Tagline */
+.diwali-tagline {
+  font-size: clamp(0.9rem, 2.6vw, 1.05rem);
+  color: #fff1f2;
+  margin-top: 12px;
+  max-width: 420px;
+  line-height: 1.55;
+  font-weight: 500;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75);
+  z-index: 5;
+}
+
+/* Explore & Celebrate Button */
+.modal-footer-action {
+  margin-top: 22px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 5;
+}
+
+.modal-explore-btn {
+  background: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%);
+  color: #1a0801;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  padding: 12px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-explore-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.65);
+  filter: brightness(1.08);
+}
+
+.modal-explore-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Interactive Hint */
+.modal-hint-text {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 10px;
+  z-index: 5;
+}
+
+/* Navbar Trigger Button */
+.diwali-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%);
+  color: #1c0901 !important;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 7px 15px;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.4), 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+  margin-right: 6px;
+}
+.diwali-nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.65);
+  filter: brightness(1.1);
+}
+
+/* ==========================================================================
+   MOBILE SPECIFIC ADAPTATION (OPTIMIZED FOR 360px - 420px SCREENS)
+   ========================================================================== */
+@media (max-width: 480px) {
+  #diwali-splash {
+    padding: 12px;
+  }
+
+  .diwali-modal-box {
+    width: 95vw;
+    padding: 28px 16px 20px 16px;
+    border-radius: 26px;
+  }
+
+  .diwali-close-btn {
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .diwali-modal-sound-pill {
+    top: 14px;
+    left: 14px;
+    font-size: 0.72rem;
+    padding: 4px 10px;
+  }
+
+  .diya-container {
+    width: 120px;
+    height: 95px;
+    margin-top: 6px;
+    margin-bottom: 4px;
+  }
+
+  .diya-svg {
+    width: 115px;
+    height: 90px;
+  }
+
+  .diwali-sanskrit-title {
+    font-size: 1.1rem;
+    letter-spacing: 0.16em;
+    margin-bottom: 4px;
+  }
+
+  .diwali-main-title {
+    font-size: 2.25rem;
+    letter-spacing: 0.05em;
+  }
+
+  .diwali-tagline {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-top: 8px;
+    max-width: 290px;
+  }
+
+  .modal-footer-action {
+    margin-top: 16px;
+  }
+
+  .modal-explore-btn {
+    padding: 10px 22px;
+    font-size: 0.88rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal-hint-text {
+    font-size: 0.72rem;
+    margin-top: 8px;
+  }
+}
