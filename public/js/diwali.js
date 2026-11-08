@@ -13,6 +13,35 @@
  */
 
 (function () {
+  const DIWALI_SESSION_KEY = 'pixelcraft_diwali_seen_session';
+
+  function isPageReload() {
+    try {
+      const navEntries = performance.getEntriesByType('navigation');
+      if (navEntries && navEntries.length > 0) {
+        return navEntries[0].type === 'reload';
+      }
+      if (window.performance && window.performance.navigation) {
+        return window.performance.navigation.type === 1; // TYPE_RELOAD
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  function shouldAutoShowModal() {
+    // 1. If page was reloaded / refreshed, DO NOT SHOW
+    if (isPageReload()) return false;
+
+    // 2. If already shown in this browser session, DO NOT SHOW on reload
+    try {
+      if (sessionStorage.getItem(DIWALI_SESSION_KEY) === 'true') {
+        return false;
+      }
+    } catch (e) {}
+
+    return true;
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initDiwaliModal);
   } else {
@@ -22,9 +51,19 @@
   function initDiwaliModal() {
     if (document.getElementById('diwali-splash')) return;
 
+    const autoShow = shouldAutoShowModal();
+    if (autoShow) {
+      try {
+        sessionStorage.setItem(DIWALI_SESSION_KEY, 'true');
+      } catch (e) {}
+    }
+
     // Create Backdrop & Modal Element
     const splash = document.createElement('div');
     splash.id = 'diwali-splash';
+    if (!autoShow) {
+      splash.style.display = 'none';
+    }
     splash.innerHTML = `
       <!-- Fireworks Canvas over live website -->
       <canvas id="diwali-canvas"></canvas>
@@ -113,7 +152,7 @@
         <!-- Action Button -->
         <div class="modal-footer-action">
           <button class="modal-explore-btn" id="diwali-explore-btn">
-            <span>✨ Celebrate &amp; Explore Website</span>
+            <span>Celebrate &amp; Explore Website</span>
           </button>
         </div>
         <div class="modal-hint-text">Tap anywhere on screen for fireworks 🎆</div>
@@ -255,8 +294,10 @@
       } catch (e) {}
     }
 
-    setTimeout(playCelestialSymphony, 100);
-    window.addEventListener('pointerdown', playCelestialSymphony, { once: true });
+    if (autoShow) {
+      setTimeout(playCelestialSymphony, 100);
+      window.addEventListener('pointerdown', playCelestialSymphony, { once: true });
+    }
 
     // ========================================================
     // CANVAS FIREWORKS & CELESTIAL PARTICLES
@@ -408,23 +449,29 @@
       }
     }
 
-    // Launch initial celebratory barrage
-    setTimeout(() => {
+    let cometInterval = null;
+    let isRunning = autoShow;
+
+    function launchCelebratoryBarrage() {
       celestialComets.push(new CelestialComet(width * 0.22, height * 0.22));
       celestialComets.push(new CelestialComet(width * 0.78, height * 0.20));
-    }, 80);
 
-    setTimeout(() => {
-      celestialComets.push(new CelestialComet(width * 0.5, height * 0.16));
-      celestialComets.push(new CelestialComet(width * 0.15, height * 0.36));
-      celestialComets.push(new CelestialComet(width * 0.85, height * 0.34));
-    }, 550);
+      setTimeout(() => {
+        celestialComets.push(new CelestialComet(width * 0.5, height * 0.16));
+        celestialComets.push(new CelestialComet(width * 0.15, height * 0.36));
+        celestialComets.push(new CelestialComet(width * 0.85, height * 0.34));
+      }, 450);
 
-    // Continuous ambient fireworks in the background
-    let cometInterval = setInterval(() => {
-      if (document.hidden) return;
-      celestialComets.push(new CelestialComet());
-    }, 1800);
+      if (cometInterval) clearInterval(cometInterval);
+      cometInterval = setInterval(() => {
+        if (document.hidden || !isRunning) return;
+        celestialComets.push(new CelestialComet());
+      }, 1800);
+    }
+
+    if (autoShow) {
+      setTimeout(launchCelebratoryBarrage, 80);
+    }
 
     // Click on Backdrop to detonate fireworks
     splash.addEventListener('click', (e) => {
@@ -444,7 +491,7 @@
     // PERSISTENCE & CLOSE BUTTON LOGIC (NO AUTO-DISMISS)
     // ========================================================
     function dismissDiwaliModal() {
-      clearInterval(cometInterval);
+      if (cometInterval) clearInterval(cometInterval);
       splash.classList.add('fade-out');
       setTimeout(() => {
         splash.style.display = 'none';
@@ -471,7 +518,6 @@
     // ========================================================
     // MAIN RENDER LOOP
     // ========================================================
-    let isRunning = true;
     function render() {
       if (!isRunning) return;
       ctx.clearRect(0, 0, width, height);
@@ -502,7 +548,10 @@
 
       requestAnimationFrame(render);
     }
-    render();
+
+    if (autoShow) {
+      render();
+    }
 
     // Global Replay Method
     window.replayDiwaliIntro = function () {
@@ -512,13 +561,7 @@
       hasPlayedAudio = false;
       playCelestialSymphony();
       render();
-      celestialComets.push(new CelestialComet(width * 0.28, height * 0.2));
-      celestialComets.push(new CelestialComet(width * 0.72, height * 0.2));
-      clearInterval(cometInterval);
-      cometInterval = setInterval(() => {
-        if (document.hidden) return;
-        celestialComets.push(new CelestialComet());
-      }, 1800);
+      launchCelebratoryBarrage();
     };
   }
 })();
