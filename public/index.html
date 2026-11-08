@@ -124,12 +124,14 @@
   
 
   
-  <!-- Fonts: Inter & Outfit -->
+  <!-- Fonts: Inter, Outfit & Cinzel Decorative for Cosmic Festival Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@700;800;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <!-- Global enterprise stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
+  <!-- Celebratory Festive Stylesheet -->
+  <link rel="stylesheet" href="css/diwali.css" />
   <!-- Advanced JSON-LD Structured Data -->
   <!-- Scoped Enterprise Styles & Dark Mode Harmonization -->
   <style>
@@ -2109,6 +2111,12 @@
 
       <!-- Action Controls (Theme, Settings, Auth) -->
       <div class="nav-actions">
+        <!-- Festive Happy Diwali Replay Trigger -->
+        <button class="diwali-nav-btn" onclick="window.replayDiwaliIntro &amp;&amp; window.replayDiwaliIntro()" title="Happy Diwali! Click to celebrate" aria-label="Happy Diwali celebration">
+          <span>🪔</span>
+          <span>Diwali Wish</span>
+        </button>
+
         <!-- Dark Mode Toggle Button (Like GitHub/LinkedIn) -->
         <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
           <span style="font-size: 1.15rem;">🌙</span>
@@ -4238,5 +4246,8 @@
 
   <!-- Centrally Managed Cookie Consent -->
   <script src="js/cookie-consent.js"></script>
+
+  <!-- Celebratory Diwali Festive Engine -->
+  <script src="js/diwali.js"></script>
 </body>
 </html>
