@@ -32,8 +32,6 @@ class AVRShieldEngine:
     def __init__(self):
         self.crypto_mgr = PayloadEncryptionManager()
         self.audio_codec = AudioSpreadSpectrumCodec()
-        self.video_codec = VideoLuminanceSpreadSpectrumCodec()
-        self.coordinator = RecoveryCoordinator(self.crypto_mgr)
 
     def analyze_media(self, media_path: str) -> Dict[str, Any]:
         """Inspects resolution, frame rate, duration, audio properties, and capacity."""
@@ -146,89 +144,59 @@ class AVRShieldEngine:
         decoy_password: Optional[str] = None
     ) -> Dict[str, Any]:
         """
-        Embeds secret_text across both Audio and Video Luminance channels with AES-256-GCM.
-        Generates production-ready resilient MP4 carrier.
+        Embeds secret_text into the video's audio track using robust psychoacoustic spread-spectrum
+        with AES-256-GCM authenticated encryption and Reed-Solomon RS(64,36) error correction.
+        Video visual stream is copied with zero re-encoding (-c:v copy), preserving 100% original video quality.
         """
         if not os.path.exists(video_path):
             raise FileNotFoundError(f"Video file not found: {video_path}")
 
-        # 1. Derive key seed for PN spreading sequences
         key_seed = zlib.crc32(password.encode('utf-8'))
 
-        # 2. Encrypt payload via AES-256-GCM
+        # 1. Encrypt payload via AES-256-GCM
         envelope, enc_meta = self.crypto_mgr.encrypt_payload(
             secret_text=secret_text,
             password=password,
-            channel_id="X",
+            channel_id="A",
             decoy_text=decoy_text,
             decoy_password=decoy_password
         )
 
-        # 3. Frame payload into audio and video packet blocks
-        audio_pkts, video_pkts = self.coordinator.frame_envelope(envelope, max_packet_size=128)
-        audio_payload_bytes = audio_pkts[0] if audio_pkts else envelope
-        video_payload_bytes = video_pkts[0] if video_pkts else envelope
-
-        # 4. Process Audio Track (Primary)
+        # 2. Extract or synthesize Audio Track
         audio_pcm, has_audio = self._extract_audio_pcm(video_path, 44100)
-        audio_stats = {}
-        snr_val = 0.0
+        req_chips = (len(envelope) + 2 + 35) // 36 * 64 * 8 * self.audio_codec.chip_len + 2048
+
+        if not has_audio:
+            # If video has no audio, synthesize ambient acoustic carrier
+            target_len = max(req_chips + 44100 * 2, 44100 * 5)
+            t = np.linspace(0, target_len / 44100, target_len, endpoint=False)
+            audio_pcm = (0.01 * np.sin(2 * np.pi * 440 * t) + 0.005 * np.random.randn(len(t))).astype(np.float32)
+        elif len(audio_pcm) < req_chips:
+            # If video has audio but is shorter than payload, tile existing audio
+            repeats = int(math.ceil(req_chips / len(audio_pcm))) + 1
+            audio_pcm = np.tile(audio_pcm, repeats)[:max(req_chips + 44100 * 2, len(audio_pcm) * repeats)]
+
+        # 3. Embed in audio carrier using psychoacoustic spread-spectrum
+        wm_audio, audio_stats = self.audio_codec.encode_audio_stream(audio_pcm, envelope, key_seed)
+        snr_val = compute_audio_snr(audio_pcm, wm_audio)
 
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tf_audio:
             wm_audio_tmp = tf_audio.name
 
         try:
-            if has_audio and len(audio_pcm) > 44100:
-                wm_audio, audio_stats = self.audio_codec.encode_audio_stream(audio_pcm, audio_payload_bytes, key_seed)
-                snr_val = compute_audio_snr(audio_pcm, wm_audio)
-                self._write_pcm_to_wav(wm_audio, wm_audio_tmp, 44100)
-            else:
-                # Generate synthetic silent audio carrier if video has no audio
-                dummy_pcm = np.random.randn(44100 * 8).astype(np.float32) * 0.01
-                wm_audio, audio_stats = self.audio_codec.encode_audio_stream(dummy_pcm, audio_payload_bytes, key_seed)
-                self._write_pcm_to_wav(wm_audio, wm_audio_tmp, 44100)
-                has_audio = True
+            self._write_pcm_to_wav(wm_audio, wm_audio_tmp, 44100)
 
-            # 5. Process Video Track (Secondary / Backup)
-            cap = cv2.VideoCapture(video_path)
-            frames = []
-            while True:
-                ret, frame = cap.read()
-                if not ret:
-                    break
-                frames.append(frame)
-            cap.release()
-
-            if not frames:
-                raise ValueError("Could not read any frames from input video.")
-
-            wm_frames, video_stats = self.video_codec.encode_video_frames(frames, video_payload_bytes, key_seed)
-            psnr_val = compute_video_psnr(frames[0], wm_frames[0])
-            ssim_val = compute_video_ssim(frames[0], wm_frames[0])
-
-            # Write watermarked frames to temp video
-            with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as tf_vid:
-                raw_vid_tmp = tf_vid.name
-
-            orig_h, orig_w = frames[0].shape[:2]
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-            out_vid = cv2.VideoWriter(raw_vid_tmp, fourcc, 30.0, (orig_w, orig_h))
-            for f in wm_frames:
-                out_vid.write(f)
-            out_vid.release()
-
-            # 6. Re-mux Video and Audio with FFmpeg
+            # 4. Re-mux video stream directly (-c:v copy) with watermarked audio
+            # Use -stream_loop -1 so shorter videos loop seamlessly to match watermark length
             os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
             remux_cmd = [
                 FFMPEG_EXE, "-y",
-                "-i", raw_vid_tmp,
+                "-stream_loop", "-1",
+                "-i", video_path,
                 "-i", wm_audio_tmp,
                 "-map", "0:v:0",
                 "-map", "1:a:0",
-                "-c:v", "libx264",
-                "-crf", "18",
-                "-preset", "faster",
-                "-pix_fmt", "yuv420p",
+                "-c:v", "copy",
                 "-c:a", "aac",
                 "-b:a", "192k",
                 "-shortest",
@@ -240,68 +208,74 @@ class AVRShieldEngine:
             if os.path.exists(wm_audio_tmp):
                 try: os.unlink(wm_audio_tmp)
                 except Exception: pass
-            if 'raw_vid_tmp' in locals() and os.path.exists(raw_vid_tmp):
-                try: os.unlink(raw_vid_tmp)
-                except Exception: pass
 
         return {
             "success": True,
             "engine": "AVR-SHIELD",
             "output_path": output_path,
             "audio_snr_db": snr_val,
-            "video_psnr_db": psnr_val,
-            "video_ssim": ssim_val,
+            "video_psnr_db": 100.0,  # Lossless video copy (100 dB represents mathematical identity)
+            "video_ssim": 1.0,        # Lossless video copy
             "encryption": enc_meta,
-            "audio_stats": audio_stats,
-            "video_stats": video_stats
+            "audio_stats": audio_stats
         }
 
     def extract(self, video_path: str, password: str, is_simulated_test: bool = False) -> Dict[str, Any]:
         """
-        Blind extraction of payload from video_path.
-        Extracts audio and video independently and triggers 3-path Recovery Coordinator.
+        Blind extraction of payload from video carrier.
+        Extracts the audio track and decodes the spread-spectrum signal.
         """
         if not os.path.exists(video_path):
             raise FileNotFoundError(f"Media file not found: {video_path}")
 
         key_seed = zlib.crc32(password.encode('utf-8'))
 
-        # 1. Extract and decode Audio Stream
+        # 1. Extract audio PCM
         audio_pcm, has_audio = self._extract_audio_pcm(video_path, 44100)
-        audio_payload = None
-        audio_stats = {"extracted": False}
-        if has_audio and len(audio_pcm) > 44100:
-            audio_payload, audio_stats = self.audio_codec.decode_audio_stream(audio_pcm, key_seed)
+        if not has_audio or len(audio_pcm) < 44100:
+            return {
+                "success": False,
+                "authenticated": False,
+                "error": "No valid audio track found in media container.",
+                "recovered_text": None,
+                "is_simulated_test": is_simulated_test
+            }
 
-        # 2. Extract and decode Video Frames
-        cap = cv2.VideoCapture(video_path)
-        frames = []
-        max_extract_frames = 900
-        while len(frames) < max_extract_frames:
-            ret, frame = cap.read()
-            if not ret:
-                break
-            frames.append(frame)
-        cap.release()
+        # 2. Decode audio stream
+        audio_payload, audio_stats = self.audio_codec.decode_audio_stream(audio_pcm, key_seed)
+        if not audio_payload:
+            return {
+                "success": False,
+                "authenticated": False,
+                "error": audio_stats.get("error", "Failed to decode steganographic audio track."),
+                "audio_stats": audio_stats,
+                "recovered_text": None,
+                "is_simulated_test": is_simulated_test
+            }
 
-        video_payload = None
-        video_stats = {"extracted": False}
-        if frames:
-            video_payload, video_stats = self.video_codec.decode_video_frames(frames, key_seed)
-
-        # 3. Recovery Coordinator across Path A, Path B, and Path C
-        secret, report = self.coordinator.recover_message(
-            audio_raw_payload=audio_payload,
-            video_raw_payload=video_payload,
-            password=password,
-            audio_stats=audio_stats,
-            video_stats=video_stats
-        )
-
-        report["is_simulated_test"] = is_simulated_test
-        report["engine"] = "AVR-SHIELD"
-        report["success"] = report["authenticated"]
-        return report
+        # 3. Decrypt and authenticate AES-256-GCM
+        try:
+            plaintext, auth_info = self.crypto_mgr.decrypt_payload(audio_payload, password)
+            return {
+                "success": True,
+                "authenticated": True,
+                "path_successful": "PATH_A_AUDIO",
+                "vault": auth_info.get("vault", "PRIMARY"),
+                "recovered_text": plaintext,
+                "audio_stats": audio_stats,
+                "engine": "AVR-SHIELD",
+                "is_simulated_test": is_simulated_test
+            }
+        except AuthenticationFailedError:
+            return {
+                "success": False,
+                "authenticated": False,
+                "error": "Cryptographic authentication failed. Incorrect password or data corrupted.",
+                "audio_stats": audio_stats,
+                "engine": "AVR-SHIELD",
+                "recovered_text": None,
+                "is_simulated_test": is_simulated_test
+            }
 
     def simulate_whatsapp(self, input_video: str, output_video: str, profile: str = "standard") -> Dict[str, Any]:
         """

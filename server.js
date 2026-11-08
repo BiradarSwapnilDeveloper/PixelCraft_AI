@@ -2553,7 +2553,8 @@ function runAvrShieldCommand(args, timeoutMs = 60000) {
         return reject(new Error(stderr.trim() || `AVR-SHIELD process failed with code ${code}`));
       }
       try {
-        const json = JSON.parse(stdout.trim());
+        const sanitized = stdout.trim().replace(/:\s*Infinity/g, ': 100.0').replace(/:\s*NaN/g, ': null');
+        const json = JSON.parse(sanitized);
         resolve(json);
       } catch (e) {
         reject(new Error(`Invalid JSON from AVR-SHIELD engine: ${stdout}`));

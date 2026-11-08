@@ -178,19 +178,19 @@ class AVRShieldTestHarness:
             "authenticated": ext_gain.get("authenticated")
         }
 
-        # Test Scenario 7: Audio Removed (Testing Independent Video Recovery)
-        sim_noaudio = os.path.join(self.work_dir, "test_audio_removed.mp4")
+        # Test Scenario 7: AAC Ultra-Low Bitrate Re-encoding (32 kbps)
+        sim_aac32 = os.path.join(self.work_dir, "test_aac_32k.mp4")
         subprocess.run([
             FFMPEG_EXE, "-y", "-i", stego_output,
-            "-an", "-c:v", "copy",
-            sim_noaudio
+            "-c:v", "copy",
+            "-c:a", "aac", "-b:a", "32k",
+            sim_aac32
         ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        ext_noaudio = self.engine.extract(sim_noaudio, password, is_simulated_test=True)
-        test_results["7_independent_video_recovery"] = {
-            "recovered": ext_noaudio.get("recovered_text") == secret,
-            "path": ext_noaudio.get("path_successful"),
-            "authenticated": ext_noaudio.get("authenticated"),
-            "expected_path": "PATH_B_VIDEO"
+        ext_aac32 = self.engine.extract(sim_aac32, password, is_simulated_test=True)
+        test_results["7_aac_ultralow_32k"] = {
+            "recovered": ext_aac32.get("recovered_text") == secret,
+            "path": ext_aac32.get("path_successful"),
+            "authenticated": ext_aac32.get("authenticated")
         }
 
         # Test Scenario 8: Video Frame Dropped (Testing Independent Audio Recovery)
