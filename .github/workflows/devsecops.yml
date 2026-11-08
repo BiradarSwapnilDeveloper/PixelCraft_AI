@@ -53,35 +53,50 @@ jobs:
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
           scanners: 'vuln'
 
-      # Setup Trivy CLI (Official GitHub Action with GITHUB_TOKEN to prevent rate limits)
-      - name: "🔧 Setup Trivy CLI"
-        if: always()
-        uses: aquasecurity/setup-trivy@v0.2.2
+      # Gate 3: Trivy Scan - Generate Table Report
+      - name: "📊 Generate Table Report"
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          output: 'trivy-table.txt'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+          scanners: 'vuln'
 
-      # Gate 3: Generate Markdown Report in GitHub Summary
-      - name: "📊 Generate Markdown Report"
+      # Publish Markdown Report to Step Summary
+      - name: "📊 Publish to Job Summary"
         if: always()
         run: |
           echo "## 🛡️ Trivy Vulnerability Report" >> $GITHUB_STEP_SUMMARY
           echo '```text' >> $GITHUB_STEP_SUMMARY
-          if command -v trivy >/dev/null 2>&1; then
-            trivy fs . --scanners vuln >> $GITHUB_STEP_SUMMARY || true
+          if [ -f trivy-table.txt ]; then
+            cat trivy-table.txt >> $GITHUB_STEP_SUMMARY
           else
-            echo "Trivy CLI scan completed in Gate 2." >> $GITHUB_STEP_SUMMARY
+            echo "Trivy scan results saved in JSON report." >> $GITHUB_STEP_SUMMARY
           fi
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "✅ Markdown Report added to Job Summary!"
 
-      # Gate 3b: Generate and Upload HTML Report (for downloading)
+      # Gate 3b: Generate HTML Report
       - name: "📄 Generate & Upload HTML Report"
-        if: always()
-        run: |
-          if command -v trivy >/dev/null 2>&1; then
-            trivy fs . --scanners vuln --format template --template "@html.tpl" -o trivy-report.html || true
-          fi
-          echo "✅ HTML Report generated!"
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'template'
+          template: '@html.tpl'
+          output: 'trivy-report.html'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+          scanners: 'vuln'
 
       - name: "📤 Upload HTML Artifact"
         if: always()
