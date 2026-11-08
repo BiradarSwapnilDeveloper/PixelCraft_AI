@@ -113,13 +113,25 @@ jobs:
           name: trivy-report-json
           path: trivy-results.json
 
-      # Gate 4: SBOM Generation
+      # Gate 4: SBOM Generation (via Trivy Native SPDX)
       - name: "📦 Generate SBOM (Software Bill of Materials)"
-        uses: anchore/sbom-action@v0
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          path: ./
-          format: spdx-json
-          artifact-name: sbom.spdx.json
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'spdx-json'
+          output: 'sbom.spdx.json'
+
+      - name: "📤 Upload SBOM Artifact"
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: sbom.spdx.json
+          path: sbom.spdx.json
 
   # ============================================================
   # JOB 2: Snyk Scan aur AI Remediation
