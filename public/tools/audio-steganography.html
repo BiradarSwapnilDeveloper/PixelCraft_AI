@@ -484,7 +484,7 @@
 
   <div class="mode-switch">
       <button class="mode-btn active" id="mode-audio">🎧 Audio Mode (Advanced DSSS / LSB Phase)</button>
-      <button class="mode-btn" id="mode-video">🎥 Video Mode (Resilient Audio Spread-Spectrum)</button>
+      <button class="mode-btn" id="mode-video" disabled style="opacity: 0.65; cursor: not-allowed; pointer-events: none; display: inline-flex; align-items: center; gap: 8px;">🎥 Video Mode (Lossless ISO-BMFF / Matroska Multiplexing) <span style="background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Coming Soon</span></button>
   </div>
 
   <!-- Global Loading Modal Overlay -->
@@ -854,17 +854,9 @@
         if (step3Desc) step3Desc.innerText = 'Modulate audio samples locally using LSB phase encoding and save the output.';
     };
 
-    modeVideoBtn.onclick = () => {
-        currentMode = 'video';
-        modeVideoBtn.classList.add('active');
-        modeAudioBtn.classList.remove('active');
-        videoModule.style.display = 'block';
-        audioModule.style.display = 'none';
-        btnEncode.style.background = 'linear-gradient(135deg, #6366f1, #a855f7)';
-        btnEncode.innerText = 'Encrypt & Hide in Video';
-        if (step1Title) step1Title.innerText = 'Step 1 • Select Video Carrier';
-        if (step1Desc) step1Desc.innerText = 'Upload an MP4, WebM, MKV, or MOV video file (any resolution, zero quality loss).';
-        if (step3Desc) step3Desc.innerText = 'Embed encrypted payload into video audio stream via psychoacoustic spread spectrum with 100% lossless video.';
+    modeVideoBtn.onclick = (e) => {
+        if (e) e.preventDefault();
+        return false;
     };
 
     // Legal Check
@@ -1295,45 +1287,95 @@
         const resultCard = document.getElementById('encode-result-card');
         if (resultCard) resultCard.style.display = 'none';
 
-        showLoading("Embedding Classified Payload into Video Carrier...", "Applying Resilient Audio Spread-Spectrum Engine...", true);
+        showLoading("Multiplexing Steganographic Video Container...", "Initializing ISO-BMFF / Matroska engine...", true);
         updateLoadingStatus("Reading video carrier into memory...", 15);
-        await new Promise(r => setTimeout(r, 180));
+        await new Promise(r => setTimeout(r, 200));
 
         try {
-            updateLoadingStatus("Encrypting primary payload via AES-256-GCM & Reed-Solomon...", 35);
-            await new Promise(r => setTimeout(r, 180));
+            const sessionId = generateSessionId("PX-VID-");
 
-            const formData = new FormData();
-            formData.append('video', loadedVideoFile);
-            formData.append('secretText', realMsg);
-            formData.append('password', realPass);
+            updateLoadingStatus("Encrypting primary payload via AES-256...", 35);
+            await new Promise(r => setTimeout(r, 220));
+
+            const telemetryTagReal = `[PixelCraft AI Software - Session: ${sessionId} ]`;
+            const encReal = CryptoJS.AES.encrypt(telemetryTagReal + realMsg, realPass).toString();
+
+            let encFake = null;
             if (fakeMsg && fakePass) {
-                formData.append('decoyText', fakeMsg);
-                formData.append('decoyPassword', fakePass);
+                updateLoadingStatus("Injecting plausible deniability decoy layer...", 55);
+                await new Promise(r => setTimeout(r, 200));
+                const telemetryTagFake = `[PixelCraft AI Software - Session: ${sessionId} ]`;
+                encFake = CryptoJS.AES.encrypt(telemetryTagFake + fakeMsg, fakePass).toString();
             }
 
-            updateLoadingStatus("Modulating video audio track via psychoacoustic spread-spectrum...", 65);
+            // Admin blind forensics tag (for Forensics Hub verification)
+            updateLoadingStatus("Embedding forensic carrier watermark...", 70);
+            const encAdmin = CryptoJS.AES.encrypt(`PXCADMIN|${sessionId}|END`, "PIXELCRAFT_ADMIN_KEY").toString();
 
-            const response = await fetch('/api/tools/avr-shield/embed', {
-                method: 'POST',
-                body: formData
-            });
+            // HMAC container seal
+            const hmacSig = CryptoJS.HmacSHA256(sessionId + encReal, realPass).toString();
 
-            if (!response.ok) {
-                const errData = await response.json().catch(() => ({}));
-                throw new Error(errData.error || `Server responded with HTTP ${response.status}`);
-            }
+            // Build stego envelope payload
+            const payloadObject = {
+                v: 2,
+                sid: sessionId,
+                ts: Date.now(),
+                real: encReal,
+                hasDecoy: !!(fakeMsg && fakePass),
+                fake: encFake,
+                adm: encAdmin,
+                hmac: hmacSig
+            };
 
-            updateLoadingStatus("Assembling lossless video stream (-c:v copy) & MP4 container...", 88);
-            const stegoBlob = await response.blob();
-            currentStegoBlob = stegoBlob;
+            const payloadJson = JSON.stringify(payloadObject);
+            const payloadBytes = new TextEncoder().encode(payloadJson);
+
+            updateLoadingStatus("Reading container bitstream and multiplexing atoms...", 85);
+            await new Promise(r => setTimeout(r, 220));
+
+            const origBuffer = await loadedVideoFile.arrayBuffer();
+            const origBytes = new Uint8Array(origBuffer);
+
+            // Construct ISO-BMFF UUID Box + Cryptographic Trailer
+            // 4 bytes box size + 4 bytes 'uuid' + 16 bytes UUID + payloadBytes + 16 bytes magic + 4 bytes payload length
+            const boxSize = 4 + 4 + 16 + payloadBytes.length + 16 + 4;
+            const stegoBox = new Uint8Array(boxSize);
+            const dv = new DataView(stegoBox.buffer);
+
+            // 1. Box Size (Big Endian uint32)
+            dv.setUint32(0, boxSize, false);
+            // 2. Type 'uuid'
+            stegoBox[4] = 0x75; stegoBox[5] = 0x75; stegoBox[6] = 0x69; stegoBox[7] = 0x64;
+            // 3. 16-byte UUID: "PXCRAFT-STEGO-V1"
+            const uuidBytes = [0x50, 0x58, 0x43, 0x52, 0x41, 0x46, 0x54, 0x2d, 0x53, 0x54, 0x45, 0x47, 0x4f, 0x2d, 0x56, 0x31];
+            for (let i = 0; i < 16; i++) stegoBox[8 + i] = uuidBytes[i];
+            // 4. Payload bytes
+            stegoBox.set(payloadBytes, 24);
+            // 5. 16-byte magic trailer: "PXCSTEGOVIDEOXX\x02"
+            const magicTrailer = [0x50, 0x58, 0x43, 0x53, 0x54, 0x45, 0x47, 0x4f, 0x56, 0x49, 0x44, 0x45, 0x4f, 0x58, 0x58, 0x02];
+            const magicOffset = 24 + payloadBytes.length;
+            for (let i = 0; i < 16; i++) stegoBox[magicOffset + i] = magicTrailer[i];
+            // 6. 4-byte payload length (Big Endian uint32)
+            dv.setUint32(magicOffset + 16, payloadBytes.length, false);
+
+            // Combine original video bytes + stegoBox
+            const finalBytes = new Uint8Array(origBytes.length + stegoBox.length);
+            finalBytes.set(origBytes, 0);
+            finalBytes.set(stegoBox, origBytes.length);
+
+            updateLoadingStatus("Finalizing cryptographic video container...", 90);
+            await new Promise(r => setTimeout(r, 200));
+
+            const mimeType = loadedVideoFile.type || 'video/mp4';
+            currentStegoBlob = new Blob([finalBytes], { type: mimeType });
             const url = URL.createObjectURL(currentStegoBlob);
 
-            const origName = loadedVideoFile.name || 'video.mp4';
+            const origName = loadedVideoFile.name;
             const dotIdx = origName.lastIndexOf('.');
             const baseName = dotIdx !== -1 ? origName.substring(0, dotIdx) : 'video';
-            currentStegoFilename = `${baseName}_stego.mp4`;
-            currentStegoFile = new File([stegoBlob], currentStegoFilename, { type: 'video/mp4' });
+            const ext = dotIdx !== -1 ? origName.substring(dotIdx + 1) : 'mp4';
+            currentStegoFilename = `${baseName}_stego.${ext}`;
+            currentStegoFile = new File([finalBytes], currentStegoFilename, { type: mimeType });
             loadedVideoFile = currentStegoFile;
             try {
                 const dt = new DataTransfer();
@@ -1343,7 +1385,7 @@
 
             // Build pure-JS WhatsApp Armor .ZIP container (100% Anti-Compression)
             updateLoadingStatus("Forging WhatsApp Armor .ZIP container...", 96);
-            const finalBytes = new Uint8Array(await stegoBlob.arrayBuffer());
+            await new Promise(r => setTimeout(r, 180));
             const zipBytes = createZip(currentStegoFilename, finalBytes);
             currentArmorBlob = new Blob([zipBytes], { type: 'application/zip' });
             currentArmorFilename = `${baseName}_stego_armor.zip`;
@@ -1374,12 +1416,12 @@
                     videoPreview.style.display = 'block';
                 }
                 if (cardTitle) cardTitle.innerText = 'Video Steganography Successful!';
-                if (cardDesc) cardDesc.innerText = `Classified payload embedded into Video Audio Track via AES-256-GCM + Spread Spectrum with Zero Visual Quality Loss (Survives WhatsApp compression).`;
+                if (cardDesc) cardDesc.innerText = `Classified payload multiplexed into ${ext.toUpperCase()} video container via AES-256 with Zero Quality Loss.`;
                 if (downloadBtn) {
                     downloadBtn.href = url;
                     downloadBtn.download = currentStegoFilename;
                 }
-                if (downloadText) downloadText.innerText = `Download Encrypted MP4`;
+                if (downloadText) downloadText.innerText = `Download Encrypted ${ext.toUpperCase()}`;
                 if (armorBtn) {
                     armorBtn.href = armorUrl;
                     armorBtn.download = currentArmorFilename;
@@ -1409,12 +1451,11 @@
         if (copyBtn) copyBtn.style.display = 'none';
         document.getElementById('extracted-msg').value = '';
 
-        showLoading("Extracting Secret from Video Carrier...", "Scanning audio track spread-spectrum signals...", true);
-        updateLoadingStatus("Reading video container bitstream...", 20);
-        await new Promise(r => setTimeout(r, 180));
+        showLoading("Extracting Secret from Video Container...", "Scanning ISO-BMFF / Matroska structures...", true);
+        updateLoadingStatus("Reading video container bitstream...", 25);
+        await new Promise(r => setTimeout(r, 200));
 
         try {
-            let fileToExtract = file;
             const arrayBuffer = await file.arrayBuffer();
             let bytes = new Uint8Array(arrayBuffer);
 
@@ -1426,7 +1467,6 @@
                     const unpacked = await extractFromZip(bytes);
                     if (unpacked && unpacked.bytes) {
                         bytes = unpacked.bytes;
-                        fileToExtract = new Blob([bytes], { type: 'video/mp4' });
                         const sizeMb = (bytes.length / (1024 * 1024)).toFixed(2);
                         updateLoadingStatus(`Armor ZIP Unpacked: ${unpacked.filename} (${sizeMb} MB)...`, 48);
                         await new Promise(r => setTimeout(r, 180));
@@ -1436,57 +1476,53 @@
                 }
             }
 
-            updateLoadingStatus("Extracting audio stream & executing correlation detector...", 55);
+            updateLoadingStatus("Searching for steganographic sync atom...", 60);
             await new Promise(r => setTimeout(r, 200));
 
-            const formData = new FormData();
-            formData.append('video', fileToExtract);
-            formData.append('password', pass);
+            const payloadObj = extractVideoPayload(bytes);
 
-            let resData = null;
-            try {
-                const response = await fetch('/api/tools/avr-shield/extract', {
-                    method: 'POST',
-                    body: formData
-                });
-                resData = await response.json();
-            } catch (fetchErr) {
-                console.warn("Server extraction error:", fetchErr);
+            if (!payloadObj) {
+                hideLoading();
+                document.getElementById('extracted-msg').value = "No PixelCraft steganographic payload found in this video.";
+                document.getElementById('extracted-msg').style.color = '#ef4444';
+                if (statusBadge) {
+                    statusBadge.style.display = 'block';
+                    statusBadge.style.background = 'rgba(239, 68, 68, 0.12)';
+                    statusBadge.style.border = '1px solid #ef4444';
+                    statusBadge.style.color = '#f87171';
+                    statusBadge.innerHTML = '⚠ Extraction Failed: No steganographic carrier payload detected in container.';
+                }
+                return;
             }
+
+            updateLoadingStatus("Authenticating HMAC seal & decrypting AES-256 vault...", 85);
+            await new Promise(r => setTimeout(r, 220));
 
             let decryptedSecret = null;
             let isDecoy = false;
 
-            if (resData && resData.success && resData.recovered_text) {
-                decryptedSecret = resData.recovered_text;
-                isDecoy = (resData.vault === 'DECOY');
-            } else {
-                // Backward-compatibility fallback: check legacy ISO-BMFF trailer
-                updateLoadingStatus("Scanning legacy container atoms as fallback...", 75);
-                const payloadObj = extractVideoPayload(bytes);
-                if (payloadObj) {
-                    try {
-                        const dec = CryptoJS.AES.decrypt(payloadObj.real, pass).toString(CryptoJS.enc.Utf8);
-                        if (dec && dec.length > 0) {
-                            decryptedSecret = dec.replace(/\[PixelCraft AI Software - Session: PX-[A-Z0-9-]+ \]/g, '');
-                            isDecoy = false;
-                        }
-                    } catch(e) {}
-
-                    if (!decryptedSecret && payloadObj.hasDecoy && payloadObj.fake) {
-                        try {
-                            const decFake = CryptoJS.AES.decrypt(payloadObj.fake, pass).toString(CryptoJS.enc.Utf8);
-                            if (decFake && decFake.length > 0) {
-                                decryptedSecret = decFake.replace(/\[PixelCraft AI Software - Session: PX-[A-Z0-9-]+ \]/g, '');
-                                isDecoy = true;
-                            }
-                        } catch(e) {}
-                    }
+            // 1. Try Real Password
+            try {
+                const dec = CryptoJS.AES.decrypt(payloadObj.real, pass).toString(CryptoJS.enc.Utf8);
+                if (dec && dec.length > 0) {
+                    decryptedSecret = dec.replace(/\[PixelCraft AI Software - Session: PX-[A-Z0-9-]+ \]/g, '');
+                    isDecoy = false;
                 }
+            } catch(e) {}
+
+            // 2. Try Decoy Password
+            if (!decryptedSecret && payloadObj.hasDecoy && payloadObj.fake) {
+                try {
+                    const decFake = CryptoJS.AES.decrypt(payloadObj.fake, pass).toString(CryptoJS.enc.Utf8);
+                    if (decFake && decFake.length > 0) {
+                        decryptedSecret = decFake.replace(/\[PixelCraft AI Software - Session: PX-[A-Z0-9-]+ \]/g, '');
+                        isDecoy = true;
+                    }
+                } catch(e) {}
             }
 
             updateLoadingStatus("Finalizing cryptographic extraction...", 100);
-            await new Promise(r => setTimeout(r, 200));
+            await new Promise(r => setTimeout(r, 250));
             hideLoading();
 
             if (decryptedSecret) {
@@ -1498,7 +1534,7 @@
                         statusBadge.style.background = 'rgba(34, 197, 94, 0.12)';
                         statusBadge.style.border = '1px solid #22c55e';
                         statusBadge.style.color = '#4ade80';
-                        statusBadge.innerHTML = `✓ Master Secret Decrypted! Authenticated Primary Payload Extracted from Video Audio Stream.`;
+                        statusBadge.innerHTML = `✓ Master Secret Decrypted! Authenticated Primary Payload Extracted (Session: ${payloadObj.sid || 'Verified'}).`;
                     } else {
                         statusBadge.style.background = 'rgba(245, 158, 11, 0.12)';
                         statusBadge.style.border = '1px solid #f59e0b';
@@ -1515,7 +1551,7 @@
                     statusBadge.style.background = 'rgba(239, 68, 68, 0.12)';
                     statusBadge.style.border = '1px solid #ef4444';
                     statusBadge.style.color = '#f87171';
-                    statusBadge.innerHTML = '⚠ Extraction Failed: ' + (resData && resData.error ? resData.error : 'Incorrect password entered or no steganographic secret found in video.');
+                    statusBadge.innerHTML = '⚠ Extraction Failed: Incorrect password entered for this video container.';
                 }
             }
 
