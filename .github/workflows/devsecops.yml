@@ -54,23 +54,50 @@ jobs:
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
           scanners: 'vuln'
 
-      # Gate 3: Generate Markdown Report in GitHub Summary
-      - name: "📊 Generate Markdown Report"
+      # Gate 3: Trivy Scan - Generate Table Report
+      - name: "📊 Generate Table Report"
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          output: 'trivy-table.txt'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+          scanners: 'vuln'
+
+      # Publish Markdown Report to Step Summary
+      - name: "📊 Publish to Job Summary"
         if: always()
         run: |
           echo "## 🛡️ Trivy Vulnerability Report" >> $GITHUB_STEP_SUMMARY
           echo '```text' >> $GITHUB_STEP_SUMMARY
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-          trivy fs . --scanners vuln >> $GITHUB_STEP_SUMMARY
+          if [ -f trivy-table.txt ]; then
+            cat trivy-table.txt >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Trivy scan results saved in JSON report." >> $GITHUB_STEP_SUMMARY
+          fi
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "✅ Markdown Report added to Job Summary!"
 
-      # Gate 3b: Generate and Upload HTML Report (for downloading)
+      # Gate 3b: Generate HTML Report
       - name: "📄 Generate & Upload HTML Report"
-        if: always()
-        run: |
-          trivy fs . --scanners vuln --format template --template "@html.tpl" -o trivy-report.html || true
-          echo "✅ HTML Report generated!"
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'template'
+          template: '@html.tpl'
+          output: 'trivy-report.html'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+          scanners: 'vuln'
 
       - name: "📤 Upload HTML Artifact"
         if: always()
@@ -87,13 +114,25 @@ jobs:
           name: trivy-report-json
           path: trivy-results.json
 
-      # Gate 4: SBOM Generation
+      # Gate 4: SBOM Generation (via Trivy Native SPDX)
       - name: "📦 Generate SBOM (Software Bill of Materials)"
-        uses: anchore/sbom-action@v0
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          path: ./
-          format: spdx-json
-          artifact-name: sbom.spdx.json
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'spdx-json'
+          output: 'sbom.spdx.json'
+
+      - name: "📤 Upload SBOM Artifact"
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: sbom.spdx.json
+          path: sbom.spdx.json
 
   # ============================================================
   # JOB 2: Snyk Scan aur AI Remediation
