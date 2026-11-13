@@ -91,18 +91,18 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Mobile se passport size photo kaise banaye? (Suggested 35x45 mm print guide)",
+          "name": "Mobile se passport size photo kaise banaye? (Optional 35x45 mm print guide)",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Mobile se passport size print photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, 'Govt Exam & ID' section me 'Indian Passport (Suggested 35x45 mm Print / 300 DPI)' choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai. Dhyan rahe: Routine adult PSK appointments me live photo click hoti hai; physical print minor ya offline submissions ke liye hota hai."
+            "text": "Mobile se passport size photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, 'Govt Exam & ID' section me 'Indian Passport (Optional Physical Print: 35x45 mm / 300 DPI)' choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai. Dhyan rahe: Routine adult domestic applicants ke liye Passport Seva Kendra (PSK/POPSK) par Counter A par live digital capture hoti hai; physical prints minors (<4 yrs), offline applications, ya Indian Missions abroad ke liye optional/situational require hote hain."
           }
         },
         {
           "@type": "Question",
-          "name": "Online form ke liye signature ka size kaise kam kare? (140x60 px guide)",
+          "name": "Online form ke liye signature ka size kaise kam kare? (IBPS 140x60 px & SSC ~4.0x2.0 cm guide)",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "IBPS CRP notifications aur kai state exam portals signature ke liye strictly 140x60 pixels (aspect ratio 7:3) aur file weight 10KB se 20KB mangte hain. PixelCraft Smart Resizer me 'IBPS CRP Application Signature (140x60 px)' preset select karein. Iske baad file size ko 10-20KB karne ke liye hamare Smart Image Compressor me '20KB' target preset use karein."
+            "text": "IBPS CRP guidelines candidate signature ke liye 140x60 pixels (aspect ratio 7:3) ko preferred dimension manti hain aur file weight strictly 10KB se 20KB (black ink on white paper) require karti hain. Wahi SSC portal (ssc.gov.in) ke anusar scanned signature JPEG format me 10KB se 20KB aur dimension about 4.0 cm width x 2.0 cm height (2:1 aspect ratio, ~200x100 px) hona chahiye. PixelCraft Smart Resizer me appropriate preset select karein aur Smart Image Compressor se 20KB target select karein."
           }
         },
         {
@@ -110,7 +110,39 @@
           "name": "Photo ko 3.5 x 4.5 cm me kaise resize kare?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "3.5 cm x 4.5 cm Indian passport physical print standard hai (MEA Photo Specifications). 300 DPI print standard par iski pixel value 413 x 531 pixels hoti hai. PixelCraft par upload karte hi ye preset ready milta hai jisse facial aspect ratio kharab nahi hoti."
+            "text": "3.5 cm x 4.5 cm (413x531 pixels at 300 DPI) MEA standard physical print photograph ke liye ek optional print standard hai. Domestic PSK centers par photo live digitally click hoti hai, isliye ye preset un situations ke liye useful hai jahan physical photo submit karni ho. PixelCraft par upload karte hi ye preset exact aspect ratio me ready milta hai jisse facial symmetry maintain rehti hai."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "SSC exam application form me photo aur signature upload ke kya niyam hain?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Naye SSC portal (ssc.gov.in) par candidate photograph file upload allow nahi hai; candidates ko webcam ya official 'MySSC' mobile app se live photo capture karni hoti hai. Lekin scanned signature upload mandatory hai: file JPEG format me 10 to 20 KB aur dimensions about 4.0 cm (width) x 2.0 cm (height) hone chahiye, 140x60 px nahi."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "UPSC OTR aur ORA application form me photo upload ke kya rules hain?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "UPSC OTR (One Time Registration) aur active exam applications ke liye photo upload rule hai: photo 10 din se purani nahi honi chahiye, photo par candidate ka naam aur date clearly print honi chahiye, aur face lagbhag 75% frame occupy kare. File size 20KB se 300KB aur pixel dimensions 350x350 se 1000x1000 pixels hone chahiye. UPSC ORA direct recruitment portal bhi isi 350x350 se 1000x1000 px range ko system validation ke liye use karta hai."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "PAN Card portals (UTIITSL aur Protean NSDL) ke photo dimensions kya hain?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "UTIITSL portal par 213x213 pixels (300 DPI, <30KB) aur Protean NSDL portal par 2.5x3.5 cm (<50KB) suggested convenience presets hain jo physical/scanned document mode ke liye use hote hain. Dhyan rahe ki ye statutory mandatory rules nahi hain, balki portal-specific guidelines hain. Paperless Aadhaar e-KYC mode me photo direct UIDAI se fetch hoti hai."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Photo resize karne ke baad online portal par upload kyu fail hoti hai?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Government portals par rejection ke mukhya kaaran: (1) Prescribed file size (KB) exceed hona (jaise IBPS me photo 20-50KB aur signature 10-20KB; SSC signature 10-20KB; UPSC 20-300KB); (2) Un portals par photo file upload karne ki koshish karna jahan live webcam capture mandatory hai (jaise new SSC portal); (3) UPSC OTR me photo par naam aur date mention na hona; ya (4) Facial aspect ratio stretch hona."
           }
         },
         {
@@ -135,14 +167,6 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Platforms like Instagram, TikTok, and LinkedIn enforce strict viewport aspect ratios in their mobile apps. If you upload an image with non-standard dimensions, the platform's automated system applies an arbitrary crop that often cuts off faces or headlines. Pre-formatting using PixelCraft ensures your intended framing is preserved."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Photo resize karne ke baad online portal par upload kyu fail hoti hai?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Government portals par rejection ke 2 mukhya kaaran hote hain: (1) Galat pixel aspect ratio jisse photo stretch ho jati hai, aur (2) File size limit (jaise IBPS me photo 20-50KB aur signature 10-20KB honi chahiye). Sath hi dhyan rahe ki kuch exams (jaise SSC) ab mandatory live webcam capture use karte hain. Apne exam notification PDF me specifications zaroor check karein."
           }
         },
         {
@@ -223,9 +247,11 @@
     <!-- Quick Exam & Social Media Shortcuts -->
     <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; margin:18px auto 6px auto; max-width:900px;">
       <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-right:4px;">Popular Presets:</span>
-      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🛂 Indian Passport (35x45 mm)</button>
-      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">✍️ Online Form Signature (140x60 px)</button>
-      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">📝 SSC / UPSC Photo (350x450 px)</button>
+      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🛂 Indian Passport (Optional 35x45 mm Print)</button>
+      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">✍️ IBPS Signature (Preferred 140x60 px)</button>
+      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">✍️ SSC Signature (~4.0x2.0 cm)</button>
+      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🏛️ UPSC OTR Photo (500x500 px)</button>
+      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">📝 Suggested Exam Photo (350x450 px)</button>
       <button type="button" onclick="selectQuickPreset('social')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">📸 Instagram Square (1080x1080)</button>
       <button type="button" onclick="selectQuickPreset('social')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">▶️ YouTube Thumbnail (1280x720)</button>
     </div>
@@ -283,13 +309,16 @@
 <script src="../js/utils.js"></script>
   <script>
     const PLATFORMS = [
-      // 🇮🇳 Government Exam, Passport & ID Presets (Application-Specific & Suggested Standards)
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'Indian Passport (Suggested 35x45 mm Print / 300 DPI)', w: 413, h: 531, icon: '🛂' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS CRP Application Photo (200x230 px)', w: 200, h: 230, icon: '🏦' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS CRP Application Signature (140x60 px)', w: 140, h: 60, icon: '✍️' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'PAN Card (Suggested UTIITSL Portal: 213x213 px)', w: 213, h: 213, icon: '🪪' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'Exam Photo (Suggested 350x450 px Portrait)', w: 350, h: 450, icon: '📝' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'Passport Ratio (Suggested 150 DPI Screen: 207x266 px)', w: 207, h: 266, icon: '🛂' },
+      // 🇮🇳 Government Exam, Passport & ID Presets (Official & Suggested Standards)
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'Indian Passport (Optional Physical Print: 35x45 mm / 300 DPI)', w: 413, h: 531, icon: '🛂' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS CRP Candidate Photo (Preferred 200x230 px, 20-50 KB)', w: 200, h: 230, icon: '🏦' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS CRP Scanned Signature (Preferred 140x60 px, 10-20 KB)', w: 140, h: 60, icon: '✍️' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'SSC Scanned Signature (Suggested ~4.0x2.0 cm: 200x100 px, 10-20 KB)', w: 200, h: 100, icon: '✍️' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'UPSC OTR / ORA Photo (Suggested 500x500 px / 20-300 KB)', w: 500, h: 500, icon: '🏛️' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'PAN Card (Suggested UTIITSL Portal: 213x213 px - Unverified)', w: 213, h: 213, icon: '🪪' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'PAN Card (Suggested Protean/NSDL: 2.5x3.5 cm / 200x280 px - Unverified)', w: 200, h: 280, icon: '🪪' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'Exam Photo (Suggested 350x450 px Portrait - State PSC)', w: 350, h: 450, icon: '📝' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'Passport Ratio (Optional Screen Preview: 207x266 px)', w: 207, h: 266, icon: '🛂' },
 
       // 📱 Social Media Standards
       { category: 'social', platform: 'Instagram', type: 'Square Post', w: 1080, h: 1080, icon: '📸' },
@@ -712,39 +741,54 @@
     <div style="margin: 20px 0; padding: 16px 20px; background: rgba(37,99,235,0.08); border-left: 4px solid var(--primary); border-radius: 8px; font-size: 0.92rem; color: var(--text-body); line-height: 1.6;">
       <strong style="color: var(--text-heading);">⚠️ Candidate Advisory &amp; Official Notification Verification:</strong> Recruitment boards aur government agencies ke image requirements portal aur workflow ke mutabiq vary karte hain:
       <ul style="margin: 8px 0 0 0; padding-left: 18px; line-height: 1.5;">
-        <li><strong>Indian Passport:</strong> Ministry of External Affairs (MEA) photo specifications (<a href="https://www.passportindia.gov.in/AppOnlineProject/online/photoSpec" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">passportindia.gov.in/photoSpec</a>) ke mutabiq physical print standard 35x45 mm (413x531 px at 300 DPI) hota hai. Dhyan rahe: Routine adult domestic applicants ke liye Passport Seva Kendra (PSK/POPSK) par Counter A par live digital capture hoti hai. Physical prints minors (&lt;4 yrs), offline applications, ya Indian Missions abroad ke liye require hote hain.</li>
-        <li><strong>IBPS CRP (PO/Clerk/RRB):</strong> Official IBPS candidate guidelines (<a href="https://www.ibps.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">ibps.in</a>) ke anusar candidate photo strictly 200x230 px (20-50 KB) aur signature strictly 140x60 px (10-20 KB, black ink on white paper) require hoti hai.</li>
-        <li><strong>UPSC OTR / ORA:</strong> UPSC Online Recruitment Application portal (<a href="https://upsconline.nic.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">upsconline.nic.in</a>) par photo aur signature 350x350 se 1000x1000 px (20-300 KB) ke beech upload allow karta hai. Ye portal-specific validation rule hai, statutory universal rule nahi.</li>
-        <li><strong>SSC (Staff Selection Commission):</strong> Naye portal (<a href="https://ssc.gov.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">ssc.gov.in</a>) par active notifications (CGL/CHSL 2024+) me live webcam/app photo capture mandatory hai, jabki signature 140x60 px (10-20 KB) image file upload hota hai.</li>
-        <li><strong>PAN Card Portals:</strong> UTIITSL portal (<a href="https://www.pan.utiitsl.com/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">pan.utiitsl.com</a>) 213x213 px (&lt;30 KB, 300 DPI) suggested preset use karta hai, jabki Protean/NSDL portal (<a href="https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">onlineservices.nsdl.com</a>) 2.5x3.5 cm standard mangta hai. Hamesha apna portal verify karein.</li>
-        <li><strong>Suggested Exam Photo:</strong> Hamara 350x450 px preset standard 7:9 ratio state public service commission aur entrance portals ke liye convenient suggested preset hai. Final submit karne se pehle apni active recruitment advertisement zaroor check karein.</li>
+        <li><strong>Indian Passport:</strong> Ministry of External Affairs (MEA) photo specifications (<a href="https://www.passportindia.gov.in/AppOnlineProject/online/photoSpec" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">passportindia.gov.in/photoSpec</a>) ke mutabiq physical print standard 35x45 mm (413x531 px at 300 DPI) hota hai. Dhyan rahe: Routine adult domestic applicants ke liye Passport Seva Kendra (PSK/POPSK) par Counter A par live digital capture hoti hai. Physical prints minors (&lt;4 yrs), offline applications, ya Indian Missions abroad ke liye optional/situational require hote hain.</li>
+        <li><strong>IBPS CRP (PO/Clerk/RRB):</strong> Official IBPS candidate guidelines (<a href="https://www.ibps.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">ibps.in</a>) candidate photograph ke liye 200x230 px aur signature ke liye 140x60 px (black ink on white paper, 7:3 aspect ratio) ko <em>preferred dimensions</em> ke roop me specify karti hain, jabki file size limits (photo 20-50 KB, signature 10-20 KB) mandatory criteria hain.</li>
+        <li><strong>UPSC OTR (One Time Registration):</strong> UPSC OTR profile (<a href="https://upsconline.nic.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">upsconline.nic.in</a>) par upload ki gayi photo 10 din se purani nahi honi chahiye, photo par candidate ka naam aur date clearly printed honi chahiye, aur face lagbhag 75% area cover kare (350x350 se 1000x1000 px, 20-300 KB).</li>
+        <li><strong>UPSC ORA (Online Recruitment Application):</strong> UPSC direct recruitment portal (ORA) specific posts ke liye 350x350 se 1000x1000 pixels (20-300 KB) ka system validation bounds enforce karta hai. Ye portal validation range hai, statutory universal rule nahi.</li>
+        <li><strong>SSC (Staff Selection Commission):</strong> Naye portal (<a href="https://ssc.gov.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">ssc.gov.in</a>) par active notifications (CGL/CHSL) me candidate photo file upload band hai (live webcam/MySSC mobile app capture mandatory hai). Scanned signature upload ab bhi mandatory hai: JPEG format (10-20 KB) me image dimension <em>about 4.0 cm width x 2.0 cm height</em> (2:1 aspect ratio, ~200x100 px), not 140x60 px.</li>
+        <li><strong>PAN Card Portals:</strong> UTIITSL portal (<a href="https://www.pan.utiitsl.com/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">pan.utiitsl.com</a>, 213x213 px, 300 DPI, &lt;30 KB) aur Protean/NSDL portal (<a href="https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">onlineservices.nsdl.com</a>, 2.5x3.5 cm) dono <em>suggested convenience presets (unverified / portal-dependent)</em> hain jo physical/scanned upload mode ke liye use hote hain. Paperless Aadhaar e-KYC mode me photo direct UIDAI se fetch hoti hai.</li>
+        <li><strong>Suggested Exam Photo:</strong> Hamara 350x450 px preset standard 7:9 ratio state public service commissions aur entrance portals ke liye convenient suggested preset hai. Final submit karne se pehle apni active recruitment advertisement zaroor check karein.</li>
       </ul>
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">1. Indian Passport Suggested Print Size (35x45 mm / 300 DPI)</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">1. Indian Passport: Optional Physical Print Size (35x45 mm / 300 DPI)</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
-          Ministry of External Affairs official photo guidelines (<a href="https://www.passportindia.gov.in/AppOnlineProject/online/photoSpec" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">passportindia.gov.in</a>) ke mutabiq physical print passport photograph ka size $35\text{ mm}\times 45\text{ mm}$ ($3.5\text{ cm}\times 4.5\text{ cm}$) hota hai jisme face 70-80% area occupy karta hai. 300 DPI print quality ke mutabiq exact dimensions <strong>413 &times; 531 pixels</strong> hote hain (jabki 150 DPI screen ke liye 207 &times; 266 px). Dhyan rahe ki domestic PSK appointments me officer live photo capture karta hai; physical prints minor applicants (<4 yrs), offline collection centers, aur foreign Indian Missions ke liye require hote hain.
+          Ministry of External Affairs official photo guidelines (<a href="https://www.passportindia.gov.in/AppOnlineProject/online/photoSpec" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">passportindia.gov.in</a>) ke mutabiq physical print passport photograph ka standard $35\text{ mm}\times 45\text{ mm}$ ($3.5\text{ cm}\times 4.5\text{ cm}$) hota hai (300 DPI print quality par <strong>413 &times; 531 pixels</strong>; 150 DPI screen par 207 &times; 266 px). Dhyan rahe: Ye preset <strong>strictly optional/situational</strong> hai kyunki domestic PSK centers par live digital capture Counter A par hoti hai; physical print sirf minors (&lt;4 yrs), offline collection centers, aur foreign Indian Missions ke liye require hota hai.
         </p>
       </div>
 
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. IBPS CRP Application Photo (200x230 px) &amp; Signature (140x60 px)</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. IBPS CRP Candidate Photo (Preferred 200x230 px) &amp; Signature (Preferred 140x60 px)</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
-          Institute of Banking Personnel Selection (<a href="https://www.ibps.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">ibps.in</a>) CRP notifications (PO/MT, Clerk, RRB) ke official criteria ke mutabiq: Candidate photo strictly <strong>200 &times; 230 pixels</strong> (file size 20KB to 50KB) honi chahiye, aur signature strictly <strong>140 &times; 60 pixels</strong> (file size 10KB to 20KB, white paper par black ink pen se). PixelCraft par dono dedicated presets available hain.
+          Institute of Banking Personnel Selection (<a href="https://www.ibps.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">ibps.in</a>) CRP notifications (PO/MT, Clerk, RRB) me candidate photo ke dimensions <strong>200 &times; 230 pixels</strong> aur signature ke dimensions <strong>140 &times; 60 pixels</strong> ko <em>preferred</em> ke taur par likha gaya hai. Jabki file weight criteria strictly mandatory hain: photo 20KB se 50KB aur signature 10KB se 20KB (white paper par black ink pen se).
         </p>
       </div>
 
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">3. PAN Card (Suggested UTIITSL 213x213 px) &amp; Exam Portrait</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">3. SSC Scanned Signature (~4.0x2.0 cm) vs. Mandatory Live Photo Capture</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
-          UTIITSL PAN application portal (<a href="https://www.pan.utiitsl.com/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">pan.utiitsl.com</a>) par <strong>213 &times; 213 pixels</strong> (300 DPI, under 30KB) ek established suggested upload preset hai (jabki Protean/NSDL portal <a href="https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">onlineservices.nsdl.com</a> 2.5x3.5 cm use karta hai). Sath hi, various state public service exams me standard 7:9 ratio ke liye hamara 'Suggested 350x450 px Portrait' preset instantly clean high-contrast facial portrait generate karta hai bina stretch ya distortion ke.
+          Staff Selection Commission (<a href="https://ssc.gov.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">ssc.gov.in</a>) ke naye portal par candidate photograph file upload accept nahi ki jaati; candidates ko live webcam ya official 'MySSC' app se direct photo capture karni padti hai. Lekin scanned signature upload mandatory hai: file JPEG format me <strong>10KB to 20KB</strong> aur dimensions <strong>about 4.0 cm width &times; 2.0 cm height</strong> (2:1 aspect ratio, ~200 &times; 100 px) hone chahiye, 140x60 px nahi.
         </p>
       </div>
 
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">4. Pixels, CM Aur Inches Me DPI Conversion Mathematics</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">4. UPSC OTR Profile Rules vs. ORA System Validation Limits</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          UPSC (<a href="https://upsconline.nic.in/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">upsconline.nic.in</a>) me do alag systems hain: <strong>OTR (One Time Registration)</strong> me photo 10 din se purani nahi honi chahiye, candidate ka naam aur date printed honi chahiye, aur face 75% frame occupy kare. <strong>ORA (Online Recruitment Application)</strong> me portal system validation min 350 &times; 350 px se max 1000 &times; 1000 px (file size 20KB to 300KB) allow karta hai. Hamara 500 &times; 500 px square preset dono ke liye convenient fit hai.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">5. PAN Card Presets: UTIITSL (Suggested 213x213 px) &amp; Protean (Suggested 2.5x3.5 cm)</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          UTIITSL portal (<a href="https://www.pan.utiitsl.com/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">pan.utiitsl.com</a>) par <strong>213 &times; 213 pixels</strong> (300 DPI, &lt;30KB) aur Protean NSDL (<a href="https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">onlineservices.nsdl.com</a>) par <strong>2.5 &times; 3.5 cm</strong> (&lt;50KB) dono <em>suggested convenience presets (unverified / portal-dependent)</em> hain jo physical document upload mode me use hote hain. Paperless Aadhaar OTP (e-KYC) mode me manual photo upload ki requirement nahi hoti.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">6. Pixels, CM Aur Inches Me DPI Conversion Mathematics</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
           Physical centimeters ko digital pixels me convert karne ka universal formula hai: $\text{Pixels} = (\text{cm} / 2.54) \times \text{DPI}$. 300 DPI print quality ke liye: $3.5\text{ cm} \rightarrow 413\text{ px}$ aur $4.5\text{ cm} \rightarrow 531\text{ px}$. PixelCraft ka hardware canvas automatic aspect-ratio lock ke sath pixel calculation handle karta hai taaki facial features stretch na hon.
         </p>
@@ -756,49 +800,67 @@
     </h3>
     <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Mobile se passport size photo kaise banaye? (Suggested 35x45 mm print guide)</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Mobile se passport size photo kaise banaye? (Optional 35x45 mm print guide)</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Mobile se passport size print photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, &ldquo;Govt Exam &amp; ID&rdquo; section me &ldquo;Indian Passport (Suggested 35x45 mm Print / 300 DPI)&rdquo; choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai. Note: Routine adult PSK appointments me live photo click hoti hai; ye preset physical print submissions (jaise minors ya offline centers) ke liye hai.
+          Mobile se passport size photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, &ldquo;Govt Exam &amp; ID&rdquo; section me &ldquo;Indian Passport (Optional Physical Print: 35x45 mm / 300 DPI)&rdquo; choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai. Dhyan rahe: Routine adult domestic applicants ke liye Passport Seva Kendra (PSK/POPSK) par Counter A par live digital capture hoti hai; physical prints minors (&lt;4 yrs), offline applications, ya Indian Missions abroad ke liye optional/situational require hote hain.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Online form ke liye signature ka size kaise kam kare? (140x60 px guide)</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Online form ke liye signature ka size kaise kam kare? (IBPS 140x60 px &amp; SSC ~4.0x2.0 cm guide)</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          IBPS CRP notifications aur kai state exam portals signature ke liye strictly 140x60 pixels (aspect ratio 7:3) aur file weight 10KB se 20KB mangte hain. PixelCraft Smart Resizer me &ldquo;IBPS CRP Application Signature (140x60 px)&rdquo; preset select karein. Iske baad file size ko 10-20KB karne ke liye hamare Smart Image Compressor me &ldquo;20KB&rdquo; target preset use karein.
+          IBPS CRP guidelines candidate signature ke liye 140x60 pixels (aspect ratio 7:3) ko preferred dimension manti hain aur file weight strictly 10KB se 20KB (black ink on white paper) require karti hain. Wahi SSC portal (ssc.gov.in) ke anusar scanned signature JPEG format me 10KB se 20KB aur dimension about 4.0 cm width x 2.0 cm height (2:1 aspect ratio, ~200x100 px) hona chahiye. PixelCraft Smart Resizer me appropriate preset select karein aur Smart Image Compressor se 20KB target select karein.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: Photo ko 3.5 x 4.5 cm me kaise resize kare?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          3.5 cm x 4.5 cm Indian passport physical print standard hai (MEA Photo Specifications). 300 DPI print standard par iski pixel value 413 x 531 pixels hoti hai. PixelCraft par upload karte hi ye preset ready milta hai jisse facial aspect ratio kharab nahi hoti.
+          3.5 cm x 4.5 cm (413x531 pixels at 300 DPI) MEA standard physical print photograph ke liye ek optional print standard hai. Domestic PSK centers par photo live digitally click hoti hai, isliye ye preset un situations ke liye useful hai jahan physical photo submit karni ho. PixelCraft par upload karte hi ye preset exact aspect ratio me ready milta hai jisse facial symmetry maintain rehti hai.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Photo ka pixel size kaise change kare bina quality kharab kiye?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: SSC exam application form me photo aur signature upload ke kya niyam hain?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          PixelCraft AI hardware-accelerated bicubic interpolation use karta hai jo 16 surrounding pixels ko sample karke smooth gradients aur sharp edges banaye rakhta hai. Isse photo stretch ya blur nahi hoti aur quality 100% crisp bani rehti hai.
+          Naye SSC portal (ssc.gov.in) par candidate photograph file upload allow nahi hai; candidates ko webcam ya official 'MySSC' mobile app se live photo capture karni hoti hai. Lekin scanned signature upload mandatory hai: file JPEG format me 10 to 20 KB aur dimensions about 4.0 cm (width) x 2.0 cm (height) hone chahiye, 140x60 px nahi.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: Does enlarging a small photo make it blurry?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: UPSC OTR aur ORA application form me photo upload ke kya rules hain?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Upscaling an image beyond its original native resolution requires mathematical interpolation to invent new pixels where none existed originally. While bicubic smoothing prevents blocky pixelation, excessive upscaling (e.g., 300%+) will naturally appear softer. For optimal results, start with high-resolution master captures.
+          UPSC OTR (One Time Registration) aur active exam applications ke liye photo upload rule hai: photo 10 din se purani nahi honi chahiye, photo par candidate ka naam aur date clearly print honi chahiye, aur face lagbhag 75% frame occupy kare. File size 20KB se 300KB aur pixel dimensions 350x350 se 1000x1000 pixels hone chahiye. UPSC ORA direct recruitment portal bhi isi 350x350 se 1000x1000 px range ko system validation ke liye use karta hai.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: Why are my social media photos cropped automatically after upload?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: PAN Card portals (UTIITSL aur Protean NSDL) ke photo dimensions kya hain?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Platforms like Instagram, TikTok, and LinkedIn enforce strict viewport aspect ratios in their mobile apps. If you upload an image with non-standard dimensions, the platform's automated system applies an arbitrary crop that often cuts off faces or headlines. Pre-formatting using PixelCraft ensures your intended framing is preserved.
+          UTIITSL portal par 213x213 pixels (300 DPI, &lt;30KB) aur Protean NSDL portal par 2.5x3.5 cm (&lt;50KB) suggested convenience presets hain jo physical/scanned document mode ke liye use hote hain. Dhyan rahe ki ye statutory mandatory rules nahi hain, balki portal-specific guidelines hain. Paperless Aadhaar e-KYC mode me photo direct UIDAI se fetch hoti hai.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: Photo resize karne ke baad online portal par upload kyu fail hoti hai?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Government portals par rejection ke 2 mukhya kaaran hote hain: (1) Galat pixel aspect ratio jisse photo stretch ho jati hai, aur (2) File size limit (jaise IBPS me photo 20-50KB aur signature 10-20KB honi chahiye). Sath hi dhyan rahe ki kuch exams (jaise SSC) ab mandatory live webcam capture use karte hain. Apne exam notification PDF me specifications zaroor check karein.
+          Government portals par rejection ke mukhya kaaran: (1) Prescribed file size (KB) exceed hona (jaise IBPS me photo 20-50KB aur signature 10-20KB; SSC signature 10-20KB; UPSC 20-300KB); (2) Un portals par photo file upload karne ki koshish karna jahan live webcam capture mandatory hai (jaise new SSC portal); (3) UPSC OTR me photo par naam aur date mention na hona; ya (4) Facial aspect ratio stretch hona.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q8: Can I batch resize multiple images into a single ZIP file download?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q8: Photo ka pixel size kaise change kare bina quality kharab kiye?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          PixelCraft AI hardware-accelerated bicubic interpolation use karta hai jo 16 surrounding pixels ko sample karke smooth gradients aur sharp edges banaye rakhta hai. Isse photo stretch ya blur nahi hoti aur quality 100% crisp bani rehti hai.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q9: Does enlarging a small photo make it blurry?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Upscaling an image beyond its original native resolution requires mathematical interpolation to invent new pixels where none existed originally. While bicubic smoothing prevents blocky pixelation, excessive upscaling (e.g., 300%+) will naturally appear softer. For optimal results, start with high-resolution master captures.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q10: Why are my social media photos cropped automatically after upload?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Platforms like Instagram, TikTok, and LinkedIn enforce strict viewport aspect ratios in their mobile apps. If you upload an image with non-standard dimensions, the platform's automated system applies an arbitrary crop that often cuts off faces or headlines. Pre-formatting using PixelCraft ensures your intended framing is preserved.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q11: Can I batch resize multiple images into a single ZIP file download?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Yes. PixelCraft AI includes multi-platform export. You can upload an image and export all platform presets simultaneously into a single compressed ZIP archive via JSZip with zero server uploads.
         </p>

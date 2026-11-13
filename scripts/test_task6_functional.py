@@ -85,12 +85,15 @@ print("   (approx. 30%-38% of width and height) for guaranteed commercial scanna
 print("\n--- TEST 2: SMART RESIZE PRESETS & MATHEMATICAL VERIFICATION ---")
 
 presets = [
-    {"label": "Indian Passport Photo (35x45 mm / 300 DPI)", "w": 413, "h": 531, "aspect": 35/45, "authority": "MEA / Passport Seva"},
-    {"label": "IBPS Exam Photo (200x230 px)", "w": 200, "h": 230, "aspect": 200/230, "authority": "IBPS CRP Notification"},
-    {"label": "IBPS & Portal Signature (140x60 px)", "w": 140, "h": 60, "aspect": 140/60, "authority": "IBPS CRP 7:3 Ratio"},
-    {"label": "PAN Card (UTIITSL Portal: 213x213 px)", "w": 213, "h": 213, "aspect": 1.0, "authority": "UTIITSL PAN Guidelines"},
-    {"label": "Exam Photo (Suggested 350x450 px)", "w": 350, "h": 450, "aspect": 350/450, "authority": "Suggested 7:9 Portrait"},
-    {"label": "Passport Ratio (150 DPI Screen: 207x266 px)", "w": 207, "h": 266, "aspect": 35/45, "authority": "Screen Upload Standard"}
+    {"label": "Indian Passport (Optional Print: 35x45 mm)", "w": 413, "h": 531, "aspect": 35/45, "authority": "MEA Passport Seva (Optional Print)"},
+    {"label": "IBPS Candidate Photo (Preferred 200x230 px)", "w": 200, "h": 230, "aspect": 200/230, "authority": "IBPS CRP Notification (Preferred)"},
+    {"label": "IBPS Scanned Signature (Preferred 140x60 px)", "w": 140, "h": 60, "aspect": 140/60, "authority": "IBPS CRP 7:3 Ratio (Preferred)"},
+    {"label": "SSC Scanned Signature (200x100 px / ~4.0x2.0 cm)", "w": 200, "h": 100, "aspect": 2.0, "authority": "SSC CGL/CHSL Active Notices"},
+    {"label": "UPSC OTR / ORA Photo (500x500 px)", "w": 500, "h": 500, "aspect": 1.0, "authority": "UPSC Portal System Validation"},
+    {"label": "PAN Card UTIITSL (Suggested 213x213 px)", "w": 213, "h": 213, "aspect": 1.0, "authority": "UTIITSL Portal (Suggested)"},
+    {"label": "PAN Card Protean/NSDL (Suggested 200x280 px)", "w": 200, "h": 280, "aspect": 200/280, "authority": "Protean NSDL (Suggested)"},
+    {"label": "Exam Photo (Suggested 350x450 px)", "w": 350, "h": 450, "aspect": 350/450, "authority": "Suggested 7:9 Portrait (State PSC)"},
+    {"label": "Passport Ratio (150 DPI Screen: 207x266 px)", "w": 207, "h": 266, "aspect": 35/45, "authority": "Optional Screen Upload"}
 ]
 
 print(f"{'Preset Name':<42} | {'Width x Height':<14} | {'Aspect Ratio':<12} | {'Authority / Source'}")
