@@ -432,7 +432,7 @@
         <div class="upload-area-pdf" id="upload-area" onclick="document.getElementById('file-input').click()">
           <input type="file" id="file-input" accept=".pdf,application/pdf" style="display:none"/>
           <div class="upload-icon-pdf">📄</div>
-          <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 8px;">Tap or Drop PDF Here</h3>
+          <div class="dropzone-title" style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 8px;">Tap or Drop PDF Here</div>
           <p style="color: #94a3b8; margin-bottom: 12px;">Max file size: 50MB. Secure temporary hosting.</p>
           <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 6px; padding: 8px 12px; font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; text-align: left; margin: 0 auto; max-width: 450px;">
             <strong style="color: #60a5fa;">Public Link Notice:</strong> Generates a public link (<code>/p/:id</code>) accessible to anyone possessing the URL. Files are stored on isolated server storage and automatically purged by an hourly cleanup process once they exceed the 24-hour retention threshold (<a href="../data-practices.html#pdf-to-link" style="color: #93c5fd; text-decoration: underline;" target="_blank">view data practices</a>).
@@ -440,7 +440,7 @@
         </div>
 
         <div id="upload-status" style="display: none; text-align: center; margin-top: 20px;">
-          <h4 style="color: var(--text-main); margin-bottom: 10px;" id="status-text">Uploading magic... ✨</h4>
+          <div class="status-title" style="color: var(--text-main); margin-bottom: 10px;" id="status-text">Uploading magic... ✨</div>
           <div class="progress-bar-container" style="display: block;">
             <div class="progress-bar" id="progress-bar"></div>
           </div>
@@ -449,7 +449,7 @@
         <div class="result-box" id="result-box">
           <div style="text-align: center;">
             <div class="success-icon">✅</div>
-            <h3 style="color: var(--text-main); margin-bottom: 5px;">Your PDF is Ready to Share!</h3>
+            <div class="status-title" style="color: var(--text-main); margin-bottom: 5px;">Your PDF is Ready to Share!</div>
             <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px;">This secure link is active for 24 hours.</p>
           </div>
 
@@ -462,11 +462,11 @@
             <a href="#" id="open-link" target="_blank" class="btn btn-gray" style="display: inline-block; margin-bottom: 15px;">🌐 Open in New Tab</a>
           </div>
 
-          <h4 style="color: var(--text-main); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-top: 10px;">Quick Share</h4>
+          <div class="share-title" style="color: var(--text-main); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-top: 10px;">Quick Share</div>
           <div class="share-actions">
-            <a href="#" id="share-wa" target="_blank" class="share-btn whatsapp">💬 WhatsApp</a>
-            <a href="#" id="share-tg" target="_blank" class="share-btn telegram">✈️ Telegram</a>
-            <a href="#" id="share-em" target="_blank" class="share-btn email">📧 Email</a>
+            <a href="javascript:void(0)" id="share-wa" rel="noopener noreferrer" class="share-btn whatsapp">💬 WhatsApp</a>
+            <a href="javascript:void(0)" id="share-tg" rel="noopener noreferrer" class="share-btn telegram">✈️ Telegram</a>
+            <a href="javascript:void(0)" id="share-em" rel="noopener noreferrer" class="share-btn email">📧 Email</a>
           </div>
 
           <div style="text-align: center;">
@@ -490,7 +490,7 @@
 <!-- RELATED TOOLS FOR SEO INTERNAL LINKING -->
 <div style="max-width: 1000px; margin: 60px auto 40px; padding: 0 20px;">
   <div style="padding: 30px; background: var(--surface-subtle); border-radius: 16px; border: 1px solid var(--border-color);">
-    <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 20px; font-family: 'Outfit', sans-serif;">🔗 Explore More Premium Free Tools</h3>
+    <div class="status-title" style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 20px; font-family: 'Outfit', sans-serif;">🔗 Explore More Premium Free Tools</div>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
       <a href="qr-generator.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
         <div style="font-size: 1.5rem; margin-bottom: 8px;">🔲</div>
@@ -698,7 +698,7 @@
 <!-- RELATED TOOLS FOR SEO INTERNAL LINKING -->
       <div style="max-width: 1000px; margin: 60px auto 40px; padding: 0 20px;">
         <div style="padding: 30px; background: var(--surface-subtle); border-radius: 16px; border: 1px solid var(--border-color);">
-          <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 20px; font-family: 'Outfit', sans-serif;">Explore More Document &amp; Sharing Tools</h3>
+          <h2 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 20px; font-family: 'Outfit', sans-serif;">Explore More Document &amp; Sharing Tools</h2>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
             <a href="images-to-pdf.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
               <div style="font-size: 1.5rem; margin-bottom: 8px;">📄</div>

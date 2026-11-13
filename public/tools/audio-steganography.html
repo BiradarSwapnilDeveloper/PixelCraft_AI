@@ -482,7 +482,7 @@
       <div class="sound-wave-bars">
         <span></span><span></span><span></span><span></span><span></span>
       </div>
-      <h3 style="color: #38bdf8; margin: 0 0 8px; font-family: 'Outfit', sans-serif; font-size: 1.35rem;" id="loading-title">Processing Audio...</h3>
+      <div class="dropzone-title" style="color: #38bdf8; margin: 0 0 8px; font-family: 'Outfit', sans-serif; font-size: 1.35rem;" id="loading-title">Processing Audio...</div>
       
       <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 10px; margin: 16px 0 12px; overflow: hidden; display: none;" id="progress-bar-container">
         <div id="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8, #8b5cf6, #ec4899); transition: width 0.3s ease; box-shadow: 0 0 12px #38bdf8;"></div>
@@ -504,7 +504,7 @@
     <div id="audio-module">
         <div class="file-drop-area" id="drop-area-audio" onclick="document.getElementById('audio-input').click()">
           <div class="tool-icon" style="font-size: 3rem; margin-bottom: 10px;">🎧</div>
-          <h3 style="margin: 0; color: var(--text-heading);">Upload Audio File</h3>
+          <div class="dropzone-title" style="margin: 0; color: var(--text-heading);">Upload Audio File</div>
           <p style="color: #a1a1aa; font-size: 0.9rem; margin-top: 8px;">Supports WAV, MP3, M4A, FLAC &amp; WhatsApp Armor .ZIP (Output: 16-bit WAV)</p>
           <input type="file" id="audio-input" accept="audio/*,.zip,application/zip" style="display: none;">
           <button type="button" class="btn btn-outline" style="margin-top: 15px; padding: 10px 20px; border-radius: 8px; border: 1px solid #38bdf8; background: transparent; color: #38bdf8; font-weight: 600; cursor: pointer;">Browse Audio / Armor ZIP</button>
@@ -518,7 +518,7 @@
     <div id="video-module" style="display: none;">
         <div class="file-drop-area" id="drop-area-video" onclick="document.getElementById('video-input').click()">
           <div class="tool-icon" style="font-size: 3rem; margin-bottom: 10px;">🎥</div>
-          <h3 style="margin: 0; color: var(--text-heading);">Upload Video Carrier File</h3>
+          <div class="dropzone-title" style="margin: 0; color: var(--text-heading);">Upload Video Carrier File</div>
           <p style="color: #a1a1aa; font-size: 0.9rem; margin-top: 8px;">Supports MP4, WebM, MKV, MOV, AVI &amp; WhatsApp Armor .ZIP (100% Lossless)</p>
           <input type="file" id="video-input" accept="video/mp4,video/webm,video/x-matroska,video/quicktime,video/x-msvideo,video/*,.zip,application/zip" style="display: none;">
           <button type="button" class="btn btn-outline" style="margin-top: 15px; padding: 10px 20px; border-radius: 8px; border: 1px solid #6366f1; background: transparent; color: #818cf8; font-weight: 600; cursor: pointer;">Browse Video / Armor ZIP</button>
@@ -574,7 +574,7 @@
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
           <div style="width: 38px; height: 38px; border-radius: 50%; background: #22c55e; display: flex; align-items: center; justify-content: center; color: #000; font-size: 1.25rem; font-weight: bold; flex-shrink: 0;">✓</div>
           <div>
-            <h4 id="result-card-title" style="color: #4ade80; margin: 0; font-size: 1.15rem; font-family: 'Outfit', sans-serif;">Encryption &amp; Steganography Successful!</h4>
+            <div class="status-title" id="result-card-title" style="color: #4ade80; margin: 0; font-size: 1.15rem; font-family: 'Outfit', sans-serif;">Encryption &amp; Steganography Successful!</div>
             <p id="result-card-desc" style="margin: 2px 0 0; color: var(--text-muted); font-size: 0.85rem;">Classified payload embedded into media carrier with AES-256 authenticated encryption.</p>
           </div>
         </div>
@@ -1907,7 +1907,7 @@
 <!-- RELATED TOOLS FOR SEO INTERNAL LINKING -->
       <div style="max-width: 1000px; margin: 60px auto 40px; padding: 0 20px;">
         <div style="padding: 30px; background: var(--surface-subtle); border-radius: 16px; border: 1px solid var(--border-color);">
-          <h3 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 20px; font-family: 'Outfit', sans-serif;">Explore More Cryptographic Privacy Tools</h3>
+          <h2 style="color: var(--text-main); font-size: 1.5rem; margin-bottom: 20px; font-family: 'Outfit', sans-serif;">Explore More Cryptographic Privacy Tools</h2>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
             <a href="advanced-decoy.html" style="text-decoration: none; padding: 16px; background: var(--surface-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-main); transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
               <div style="font-size: 1.5rem; margin-bottom: 8px;">🪤</div>

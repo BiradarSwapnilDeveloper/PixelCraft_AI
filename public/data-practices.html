@@ -363,7 +363,7 @@
 
     <!-- Master Inventory Table -->
     <section class="content-section">
-      <div class="section-heading">
+      <h2 class="section-heading">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
         Complete Tool Processing & Data Inventory
       </div>
@@ -656,7 +656,7 @@
 
     <!-- User Account, Cookies & Deletion -->
     <section class="content-section">
-      <div class="section-heading">
+      <h2 class="section-heading">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Account Data, Sessions, and Complete Deletion
       </div>
@@ -666,21 +666,21 @@
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
         <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
-          <h4 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">What We Store Upon Login</h4>
+          <h3 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">What We Store Upon Login</h3>
           <p style="color: var(--text-body); font-size: 0.9rem; margin-bottom: 0;">
             We store only your Google ID, primary email address, full name, profile picture URL, and a tool usage count in our MongoDB database. We never receive or store your Google account password.
           </p>
         </div>
 
         <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
-          <h4 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">Session Cookies & Duration</h4>
+          <h3 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">Session Cookies & Duration</h3>
           <p style="color: var(--text-body); font-size: 0.9rem; margin-bottom: 0;">
             Authentication utilizes an HTTP-only, secure session cookie (<span class="code-chip">connect.sid</span>) with a rolling expiration window of <strong>30 days</strong>. Logging out immediately destroys the server session and invalidates the cookie.
           </p>
         </div>
 
         <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
-          <h4 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">Account & Data Erasure</h4>
+          <h3 style="color: var(--text-heading); margin-top: 0; margin-bottom: 10px;">Account & Data Erasure</h3>
           <p style="color: var(--text-body); font-size: 0.9rem; margin-bottom: 0;">
             You can delete your account and associated database profile at any time through our verified <span class="code-chip">POST /api/user/delete</span> endpoint. Your profile record is permanently removed from the database immediately.
           </p>

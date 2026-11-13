@@ -92,7 +92,7 @@
       box-shadow: var(--shadow-glass);
       background: var(--glass-hover);
     }
-    .about-stat-box h3 {
+    .about-stat-box h3, .about-stat-box .stat-number {
       font-size: 2.5rem;
       font-family: 'Outfit';
       color: var(--primary);
@@ -112,7 +112,7 @@
       .legal-content h2 { font-size: 1.2rem; margin-top: 28px; }
       .legal-content p, .legal-content li { font-size: 0.95rem; }
       .about-stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; }
-      .about-stat-box h3 { font-size: 1.8rem; }
+      .about-stat-box h3, .about-stat-box .stat-number { font-size: 1.8rem; }
     }
     .footer-legal-links {
       display: flex; flex-wrap: wrap; justify-content: center;
@@ -179,15 +179,15 @@
 
         <div class="about-stats-grid">
           <div class="about-stat-box">
-            <h3>10+</h3>
+            <div class="stat-number">10+</div>
             <p>Free Tools</p>
           </div>
           <div class="about-stat-box">
-            <h3>100%</h3>
+            <div class="stat-number">100%</div>
             <p>Browser-Based</p>
           </div>
           <div class="about-stat-box">
-            <h3>∞</h3>
+            <div class="stat-number">∞</div>
             <p>Possibilities</p>
           </div>
         </div>
@@ -196,7 +196,7 @@
         <ul>
           <li><strong>Innovation:</strong> We continually integrate cutting-edge models-from Deep Content Detection algorithms to Hugging Face generative pipelines-into a unified, intuitive dashboard.</li>
           <li><strong>Simplicity:</strong> No installations, no complex learning curves. Our tools are designed with "one-click" ideologies, turning high-level operations into accessible buttons.</li>
-          <li><strong>Accessibility & Privacy:</strong> We offer our robust tools entirely for free to ensure global reach. Importantly, we architect our client-side utilities (including Steganography, Digital Fingerprint Wiping, EXIF inspection, and media converters) using WebAssembly, HTML5 Canvas, and Web Crypto so that your files remain strictly inside your local browser environment. Only specific server-assisted utilities (such as temporary 24-hour PDF document sharing or external AI speech/inference services) transmit data to backend systems under strict, non-training ephemeral retention limits.</li>
+          <li><strong>Accessibility & Privacy:</strong> We offer our robust tools entirely for free to ensure global reach. Importantly, we architect our client-side utilities (including Steganography, Digital Fingerprint Wiping, EXIF inspection, and media converters) using WebAssembly, HTML5 Canvas, and Web Crypto so that your files remain strictly inside your local browser environment. Only specific server-assisted utilities (such as temporary 24-hour PDF document sharing or external AI speech/inference services) transmit data to backend systems under strict, non-training ephemeral retention limits. For completely offline usage, users can also <a href="download-app.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Install PixelCraft AI as a PWA app</a> across desktop and mobile devices.</li>
         </ul>
 
         <h2>Looking Toward the Future</h2>
