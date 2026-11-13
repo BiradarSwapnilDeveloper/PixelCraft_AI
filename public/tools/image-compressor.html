@@ -428,12 +428,18 @@ function fallbackDataUrl(fmt, q) {
 }
 
 let currentCompressedBytes = 0;
+let isOriginalRetained = false;
 
 function updateCompStats(bytes) {
   currentCompressedBytes = bytes;
   document.getElementById('comp-size').textContent = formatFileSize(bytes);
-  const savings = Math.round((1 - bytes / currentFile.size) * 100);
   const savingsEl = document.getElementById('savings-pct');
+  if (isOriginalRetained) {
+    savingsEl.textContent = 'Original retained (already satisfies target)';
+    savingsEl.style.color = 'var(--success)';
+    return;
+  }
+  const savings = Math.round((1 - bytes / currentFile.size) * 100);
   if (savings > 0) {
     savingsEl.textContent = `${savings}% smaller`;
     savingsEl.style.color = 'var(--success)';
@@ -462,6 +468,7 @@ document.querySelectorAll('.btn-preset-kb').forEach(btn => {
     const noteEl = document.getElementById('target-kb-note');
     const feedbackEl = document.getElementById('target-feedback');
     if (kb === 'auto') {
+      isOriginalRetained = false;
       if (noteEl) noteEl.style.display = 'none';
       if (feedbackEl) feedbackEl.textContent = 'Manual quality slider active';
       return;
@@ -479,6 +486,8 @@ async function compressToTargetBytes(targetBytes, targetLabel) {
   if (feedbackEl) feedbackEl.textContent = `Optimizing for ${targetLabel}KB...`;
   
   const fmt = formatSelect.value;
+  isOriginalRetained = false;
+
   // Binary search for highest quality under targetBytes
   let low = 0.05, high = 0.98, bestQ = 0.05;
 
@@ -500,11 +509,40 @@ async function compressToTargetBytes(targetBytes, targetLabel) {
 
   setTimeout(() => {
     const finalBytes = currentCompressedBytes || 0;
-    if (finalBytes <= targetBytes) {
-      if (feedbackEl) feedbackEl.textContent = `✅ Target met (${formatFileSize(finalBytes)} ≤ ${targetLabel}KB)`;
+
+    // Check if re-encoding produced a larger file when original already satisfied target:
+    if (currentFile && currentFile.size <= targetBytes && finalBytes >= currentFile.size) {
+      isOriginalRetained = true;
+      currentCompressedBytes = currentFile.size;
+      if (currentBlobUrl && currentBlobUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(currentBlobUrl);
+      }
+      currentBlobUrl = URL.createObjectURL(currentFile);
+      document.getElementById('comp-size').textContent = formatFileSize(currentFile.size);
+      
+      const savingsEl = document.getElementById('savings-pct');
+      if (savingsEl) {
+        savingsEl.textContent = 'Original retained (already satisfies target)';
+        savingsEl.style.color = 'var(--success)';
+      }
+      if (feedbackEl) {
+        feedbackEl.textContent = `✅ Original preserved (${formatFileSize(currentFile.size)} ≤ ${targetLabel}KB) — already meets target without re-encoding`;
+        feedbackEl.style.color = 'var(--success)';
+      }
+      if (noteEl) noteEl.style.display = 'none';
+    } else if (finalBytes <= targetBytes) {
+      isOriginalRetained = false;
+      if (feedbackEl) {
+        feedbackEl.textContent = `✅ Target met (${formatFileSize(finalBytes)} ≤ ${targetLabel}KB)`;
+        feedbackEl.style.color = 'var(--success)';
+      }
       if (noteEl) noteEl.style.display = 'none';
     } else {
-      if (feedbackEl) feedbackEl.textContent = `Lowest quality reaches ${formatFileSize(finalBytes)}`;
+      isOriginalRetained = false;
+      if (feedbackEl) {
+        feedbackEl.textContent = `Lowest quality reaches ${formatFileSize(finalBytes)}`;
+        feedbackEl.style.color = 'var(--warning, #d97706)';
+      }
       if (noteEl) {
         noteEl.style.display = 'block';
         noteEl.innerHTML = `⚠️ <em>At native resolution (${currentImg.naturalWidth || currentImg.width}×${currentImg.naturalHeight || currentImg.height}px), compressed file reaches ${formatFileSize(finalBytes)}. For strict portal uploads requiring under ${targetLabel}KB, use our <a href="smart-resize.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Smart Resizer</a> to resize pixel dimensions (e.g. 140×60px for signature or 350×450px for photo).</em>`;
@@ -546,6 +584,7 @@ function testQualityBytes(q, fmt) {
 }
 
 qualitySlider.addEventListener('input', () =>{ 
+  isOriginalRetained = false;
   qualityVal.textContent = qualitySlider.value + '%'; 
   const feedbackEl = document.getElementById('target-feedback');
   if (feedbackEl) feedbackEl.textContent = 'Manual quality mode';
@@ -553,7 +592,10 @@ qualitySlider.addEventListener('input', () =>{
   if (noteEl) noteEl.style.display = 'none';
   compress(); 
 });
-formatSelect.addEventListener('change', compress);
+formatSelect.addEventListener('change', () => {
+  isOriginalRetained = false;
+  compress();
+});
 
 document.getElementById('btn-download').addEventListener('click', () =>{
   if (!currentImg) return;
@@ -562,8 +604,14 @@ document.getElementById('btn-download').addEventListener('click', () =>{
   const origName = currentFile && currentFile.name ? currentFile.name : 'image.jpg';
   const dotIndex = origName.lastIndexOf('.');
   const baseName = dotIndex > 0 ? origName.substring(0, dotIndex) : origName;
-  const filename = `${baseName}-compressed.${ext}`;
   
+  if (isOriginalRetained && currentFile) {
+    downloadFile(currentBlobUrl, origName);
+    showToast('Downloaded preserved original file', 'success');
+    return;
+  }
+
+  const filename = `${baseName}-compressed.${ext}`;
   if (currentBlobUrl) {
     downloadFile(currentBlobUrl, filename);
   } else {
@@ -576,6 +624,7 @@ function resetTool() {
   if (currentBlobUrl && currentBlobUrl.startsWith('blob:')) {
     URL.revokeObjectURL(currentBlobUrl);
   }
+  isOriginalRetained = false;
   currentBlobUrl = null;
   currentFile = null; 
   currentImg = null;

@@ -345,7 +345,7 @@
                     <input type="color" id="qr-color-fg-2" value="#3b82f6" />
                     <span id="fg-val-2" style="font-family:monospace; font-size:0.9rem; color:var(--text-muted)">#3b82f6</span>
                   </div>
-                  <label style="font-size:0.8rem; margin:0;"><input type="checkbox" id="fg-gradient-toggle" checked style="margin-right:5px;">Enable Gradient</label>
+                  <label style="font-size:0.8rem; margin:0;"><input type="checkbox" id="fg-gradient-toggle" style="margin-right:5px;">Enable Gradient (Stylized)</label>
                 </div>
               </div>
               <div class="control-group">
@@ -359,7 +359,7 @@
                     <input type="color" id="qr-color-bg-2" value="#f1f5f9" />
                     <span id="bg-val-2" style="font-family:monospace; font-size:0.9rem; color:var(--text-muted)">#f1f5f9</span>
                   </div>
-                  <label style="font-size:0.8rem; margin:0;"><input type="checkbox" id="bg-gradient-toggle" checked style="margin-right:5px;">Enable Gradient</label>
+                  <label style="font-size:0.8rem; margin:0;"><input type="checkbox" id="bg-gradient-toggle" style="margin-right:5px;">Enable Gradient (Stylized)</label>
                 </div>
               </div>
             </div>
@@ -368,34 +368,45 @@
               <div class="control-group" style="margin-bottom:0;">
                 <label>Dot Pattern</label>
                 <select id="qr-dots" class="prompt-input" style="padding:14px;">
-                  <option value="square">Classic Square</option>
-                  <option value="rounded" selected>Modern Rounded</option>
-                  <option value="dots">Circular Dots</option>
-                  <option value="classy">Classy Edge</option>
-                  <option value="extra-rounded">Extra Rounded</option>
+                  <option value="square" selected>Classic Square (High Compatibility)</option>
+                  <option value="rounded">Modern Rounded (Stylized)</option>
+                  <option value="dots">Circular Dots (Stylized)</option>
+                  <option value="classy">Classy Edge (Stylized)</option>
+                  <option value="extra-rounded">Extra Rounded (Stylized)</option>
                 </select>
               </div>
               <div class="control-group" style="margin-bottom:0;">
                 <label>Corner Shape</label>
                 <select id="qr-corners" class="prompt-input" style="padding:14px;">
-                  <option value="square">Sharp Square</option>
-                  <option value="extra-rounded" selected>Smooth Curved</option>
-                  <option value="dot">Circular Dot</option>
+                  <option value="square" selected>Sharp Square (High Compatibility)</option>
+                  <option value="extra-rounded">Smooth Curved (Stylized)</option>
+                  <option value="dot">Circular Dot (Stylized)</option>
                 </select>
               </div>
             </div>
 
-            <div class="img-upload-group" style="margin-top: 10px;">
+            <!-- Dynamic Style Compatibility Advisory Banner -->
+            <div id="style-compatibility-warning" style="margin-top: 14px; padding: 10px 14px; border-radius: 8px; font-size: 0.8rem; line-height: 1.45; display: block;"></div>
+
+            <div class="img-upload-group" style="margin-top: 14px;">
               <div>
                 <label style="display:block; font-size:0.9rem; font-weight:600; color:var(--text-main); margin-bottom:4px;">Center Logo / Icon</label>
-                <span style="font-size:0.8rem; color:var(--text-muted);">Max 2MB image</span>
+                <span style="font-size:0.8rem; color:var(--text-muted);">Optional (Conservative ~12% area, Level H)</span>
               </div>
-              <input type="file" id="logo-upload" accept="image/png, image/jpeg, image/webp" style="display:none;" />
-              <button class="upload-btn" onclick="document.getElementById('logo-upload').click()">
-                 Choose File
-              </button>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <input type="file" id="logo-upload" accept="image/png, image/jpeg, image/webp" style="display:none;" />
+                <button type="button" class="upload-btn" onclick="document.getElementById('logo-upload').click()">
+                   Upload Logo
+                </button>
+                <button type="button" id="btn-toggle-brand-logo" class="upload-btn" style="background: rgba(255,255,255,0.06); font-size:0.8rem;">
+                   Brand Icon
+                </button>
+              </div>
             </div>
-            <div id="logo-preview-text" style="font-size: 0.85rem; color:#A7F3D0; margin-top:-10px; display:none; margin-bottom: 16px;">Logo loaded</div>
+            <div id="logo-preview-text" style="font-size: 0.83rem; color:#A7F3D0; margin-top:-6px; display:none; margin-bottom: 14px; align-items:center; justify-content:space-between;">
+              <span id="logo-status-text">Center logo active (~12% area)</span>
+              <button type="button" id="btn-remove-logo" style="background:none; border:none; color:#f87171; cursor:pointer; font-size:0.8rem; text-decoration:underline;">Remove Logo</button>
+            </div>
 
             <!-- 3D AI QR Add-on UI -->
             <div class="img-upload-group ai-qr-glow" style="margin-top: 15px; background: rgba(59,130,246,0.05); flex-direction: column; align-items: stretch; gap: 10px;">
@@ -475,7 +486,8 @@
     const logoPreviewText = document.getElementById('logo-preview-text');
     
     let qrCode = null;
-    let isDefaultLogo = true;
+    let isDefaultLogo = false;
+    let logoUrl = null;
     
     // Dynamic PixelCraft Logo SVG Matcher
     function getContrast(hexcolor){
@@ -495,8 +507,28 @@
       const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><defs><radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="35%" stop-color="${bgColor}" stop-opacity="0.95"/><stop offset="70%" stop-color="${highlightColor}" stop-opacity="0.8"/><stop offset="100%" stop-color="${bgColor}" stop-opacity="0"/></radialGradient></defs><rect width="600" height="600" fill="url(#glow)" /><text x="50%" y="43%" dominant-baseline="middle" text-anchor="middle" font-size="220"></text><text x="50%" y="82%" text-anchor="middle" fill="#0f172a" font-size="58" font-family="Arial, sans-serif" font-weight="900" letter-spacing="1">PixelCraft AI</text></svg>`;
       return "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgStr)));
     }
-    
-    let logoUrl = generatePcLogo("#ffffff", "#3b82f6");
+
+    function updateStyleCompatibilityWarning() {
+      const warningEl = document.getElementById('style-compatibility-warning');
+      if (!warningEl) return;
+      const isStylized = (dotType.value !== 'square') || 
+                         (cornerType.value !== 'square') || 
+                         fgGradCheck.checked || 
+                         bgGradCheck.checked;
+      if (isStylized) {
+        warningEl.style.display = 'block';
+        warningEl.style.background = 'rgba(217, 119, 6, 0.12)';
+        warningEl.style.border = '1px solid rgba(217, 119, 6, 0.35)';
+        warningEl.style.color = '#f59e0b';
+        warningEl.innerHTML = '<strong>⚠️ Stylized Design Warning:</strong> You have selected an optional stylized design (e.g., rounded dots, curved corners, or color gradients). While high-end smartphone cameras can read many stylized codes, older cameras and commercial barcode scanners may fail to decode them reliably. For maximum compatibility and physical printing, <strong>Classic Square</strong> modules with solid dark-on-white contrast are strongly recommended.';
+      } else {
+        warningEl.style.display = 'block';
+        warningEl.style.background = 'rgba(16, 185, 129, 0.1)';
+        warningEl.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+        warningEl.style.color = '#10b981';
+        warningEl.innerHTML = '<strong>✅ High Compatibility Default:</strong> Standard Classic Square modules on solid white background provide the highest optical contrast and scannability across all devices, barcode readers, and print media.';
+      }
+    }
 
     function renderQR() {
       // Clean previous
@@ -505,8 +537,8 @@
       let currentBgColor = colorBg1.value;
       let highlightColor = colorFg2.value; // The secondary foreground color (e.g., light blue)
       
-      // Update glow dynamically if user hasn't uploaded a custom logo
-      if (isDefaultLogo) {
+      // Update glow dynamically if brand logo is active
+      if (isDefaultLogo && logoUrl) {
          logoUrl = generatePcLogo(currentBgColor, highlightColor);
       }
 
@@ -548,24 +580,17 @@
          }
       }
 
-      // Define thick margin and slightly rounded edges
-      qrCode = new QRCodeStyling({
+      // Define QR configuration with Level H error correction and safe quiet zone
+      const qrConfig = {
         width: 340,
         height: 340,
         type: "canvas", 
         data: qrData.value || "https://pixelcraftaitools.com",
-        image: logoUrl,
         margin: 20,
         qrOptions: {
           typeNumber: 0,
           mode: "Byte",
           errorCorrectionLevel: "H" 
-        },
-        imageOptions: {
-          hideBackgroundDots: true,
-          imageSize: 0.35,
-          margin: 4,
-          crossOrigin: "anonymous",
         },
         dotsOptions: dotsSetup,
         backgroundOptions: bgSetup,
@@ -575,11 +600,23 @@
         },
         cornersDotOptions: {
           color: fgGradCheck.checked ? colorFg2.value : colorFg1.value,
-          type: "dot" 
+          type: (cornerType.value === 'square') ? 'square' : 'dot'
         }
-      });
+      };
 
+      if (logoUrl) {
+        qrConfig.image = logoUrl;
+        qrConfig.imageOptions = {
+          hideBackgroundDots: true,
+          imageSize: 0.35,
+          margin: 4,
+          crossOrigin: "anonymous"
+        };
+      }
+
+      qrCode = new QRCodeStyling(qrConfig);
       qrCode.append(document.getElementById("qr-preview"));
+      updateStyleCompatibilityWarning();
     }
 
     function updateUrlStatus() {
@@ -612,6 +649,40 @@
     colorBg1.addEventListener('input', (e) =>{ bgVal1.textContent = e.target.value; renderQR(); });
     colorBg2.addEventListener('input', (e) =>{ bgVal2.textContent = e.target.value; renderQR(); });
 
+    // Handle Brand Icon and Logo Controls
+    const btnToggleBrandLogo = document.getElementById('btn-toggle-brand-logo');
+    const btnRemoveLogo = document.getElementById('btn-remove-logo');
+    const logoStatusText = document.getElementById('logo-status-text');
+
+    if (btnToggleBrandLogo) {
+      btnToggleBrandLogo.addEventListener('click', () => {
+        if (!logoUrl || !isDefaultLogo) {
+          isDefaultLogo = true;
+          logoUrl = generatePcLogo(colorBg1.value, colorFg2.value);
+          logoPreviewText.style.display = 'flex';
+          logoStatusText.textContent = 'PixelCraft Brand Icon active (~12% area, Level H)';
+          showToast('Brand icon added to QR code', 'success');
+        } else {
+          isDefaultLogo = false;
+          logoUrl = null;
+          logoPreviewText.style.display = 'none';
+          showToast('Logo removed', 'info');
+        }
+        renderQR();
+      });
+    }
+
+    if (btnRemoveLogo) {
+      btnRemoveLogo.addEventListener('click', () => {
+        isDefaultLogo = false;
+        logoUrl = null;
+        logoUpload.value = '';
+        logoPreviewText.style.display = 'none';
+        showToast('Logo removed from QR code', 'info');
+        renderQR();
+      });
+    }
+
     // Handle Logo Loading using file-to-DataURL
     logoUpload.addEventListener('change', (e) =>{
       const file = e.target.files[0];
@@ -626,8 +697,9 @@
       reader.onload = (event) =>{
         isDefaultLogo = false;
         logoUrl = event.target.result;
-        logoPreviewText.style.display = 'block';
-        showToast('Logo added to QR code ', 'success');
+        logoPreviewText.style.display = 'flex';
+        logoStatusText.textContent = `Custom logo loaded (${file.name})`;
+        showToast('Logo added to QR code', 'success');
         renderQR();
       };
       reader.readAsDataURL(file);
