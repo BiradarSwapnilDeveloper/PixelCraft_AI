@@ -152,7 +152,7 @@ The following tools transmit data to the PixelCraft AI backend server or third-p
 | **Groq Inc. (USA)** | Whisper Audio Transcription & LLM Translation | Raw audio media stream and transcript text strings | User consent upon initiating AI Dubbing `[EXTERNAL PROVIDER PRACTICE]` |
 | **Google LLC (USA)** | Text-to-Speech (Google TTS API) | Translated text strings | User consent upon initiating AI Dubbing `[EXTERNAL PROVIDER PRACTICE]` |
 | **Hugging Face Inc. (USA)** | Stable Diffusion XL (3D QR) & AudioLDM2 (SFX) | Prompt text strings and target scan URLs | User consent upon initiating AI Generation `[EXTERNAL PROVIDER PRACTICE]` |
-| **Google LLC (USA)** | reCAPTCHA v2 / v3 spam prevention | Client interaction token and server verification secret | Legitimate security interest on Contact form `[EXTERNAL PROVIDER PRACTICE]` |
+| **Direct Email (SMTP)** | Contact form message delivery | Name, email address, message payload | Legitimate interest for responding to inquiries `[VERIFIED IN CODE]` |
 | **Google LLC (USA)** | Google Analytics (GA4) | Aggregated site interaction metrics, anonymized IP | User consent via Cookie Consent Banner `[EXTERNAL PROVIDER PRACTICE]` |
 | **Google LLC (USA)** | Google AdSense | Advertising personalization cookies and device metadata | User consent via Cookie Consent Banner `[EXTERNAL PROVIDER PRACTICE]` |
 | **Telegram FZ-LLC** | Admin incident alerts & registration notifications | Admin notification text with masked IP (`.xxx.xxx`) and user email | Legitimate security and operational monitoring `[EXTERNAL PROVIDER PRACTICE]` |

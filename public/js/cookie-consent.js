@@ -10,17 +10,24 @@
 
   let trackingInjected = false;
 
-  // Initialize dataLayer and Google Consent Mode v2 baseline
+  // Initialize dataLayer and Google Consent Mode v2 baseline synchronously
   window.dataLayer = window.dataLayer || [];
   function gtag() { window.dataLayer.push(arguments); }
   window.gtag = gtag;
 
   // Read saved consent status
-  const hasAccepted = localStorage.getItem('cookieConsent') === 'accepted' || localStorage.getItem('pc_consent_v1') === 'true';
-  const hasRejected = localStorage.getItem('cookieConsent') === 'rejected' || localStorage.getItem('pc_consent_v1') === 'false';
+  function getSavedConsent() {
+    const consent = localStorage.getItem('cookieConsent');
+    const legacy = localStorage.getItem('pc_consent_v1');
+    if (consent === 'accepted' || legacy === 'true') return 'accepted';
+    if (consent === 'rejected' || legacy === 'false') return 'rejected';
+    return null;
+  }
 
-  // Apply default Google Consent Mode v2 configuration
-  if (hasAccepted) {
+  const initialConsent = getSavedConsent();
+
+  // Apply default Google Consent Mode v2 configuration before any tag loads
+  if (initialConsent === 'accepted') {
     gtag('consent', 'default', {
       'ad_storage': 'granted',
       'ad_user_data': 'granted',
@@ -72,9 +79,10 @@
   }
 
   function removeTracking() {
+    const wasActive = trackingInjected || !!document.getElementById('ga-script') || !!document.getElementById('adsense-script');
     trackingInjected = false;
 
-    // Update Consent Mode v2 to denied
+    // Update Consent Mode v2 to denied immediately
     gtag('consent', 'update', {
       'ad_storage': 'denied',
       'ad_user_data': 'denied',
@@ -82,6 +90,7 @@
       'analytics_storage': 'denied'
     });
 
+    // Remove script elements from DOM where present
     const gaScript = document.getElementById('ga-script') || document.querySelector('script[src*="googletagmanager.com/gtag/js"]');
     if (gaScript && gaScript.parentNode) {
       gaScript.parentNode.removeChild(gaScript);
@@ -92,28 +101,63 @@
       adScript.parentNode.removeChild(adScript);
     }
 
-    // Clear tracking cookies
+    // Clear tracking cookies across path and domain scopes
     clearTrackingCookies();
+
+    return wasActive;
   }
 
   function clearTrackingCookies() {
-    const trackingCookies = ['_ga', '_gid', '_gat', '__gads', '__gpi'];
+    const trackingCookies = ['_ga', '_gid', '_gat', '__gads', '__gpi', '_gac_', '_gat_gtag_'];
     const cookies = document.cookie.split(';');
     const hostname = window.location.hostname;
     const domainParts = hostname.split('.');
+    const domains = ['', hostname];
+    if (domainParts.length >= 2) {
+      domains.push('.' + domainParts.slice(-2).join('.'));
+    }
+    const currentPath = (window.location && window.location.pathname) ? window.location.pathname : '/';
+    const paths = ['/', currentPath];
 
     cookies.forEach(c => {
       const name = c.split('=')[0].trim();
       const isTracking = trackingCookies.some(tc => name === tc || name.startsWith(tc));
       if (isTracking) {
-        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + hostname + ';';
-        if (domainParts.length >= 2) {
-          const rootDomain = '.' + domainParts.slice(-2).join('.');
-          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + rootDomain + ';';
-        }
+        paths.forEach(p => {
+          domains.forEach(d => {
+            const domainAttr = d ? '; domain=' + d : '';
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=' + p + domainAttr + ';';
+          });
+        });
       }
     });
+  }
+
+  // Detect whether the user is actively working on content or using an interactive tool
+  function isUserWorkingOnContent() {
+    // 1. Tool pages are sensitive to unsaved user work
+    const pathStr = (window.location && window.location.pathname) ? window.location.pathname : '';
+    const isToolPage = pathStr.includes('/tools/');
+
+    // 2. Check for active files in file inputs
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    for (let i = 0; i < fileInputs.length; i++) {
+      if (fileInputs[i].files && fileInputs[i].files.length > 0) return true;
+    }
+
+    // 3. Check for text entered into textareas
+    const textareas = document.querySelectorAll('textarea');
+    for (let i = 0; i < textareas.length; i++) {
+      if (textareas[i].value && textareas[i].value.trim().length > 10) return true;
+    }
+
+    // 4. Check for active canvas buffers
+    const canvases = document.querySelectorAll('canvas');
+    for (let i = 0; i < canvases.length; i++) {
+      if (canvases[i].width > 100 && canvases[i].height > 100) return true;
+    }
+
+    return isToolPage;
   }
 
   function unblurTools() {
@@ -127,6 +171,14 @@
 
   function createBanner() {
     if (document.getElementById('cookie-consent-banner')) return;
+
+    // Close settings drawer if open to keep banner accessible
+    const drawer = document.getElementById('settings-drawer');
+    if (drawer && drawer.classList.contains('active')) {
+      drawer.classList.remove('active');
+      const overlay = document.getElementById('settings-drawer-overlay');
+      if (overlay) overlay.classList.remove('active');
+    }
 
     // Inject styles if not present
     if (!document.getElementById('cookie-consent-styles')) {
@@ -244,7 +296,7 @@
       document.head.appendChild(style);
     }
 
-    const currentStatus = localStorage.getItem('cookieConsent');
+    const currentStatus = getSavedConsent();
     const statusNote = currentStatus ? ` (Currently: ${currentStatus === 'accepted' ? 'Accepted' : 'Rejected'})` : '';
 
     const banner = document.createElement('div');
@@ -287,25 +339,57 @@
     };
 
     document.getElementById('btn-reject-cookies').onclick = () => {
+      const currentStored = getSavedConsent();
+      const wasTrackingActive = trackingInjected || !!document.getElementById('ga-script') || !!document.getElementById('adsense-script') || (currentStored === 'accepted');
+
       localStorage.setItem('cookieConsent', 'rejected');
       localStorage.setItem('pc_consent_v1', 'false');
       sessionStorage.setItem('tc_accepted', 'true');
       closeBanner();
       removeTracking();
-      if (typeof showToast === 'function') {
-        showToast('Cookie preferences updated: Non-essential cookies rejected.', 'default');
+
+      if (wasTrackingActive) {
+        if (isUserWorkingOnContent()) {
+          if (typeof showToast === 'function') {
+            showToast('Cookie preferences updated: Tracking disabled. Please refresh when your work is finished to completely unload scripts from memory.', 'default', 6000);
+          }
+        } else {
+          if (typeof showToast === 'function') {
+            showToast('Cookie preferences revoked. Refreshing page to cleanly purge in-memory tracking...', 'default', 2000);
+          }
+          setTimeout(() => {
+            if (window.location && typeof window.location.reload === 'function') {
+              window.location.reload();
+            }
+          }, 1200);
+        }
+      } else {
+        if (typeof showToast === 'function') {
+          showToast('Cookie preferences updated: Non-essential cookies rejected.', 'default');
+        }
       }
     };
   }
 
   window.openCookieConsentBanner = createBanner;
   window.loadTrackingScripts = loadTracking;
+  window.revokeCookieConsent = function () {
+    const btn = document.getElementById('btn-reject-cookies');
+    if (btn) btn.click();
+    else {
+      localStorage.setItem('cookieConsent', 'rejected');
+      localStorage.setItem('pc_consent_v1', 'false');
+      removeTracking();
+    }
+  };
 
   function init() {
-    if (hasAccepted) {
+    const current = getSavedConsent();
+
+    if (current === 'accepted') {
       unblurTools();
       loadTracking();
-    } else if (hasRejected) {
+    } else if (current === 'rejected') {
       unblurTools();
     } else {
       createBanner();

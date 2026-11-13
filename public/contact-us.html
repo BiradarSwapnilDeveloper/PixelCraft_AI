@@ -66,7 +66,65 @@
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />  <link rel="stylesheet" href="css/style.css" />  <!-- Google reCAPTCHA v2 -->  <script src="https://www.google.com/recaptcha/api.js" async defer></script>  <style>    .legal-content h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 24px; text-align: center; }    .legal-content p.subtitle { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; text-align: center; max-width: 600px; margin: 0 auto 40px; }    .contact-wrapper {      display: grid;      grid-template-columns: 1fr 1fr;      gap: 40px;    }    .contact-form {      background: rgba(255, 255, 255, 0.03);      padding: 30px;      border-radius: 20px;      border: 1px solid var(--glass-border);      display: grid;      gap: 20px;    }    .direct-contact {      display: flex;      flex-direction: column;      gap: 20px;      justify-content: center;    }    .direct-card {      background: var(--glass-bg);      border: 1px solid var(--glass-border);      padding: 24px;      border-radius: 16px;      display: flex;      align-items: center;      gap: 16px;      transition: var(--transition-smooth);      text-decoration: none;      color: var(--text-main);    }    .direct-card:hover {      background: var(--glass-hover);      border-color: var(--glass-border-hover);      transform: translateY(-3px);    }    .direct-icon {      width: 48px;      height: 48px;      background: rgba(26, 86, 219, 0.15);      color: var(--primary);      border-radius: 12px;      display: flex;      align-items: center;      justify-content: center;      font-size: 1.5rem;    }    /* Mobile Responsive */    @media (max-width: 768px) {      .contact-wrapper {        grid-template-columns: 1fr;      }    }  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .legal-content h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 24px; text-align: center; }
+    .legal-content p.subtitle { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; text-align: center; max-width: 600px; margin: 0 auto 40px; }
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .contact-form {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      display: grid;
+      gap: 20px;
+    }
+    .direct-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
+    }
+    .direct-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 24px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: var(--transition-smooth);
+      text-decoration: none;
+      color: var(--text-main);
+    }
+    .direct-card:hover {
+      background: var(--glass-hover);
+      border-color: var(--glass-border-hover);
+      transform: translateY(-3px);
+    }
+    .direct-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(26, 86, 219, 0.15);
+      color: var(--primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 
 </head>
 <body>
@@ -249,6 +307,46 @@
             <p style="color: var(--text-muted, #94a3b8); font-size: 0.95rem; text-align: center;">Check out our code</p>
           </a>
         </div>
+
+        <!-- Direct Message Form -->
+        <div style="width: 100%; max-width: 680px; margin-top: 15px;">
+          <form class="contact-form" id="contactForm" style="
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 36px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          ">
+            <div>
+              <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.6rem; color: var(--text-main, #fff); font-weight: 700; margin-bottom: 6px;">Send a Message</h2>
+              <p style="color: var(--text-muted, #94a3b8); font-size: 0.95rem; margin: 0; line-height: 1.5;">Have questions, feedback, or need direct support? Fill out the form below.</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label for="contactName" style="color: var(--text-main, #fff); font-weight: 600; font-size: 0.95rem;">Your Name <span style="color: #ef4444;">*</span></label>
+              <input type="text" id="contactName" name="name" required maxlength="100" placeholder="John Doe" style="width: 100%; border: 1px solid var(--glass-border); background: var(--bg-dark, #0b0f19); color: #fff; padding: 14px 16px; border-radius: 12px; font-family: inherit; font-size: 0.95rem; outline: none; transition: border-color 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='var(--primary, #2563eb)'" onblur="this.style.borderColor='var(--glass-border)'" />
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label for="contactEmail" style="color: var(--text-main, #fff); font-weight: 600; font-size: 0.95rem;">Your Email <span style="color: #ef4444;">*</span></label>
+              <input type="email" id="contactEmail" name="email" required maxlength="120" placeholder="john@example.com" style="width: 100%; border: 1px solid var(--glass-border); background: var(--bg-dark, #0b0f19); color: #fff; padding: 14px 16px; border-radius: 12px; font-family: inherit; font-size: 0.95rem; outline: none; transition: border-color 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='var(--primary, #2563eb)'" onblur="this.style.borderColor='var(--glass-border)'" />
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label for="contactMessage" style="color: var(--text-main, #fff); font-weight: 600; font-size: 0.95rem;">Message <span style="color: #ef4444;">*</span></label>
+              <textarea id="contactMessage" name="message" required rows="5" maxlength="5000" placeholder="How can we assist you today?" style="width: 100%; border: 1px solid var(--glass-border); background: var(--bg-dark, #0b0f19); color: #fff; padding: 14px 16px; border-radius: 12px; font-family: inherit; font-size: 0.95rem; outline: none; resize: vertical; transition: border-color 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='var(--primary, #2563eb)'" onblur="this.style.borderColor='var(--glass-border)'"></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; border-radius: 12px; padding: 14px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 6px;" id="contactSubmitBtn">
+              Send Message 🚀
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </section>
@@ -277,36 +375,47 @@
     const form = document.getElementById('contactForm');
     const submitBtn = document.getElementById('contactSubmitBtn');
 
-    // reCAPTCHA Callbacks
-    function onRecaptchaSuccess(token) {
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = '1';
-      submitBtn.style.cursor = 'pointer';
-    }
-
-    function onRecaptchaExpired() {
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.5';
-      submitBtn.style.cursor = 'not-allowed';
-      showToast('reCAPTCHA expired. Please verify again.', 'error');
-    }
-
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const name = document.getElementById('contactName').value.trim();
-        const email = document.getElementById('contactEmail').value.trim();
-        const message = document.getElementById('contactMessage').value.trim();
+        const nameInput = document.getElementById('contactName');
+        const emailInput = document.getElementById('contactEmail');
+        const messageInput = document.getElementById('contactMessage');
 
-        if (!name || !email || !message) {
-          showToast('Please fill all required fields.', 'error');
+        const name = nameInput ? nameInput.value.trim() : '';
+        const email = emailInput ? emailInput.value.trim() : '';
+        const message = messageInput ? messageInput.value.trim() : '';
+
+        // Client-side validation
+        if (!name || name.length < 2) {
+          if (typeof showToast === 'function') {
+            showToast('Please provide your name (at least 2 characters).', 'error');
+          } else {
+            alert('Please provide your name (at least 2 characters).');
+          }
+          if (nameInput) nameInput.focus();
           return;
         }
 
-        const recaptchaToken = grecaptcha.getResponse();
-        if (!recaptchaToken) {
-          showToast('Please complete the reCAPTCHA verification.', 'error');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          if (typeof showToast === 'function') {
+            showToast('Please provide a valid email address.', 'error');
+          } else {
+            alert('Please provide a valid email address.');
+          }
+          if (emailInput) emailInput.focus();
+          return;
+        }
+
+        if (!message || message.length < 10) {
+          if (typeof showToast === 'function') {
+            showToast('Please provide a message with at least 10 characters.', 'error');
+          } else {
+            alert('Please provide a message with at least 10 characters.');
+          }
+          if (messageInput) messageInput.focus();
           return;
         }
 
@@ -318,32 +427,34 @@
           const res = await fetch('/api/contact', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, message, recaptchaToken })
+            body: JSON.stringify({ name, email, message })
           });
 
           const data = await res.json();
           if (res.ok && data.success) {
-            showToast('Message sent successfully! We will get back to you soon. 🎉', 'success');
+            if (typeof showToast === 'function') {
+              showToast('Message sent successfully! We will get back to you soon. 🎉', 'success');
+            } else {
+              alert('Message sent successfully!');
+            }
             form.reset();
-            grecaptcha.reset();
-            submitBtn.disabled = true;
-            submitBtn.style.opacity = '0.5';
-            submitBtn.style.cursor = 'not-allowed';
           } else {
-            showToast('Error: ' + (data.error || 'Failed to send'), 'error');
-            grecaptcha.reset();
-            submitBtn.innerHTML = btnOriginalText;
-            submitBtn.disabled = true;
-            submitBtn.style.opacity = '0.5';
-            submitBtn.style.cursor = 'not-allowed';
+            const errMsg = data.error || 'Failed to send message.';
+            if (typeof showToast === 'function') {
+              showToast('Error: ' + errMsg, 'error');
+            } else {
+              alert('Error: ' + errMsg);
+            }
           }
         } catch (err) {
-          showToast('Network error while sending message', 'error');
-          grecaptcha.reset();
+          if (typeof showToast === 'function') {
+            showToast('Network error while sending message. Please try again.', 'error');
+          } else {
+            alert('Network error while sending message.');
+          }
+        } finally {
           submitBtn.innerHTML = btnOriginalText;
-          submitBtn.disabled = true;
-          submitBtn.style.opacity = '0.5';
-          submitBtn.style.cursor = 'not-allowed';
+          submitBtn.disabled = false;
         }
       });
     }

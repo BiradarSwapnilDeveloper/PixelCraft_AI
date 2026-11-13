@@ -1350,33 +1350,70 @@ app.post('/api/generate-comment', aiGenerationLimiterMiddleware, async (req, res
 
 const nodemailer = require('nodemailer');
 
+// Contact Form Rate Limiter (Max 5 submissions per 15 minutes per IP)
+const contactRateLimiter = new Map();
+
+function checkContactRateLimit(ip) {
+  const now = Date.now();
+  const windowMs = 15 * 60 * 1000; // 15 mins
+  const maxSubmissions = 5;
+  const record = contactRateLimiter.get(ip) || { count: 0, resetTime: now + windowMs };
+
+  if (now > record.resetTime) {
+    record.count = 0;
+    record.resetTime = now + windowMs;
+  }
+
+  if (record.count >= maxSubmissions) {
+    return { allowed: false, retryAfter: Math.ceil((record.resetTime - now) / 1000) };
+  }
+
+  record.count++;
+  contactRateLimiter.set(ip, record);
+  return { allowed: true };
+}
+
 app.post('/api/contact', async (req, res) => {
-  const { name, email, message, recaptchaToken } = req.body;
-  if (!name || !email || !message) return res.status(400).json({ error: "Missing fields" });
-
-  // ✅ Verify reCAPTCHA token with Google
-  if (!recaptchaToken) {
-    return res.status(400).json({ error: "reCAPTCHA verification required. Please complete the checkbox." });
-  }
-  try {
-    const verifyRes = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`
-    });
-    const verifyData = await verifyRes.json();
-    if (!verifyData.success) {
-      console.warn("❌ reCAPTCHA verification failed:", verifyData['error-codes']);
-      return res.status(400).json({ error: "reCAPTCHA failed. Please try again." });
-    }
-    console.log("✅ reCAPTCHA verified successfully");
-  } catch (captchaErr) {
-    console.error("🔴 reCAPTCHA check error:", captchaErr.message);
-    return res.status(500).json({ error: "Failed to verify reCAPTCHA. Try again later." });
+  const clientIp = req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0].trim() : (req.socket.remoteAddress || req.ip || '127.0.0.1');
+  const rateCheck = checkContactRateLimit(clientIp);
+  if (!rateCheck.allowed) {
+    res.setHeader('Retry-After', rateCheck.retryAfter || 900);
+    return res.status(429).json({ error: `Too many messages sent. Please wait ${Math.ceil(rateCheck.retryAfter / 60)} minutes before trying again.` });
   }
 
+  const { name, email, message } = req.body;
+  if (!name || typeof name !== 'string' || !name.trim()) {
+    return res.status(400).json({ error: "Your name is required." });
+  }
+  if (!email || typeof email !== 'string' || !email.trim()) {
+    return res.status(400).json({ error: "Your email address is required." });
+  }
+  if (!message || typeof message !== 'string' || !message.trim()) {
+    return res.status(400).json({ error: "Your message is required." });
+  }
+
+  const trimmedName = name.trim();
+  const trimmedEmail = email.trim();
+  const trimmedMessage = message.trim();
+
+  if (trimmedName.length < 2 || trimmedName.length > 100) {
+    return res.status(400).json({ error: "Name must be between 2 and 100 characters." });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(trimmedEmail) || trimmedEmail.length > 120) {
+    return res.status(400).json({ error: "Please enter a valid email address." });
+  }
+
+  if (trimmedMessage.length < 10) {
+    return res.status(400).json({ error: "Message must be at least 10 characters long." });
+  }
+  if (trimmedMessage.length > 5000) {
+    return res.status(400).json({ error: "Message is too long (maximum 5000 characters allowed)." });
+  }
+
   try {
-    console.log(`📩 Preparing to send email from contact form (Name: ${name}, Email: ${email})`);
+    console.log(`📩 Preparing to send email from contact form (Name: ${trimmedName}, Email: ${trimmedEmail})`);
 
     // Explicitly configure Gmail SMTP
     const transporter = nodemailer.createTransport({
@@ -1390,16 +1427,16 @@ app.post('/api/contact', async (req, res) => {
     // Gmail requires 'from' to match the authenticated email to prevent spam blocking
     const mailOptions = {
       from: `"PixelCraft Contact" <${process.env.EMAIL_USER}>`,
-      replyTo: email,
+      replyTo: trimmedEmail,
       to: process.env.EMAIL_USER, // Sends the contact message to the website owner's email
-      subject: `New Message from PixelCraft Website: ${name}`,
+      subject: `New Message from PixelCraft Website: ${trimmedName}`,
       text: `Someone just sent a message from your website contact form!
       
-Name: ${name}
-Email: ${email}
+Name: ${trimmedName}
+Email: ${trimmedEmail}
 
 Message: 
-${message}
+${trimmedMessage}
 `
     };
 
