@@ -348,6 +348,91 @@
             </button>
           </form>
         </div>
+
+        <!-- Inquiry Categories & Support Scope -->
+        <div style="margin-top: 50px; width: 100%; border-top: 1px solid var(--glass-border); padding-top: 40px;">
+          <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; color: var(--text-main); font-weight: 700; margin-bottom: 14px; text-align: left;">Inquiry Categories &amp; Support Scope</h2>
+          <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7; margin-bottom: 24px; text-align: left;">PixelCraft AI is committed to providing reliable, decentralized privacy, cryptography, and digital image utilities. To ensure all inquiries are handled effectively, please review the primary categories covered by our engineering team:</p>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px;">
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 24px;">
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: var(--text-main); margin-bottom: 8px;">🛠️ Technical Tool Support</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Troubleshooting browser-side media processing, WebAssembly execution errors, image compression tuning, or unexpected canvas rendering in tools like our <a href="tools/image-compressor.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Image Compressor</a>, <a href="tools/format-converter.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Format Converter</a>, or <a href="tools/advanced-decoy.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Advanced Decoy Steganography</a>.</p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 24px;">
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: var(--text-main); margin-bottom: 8px;">🐛 Bug Reports &amp; Edge Cases</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Reporting browser-specific issues, canvas memory limits on ultra-high-resolution images, mobile responsiveness defects, or unexpected exceptions. Please consult our structured reporting checklist below.</p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 24px;">
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: var(--text-main); margin-bottom: 8px;">💡 Feature Suggestions &amp; Ideas</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Proposing newly standardized image compression algorithms (such as AVIF or JPEG XL), novel steganographic carrier structures, or client-side cryptographic improvements to expand our browser utility suite.</p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 24px;">
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: var(--text-main); margin-bottom: 8px;">🔒 Security &amp; Vulnerability Disclosure</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Coordinated vulnerability disclosures regarding our Node.js API endpoints, rate limiters, or client-side sandbox isolation. Please review our <a href="security-whitepaper.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Security Whitepaper</a> for responsible disclosure policies.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expected Response Times -->
+        <div style="margin-top: 30px; width: 100%; border-top: 1px solid var(--glass-border); padding-top: 40px;">
+          <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; color: var(--text-main); font-weight: 700; margin-bottom: 14px; text-align: left;">Expected Response Times &amp; Communication Scope</h2>
+          <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7; margin-bottom: 16px; text-align: left;">PixelCraft AI is developed and maintained as an independent privacy-first engineering initiative. We prioritize substantive technical inquiries, reproducible bug tickets, and verified security disclosures:</p>
+          <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; padding-left: 20px; margin-bottom: 20px; text-align: left;">
+            <li><strong>Standard Technical Support:</strong> We aim to review and reply to form inquiries within <strong>24 to 48 business hours</strong> (Monday through Friday, excluding public holidays).</li>
+            <li><strong>Security Vulnerability Disclosures:</strong> Inquiries marked as security disclosures are prioritized and acknowledged promptly within <strong>24 hours</strong>.</li>
+            <li><strong>Feature Requests &amp; Feedback:</strong> Reviewed and cataloged during sprint planning cycles; individual status updates are shared when roadmap milestones are published.</li>
+            <li><strong>No Telephone Support:</strong> To maintain strict data privacy and zero unnecessary telemetry, PixelCraft AI operates solely through digital channels (secure web form, official email, and GitHub). We do not maintain telephone call centers.</li>
+          </ul>
+        </div>
+
+        <!-- Bug & Problem Reporting Guidance -->
+        <div style="margin-top: 30px; width: 100%; border-top: 1px solid var(--glass-border); padding-top: 40px;">
+          <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; color: var(--text-main); font-weight: 700; margin-bottom: 14px; text-align: left;">How to Submit an Effective Bug Report</h2>
+          <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7; margin-bottom: 20px; text-align: left;">Because PixelCraft AI executes high-performance cryptographic and media operations directly in your web browser memory (RAM), reproducible technical context allows us to pinpoint the specific browser engine, memory allocation, or canvas constraint causing an anomaly. When submitting a report, please include:</p>
+          
+          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 16px; padding: 24px; margin-bottom: 24px; text-align: left;">
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: #38bdf8; margin-bottom: 12px;">📋 Problem Reporting Checklist</h3>
+            <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; padding-left: 20px; margin: 0;">
+              <li><strong>Tool Name &amp; URL:</strong> The specific tool where the issue occurred (e.g., <a href="tools/pdf-to-link.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">PDF to Link</a>, <a href="tools/exif-viewer.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">EXIF Viewer</a>).</li>
+              <li><strong>Operating System &amp; Device:</strong> Operating system and architecture (e.g., Windows 11 64-bit, macOS Sonoma M2, Android 14, iOS 17).</li>
+              <li><strong>Browser &amp; Version:</strong> Exact browser build (e.g., Google Chrome 122.0, Mozilla Firefox 124, Apple Safari 17.3).</li>
+              <li><strong>Input File Details:</strong> Format, resolution, and file size (e.g., "14MB PNG image, 4000x3000px" or "12-page PDF document"). <em>Note: Never submit sensitive personal documents or unredacted credentials in bug reports.</em></li>
+              <li><strong>Observed vs Expected Result:</strong> What actually occurred versus what you expected to see.</li>
+              <li><strong>Console Error Logs (Optional):</strong> Any error logs displayed in your browser Developer Tools console (F12 -&gt; Console tab).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Support FAQ -->
+        <div style="margin-top: 30px; width: 100%; border-top: 1px solid var(--glass-border); padding-top: 40px; text-align: left;">
+          <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; color: var(--text-main); font-weight: 700; margin-bottom: 24px; text-align: left;">Frequently Asked Support Questions</h2>
+          
+          <div style="display: flex; flex-direction: column; gap: 18px;">
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px;">
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px;">Do you store or inspect the files I process when troubleshooting an issue?</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">No. The vast majority of PixelCraft AI utilities operate exclusively on the client side using WebAssembly and HTML5 Canvas inside your local browser sandbox. Your files never transit our servers during ordinary tool execution. For server-assisted utilities like ephemeral PDF link sharing, refer to our <a href="data-practices.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Data Practices</a> and <a href="privacy-policy.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Privacy Policy</a>.</p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px;">
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px;">Can I install PixelCraft AI tools directly onto my phone or desktop?</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Yes. PixelCraft AI is engineered as a Progressive Web App (PWA). You can install it directly from your web browser with a single tap, without app store downloads. Visit our dedicated <a href="download-app.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Install PWA App</a> guide for complete instructions for Android, iOS, Windows, and Mac.</p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px;">
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px;">Are the tools completely free for commercial and organization workflows?</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Yes. All tools on PixelCraft AI are free to use for personal, academic, and commercial workflows governed by our <a href="terms-conditions.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Terms of Service</a>. We do not enforce mandatory subscriptions or embed watermarks in your processed outputs.</p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px;">
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px;">How should security researchers submit responsible vulnerability reports?</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Please email <a href="mailto:support.pixelcraft205@gmail.com" style="color: var(--primary); font-weight: 600; text-decoration: underline;">support.pixelcraft205@gmail.com</a> with the subject prefix <code>[SECURITY DISCLOSURE]</code>. Include reproduction steps, affected URLs or endpoints, and proof-of-concept payloads. We follow coordinated disclosure principles detailed in our <a href="security-whitepaper.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Security Whitepaper</a>.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>

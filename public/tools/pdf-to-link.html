@@ -464,8 +464,8 @@
 
           <div class="share-title" style="color: var(--text-main); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-top: 10px;">Quick Share</div>
           <div class="share-actions">
-            <a href="javascript:void(0)" id="share-wa" rel="noopener noreferrer" class="share-btn whatsapp">💬 WhatsApp</a>
-            <a href="javascript:void(0)" id="share-tg" rel="noopener noreferrer" class="share-btn telegram">✈️ Telegram</a>
+            <a href="javascript:void(0)" id="share-wa" target="_blank" rel="noopener noreferrer" class="share-btn whatsapp">💬 WhatsApp</a>
+            <a href="javascript:void(0)" id="share-tg" target="_blank" rel="noopener noreferrer" class="share-btn telegram">✈️ Telegram</a>
             <a href="javascript:void(0)" id="share-em" rel="noopener noreferrer" class="share-btn email">📧 Email</a>
           </div>
 
@@ -664,6 +664,19 @@
     showToast('Link copied to clipboard!', 'success');
     setTimeout(() => { copyBtn.textContent = oldText; }, 2000);
   }
+
+  // Guard share buttons if clicked prior to link generation
+  ['share-wa', 'share-tg', 'share-em'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('click', (e) => {
+        if (!el.href || el.href.includes('javascript:void(0)')) {
+          e.preventDefault();
+          showToast('Please upload a PDF first to generate a share link.', 'info');
+        }
+      });
+    }
+  });
 
   function resetTool() {
     uploadArea.style.display = 'block';

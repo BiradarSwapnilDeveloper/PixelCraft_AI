@@ -66,113 +66,410 @@
   }
   </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/style.css" />
+
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #f8fafc;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      color: #0f172a;
-      text-align: center;
-    }
-    .container {
-      background: #ffffff;
-      padding: 40px;
+    .download-hero-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
       border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-      max-width: 400px;
-      width: 90%;
+      padding: 40px 30px;
+      text-align: center;
+      max-width: 580px;
+      margin: 0 auto 50px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
-    .icon {
-      width: 80px;
-      height: 80px;
-      background: #2563EB;
-      border-radius: 20px;
-      display: flex;
+    .download-hero-card h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.25;
+    }
+    .download-hero-card p {
+      margin: 0 0 24px;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .btn-install {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
-      margin: 0 auto 24px;
-      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
-    }
-    h1 {
-      margin: 0 0 12px;
-      font-size: 24px;
-      font-weight: 800;
-      color: #1e293b;
-    }
-    p {
-      margin: 0 0 32px;
-      font-size: 15px;
-      color: #64748b;
-      line-height: 1.5;
-    }
-    .btn {
-      display: block;
+      gap: 10px;
       width: 100%;
-      background: #2563EB;
+      max-width: 380px;
+      background: var(--primary, #2563EB);
       color: white;
       border: none;
-      padding: 16px;
-      font-size: 16px;
+      padding: 16px 24px;
+      font-size: 1.05rem;
       font-weight: 700;
-      border-radius: 12px;
+      border-radius: 14px;
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
       box-sizing: border-box;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
     }
-    .btn:hover {
+    .btn-install:hover {
       background: #1d4ed8;
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.45);
     }
-    .btn:active {
+    .btn-install:active {
       transform: translateY(0);
     }
-    .instructions {
+    .fallback-card {
       margin-top: 24px;
-      font-size: 13px;
-      color: #94a3b8;
+      font-size: 0.95rem;
+      color: var(--text-muted);
       text-align: left;
-      background: #f1f5f9;
-      padding: 16px;
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 20px 24px;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
     }
-    .instructions ul {
-      margin: 8px 0 0;
+    .fallback-card ul {
+      margin: 10px 0 0;
       padding-left: 20px;
+      line-height: 1.7;
     }
-    .instructions li {
-      margin-bottom: 4px;
+    .pwa-guide-section {
+      margin-top: 50px;
+      border-top: 1px solid var(--glass-border);
+      padding-top: 40px;
+      text-align: left;
+    }
+    .pwa-guide-section h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
+    .pwa-guide-section p {
+      font-size: 1.02rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .pwa-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .pwa-feature-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: transform 0.25s ease;
+    }
+    .pwa-feature-box:hover {
+      transform: translateY(-3px);
+      border-color: rgba(37, 99, 235, 0.4);
+    }
+    .pwa-feature-box h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .pwa-feature-box p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .platform-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .platform-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .platform-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .platform-card ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .platform-card li {
+      margin-bottom: 6px;
+    }
+    .matrix-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 26px;
+      margin-bottom: 24px;
+    }
+    .matrix-box h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+    .matrix-box ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
     }
   </style>
-<link rel="stylesheet" href="css/style.css">
-
 </head>
 <body>
+  <div id="toast-container" class="toast-container"></div>
 
-  <div class="container">
-    <img src="logo.jpg?v=5" alt="PixelCraft Logo" style="height: 60px; border-radius: 50%; display: block; margin: 0 auto 15px;">
-    <h1>Install PixelCraft AI</h1>
-    <p>Get the official app on your Android device for faster access and a full-screen experience.</p>
-    
-    <button id="install-btn" class="btn">Download & Install App</button>
-
-    <div class="instructions" id="fallback-instructions" style="display:none;">
-      <strong>If the button doesn't work:</strong>
-      <ul>
-        <li>Tap the <strong>3 dots (⋮)</strong> menu in Chrome</li>
-        <li>Select <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong></li>
+  <!-- NAVIGATION BAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+        <span>PixelCraft AI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#tools">All Tools</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="blog/index.html">Research</a></li>
+        <li><a href="contact-us.html">Contact</a></li>
       </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+          <span style="font-size: 1.15rem;">🌙</span>
+        </button>
+        <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings &amp; Account Info" aria-label="Open Platform Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+        <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+          <span>Sign In</span>
+        </a>
+      </div>
     </div>
-  </div>
+  </nav>
 
+  <!-- MAIN SECTION -->
+  <section class="section" style="padding-top: 130px; min-height: 80vh;">
+    <div class="container" style="max-width: 960px; background: var(--glass-bg); padding: 48px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px);">
+      
+      <!-- HERO INSTALL CARD -->
+      <div class="download-hero-card">
+        <img src="logo.jpg?v=5" alt="PixelCraft Logo" style="height: 64px; border-radius: 50%; display: block; margin: 0 auto 16px; box-shadow: 0 8px 20px rgba(37,99,235,0.3);">
+        <h1>Install PixelCraft AI</h1>
+        <p>Get the official Progressive Web App on your phone, tablet, or desktop for lightning-fast access, offline client-side image processing, and a native standalone window.</p>
+        
+        <button id="install-btn" class="btn-install">📲 Download &amp; Install App</button>
+
+        <div class="fallback-card" id="fallback-instructions" style="display:none;">
+          <strong style="color: var(--text-main);">If your browser does not open the prompt automatically:</strong>
+          <ul>
+            <li><strong>Android (Chrome):</strong> Tap the <strong>3 dots (⋮)</strong> menu &rarr; select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</li>
+            <li><strong>iOS (Safari):</strong> Tap the <strong>Share</strong> button (box with upward arrow) &rarr; select <strong>"Add to Home Screen"</strong>.</li>
+            <li><strong>Desktop (Chrome/Edge):</strong> Click the <strong>Install</strong> icon in the address bar.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SECTION: WHAT IS PWA -->
+      <div class="pwa-guide-section">
+        <h2>What is the PixelCraft AI Progressive Web App?</h2>
+        <p>A Progressive Web App (PWA) is a modern software application built using open web technologies (HTML5, WebAssembly, CSS, and modern JavaScript) that delivers an experience identical to a native mobile or desktop application. When you install PixelCraft AI as a PWA, it runs in its own dedicated, standalone application window without browser navigation bars or clutter.</p>
+        <p>Unlike bulky store applications that require massive downloads, invasive permissions, and frequent multi-gigabyte updates, our PWA is exceptionally lightweight (under 5MB). Core assets and client-side processing engines are cached locally by a background Service Worker, enabling instant launches and seamless offline processing for all in-memory utilities.</p>
+      </div>
+
+      <!-- SECTION: KEY ADVANTAGES -->
+      <div class="pwa-guide-section">
+        <h2>Key Advantages of Installing PixelCraft AI</h2>
+        <div class="pwa-feature-grid">
+          <div class="pwa-feature-box">
+            <h3>⚡ 1-Click Launch &amp; Standalone Mode</h3>
+            <p>Access your favorite tools directly from your Windows Taskbar, macOS Dock, or Android/iOS Home Screen without opening a browser tab first.</p>
+          </div>
+          <div class="pwa-feature-box">
+            <h3>🔒 Zero In-Transit Data Risk</h3>
+            <p>Your media stays completely inside your local browser memory sandbox. All client-side tools run in-RAM via WebAssembly with zero telemetry.</p>
+          </div>
+          <div class="pwa-feature-box">
+            <h3>💾 Lightweight Storage (&lt; 5MB)</h3>
+            <p>Uses a fraction of the space required by desktop graphic suites. Fast installation without clogging your device internal memory.</p>
+          </div>
+          <div class="pwa-feature-box">
+            <h3>🔄 Automatic Seamless Updates</h3>
+            <p>No manual store updating required. The Service Worker automatically syncs updated algorithmic improvements whenever you reconnect.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: STEP-BY-STEP PLATFORM INSTRUCTIONS -->
+      <div class="pwa-guide-section">
+        <h2>Step-by-Step Installation Instructions</h2>
+        <p>You can install PixelCraft AI on virtually any modern operating system in seconds without visiting an app store:</p>
+
+        <div class="platform-cards-grid">
+          <!-- Android -->
+          <div class="platform-card">
+            <h3>📱 Android (Google Chrome &amp; Brave)</h3>
+            <ol>
+              <li>Open <strong>pixelcraftaitools.com/download-app.html</strong> in Google Chrome.</li>
+              <li>Tap the <strong>"Download &amp; Install App"</strong> button above, or tap the three dots <strong>(⋮)</strong> in the top-right corner.</li>
+              <li>Select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong> from the menu.</li>
+              <li>Confirm when prompted. PixelCraft AI will appear in your app drawer and home screen.</li>
+            </ol>
+          </div>
+
+          <!-- iOS / iPadOS -->
+          <div class="platform-card">
+            <h3>🍏 Apple iOS &amp; iPadOS (Safari)</h3>
+            <ol>
+              <li>Open <strong>pixelcraftaitools.com</strong> in Apple Safari on your iPhone or iPad.</li>
+              <li>Tap the <strong>Share</strong> button (the square with an upward arrow) on the bottom navigation bar.</li>
+              <li>Scroll down the share sheet and tap <strong>"Add to Home Screen"</strong>.</li>
+              <li>Tap <strong>"Add"</strong> in the top-right corner. The app icon will launch in full-screen standalone mode.</li>
+            </ol>
+          </div>
+
+          <!-- Windows -->
+          <div class="platform-card">
+            <h3>💻 Windows 10 &amp; 11 (Chrome &amp; Edge)</h3>
+            <ol>
+              <li>Navigate to PixelCraft AI in Google Chrome or Microsoft Edge.</li>
+              <li>Look for the <strong>Install</strong> icon (computer screen with a down arrow) on the right side of your address bar.</li>
+              <li>Click <strong>Install</strong>, or open the browser menu &rarr; <strong>"Apps"</strong> &rarr; <strong>"Install PixelCraft AI"</strong>.</li>
+              <li>You can right-click the running window to pin it directly to your Windows Taskbar or Start Menu.</li>
+            </ol>
+          </div>
+
+          <!-- macOS -->
+          <div class="platform-card">
+            <h3>🖥️ macOS (Chrome &amp; Safari Sonoma+)</h3>
+            <ol>
+              <li><strong>In Chrome:</strong> Click the install icon in the URL bar, or click Menu &rarr; <strong>"Save and share"</strong> &rarr; <strong>"Install PixelCraft AI"</strong>.</li>
+              <li><strong>In Safari (macOS Sonoma 14+):</strong> Click <strong>File</strong> in the top menu bar &rarr; select <strong>"Add to Dock"</strong>.</li>
+              <li>PixelCraft AI will appear as a standalone app in your macOS Dock and Launchpad.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: OFFLINE CAPABILITIES MATRIX -->
+      <div class="pwa-guide-section">
+        <h2>Offline Capabilities &amp; Tool Availability Matrix</h2>
+        <p>We believe in transparent engineering. Because PixelCraft AI employs a hybrid architecture, utilities fall into two distinct execution tiers:</p>
+
+        <!-- Offline tier -->
+        <div class="matrix-box" style="border-left: 4px solid #10b981;">
+          <h3 style="color: #34d399;">🟢 100% Offline-Capable Tools (Client-Side In-Memory Execution)</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px;">Once the application shell is cached, the following tools execute entirely inside your local device RAM through WebAssembly, HTML5 Canvas 2D/WebGL, and Web Crypto APIs. They require <strong>zero internet connectivity</strong> and function perfectly in airplane mode:</p>
+          <ul>
+            <li><a href="tools/image-compressor.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Image Compressor</a> — Lossless and lossy client-side photographic optimization.</li>
+            <li><a href="tools/format-converter.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Image Format Converter</a> — Multi-format transcoding between PNG, JPG, WebP, and AVIF.</li>
+            <li><a href="tools/smart-resize.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Smart Image Resizer</a> — High-precision bicubic dimension scaling.</li>
+            <li><a href="tools/color-palette.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Color Palette Extractor</a> — Local color quantization and hex code extraction.</li>
+            <li><a href="tools/exif-viewer.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">EXIF Viewer &amp; Metadata Stripper</a> — Binary byte-level header parsing and camera metadata scrubbing.</li>
+            <li><a href="tools/watermark-adder.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Watermark Adder</a> — Graphic and typographic overlay compositing.</li>
+            <li><a href="tools/advanced-decoy.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Advanced Decoy Steganography</a> — Multi-layer LSB pixel payload embedding.</li>
+            <li><a href="tools/audio-steganography.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Audio Steganography</a> — Binary payload concealment inside audio waveform samples.</li>
+            <li><a href="tools/digital-fingerprint-wiper.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Digital Fingerprint Wiper</a> — High-frequency PRNU sensor noise suppression.</li>
+            <li><a href="tools/forensic-sanitizer.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Forensic Media Sanitizer</a> — Deep pixel redraw eliminating residual forensic artifacts.</li>
+            <li><a href="tools/images-to-pdf.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Images to PDF Converter</a> — Client-side multi-page document compilation via jsPDF.</li>
+            <li><a href="tools/qr-generator.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Offline QR Code Generator</a> — Pure vector canvas QR code matrix rendering.</li>
+          </ul>
+        </div>
+
+        <!-- Cloud tier -->
+        <div class="matrix-box" style="border-left: 4px solid #f59e0b;">
+          <h3 style="color: #fbbf24;">🟡 Cloud &amp; Server-Assisted Tools (Active Internet Required)</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px;">The following specialized tools require an active internet connection to communicate with backend APIs or cloud threat databases:</p>
+          <ul>
+            <li><a href="tools/pdf-to-link.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">PDF to Link</a> — Requires uploading documents to our temporary, encrypted ephemeral server storage to generate public shareable links and QR redirects.</li>
+            <li><a href="tools/ai-dubbing.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">AI Voice Dubbing</a> — Interfaces with cloud neural speech-to-speech synthesis models.</li>
+            <li><a href="tools/phishing-scanner.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Phishing URL Scanner</a> — Performs real-time DNS queries, homoglyph heuristics, and threat intelligence database lookups against live domains.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SECTION: HOW TO UPDATE -->
+      <div class="pwa-guide-section">
+        <h2>How to Update the Progressive Web App</h2>
+        <p>One of the greatest benefits of Progressive Web Apps is automated lifecycle management. You will never be interrupted by forced multi-gigabyte updates or app store approval delays:</p>
+        <ul style="color: var(--text-muted); font-size: 0.98rem; line-height: 1.8; padding-left: 20px;">
+          <li>Whenever you launch PixelCraft AI with an active internet connection, the background Service Worker checks for updated scripts and WebAssembly bundles.</li>
+          <li>New updates are downloaded quietly in the background without interrupting your current workflow.</li>
+          <li>When you close and reopen the app or refresh the window, the newly activated version immediately takes effect.</li>
+        </ul>
+      </div>
+
+      <!-- SECTION: HOW TO UNINSTALL -->
+      <div class="pwa-guide-section">
+        <h2>How to Uninstall the PixelCraft AI App</h2>
+        <p>If you ever wish to remove the installed Progressive Web App, you can do so cleanly in seconds with zero lingering registry entries or leftover system files:</p>
+        <ul style="color: var(--text-muted); font-size: 0.98rem; line-height: 1.8; padding-left: 20px;">
+          <li><strong>Android:</strong> Long-press the PixelCraft AI app icon on your home screen or app drawer &rarr; drag to <strong>"Uninstall"</strong> or tap the info icon &rarr; <strong>"Uninstall"</strong>.</li>
+          <li><strong>iOS:</strong> Long-press the app icon on your home screen &rarr; tap <strong>"Delete Bookmark"</strong> or <strong>"Remove App"</strong> &rarr; confirm deletion.</li>
+          <li><strong>Windows (Chrome/Edge):</strong> Open the PixelCraft AI app window &rarr; click the three vertical dots <strong>(⋮)</strong> in the top title bar &rarr; select <strong>"Uninstall PixelCraft AI"</strong> &rarr; click <strong>"Remove"</strong>. Alternatively, uninstall via Windows Settings &rarr; Apps &rarr; Installed Apps.</li>
+          <li><strong>macOS:</strong> In Safari Web Apps, right-click the icon in your Dock &rarr; <strong>Options</strong> &rarr; <strong>Remove from Dock</strong>, then delete the shortcut from your <code>~/Applications</code> directory. In Chrome, click the three-dot menu in the title bar &rarr; <strong>"Uninstall PixelCraft AI"</strong>.</li>
+        </ul>
+      </div>
+
+      <!-- SECTION: PWA FAQS -->
+      <div class="pwa-guide-section">
+        <h2>Frequently Asked Questions About PWA Installation</h2>
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px;">
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px;">Does installing the PWA cost anything or require an account?</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">No. Installing and utilizing PixelCraft AI as a PWA is completely free. You do not need to register, create an account, or provide payment details to install or use our tools.</p>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px;">
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px;">How much local storage does the app consume on my device?</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">The installed app takes less than 5 megabytes (MB) of storage space. It uses efficient browser-level cache partitions rather than bulky multi-gigabyte native binaries.</p>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px;">
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px;">Is my privacy protected when running the installed app?</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">Yes. The PWA operates under the exact same zero-knowledge, local-sandbox guarantees as our website. Client-side utilities never send your files to any external server. For complete technical documentation, read our <a href="data-practices.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Data Practices</a> and <a href="security-whitepaper.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Security Whitepaper</a>.</p>
+          </div>
+
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px;">
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px;">Why isn't PixelCraft AI distributed through Google Play or Apple App Store?</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0;">By distributing via modern Progressive Web App standards, we maintain complete independence from centralized app stores, bypass artificial platform gatekeepers, prevent background tracking SDKs, and provide instantaneous, zero-install updates to users globally.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PWA INSTALL LOGIC -->
   <script>
     // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
@@ -191,53 +488,65 @@
       e.preventDefault();
       // Store the event
       deferredPrompt = e;
-      installBtn.textContent = "Download & Install App";
-    });
-
-    installBtn.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        // Show the native Android install prompt
-        deferredPrompt.prompt();
-        // Wait for user to decide
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('App Installed');
-          installBtn.textContent = "Installed Successfully! 🎉";
-          installBtn.style.background = "#10b981";
-        }
-        deferredPrompt = null;
-      } else {
-        // If the browser doesn't support the prompt or already installed
-        fallbackInstructions.style.display = 'block';
-        installBtn.textContent = "Check instructions below 👇";
+      if (installBtn) {
+        installBtn.textContent = "📲 Download & Install App";
       }
     });
 
+    if (installBtn) {
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          // Show the native install prompt
+          deferredPrompt.prompt();
+          // Wait for user to decide
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            console.log('App Installed');
+            installBtn.textContent = "Installed Successfully! 🎉";
+            installBtn.style.background = "#10b981";
+          }
+          deferredPrompt = null;
+        } else {
+          // If browser doesn't support automatic prompt or already installed
+          if (fallbackInstructions) {
+            fallbackInstructions.style.display = 'block';
+            fallbackInstructions.scrollIntoView({ behavior: 'smooth' });
+          }
+          installBtn.textContent = "Check instructions below 👇";
+        }
+      });
+    }
+
     // Check if running in standalone mode (already installed)
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      installBtn.textContent = "App is already installed! 🎉";
-      installBtn.style.background = "#10b981";
-      installBtn.disabled = true;
+      if (installBtn) {
+        installBtn.textContent = "App is already installed! 🎉";
+        installBtn.style.background = "#10b981";
+        installBtn.disabled = true;
+      }
     }
   </script>
-<script src="./js/cookie-consent.js"></script>
-<footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
-  <div style="max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
-      <a href="about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
-      <a href="privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
-      <a href="terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
-      <a href="disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
-      <a href="cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
-      <a href="blog/index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
-      <a href="contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+        <a href="about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+        <a href="privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+        <a href="terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+        <a href="disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+        <a href="cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+        <a href="blog/index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+        <a href="contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+        &copy; 2026 PixelCraft AI. All rights reserved.<br>
+        A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+      </p>
     </div>
-    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
-      &copy; 2026 PixelCraft AI. All rights reserved.<br>
-      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
-    </p>
-  </div>
-</footer>
-<script src="js/utils.js"></script>
+  </footer>
+
+  <script src="js/utils.js"></script>
+  <script src="./js/cookie-consent.js"></script>
 </body>
 </html>
