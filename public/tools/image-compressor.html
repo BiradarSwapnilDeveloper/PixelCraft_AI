@@ -391,6 +391,10 @@ function compress() {
   resultCanvas.height = h;
   const ctx = resultCanvas.getContext('2d');
   ctx.clearRect(0, 0, w, h);
+  if (fmt === 'image/jpeg') {
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, w, h);
+  }
   ctx.drawImage(currentImg, 0, 0, w, h);
   
   document.getElementById('comp-dims').textContent = `${w} × ${h} px`;
@@ -523,6 +527,11 @@ function testQualityBytes(q, fmt) {
     tempCanvas.width = w;
     tempCanvas.height = h;
     const ctx = tempCanvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h);
+    if (fmt === 'image/jpeg') {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, w, h);
+    }
     ctx.drawImage(currentImg, 0, 0, w, h);
     if (tempCanvas.toBlob) {
       tempCanvas.toBlob(blob => {

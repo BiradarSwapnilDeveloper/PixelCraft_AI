@@ -109,7 +109,7 @@
           "name": "iPhone HEIC photo ko JPG format me kaise kare bina upload ke?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Apple devices (iPhone/iPad) photos ko HEIC format me shoot karte hain. Safari ya Chrome browser me PixelCraft Format Converter open karein aur HEIC image select karein. Tool local hardware decoding use karke image ko direct JPG me render karta hai. Aapki photo kisi external server par upload nahi hoti, isliye full privacy bani rehti hai."
+            "text": "Apple devices (iPhone/iPad) par Safari browser HEIC format ko hardware-level par natively decode karta hai, jisse PixelCraft me photo instant JPG ban jati hai. Windows/Linux desktop browsers me bina native OS codec ke HEIC render nahi hota; aisi sthiti me iPhone camera settings me 'Most Compatible' (JPEG) chunein ya universal formats (PNG, WebP, AVIF) upload karein."
           }
         },
         {
@@ -206,14 +206,14 @@
     <div id="quick-start-guide" class="quick-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px auto 8px auto; max-width: 900px; text-align: left;">
       <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
         <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 1 • Choose Input Files</div>
-        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Upload single or batch images in PNG, JPG, WebP, SVG, GIF, or HEIC format.</div>
+        <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Upload images in PNG, JPG, WebP, AVIF, BMP, or SVG format for instant conversion.</div>
       </div>
       <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
         <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 2 • Select Target Format</div>
         <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Choose output format (WebP for web speed, PNG for transparency, JPG for compatibility).</div>
       </div>
       <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 3 • Convert & Download</div>
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 3 • Convert &amp; Download</div>
         <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Process instantly via client-side Canvas and download individual files or a ZIP archive.</div>
       </div>
     </div>
@@ -223,7 +223,7 @@
       <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-right:4px;">Popular Conversions:</span>
       <button type="button" onclick="selectQuickFormat('jpg','image/jpeg')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">⚡ PNG to JPG</button>
       <button type="button" onclick="selectQuickFormat('jpg','image/jpeg')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">📱 AVIF to JPG</button>
-      <button type="button" onclick="selectQuickFormat('jpg','image/jpeg')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🍏 HEIC to JPG</button>
+      <button type="button" onclick="selectQuickFormat('webp','image/webp')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🚀 JPG to WebP</button>
       <button type="button" onclick="selectQuickFormat('png','image/png')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🖼️ WebP to PNG</button>
       <button type="button" onclick="selectQuickFormat('jpg','image/jpeg')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🌐 WebP to JPG</button>
     </div>
@@ -318,7 +318,13 @@ function selectQuickFormat(targetExt, targetMime) {
 
 async function handleFile(file) {
   currentFile = file;
-  currentImg = await fileToImage(file);
+  try {
+    currentImg = await fileToImage(file);
+  } catch (err) {
+    showToast('Could not decode image format. Your browser cannot open this file natively (e.g. HEIC is only natively supported on Apple/Safari). Please upload PNG, JPG, WebP, or AVIF.', 'error');
+    resetTool();
+    return;
+  }
   uploadArea.style.display = 'none';
   editor.style.display = 'block';
   if (preselectedFormat) {
@@ -624,9 +630,9 @@ function resetTool() {
       </div>
 
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. AVIF to JPG &amp; HEIC to JPG (Mobile Photo Format Change)</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. AVIF to JPG &amp; Mobile Photo Format Change</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
-          New Android phones me photos AVIF format me aur Apple iPhone me HEIC format me save hoti hain. Ye modern formats upload portals ya Windows PCs par open nahi hote. PixelCraft ke through aap bina kisi third-party software install kiye apne mobile me hi AVIF ya HEIC photo ko standard JPG format me convert kar sakte hain.
+          Naye Android smartphones me photos space-saving AVIF format me save hoti hain. Ye modern formats purane upload portals ya legacy office software par open nahi hote. PixelCraft ke through aap bina kisi third-party software install kiye apne browser me hi AVIF photos ko standard universally-compatible JPG format me convert kar sakte hain.
         </p>
       </div>
 
@@ -664,7 +670,7 @@ function resetTool() {
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: iPhone HEIC photo ko JPG format me kaise kare bina upload ke?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Apple devices (iPhone/iPad) photos ko HEIC format me shoot karte hain. Safari ya Chrome browser me PixelCraft Format Converter open karein aur HEIC image select karein. Tool local hardware decoding use karke image ko direct JPG me render karta hai. Aapki photo kisi external server par upload nahi hoti, isliye full privacy bani rehti hai.
+          Apple devices (iPhone/iPad) par Safari browser HEIC format ko hardware-level par natively decode karta hai, jisse PixelCraft me photo instant JPG ban jati hai. Dhyan rahe: Windows/Linux par Chrome ya Firefox me native HEIC decoder nahi hota; isliye Windows par iPhone photos use karte waqt iPhone camera settings me &ldquo;Most Compatible&rdquo; (JPEG) chunein ya universal formats (PNG, WebP, AVIF) use karein.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">

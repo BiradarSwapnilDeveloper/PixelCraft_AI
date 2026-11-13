@@ -94,7 +94,7 @@
           "name": "Mobile se passport size photo kaise banaye? (How to make a passport size photo on mobile?)",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Mobile se passport size photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, 'Govt Exam & ID' section me 'Indian Passport Photo (35x45 mm)' choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai."
+            "text": "Mobile se passport size photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, 'Govt Exam & ID' section me 'Indian Passport Photo (35x45 mm / 300 DPI)' choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai."
           }
         },
         {
@@ -102,7 +102,7 @@
           "name": "Online form ke liye signature ka size kaise kam kare? (140x60 px guide)",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Sarkari form (UPSC, SSC, IBPS, State PSC) me signature ka standard size 140x60 pixels aur file weight 10KB se 20KB mangte hain. PixelCraft Smart Resizer me 'Online Form Signature (140x60 px)' preset select karein. Iske baad file size ko 10-20KB karne ke liye hamare Smart Image Compressor me '20KB' target preset use karein."
+            "text": "IBPS aur kai sarkari form portals me signature ka standard size 140x60 pixels (aspect ratio 7:3) aur file weight 10KB se 20KB mangte hain. PixelCraft Smart Resizer me 'IBPS & Portal Signature (140x60 px)' preset select karein. Iske baad file size ko 10-20KB karne ke liye hamare Smart Image Compressor me '20KB' target preset use karein."
           }
         },
         {
@@ -110,7 +110,7 @@
           "name": "Photo ko 3.5 x 4.5 cm me kaise resize kare?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "3.5 cm x 4.5 cm Indian passport aur exam forms ka universal standard hai. 300 DPI print standard par iski pixel value 413 x 531 pixels hoti hai. PixelCraft par upload karte hi ye preset ready milta hai jisse facial aspect ratio kharab nahi hoti."
+            "text": "3.5 cm x 4.5 cm Indian passport ka standard size hai (Passport Seva MEA guidelines). 300 DPI print standard par iski pixel value 413 x 531 pixels hoti hai. PixelCraft par upload karte hi ye preset ready milta hai jisse facial aspect ratio kharab nahi hoti."
           }
         },
         {
@@ -142,7 +142,7 @@
           "name": "Photo resize karne ke baad online portal par upload kyu fail hoti hai?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Government portals par rejection ke 2 mukhya kaaran hote hain: (1) Galat pixel aspect ratio jisse photo stretch ho jati hai, aur (2) File size limit (jaise photo 20-50KB aur signature 10-20KB honi chahiye). PixelCraft Smart Resizer aur Image Compressor dono milkar 100% portal acceptance ensure karte hain."
+            "text": "Government portals par rejection ke 2 mukhya kaaran hote hain: (1) Galat pixel aspect ratio jisse photo stretch ho jati hai, aur (2) File size limit (jaise IBPS me photo 20-50KB aur signature 10-20KB honi chahiye). Sath hi dhyan rahe ki kuch exams (jaise SSC) ab mandatory live webcam capture use karte hain. Apne exam notification PDF me specifications zaroor check karein."
           }
         },
         {
@@ -283,14 +283,13 @@
 <script src="../js/utils.js"></script>
   <script>
     const PLATFORMS = [
-      // 🇮🇳 Government Exam, Passport & ID Presets
+      // 🇮🇳 Government Exam, Passport & ID Presets (Official & Suggested Standards)
       { category: 'govt', platform: 'Govt Exam & ID', type: 'Indian Passport Photo (35x45 mm / 300 DPI)', w: 413, h: 531, icon: '🛂' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'SSC / UPSC Exam Photo (350x450 px)', w: 350, h: 450, icon: '📝' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'Online Form Signature (140x60 px)', w: 140, h: 60, icon: '✍️' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'PAN Card / NSDL Photo (213x213 px)', w: 213, h: 213, icon: '🪪' },
       { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS Exam Photo (200x230 px)', w: 200, h: 230, icon: '🏦' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS Signature (140x60 px)', w: 140, h: 60, icon: '✒️' },
-      { category: 'govt', platform: 'Govt Exam & ID', type: 'Indian Passport (Screen 150 DPI)', w: 207, h: 266, icon: '🛂' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS & Portal Signature (140x60 px)', w: 140, h: 60, icon: '✍️' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'PAN Card (UTIITSL Portal: 213x213 px)', w: 213, h: 213, icon: '🪪' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'Exam Photo (Suggested 350x450 px)', w: 350, h: 450, icon: '📝' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'Passport Ratio (150 DPI Screen: 207x266 px)', w: 207, h: 266, icon: '🛂' },
 
       // 📱 Social Media Standards
       { category: 'social', platform: 'Instagram', type: 'Square Post', w: 1080, h: 1080, icon: '📸' },
@@ -706,35 +705,40 @@
       5. Photo Resizer Online — Passport Size Photo &amp; Signature Kaise Banaye (Exam Form Guide)
     </h3>
     <p>
-      Indian recruitment boards, entrance exams (jaise UPSC Civil Services, SSC CGL/CHSL, IBPS Bank PO/Clerk, NTA NEET/JEE, Railway RRB) aur official identity services (Passport Seva, Aadhaar, PAN Card) par online form bharte waqt photo aur signature ke strict dimension rules hote hain. Agar aap search kar rahe hain ki <strong>passport size photo kaise banaye</strong>, <strong>signature ka size kaise kam kare</strong> ya <strong>photo ko 3.5 x 4.5 cm me kaise banaye</strong>, to PixelCraft Smart Resizer automatically exact pixels aur aspect ratios me images ko adapt karta hai.
+      Indian recruitment boards, banking entrance exams (jaise IBPS Bank PO/Clerk, SBI), central/state commissions, aur official identity portals (Passport Seva, UTIITSL PAN) par online form bharte waqt photo aur signature ke strict dimension rules hote hain. Agar aap search kar rahe hain ki <strong>passport size photo kaise banaye</strong>, <strong>signature ka size kaise kam kare</strong> ya <strong>photo ko 3.5 x 4.5 cm me kaise banaye</strong>, to PixelCraft Smart Resizer automatically exact pixels aur aspect ratios me images ko adapt karta hai.
     </p>
+
+    <!-- Candidate Advisory Notice -->
+    <div style="margin: 20px 0; padding: 16px 20px; background: rgba(37,99,235,0.08); border-left: 4px solid var(--primary); border-radius: 8px; font-size: 0.92rem; color: var(--text-body); line-height: 1.6;">
+      <strong style="color: var(--text-heading);">⚠️ Candidate Advisory &amp; Official Notification Verification:</strong> Recruitment boards aur government portals guidelines periodically update karte rehte hain. Jaise ki SSC (Staff Selection Commission, <code>ssc.gov.in</code>) ne ab live webcam capture mandatory kar diya hai, jabki UPSC OTR (<code>upsconline.nic.in</code>) portal par 350x350 se 1000x1000 pixels ke beech variable dimensions allow hote hain. IBPS (<code>ibps.in</code>) strictly 200x230 px photo aur 140x60 px signature maangta hai. Apne exam notification PDF ki official requirements hamesha cross-verify karein.
+    </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">1. Mobile Se Passport Size Photo Kaise Banaye (35x45 mm / 3.5 x 4.5 cm)</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">1. Indian Passport Photo Size (35x45 mm / 3.5 x 4.5 cm)</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
-          Indian passport photo ka standard size $3.5\text{ cm}\times 4.5\text{ cm}$ ($35\text{ mm}\times 45\text{ mm}$) hota hai. High-resolution print (300 DPI) ke hisaab se iske exact dimensions <strong>413 &times; 531 pixels</strong> hote hain, jabki screen portals par 207 &times; 266 pixels ya 350 &times; 450 pixels chalte hain. PixelCraft me photo upload karke 'Indian Passport Photo' par click karein aur face ko center me rakh kar crop karein.
+          Ministry of External Affairs (<code>passportindia.gov.in</code>) guidelines ke anusar Indian passport photo ka standard size $35\text{ mm}\times 45\text{ mm}$ ($3.5\text{ cm}\times 4.5\text{ cm}$) hota hai jisme face 80-85% area occupy karta hai. 300 DPI print quality ke mutabiq exact dimensions <strong>413 &times; 531 pixels</strong> hote hain (jabki 150 DPI screen portal ke liye 207 &times; 266 px). PixelCraft me 'Indian Passport Photo' preset select karke direct download karein.
         </p>
       </div>
 
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. Online Form Signature Ka Size Kaise Kam Kare (140x60 Pixels)</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. IBPS Exam Photo (200x230 px) &amp; Signature (140x60 px)</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
-          UPSC, SSC, State PSC aur IBPS application portals signature ke liye strictly <strong>140 &times; 60 pixels</strong> (aspect ratio 7:3) aur file weight strictly 10KB se 20KB mangte hain. White paper par signature karke photo kheenchiye, PixelCraft Smart Resizer me 'Online Form Signature' chuniye, aur file size reduce karne ke liye hamare Smart Image Compressor me 20KB preset use karein.
+          Institute of Banking Personnel Selection (<code>ibps.in</code>) CRP notification ke official criteria ke mutabiq: Candidate photo strictly <strong>200 &times; 230 pixels</strong> (file size 20KB to 50KB) honi chahiye, aur signature strictly <strong>140 &times; 60 pixels</strong> (file size 10KB to 20KB, white paper par black ink pen se). PixelCraft par dono dedicated presets available hain.
         </p>
       </div>
 
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">3. Pixels, CM Aur Inches Me DPI Conversion Mathematics</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">3. PAN Card (UTIITSL 213x213 px) &amp; Exam Portrait (350x450 px)</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          UTIITSL PAN application portal strictly <strong>213 &times; 213 pixels</strong> (300 DPI, under 30KB) scan require karta hai. Sath hi, central aur state recruitment portals me standard 7:9 ratio ke liye hamara 'Suggested 350x450 px' preset instantly clean high-contrast facial portrait generate karta hai bina stretch ya distortion ke.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">4. Pixels, CM Aur Inches Me DPI Conversion Mathematics</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
           Physical centimeters ko digital pixels me convert karne ka universal formula hai: $\text{Pixels} = (\text{cm} / 2.54) \times \text{DPI}$. 300 DPI print quality ke liye: $3.5\text{ cm} \rightarrow 413\text{ px}$ aur $4.5\text{ cm} \rightarrow 531\text{ px}$. PixelCraft ka hardware canvas automatic aspect-ratio lock ke sath pixel calculation handle karta hai taaki facial features stretch na hon.
-        </p>
-      </div>
-
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">4. Sarkari Portal Upload Rejection Se Bachne Ke Tips</h4>
-        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
-          Portals par upload reject hone ke 3 mukhya reasons hote hain: (1) Galat pixel dimension jisse portrait horizontal stretch ho jata hai, (2) File size exceed hona (&gt;50KB), aur (3) Plain white ya light background na hona. PixelCraft par exact crop dimensions aur clean resampling se rejection risk 0% ho jata hai.
         </p>
       </div>
     </div>
@@ -746,19 +750,19 @@
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Mobile se passport size photo kaise banaye? (How to make a passport size photo on mobile?)</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Mobile se passport size photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, &ldquo;Govt Exam &amp; ID&rdquo; section me &ldquo;Indian Passport Photo (35x45 mm)&rdquo; choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai.
+          Mobile se passport size photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, &ldquo;Govt Exam &amp; ID&rdquo; section me &ldquo;Indian Passport Photo (35x45 mm / 300 DPI)&rdquo; choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Online form ke liye signature ka size kaise kam kare? (140x60 px guide)</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Sarkari form (UPSC, SSC, IBPS, State PSC) me signature ka standard size 140x60 pixels aur file weight 10KB se 20KB mangte hain. PixelCraft Smart Resizer me &ldquo;Online Form Signature (140x60 px)&rdquo; preset select karein. Iske baad file size ko 10-20KB karne ke liye hamare Smart Image Compressor me &ldquo;20KB&rdquo; target preset use karein.
+          IBPS aur kai sarkari form portals me signature ka standard size 140x60 pixels (aspect ratio 7:3) aur file weight 10KB se 20KB mangte hain. PixelCraft Smart Resizer me &ldquo;IBPS &amp; Portal Signature (140x60 px)&rdquo; preset select karein. Iske baad file size ko 10-20KB karne ke liye hamare Smart Image Compressor me &ldquo;20KB&rdquo; target preset use karein.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: Photo ko 3.5 x 4.5 cm me kaise resize kare?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          3.5 cm x 4.5 cm Indian passport aur exam forms ka universal standard hai. 300 DPI print standard par iski pixel value 413 x 531 pixels hoti hai. PixelCraft par upload karte hi ye preset ready milta hai jisse facial aspect ratio kharab nahi hoti.
+          3.5 cm x 4.5 cm Indian passport ka standard size hai (Passport Seva MEA guidelines). 300 DPI print standard par iski pixel value 413 x 531 pixels hoti hai. PixelCraft par upload karte hi ye preset ready milta hai jisse facial aspect ratio kharab nahi hoti.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
@@ -782,7 +786,7 @@
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: Photo resize karne ke baad online portal par upload kyu fail hoti hai?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Government portals par rejection ke 2 mukhya kaaran hote hain: (1) Galat pixel aspect ratio jisse photo stretch ho jati hai, aur (2) File size limit (jaise photo 20-50KB aur signature 10-20KB honi chahiye). PixelCraft Smart Resizer aur Image Compressor dono milkar 100% portal acceptance ensure karte hain.
+          Government portals par rejection ke 2 mukhya kaaran hote hain: (1) Galat pixel aspect ratio jisse photo stretch ho jati hai, aur (2) File size limit (jaise IBPS me photo 20-50KB aur signature 10-20KB honi chahiye). Sath hi dhyan rahe ki kuch exams (jaise SSC) ab mandatory live webcam capture use karte hain. Apne exam notification PDF me specifications zaroor check karein.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
