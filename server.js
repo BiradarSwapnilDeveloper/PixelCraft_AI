@@ -1445,7 +1445,7 @@ ${trimmedMessage}
     res.json({ success: true, message: 'Email sent successfully!' });
   } catch (err) {
     console.error("🔴 Email Send Error (Check EMAIL_PASS App Password):", err.message);
-    res.status(500).json({ error: "Failed to send email", details: err.message });
+    res.status(500).json({ error: "Failed to send email. Please try again later or contact us directly." });
   }
 });
 
