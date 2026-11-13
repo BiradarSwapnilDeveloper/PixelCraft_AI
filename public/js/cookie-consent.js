@@ -1,13 +1,54 @@
 /**
- * PixelCraft AI - Unified GDPR & AdSense Cookie & Privacy Consent Manager
- * Consolidates all consent modals into a single, polished, non-intrusive component.
+ * PixelCraft AI - Unified GDPR, ePrivacy & Google Consent Mode v2 Manager
+ * Ensures zero non-essential tracking scripts execute before explicit user consent.
  */
 (function () {
+  'use strict';
+
   const GA_ID = 'G-9EK2GY31YP';
   const ADSENSE_ID = 'ca-pub-3788374704176398';
 
+  let trackingInjected = false;
+
+  // Initialize dataLayer and Google Consent Mode v2 baseline
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  window.gtag = gtag;
+
+  // Read saved consent status
+  const hasAccepted = localStorage.getItem('cookieConsent') === 'accepted' || localStorage.getItem('pc_consent_v1') === 'true';
+  const hasRejected = localStorage.getItem('cookieConsent') === 'rejected' || localStorage.getItem('pc_consent_v1') === 'false';
+
+  // Apply default Google Consent Mode v2 configuration
+  if (hasAccepted) {
+    gtag('consent', 'default', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  } else {
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied'
+    });
+  }
+
   function loadTracking() {
-    // Prevent duplicate injections
+    if (trackingInjected) return;
+    trackingInjected = true;
+
+    // Update Consent Mode v2 to granted
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+
+    // 1. Google Analytics 4 Script Injection
     if (!document.getElementById('ga-script') && !document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
       const gaScript = document.createElement('script');
       gaScript.id = 'ga-script';
@@ -15,12 +56,11 @@
       gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
       document.head.appendChild(gaScript);
 
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { window.dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', GA_ID);
     }
 
+    // 2. Google AdSense Script Injection
     if (!document.getElementById('adsense-script') && !document.querySelector('script[src*="pagead2.googlesyndication.com"]')) {
       const adScript = document.createElement('script');
       adScript.id = 'adsense-script';
@@ -29,6 +69,51 @@
       adScript.crossOrigin = 'anonymous';
       document.head.appendChild(adScript);
     }
+  }
+
+  function removeTracking() {
+    trackingInjected = false;
+
+    // Update Consent Mode v2 to denied
+    gtag('consent', 'update', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied'
+    });
+
+    const gaScript = document.getElementById('ga-script') || document.querySelector('script[src*="googletagmanager.com/gtag/js"]');
+    if (gaScript && gaScript.parentNode) {
+      gaScript.parentNode.removeChild(gaScript);
+    }
+
+    const adScript = document.getElementById('adsense-script') || document.querySelector('script[src*="pagead2.googlesyndication.com"]');
+    if (adScript && adScript.parentNode) {
+      adScript.parentNode.removeChild(adScript);
+    }
+
+    // Clear tracking cookies
+    clearTrackingCookies();
+  }
+
+  function clearTrackingCookies() {
+    const trackingCookies = ['_ga', '_gid', '_gat', '__gads', '__gpi'];
+    const cookies = document.cookie.split(';');
+    const hostname = window.location.hostname;
+    const domainParts = hostname.split('.');
+
+    cookies.forEach(c => {
+      const name = c.split('=')[0].trim();
+      const isTracking = trackingCookies.some(tc => name === tc || name.startsWith(tc));
+      if (isTracking) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + hostname + ';';
+        if (domainParts.length >= 2) {
+          const rootDomain = '.' + domainParts.slice(-2).join('.');
+          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + rootDomain + ';';
+        }
+      }
+    });
   }
 
   function unblurTools() {
@@ -43,7 +128,7 @@
   function createBanner() {
     if (document.getElementById('cookie-consent-banner')) return;
 
-    // Inject styles
+    // Inject styles if not present
     if (!document.getElementById('cookie-consent-styles')) {
       const style = document.createElement('style');
       style.id = 'cookie-consent-styles';
@@ -159,12 +244,15 @@
       document.head.appendChild(style);
     }
 
+    const currentStatus = localStorage.getItem('cookieConsent');
+    const statusNote = currentStatus ? ` (Currently: ${currentStatus === 'accepted' ? 'Accepted' : 'Rejected'})` : '';
+
     const banner = document.createElement('div');
     banner.id = 'cookie-consent-banner';
     banner.setAttribute('role', 'dialog');
     banner.setAttribute('aria-label', 'Privacy and Cookie Consent');
     banner.innerHTML = `
-      <h3>🍪 We Value Your Privacy</h3>
+      <h3>🍪 We Value Your Privacy${statusNote}</h3>
       <p>
         We use cookies to enhance your browsing experience, analyze site traffic, and serve relevant ads. By clicking <strong>"Accept All"</strong>, you consent to our use of cookies and acknowledge our 
         <a href="/terms-conditions.html" target="_blank">Terms</a>, 
@@ -193,6 +281,9 @@
       sessionStorage.setItem('tc_accepted', 'true');
       closeBanner();
       loadTracking();
+      if (typeof showToast === 'function') {
+        showToast('Cookie preferences updated: All cookies accepted.', 'success');
+      }
     };
 
     document.getElementById('btn-reject-cookies').onclick = () => {
@@ -200,6 +291,10 @@
       localStorage.setItem('pc_consent_v1', 'false');
       sessionStorage.setItem('tc_accepted', 'true');
       closeBanner();
+      removeTracking();
+      if (typeof showToast === 'function') {
+        showToast('Cookie preferences updated: Non-essential cookies rejected.', 'default');
+      }
     };
   }
 
@@ -207,9 +302,6 @@
   window.loadTrackingScripts = loadTracking;
 
   function init() {
-    const hasAccepted = localStorage.getItem('cookieConsent') === 'accepted' || localStorage.getItem('pc_consent_v1') === 'true';
-    const hasRejected = localStorage.getItem('cookieConsent') === 'rejected' || localStorage.getItem('pc_consent_v1') === 'false';
-
     if (hasAccepted) {
       unblurTools();
       loadTracking();
@@ -226,6 +318,20 @@
         createBanner();
       });
     });
+
+    // Global event delegation for any dynamically created triggers
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest && e.target.closest('.manage-consent-btn, [data-manage-consent], #cookie-preferences-btn, a[href="#cookie-preferences"], a[href="#manage-cookies"]');
+      if (trigger) {
+        e.preventDefault();
+        createBanner();
+      }
+    });
+
+    // Reopen banner if URL contains #manage-cookies or #cookie-preferences or manage-consent parameter
+    if (window.location.hash === '#manage-cookies' || window.location.hash === '#cookie-preferences' || (window.location.search && window.location.search.includes('manage-consent=1'))) {
+      createBanner();
+    }
   }
 
   if (document.readyState === 'loading') {

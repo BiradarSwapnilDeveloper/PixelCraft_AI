@@ -187,6 +187,9 @@ function injectSettingsDrawer() {
           </svg>
           <span>Purge Local Session & Buffers</span>
         </button>
+        <button class="btn btn-secondary manage-consent-btn" style="width: 100%; justify-content: center; font-size: 0.88rem; gap: 8px; margin-top: 8px;" type="button">
+          <span>🍪 Customize Cookie Preferences</span>
+        </button>
       </div>
 
       <!-- Quick Navigation & Trust Links -->
