@@ -109,7 +109,7 @@
           "name": "Does Error Correction Level H mean a logo can cover 30% of the QR code?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. Approximately 30% refers to recoverable Reed-Solomon data codewords, NOT a guaranteed 30% physical logo-overlay area. If a logo obscures finder squares, timing lines, or alignment modules, decoding will fail. For 100% scannability, center logos should occupy approximately 10% to 20% of the central area and maintain high contrast against modules."
+            "text": "No. The official ISO/IEC 18004 (DENSO WAVE) standard specifies that Level H provides error correction capacity for approximately 30% of total symbol codewords, not 30% of visible image area. Placing an opaque physical logo occludes contiguous modules and can interfere with alignment patterns. No logo coverage percentage is universally guaranteed across all camera optics. We recommend keeping logos conservative, maintaining high contrast, and always test-scanning the exported QR code with multiple scanner apps before printing or distribution."
           }
         },
         {
@@ -117,7 +117,7 @@
           "name": "QR code me apna logo kaise lagaye bina scan kharab kiye?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "'Center Logo / Icon' option me 'Choose File' par click karke apna PNG/JPG logo upload karein. PixelCraft AI Error Correction Level H use karta hai jisse center area me logo fit hone ke baad bhi outer modules se barcode flawlessly decode hota hai."
+            "text": "'Center Logo / Icon' option me 'Choose File' par click karke apna PNG/JPG logo upload karein. PixelCraft AI Error Correction Level H use karta hai. Scannability ensure karne ke liye logo ko center me compact rakhein aur download karne ke baad hamesha apne mobile se test-scan karke verify karein."
           }
         },
         {
@@ -430,6 +430,9 @@
           <div class="toolbar">
              <button class="btn btn-green" id="btn-dl-png" style="width:100%; justify-content:center;">Download PNG</button>
              <button class="btn btn-outline" id="btn-dl-svg" style="width:100%; justify-content:center;">Vector SVG</button>
+          </div>
+          <div style="margin-top:12px; padding:10px 12px; background:var(--surface-subtle); border:1px solid var(--border-color); border-radius:8px; font-size:0.78rem; color:var(--text-muted); line-height:1.4; text-align:center;">
+            <strong>⚠️ Pre-Print Testing Advisory:</strong> Camera lenses, lighting, and scanner apps vary. Always test-scan your downloaded QR code with a phone camera before printing on flyers, business cards, or packaging.
           </div>
 
         </div>
@@ -845,7 +848,7 @@
           <li style="margin-bottom: 6px;"><strong>Level L (Low):</strong> Recovers up to <strong>7%</strong> of corrupted or missing data codewords. Ideal for simple text where maximum data density is required.</li>
           <li style="margin-bottom: 6px;"><strong>Level M (Medium):</strong> Recovers up to <strong>15%</strong> of data. The standard industrial balance for commercial logistics and inventory labels.</li>
           <li style="margin-bottom: 6px;"><strong>Level Q (Quartile):</strong> Recovers up to <strong>25%</strong> of data. Recommended for outdoor signage subject to minor weathering or graffiti.</li>
-          <li style="margin-bottom: 6px;"><strong>Level H (High):</strong> Recovers up to <strong>30%</strong> of data. <em>Mandatory for custom logo embedding</em>: allows you to embed corporate logos, brand icons, or artistic cutouts in the matrix center without rendering the code unreadable by smartphone camera scanners!</li>
+          <li style="margin-bottom: 6px;"><strong>Level H (High):</strong> Reconstructs up to approximately <strong>30% of total data codewords</strong> across the symbol matrix. <em>Essential for custom logo embedding:</em> provides mathematical codeword redundancy that allows placing a conservative center logo. Note that codeword recovery does not translate to 30% physical surface blockage; camera lenses, module density, and decoding algorithms vary, so test-scanning is always recommended prior to print production.</li>
         </ul>
       </div>
 
@@ -1042,9 +1045,9 @@
       </div>
 
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. QR Code Me Apna Logo Kaise Lagaye &amp; Reed-Solomon Truth</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. QR Code Me Logo Aur Reed-Solomon Codeword Truth</h4>
         <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
-          PixelCraft AI highest ISO Error Correction Level H use karta hai. Dhyan rahe: Level H ka matlab hota hai ki <strong>30% data codewords mathematically recoverable hote hain</strong>, na ki QR matrix ka 30% physical surface logo se cover kiya ja sakta hai. Finder patterns (corner squares) aur timing grids ko hamesha clean rakhna zaroori hota hai. Isliye dependable scanning ke liye center logo ka size total surface area ka 10% se 20% ke beech rakhna recommended hota hai.
+          PixelCraft AI standard ISO Error Correction Level H use karta hai. Par dhyan rahe: Level H ka approximately 30% recovery rate total QR symbol ke <strong>mathematical data codewords</strong> ke liye hota hai, visible QR image ke 30% physical surface area ko cover karne ke liye nahi. Ek solid center logo contiguous data modules ko block karta hai aur matrix alignment tracks ko affect kar sakta hai. Isliye kisi bhi coverage percentage ko universal guarantee nahi mana ja sakta. Logo ko hamesha conservative size me rakhein aur print ya share karne se pehle alag-alag mobile scanner apps se test-scan zaroor karein.
         </p>
       </div>
 
@@ -1082,13 +1085,13 @@
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: Does Error Correction Level H mean a logo can cover 30% of the QR code?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          No. Approximately 30% refers to recoverable Reed-Solomon data codewords, NOT a guaranteed 30% physical logo-overlay area. If a logo obscures finder squares, timing lines, or alignment modules, decoding will fail. For 100% scannability, center logos should occupy approximately 10% to 20% of the central area and maintain high contrast against modules.
+          No. The official ISO/IEC 18004 (DENSO WAVE) standard specifies that Level H provides error correction capacity for approximately 30% of total symbol codewords, not 30% of visible image area. Placing an opaque physical logo occludes contiguous modules and can interfere with alignment patterns. No logo coverage percentage is universally guaranteed across all camera optics. We recommend keeping logos conservative, maintaining high contrast, and always test-scanning the exported QR code with multiple scanner apps before printing or distribution.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: QR code me apna logo kaise lagaye bina scan kharab kiye?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          &ldquo;Center Logo / Icon&rdquo; option me &ldquo;Choose File&rdquo; par click karke apna PNG/JPG logo upload karein. PixelCraft AI Error Correction Level H use karta hai jisse center area me logo fit hone ke baad bhi outer modules se barcode flawlessly decode hota hai.
+          &ldquo;Center Logo / Icon&rdquo; option me &ldquo;Choose File&rdquo; par click karke apna PNG/JPG logo upload karein. PixelCraft AI Error Correction Level H use karta hai. Scannability ensure karne ke liye logo ko center me compact rakhein aur download karne ke baad hamesha apne mobile se test-scan karke verify karein.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
