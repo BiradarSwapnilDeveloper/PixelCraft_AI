@@ -91,6 +91,38 @@
       "mainEntity": [
         {
           "@type": "Question",
+          "name": "Mobile se passport size photo kaise banaye? (How to make a passport size photo on mobile?)",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mobile se passport size photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, 'Govt Exam & ID' section me 'Indian Passport Photo (35x45 mm)' choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Online form ke liye signature ka size kaise kam kare? (140x60 px guide)",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sarkari form (UPSC, SSC, IBPS, State PSC) me signature ka standard size 140x60 pixels aur file weight 10KB se 20KB mangte hain. PixelCraft Smart Resizer me 'Online Form Signature (140x60 px)' preset select karein. Iske baad file size ko 10-20KB karne ke liye hamare Smart Image Compressor me '20KB' target preset use karein."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Photo ko 3.5 x 4.5 cm me kaise resize kare?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "3.5 cm x 4.5 cm Indian passport aur exam forms ka universal standard hai. 300 DPI print standard par iski pixel value 413 x 531 pixels hoti hai. PixelCraft par upload karte hi ye preset ready milta hai jisse facial aspect ratio kharab nahi hoti."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Photo ka pixel size kaise change kare bina quality kharab kiye?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PixelCraft AI hardware-accelerated bicubic interpolation use karta hai jo 16 surrounding pixels ko sample karke smooth gradients aur sharp edges banaye rakhta hai. Isse photo stretch ya blur nahi hoti aur quality 100% crisp bani rehti hai."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Does enlarging a small photo make it blurry?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -107,18 +139,10 @@
         },
         {
           "@type": "Question",
-          "name": "What is the difference between \"Fit (Padding)\" and \"Fill (Cropping)\"?",
+          "name": "Photo resize karne ke baad online portal par upload kyu fail hoti hai?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "When adapting an image to an aspect ratio different from the original, you must choose between two strategies:Fit with Padding (Letterboxing):scales the image to fit entirely within the target box, filling unoccupied areas with transparent or solid color borders (100% of image content is preserved).Fill with Cropping:scales the image to completely cover the target box, automatically trimming excess top/bottom or side pixels (fills the frame completely, but sacrifices outer edges)."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why does upscaling a low-resolution image produce blurriness?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Resampling algorithms cannot invent high-frequency optical information that was never captured by the camera sensor. When you upscale a 300x300 image to 1200x1200, the interpolation algorithm must mathematically guess the color of 15 new synthetic pixels for every 1 original pixel. While bicubic filtering smooths transitions to prevent pixelation blocks, the result will inherently appear soft compared to a natively captured high-resolution file."
+            "text": "Government portals par rejection ke 2 mukhya kaaran hote hain: (1) Galat pixel aspect ratio jisse photo stretch ho jati hai, aur (2) File size limit (jaise photo 20-50KB aur signature 10-20KB honi chahiye). PixelCraft Smart Resizer aur Image Compressor dono milkar 100% portal acceptance ensure karte hain."
           }
         },
         {
@@ -126,23 +150,7 @@
           "name": "Can I batch resize multiple images into a single ZIP file download?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. PixelCraft AI includes multi-file batch queuing. You can drop 20, 50, or 100 images into the workspace, configure target resolution dimensions, and click \"Process All.\" The engine resizes each file asynchronously using browser worker threads and packages the output into a single compressed ZIP archive viaJSZip, eliminating tedious individual file saving."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does PixelCraft AI preserve color management profiles during resizing?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The resizing engine normalizes color channels into standard linear sRGB color space prior to computing weighted interpolation averages. This prevents the dark border ring artifacts that occur when non-linear gamma curves are averaged in raw byte arrays, ensuring clean color fidelity on calibrated displays."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do social platform compression algorithms interact with resized images?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Major social platforms (Instagram, LinkedIn, X/Twitter) automatically apply aggressive server-side recompression if an uploaded image exceeds their recommended dimensions. When an image is resized to non-standard resolutions, social media transcoders scale the image twice, introducing compounding interpolation blur and color distortion. Pre-resizing your image to the exact platform pixel dimensions using PixelCraft AI bypasses server-side downsampling passes, preserving pristine typography, vivid color saturation, and razor-sharp contrast across mobile newsfeeds."
+            "text": "Yes. PixelCraft AI includes multi-platform export. You can upload an image and export all platform presets simultaneously into a single compressed ZIP archive via JSZip with zero server uploads."
           }
         }
       ]
@@ -211,23 +219,47 @@
         <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Download individual optimized assets or batch export all platform sizes as a ZIP archive.</div>
       </div>
     </div>
+
+    <!-- Quick Exam & Social Media Shortcuts -->
+    <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; margin:18px auto 6px auto; max-width:900px;">
+      <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-right:4px;">Popular Presets:</span>
+      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🛂 Indian Passport (35x45 mm)</button>
+      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">✍️ Online Form Signature (140x60 px)</button>
+      <button type="button" onclick="selectQuickPreset('govt')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">📝 SSC / UPSC Photo (350x450 px)</button>
+      <button type="button" onclick="selectQuickPreset('social')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">📸 Instagram Square (1080x1080)</button>
+      <button type="button" onclick="selectQuickPreset('social')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">▶️ YouTube Thumbnail (1280x720)</button>
+    </div>
     </div>
     <div class="tool-workspace">
       <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
         <input type="file" id="file-input" accept="image/*" style="display:none" />
         <div class="upload-icon"></div>
         <div class="dropzone-title" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Upload your image to resize for all platforms</div>
-        <p>One upload → All sizes ready</p>
+        <p>One upload → All sizes ready (Govt Exams, Passport & Social Media)</p>
       </div>
       <div id="editor" style="display:none;">
         <div
-          style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:24px;">
+          style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
           <div class="status-title" style="font-weight:700;color:var(--dark);">All Platform Sizes Ready</div>
           <div style="display:flex;gap:10px;">
             <button class="btn btn-blue" id="btn-download-all">Download All (ZIP)</button>
             <button class="btn btn-gray" onclick="resetTool()">New Image</button>
           </div>
         </div>
+
+        <!-- Preset Filter Tabs -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;">
+          <button type="button" class="preset-filter-btn active" onclick="filterPresets('all', this)" style="padding:8px 16px; border-radius:20px; font-weight:600; font-size:0.85rem; cursor:pointer; background:var(--primary); color:#ffffff; border:1px solid var(--primary); transition:all 0.2s;">
+            🌟 All Presets
+          </button>
+          <button type="button" class="preset-filter-btn" onclick="filterPresets('govt', this)" style="padding:8px 16px; border-radius:20px; font-weight:600; font-size:0.85rem; cursor:pointer; background:var(--surface-card); color:var(--text-main); border:1px solid var(--border-color); transition:all 0.2s;">
+            🇮🇳 Govt Exam &amp; Passport (35x45mm, Signature)
+          </button>
+          <button type="button" class="preset-filter-btn" onclick="filterPresets('social', this)" style="padding:8px 16px; border-radius:20px; font-weight:600; font-size:0.85rem; cursor:pointer; background:var(--surface-card); color:var(--text-main); border:1px solid var(--border-color); transition:all 0.2s;">
+            📱 Social Media (Insta, YT, LinkedIn)
+          </button>
+        </div>
+
         <div id="sizes-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
         </div>
       </div>
@@ -251,27 +283,39 @@
 <script src="../js/utils.js"></script>
   <script>
     const PLATFORMS = [
-      { platform: 'Instagram', type: 'Square Post', w: 1080, h: 1080, icon: '' },
-      { platform: 'Instagram', type: 'Portrait Post', w: 1080, h: 1350, icon: '' },
-      { platform: 'Instagram', type: 'Story/Reel', w: 1080, h: 1920, icon: '' },
-      { platform: 'Instagram', type: 'Profile Photo', w: 320, h: 320, icon: '' },
-      { platform: 'YouTube', type: 'Thumbnail', w: 1280, h: 720, icon: '' },
-      { platform: 'YouTube', type: 'Channel Banner', w: 2560, h: 1440, icon: '' },
-      { platform: 'YouTube', type: 'Profile Photo', w: 800, h: 800, icon: '' },
-      { platform: 'Twitter/X', type: 'Post Image', w: 1200, h: 675, icon: '' },
-      { platform: 'Twitter/X', type: 'Header Photo', w: 1500, h: 500, icon: '' },
-      { platform: 'LinkedIn', type: 'Post Image', w: 1200, h: 627, icon: '' },
-      { platform: 'LinkedIn', type: 'Profile Photo', w: 400, h: 400, icon: '' },
-      { platform: 'LinkedIn', type: 'Cover Photo', w: 1584, h: 396, icon: '' },
-      { platform: 'Facebook', type: 'Post Image', w: 1200, h: 630, icon: 'f' },
-      { platform: 'Facebook', type: 'Cover Photo', w: 820, h: 312, icon: 'f' },
-      { platform: 'Facebook', type: 'Profile Photo', w: 170, h: 170, icon: '' },
-      { platform: 'WhatsApp', type: 'Profile Photo', w: 640, h: 640, icon: '' },
-      { platform: 'Pinterest', type: 'Pin', w: 1000, h: 1500, icon: '' },
-      { platform: 'TikTok', type: 'Profile Photo', w: 200, h: 200, icon: '' },
+      // 🇮🇳 Government Exam, Passport & ID Presets
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'Indian Passport Photo (35x45 mm / 300 DPI)', w: 413, h: 531, icon: '🛂' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'SSC / UPSC Exam Photo (350x450 px)', w: 350, h: 450, icon: '📝' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'Online Form Signature (140x60 px)', w: 140, h: 60, icon: '✍️' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'PAN Card / NSDL Photo (213x213 px)', w: 213, h: 213, icon: '🪪' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS Exam Photo (200x230 px)', w: 200, h: 230, icon: '🏦' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'IBPS Signature (140x60 px)', w: 140, h: 60, icon: '✒️' },
+      { category: 'govt', platform: 'Govt Exam & ID', type: 'Indian Passport (Screen 150 DPI)', w: 207, h: 266, icon: '🛂' },
+
+      // 📱 Social Media Standards
+      { category: 'social', platform: 'Instagram', type: 'Square Post', w: 1080, h: 1080, icon: '📸' },
+      { category: 'social', platform: 'Instagram', type: 'Portrait Post', w: 1080, h: 1350, icon: '📸' },
+      { category: 'social', platform: 'Instagram', type: 'Story/Reel', w: 1080, h: 1920, icon: '📸' },
+      { category: 'social', platform: 'Instagram', type: 'Profile Photo', w: 320, h: 320, icon: '📸' },
+      { category: 'social', platform: 'YouTube', type: 'Thumbnail', w: 1280, h: 720, icon: '▶️' },
+      { category: 'social', platform: 'YouTube', type: 'Channel Banner', w: 2560, h: 1440, icon: '▶️' },
+      { category: 'social', platform: 'YouTube', type: 'Profile Photo', w: 800, h: 800, icon: '▶️' },
+      { category: 'social', platform: 'Twitter/X', type: 'Post Image', w: 1200, h: 675, icon: '🐦' },
+      { category: 'social', platform: 'Twitter/X', type: 'Header Photo', w: 1500, h: 500, icon: '🐦' },
+      { category: 'social', platform: 'LinkedIn', type: 'Post Image', w: 1200, h: 627, icon: '💼' },
+      { category: 'social', platform: 'LinkedIn', type: 'Profile Photo', w: 400, h: 400, icon: '💼' },
+      { category: 'social', platform: 'LinkedIn', type: 'Cover Photo', w: 1584, h: 396, icon: '💼' },
+      { category: 'social', platform: 'Facebook', type: 'Post Image', w: 1200, h: 630, icon: '📘' },
+      { category: 'social', platform: 'Facebook', type: 'Cover Photo', w: 820, h: 312, icon: '📘' },
+      { category: 'social', platform: 'Facebook', type: 'Profile Photo', w: 170, h: 170, icon: '📘' },
+      { category: 'social', platform: 'WhatsApp', type: 'Profile Photo', w: 640, h: 640, icon: '💬' },
+      { category: 'social', platform: 'Pinterest', type: 'Pin', w: 1000, h: 1500, icon: '📌' },
+      { category: 'social', platform: 'TikTok', type: 'Profile Photo', w: 200, h: 200, icon: '🎵' },
     ];
 
     let currentImg = null;
+    let currentFilter = 'all';
+    let preselectedCategory = 'all';
     const fileInput = document.getElementById('file-input');
     const uploadArea = document.getElementById('upload-area');
     const editor = document.getElementById('editor');
@@ -280,10 +324,40 @@
     setupDragDrop(uploadArea, handleFile);
     fileInput.addEventListener('change', e =>{ if (e.target.files[0]) handleFile(e.target.files[0]); });
 
+    function selectQuickPreset(cat) {
+      preselectedCategory = cat;
+      fileInput.click();
+    }
+
+    function filterPresets(cat, btn) {
+      currentFilter = cat;
+      document.querySelectorAll('.preset-filter-btn').forEach(b => {
+        b.style.background = 'var(--surface-card)';
+        b.style.color = 'var(--text-main)';
+        b.style.borderColor = 'var(--border-color)';
+      });
+      if (btn) {
+        btn.style.background = 'var(--primary)';
+        btn.style.color = '#ffffff';
+        btn.style.borderColor = 'var(--primary)';
+      }
+      if (currentImg) renderCards();
+    }
+
     async function handleFile(file) {
       currentImg = await fileToImage(file);
       uploadArea.style.display = 'none';
       editor.style.display = 'block';
+      if (preselectedCategory && preselectedCategory !== 'all') {
+        currentFilter = preselectedCategory;
+        document.querySelectorAll('.preset-filter-btn').forEach(b => {
+          const isTarget = b.getAttribute('onclick')?.includes(`'${preselectedCategory}'`);
+          b.style.background = isTarget ? 'var(--primary)' : 'var(--surface-card)';
+          b.style.color = isTarget ? '#ffffff' : 'var(--text-main)';
+          b.style.borderColor = isTarget ? 'var(--primary)' : 'var(--border-color)';
+        });
+        preselectedCategory = 'all';
+      }
       renderCards();
     }
 
@@ -303,7 +377,8 @@
 
     function renderCards() {
       sizesGrid.innerHTML = '';
-      PLATFORMS.forEach((p, i) =>{
+      const visiblePresets = PLATFORMS.filter(p => currentFilter === 'all' || p.category === currentFilter);
+      visiblePresets.forEach((p, i) =>{
         const preview = resizeToCanvas(currentImg, Math.min(p.w, 400), Math.round(Math.min(p.w, 400) * p.h / p.w));
         const card = document.createElement('div');
         card.style.cssText = 'background:var(--white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;transition:var(--transition);';
@@ -316,7 +391,7 @@
         info.style.cssText = 'padding:14px 16px;';
         info.innerHTML = `
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-        <span style="font-size:1rem;">${p.icon}</span>
+        <span style="font-size:1.1rem;">${p.icon}</span>
         <span style="font-size:0.7rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">${p.platform}</span>
       </div>
       <div style="font-weight:700;color:var(--dark);font-size:0.92rem;margin-bottom:4px;">${p.type}</div>
@@ -330,9 +405,10 @@
 
       sizesGrid.querySelectorAll('[data-idx]').forEach(btn =>{
         btn.addEventListener('click', () =>{
-          const p = PLATFORMS[parseInt(btn.dataset.idx)];
+          const visiblePresets = PLATFORMS.filter(p => currentFilter === 'all' || p.category === currentFilter);
+          const p = visiblePresets[parseInt(btn.dataset.idx)];
           const c = resizeToCanvas(currentImg, p.w, p.h);
-          downloadFile(c.toDataURL('image/png'), `${p.platform.toLowerCase().replace('/', '')}-${p.type.toLowerCase().replace(/\s/g, '-')}-${p.w}x${p.h}.png`);
+          downloadFile(c.toDataURL('image/png'), `${p.platform.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${p.type.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${p.w}x${p.h}.png`);
         });
       });
     }
@@ -341,18 +417,19 @@
       if (!window.JSZip) { showToast('ZIP library not loaded. Try downloading individually.', 'error'); return; }
       showToast('Creating ZIP file...', 'default');
       const zip = new JSZip();
-      PLATFORMS.forEach(p =>{
+      const exportPresets = PLATFORMS.filter(p => currentFilter === 'all' || p.category === currentFilter);
+      exportPresets.forEach(p =>{
         const c = resizeToCanvas(currentImg, p.w, p.h);
         const base64 = c.toDataURL('image/png').split(',')[1];
-        zip.file(`${p.platform.replace('/', '')}-${p.type.replace(/\s/g, '-')}-${p.w}x${p.h}.png`, base64, { base64: true });
+        zip.file(`${p.platform.replace(/[^a-zA-Z0-9]/g, '')}-${p.type.replace(/[^a-zA-Z0-9]/g, '-')}-${p.w}x${p.h}.png`, base64, { base64: true });
       });
       const blob = await zip.generateAsync({ type: 'blob' });
-      saveAs(blob, 'pixelcraft-all-sizes.zip');
+      saveAs(blob, `pixelcraft-resized-${currentFilter}.zip`);
       showToast('ZIP downloaded!', 'success');
     });
 
     function resetTool() {
-      currentImg = null; sizesGrid.innerHTML = '';
+      currentImg = null; currentFilter = 'all'; preselectedCategory = 'all'; sizesGrid.innerHTML = '';
       uploadArea.style.display = 'block'; editor.style.display = 'none'; fileInput.value = '';
     }
   </script>
@@ -626,49 +703,92 @@
     </div>
 
         <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
-      5. Frequently Asked Questions (FAQ)
+      5. Photo Resizer Online — Passport Size Photo &amp; Signature Kaise Banaye (Exam Form Guide)
+    </h3>
+    <p>
+      Indian recruitment boards, entrance exams (jaise UPSC Civil Services, SSC CGL/CHSL, IBPS Bank PO/Clerk, NTA NEET/JEE, Railway RRB) aur official identity services (Passport Seva, Aadhaar, PAN Card) par online form bharte waqt photo aur signature ke strict dimension rules hote hain. Agar aap search kar rahe hain ki <strong>passport size photo kaise banaye</strong>, <strong>signature ka size kaise kam kare</strong> ya <strong>photo ko 3.5 x 4.5 cm me kaise banaye</strong>, to PixelCraft Smart Resizer automatically exact pixels aur aspect ratios me images ko adapt karta hai.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">1. Mobile Se Passport Size Photo Kaise Banaye (35x45 mm / 3.5 x 4.5 cm)</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          Indian passport photo ka standard size $3.5\text{ cm}\times 4.5\text{ cm}$ ($35\text{ mm}\times 45\text{ mm}$) hota hai. High-resolution print (300 DPI) ke hisaab se iske exact dimensions <strong>413 &times; 531 pixels</strong> hote hain, jabki screen portals par 207 &times; 266 pixels ya 350 &times; 450 pixels chalte hain. PixelCraft me photo upload karke 'Indian Passport Photo' par click karein aur face ko center me rakh kar crop karein.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. Online Form Signature Ka Size Kaise Kam Kare (140x60 Pixels)</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          UPSC, SSC, State PSC aur IBPS application portals signature ke liye strictly <strong>140 &times; 60 pixels</strong> (aspect ratio 7:3) aur file weight strictly 10KB se 20KB mangte hain. White paper par signature karke photo kheenchiye, PixelCraft Smart Resizer me 'Online Form Signature' chuniye, aur file size reduce karne ke liye hamare Smart Image Compressor me 20KB preset use karein.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">3. Pixels, CM Aur Inches Me DPI Conversion Mathematics</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          Physical centimeters ko digital pixels me convert karne ka universal formula hai: $\text{Pixels} = (\text{cm} / 2.54) \times \text{DPI}$. 300 DPI print quality ke liye: $3.5\text{ cm} \rightarrow 413\text{ px}$ aur $4.5\text{ cm} \rightarrow 531\text{ px}$. PixelCraft ka hardware canvas automatic aspect-ratio lock ke sath pixel calculation handle karta hai taaki facial features stretch na hon.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">4. Sarkari Portal Upload Rejection Se Bachne Ke Tips</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          Portals par upload reject hone ke 3 mukhya reasons hote hain: (1) Galat pixel dimension jisse portrait horizontal stretch ho jata hai, (2) File size exceed hona (&gt;50KB), aur (3) Plain white ya light background na hona. PixelCraft par exact crop dimensions aur clean resampling se rejection risk 0% ho jata hai.
+        </p>
+      </div>
+    </div>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      6. Frequently Asked Questions (FAQ) — Photo Resizing &amp; Form Dimensions
     </h3>
     <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Does enlarging a small photo make it blurry?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Mobile se passport size photo kaise banaye? (How to make a passport size photo on mobile?)</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Mobile se passport size photo banana behad aasan hai: Apni clear front-facing photo PixelCraft Smart Resizer me upload karein, &ldquo;Govt Exam &amp; ID&rdquo; section me &ldquo;Indian Passport Photo (35x45 mm)&rdquo; choose karein, aur download karein. Ye tool photo ko automatically exact 3.5 x 4.5 cm (413x531 pixels at 300 DPI) me crop aur resize kar deta hai.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Online form ke liye signature ka size kaise kam kare? (140x60 px guide)</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Sarkari form (UPSC, SSC, IBPS, State PSC) me signature ka standard size 140x60 pixels aur file weight 10KB se 20KB mangte hain. PixelCraft Smart Resizer me &ldquo;Online Form Signature (140x60 px)&rdquo; preset select karein. Iske baad file size ko 10-20KB karne ke liye hamare Smart Image Compressor me &ldquo;20KB&rdquo; target preset use karein.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: Photo ko 3.5 x 4.5 cm me kaise resize kare?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          3.5 cm x 4.5 cm Indian passport aur exam forms ka universal standard hai. 300 DPI print standard par iski pixel value 413 x 531 pixels hoti hai. PixelCraft par upload karte hi ye preset ready milta hai jisse facial aspect ratio kharab nahi hoti.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Photo ka pixel size kaise change kare bina quality kharab kiye?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          PixelCraft AI hardware-accelerated bicubic interpolation use karta hai jo 16 surrounding pixels ko sample karke smooth gradients aur sharp edges banaye rakhta hai. Isse photo stretch ya blur nahi hoti aur quality 100% crisp bani rehti hai.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: Does enlarging a small photo make it blurry?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Upscaling an image beyond its original native resolution requires mathematical interpolation to invent new pixels where none existed originally. While bicubic smoothing prevents blocky pixelation, excessive upscaling (e.g., 300%+) will naturally appear softer. For optimal results, start with high-resolution master captures.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Why are my social media photos cropped automatically after upload?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: Why are my social media photos cropped automatically after upload?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Platforms like Instagram, TikTok, and LinkedIn enforce strict viewport aspect ratios in their mobile apps. If you upload an image with non-standard dimensions, the platform's automated system applies an arbitrary crop that often cuts off faces or headlines. Pre-formatting using PixelCraft ensures your intended framing is preserved.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: What is the difference between "Fit (Padding)" and "Fill (Cropping)"?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: Photo resize karne ke baad online portal par upload kyu fail hoti hai?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          When adapting an image to an aspect ratio different from the original, you must choose between two strategies:Fit with Padding (Letterboxing):scales the image to fit entirely within the target box, filling unoccupied areas with transparent or solid color borders (100% of image content is preserved).Fill with Cropping:scales the image to completely cover the target box, automatically trimming excess top/bottom or side pixels (fills the frame completely, but sacrifices outer edges).
+          Government portals par rejection ke 2 mukhya kaaran hote hain: (1) Galat pixel aspect ratio jisse photo stretch ho jati hai, aur (2) File size limit (jaise photo 20-50KB aur signature 10-20KB honi chahiye). PixelCraft Smart Resizer aur Image Compressor dono milkar 100% portal acceptance ensure karte hain.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Why does upscaling a low-resolution image produce blurriness?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q8: Can I batch resize multiple images into a single ZIP file download?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Resampling algorithms cannot invent high-frequency optical information that was never captured by the camera sensor. When you upscale a 300x300 image to 1200x1200, the interpolation algorithm must mathematically guess the color of 15 new synthetic pixels for every 1 original pixel. While bicubic filtering smooths transitions to prevent pixelation blocks, the result will inherently appear soft compared to a natively captured high-resolution file.
-        </p>
-      </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: Can I batch resize multiple images into a single ZIP file download?</h4>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Yes. PixelCraft AI includes multi-file batch queuing. You can drop 20, 50, or 100 images into the workspace, configure target resolution dimensions, and click "Process All." The engine resizes each file asynchronously using browser worker threads and packages the output into a single compressed ZIP archive viaJSZip, eliminating tedious individual file saving.
-        </p>
-      </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: How does PixelCraft AI preserve color management profiles during resizing?</h4>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          The resizing engine normalizes color channels into standard linear sRGB color space prior to computing weighted interpolation averages. This prevents the dark border ring artifacts that occur when non-linear gamma curves are averaged in raw byte arrays, ensuring clean color fidelity on calibrated displays.
-        </p>
-      </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: How do social platform compression algorithms interact with resized images?</h4>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Major social platforms (Instagram, LinkedIn, X/Twitter) automatically apply aggressive server-side recompression if an uploaded image exceeds their recommended dimensions. When an image is resized to non-standard resolutions, social media transcoders scale the image twice, introducing compounding interpolation blur and color distortion. Pre-resizing your image to the exact platform pixel dimensions using PixelCraft AI bypasses server-side downsampling passes, preserving pristine typography, vivid color saturation, and razor-sharp contrast across mobile newsfeeds.
+          Yes. PixelCraft AI includes multi-platform export. You can upload an image and export all platform presets simultaneously into a single compressed ZIP archive via JSZip with zero server uploads.
         </p>
       </div>
     </div>

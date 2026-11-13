@@ -282,6 +282,21 @@
               </select>
             </div>
           </div>
+          <!-- Quick Target Size Presets for India Online Forms -->
+          <div class="target-kb-wrapper" style="margin-bottom: 20px; background: var(--surface-subtle); padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <span style="font-weight: 700; font-size: 0.88rem; color: var(--text-heading);">🎯 Target File Size (Quick Presets):</span>
+              <span id="target-feedback" style="font-size: 0.82rem; color: var(--primary); font-weight: 600;"></span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-preset-kb" data-kb="20" style="padding: 7px 14px; font-size: 0.85rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface-card); color: var(--text-heading); cursor: pointer; transition: all 0.2s;">⚡ 20KB (Signature)</button>
+              <button type="button" class="btn-preset-kb" data-kb="50" style="padding: 7px 14px; font-size: 0.85rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface-card); color: var(--text-heading); cursor: pointer; transition: all 0.2s;">📄 50KB (UPSC / Exam Photo)</button>
+              <button type="button" class="btn-preset-kb" data-kb="100" style="padding: 7px 14px; font-size: 0.85rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface-card); color: var(--text-heading); cursor: pointer; transition: all 0.2s;">🪪 100KB (ID &amp; Documents)</button>
+              <button type="button" class="btn-preset-kb" data-kb="200" style="padding: 7px 14px; font-size: 0.85rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface-card); color: var(--text-heading); cursor: pointer; transition: all 0.2s;">🌐 200KB (Web / Email)</button>
+              <button type="button" class="btn-preset-kb" data-kb="auto" style="padding: 7px 14px; font-size: 0.85rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface-card); color: var(--text-muted); cursor: pointer; transition: all 0.2s;">Manual Quality</button>
+            </div>
+            <div id="target-kb-note" style="display: none; font-size: 0.82rem; color: var(--warning, #d97706); margin-top: 8px; line-height: 1.4;"></div>
+          </div>
           <!-- Size comparison -->
           <div style="background:var(--surface-subtle);border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;text-align:center;">
             <div>
@@ -408,7 +423,10 @@ function fallbackDataUrl(fmt, q) {
   updateCompStats(bytes);
 }
 
+let currentCompressedBytes = 0;
+
 function updateCompStats(bytes) {
+  currentCompressedBytes = bytes;
   document.getElementById('comp-size').textContent = formatFileSize(bytes);
   const savings = Math.round((1 - bytes / currentFile.size) * 100);
   const savingsEl = document.getElementById('savings-pct');
@@ -424,8 +442,106 @@ function updateCompStats(bytes) {
   }
 }
 
+// Preset Target KB Handlers
+document.querySelectorAll('.btn-preset-kb').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    document.querySelectorAll('.btn-preset-kb').forEach(b => {
+      b.style.borderColor = 'var(--border-color)';
+      b.style.background = 'var(--surface-card)';
+      b.style.color = 'var(--text-heading)';
+    });
+    btn.style.borderColor = 'var(--primary)';
+    btn.style.background = 'var(--primary)';
+    btn.style.color = '#ffffff';
+
+    const kb = btn.dataset.kb;
+    const noteEl = document.getElementById('target-kb-note');
+    const feedbackEl = document.getElementById('target-feedback');
+    if (kb === 'auto') {
+      if (noteEl) noteEl.style.display = 'none';
+      if (feedbackEl) feedbackEl.textContent = 'Manual quality slider active';
+      return;
+    }
+
+    const targetBytes = parseInt(kb, 10) * 1024;
+    await compressToTargetBytes(targetBytes, kb);
+  });
+});
+
+async function compressToTargetBytes(targetBytes, targetLabel) {
+  if (!currentImg) return;
+  const feedbackEl = document.getElementById('target-feedback');
+  const noteEl = document.getElementById('target-kb-note');
+  if (feedbackEl) feedbackEl.textContent = `Optimizing for ${targetLabel}KB...`;
+  
+  const fmt = formatSelect.value;
+  // Binary search for highest quality under targetBytes
+  let low = 0.05, high = 0.98, bestQ = 0.05;
+
+  for (let i = 0; i < 7; i++) {
+    const mid = (low + high) / 2;
+    const bytes = await testQualityBytes(mid, fmt);
+    if (bytes <= targetBytes) {
+      bestQ = mid;
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+
+  const finalPercent = Math.max(5, Math.min(98, Math.round(bestQ * 100)));
+  qualitySlider.value = finalPercent;
+  qualityVal.textContent = finalPercent + '%';
+  compress();
+
+  setTimeout(() => {
+    const finalBytes = currentCompressedBytes || 0;
+    if (finalBytes <= targetBytes) {
+      if (feedbackEl) feedbackEl.textContent = `✅ Target met (${formatFileSize(finalBytes)} ≤ ${targetLabel}KB)`;
+      if (noteEl) noteEl.style.display = 'none';
+    } else {
+      if (feedbackEl) feedbackEl.textContent = `Lowest quality reaches ${formatFileSize(finalBytes)}`;
+      if (noteEl) {
+        noteEl.style.display = 'block';
+        noteEl.innerHTML = `⚠️ <em>At native resolution (${currentImg.naturalWidth || currentImg.width}×${currentImg.naturalHeight || currentImg.height}px), compressed file reaches ${formatFileSize(finalBytes)}. For strict portal uploads requiring under ${targetLabel}KB, use our <a href="smart-resize.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Smart Resizer</a> to resize pixel dimensions (e.g. 140×60px for signature or 350×450px for photo).</em>`;
+      }
+    }
+  }, 100);
+}
+
+function testQualityBytes(q, fmt) {
+  return new Promise((resolve) => {
+    let w = currentImg.naturalWidth || currentImg.width;
+    let h = currentImg.naturalHeight || currentImg.height;
+    const maxDim = 4096;
+    if (w > maxDim || h > maxDim) {
+      const scale = Math.min(maxDim / w, maxDim / h);
+      w = Math.round(w * scale);
+      h = Math.round(h * scale);
+    }
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = w;
+    tempCanvas.height = h;
+    const ctx = tempCanvas.getContext('2d');
+    ctx.drawImage(currentImg, 0, 0, w, h);
+    if (tempCanvas.toBlob) {
+      tempCanvas.toBlob(blob => {
+        resolve(blob ? blob.size : Infinity);
+      }, fmt, q);
+    } else {
+      const dataUrl = tempCanvas.toDataURL(fmt, q);
+      const base64 = dataUrl.split(',')[1];
+      resolve(Math.round((base64.length * 3) / 4));
+    }
+  });
+}
+
 qualitySlider.addEventListener('input', () =>{ 
   qualityVal.textContent = qualitySlider.value + '%'; 
+  const feedbackEl = document.getElementById('target-feedback');
+  if (feedbackEl) feedbackEl.textContent = 'Manual quality mode';
+  const noteEl = document.getElementById('target-kb-note');
+  if (noteEl) noteEl.style.display = 'none';
   compress(); 
 });
 formatSelect.addEventListener('change', compress);
@@ -690,44 +806,86 @@ function resetTool() {
       </table>
     </div>
 
-        <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
-      5. Frequently Asked Questions (FAQ)
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      5. Online Application Forms Ke Liye Photo Ka Size Kam Kaise Kare (20KB, 50KB, 100KB Guide)
+    </h3>
+    <p style="font-size: 1.05rem; color: var(--text-body); line-height: 1.8;">
+      Indian government recruitment and entrance exam portals (such as UPSC CSE, SSC CGL/CHSL, IBPS, State Public Service Commissions, Railway RRB, NEET, and CUET) enforce strict file size rules during document upload. If your passport photograph exceeds 50KB or your digital signature exceeds 20KB, the portal throws an immediate error (<em>"File size exceeds prescribed limit"</em>) and rejects registration.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 20px 0;">
+      <div style="background: var(--surface-subtle); padding: 18px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--primary); display: block; font-size: 1.05rem; margin-bottom: 6px;">⚡ 20KB Target (Signature Upload)</strong>
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-body); line-height: 1.5;">Mandatory for candidate signature images across SSC, UPSC, and banking exam portals. Typically requires 140×60px dimensions and 10KB to 20KB weight.</p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 18px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--primary); display: block; font-size: 1.05rem; margin-bottom: 6px;">📄 50KB Target (Passport Photo)</strong>
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-body); line-height: 1.5;">Standard ceiling for applicant portrait photos (3.5×4.5 cm). Must be crisp, clear, and strictly under 50KB without facial blurring.</p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 18px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--primary); display: block; font-size: 1.05rem; margin-bottom: 6px;">🪪 100KB Target (ID &amp; Certificates)</strong>
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-body); line-height: 1.5;">Common limit for caste certificates, mark sheets, and Aadhaar card scan uploads on government college admission portals.</p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 18px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--primary); display: block; font-size: 1.05rem; margin-bottom: 6px;">🌐 200KB Target (Web &amp; Email)</strong>
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-body); line-height: 1.5;">Ideal target for blog featured images, Shopify product catalogs, and fast-loading mobile web banners.</p>
+      </div>
+    </div>
+
+    <h4 style="color: var(--text-heading); font-size: 1.2rem; margin-top: 24px; margin-bottom: 10px;">Difference Between File Size (KB) and Pixel Dimensions (Width × Height)</h4>
+    <p style="font-size: 0.95rem; color: var(--text-body); line-height: 1.8;">
+      Many users confuse <strong>file size in KB</strong> (byte weight on disk) with <strong>pixel dimensions</strong> (width and height in pixels or cm, e.g. 350×450px or 3.5×4.5 cm). Compression reduces the byte weight by optimizing quantization tables without changing dimensions. However, if an image is shot on a modern phone at 4000×3000 pixels (12MB), standard JPEG compression alone cannot force 12 million pixels under 20KB without pixel distortion. For strict 20KB/50KB limits, use our <a href="smart-resize.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Smart Image Resizer</a> to set pixel dimensions first, then compress.
+    </p>
+
+    <h4 style="color: var(--text-heading); font-size: 1.2rem; margin-top: 24px; margin-bottom: 10px;">Bina Quality Kharab Kiye Photo Size Kaise Kam Kare?</h4>
+    <p style="font-size: 0.95rem; color: var(--text-body); line-height: 1.8;">
+      To reduce image size without visible blur (<em>bina quality kharab kiye photo size kam kare</em>), keep the compression quality between <strong>70% and 82%</strong>. This range discards imperceptible color variations while preserving facial features, text outlines, and edges with an SSIM score above 0.97.
+    </p>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      6. Frequently Asked Questions (FAQ) — Photo Compression &amp; Size Kam Karne Ke Sawal
     </h3>
     <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: What is the recommended compression quality for web hero banners?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Photo ka size 50KB kaise kare? (How do I compress an image to 50KB?)</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          For high-impact full-width hero backgrounds, set the quality slider between 72% and 78%. At this level, visual differences are imperceptible to users on Retina and standard monitors, while file weight is reduced by approximately 70-80% compared to original exports.
+          Photo ka size 50KB karne ke liye: apna JPG ya PNG photo upload kare, upar diye gaye <strong>"50KB (UPSC / Exam Photo)"</strong> preset button par click kare. Tool automatically binary search karke image quality adjust karega taaki file 50KB ke andar save ho sake. Fir <em>Download Compressed Image</em> button dabaye.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Can I re-compress an already compressed JPEG to make it even smaller?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Online form ke liye signature ka size 20KB kaise banaye?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Re-compressing an existing lossy JPEG through a second lossy pass (generation loss) is generally discouraged because quantization errors accumulate, creating visible blur and blockiness. If you need a smaller file from an existing JPEG, converting it to WebP at equivalent visual quality produces superior results.
+          Signature ka size 10KB–20KB karne ke liye: signature photo upload kare aur <strong>"20KB (Signature)"</strong> preset select kare. Agar photo mobile se li gayi badi file hai, toh pehle <a href="smart-resize.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Smart Resizer</a> me jakar dimensions ko 140×60px crop kare, fir yaha compress kare taaki portal par bina error upload ho sake.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: What is the optimal quality slider value for photographic web images?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: Mobile me photo ka size kaise kam kare bina quality kharab kiye?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          For standard web delivery, a quality setting between75% and 82%represents the mathematical sweet spot. Below 70%, block boundary artifacts and ringing around high-contrast edges become visible on calibrated screens. Above 85%, file sizes increase exponentially (+100% to +200% byte increase) while the human visual cortex cannot perceive the marginal improvement in high-frequency detail.
+          Apne Android ya iPhone browser me PixelCraft AI open kare, photo select kare aur quality slider ko 75% par set kare. PixelCraft AI browser memory me hi execute hota hai, isliye bina kisi app download ya quality degrade kiye aapka photo turant compress ho jata hai.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Why does client-side compression preserve privacy better than cloud services?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Why did my image not reach exactly 20KB or 50KB? (Troubleshooting Target Sizes)</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Traditional compression websites (like TinyPNG or iloveimg) require your browser to upload your complete, uncompressed image file over the Internet to their backend servers. Once on their infrastructure, your private photos could be logged, analyzed, or cached on unencrypted storage volumes. PixelCraft AI executes the compression algorithm locally inside your browser's WebAssembly sandbox: zero bytes of your photo are ever transmitted across the network.
+          Lossy JPEG compression modifies color quantization matrices while preserving original pixel dimensions ($W \times H$). If a high-resolution 12MP smartphone photo (4000×3000px) is uploaded, even at 5% quality the minimum container overhead might be 60KB. In such cases, downsampling pixel dimensions is required to reach strict 20KB targets.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: Does compressing an image strip its EXIF and geolocation metadata?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: What is the recommended compression quality for web hero banners?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Yes. When an image is loaded into HTML5 Canvas and re-encoded viacanvas.toBlob(), the browser graphics engine constructs a brand-new container from the raw pixel buffer, discarding all legacy EXIF tags, GPS coordinates, camera serial numbers, and thumbnail data. This delivers double the security benefit: dramatically smaller files combined with automatic privacy anonymization.
+          For high-impact full-width hero backgrounds, set the quality slider between 72% and 78%. At this level, visual differences are imperceptible to users on standard and Retina displays, while file weight is reduced by 70–80% compared to uncompressed camera exports.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: How does PixelCraft AI handle gigapixel and ultra-high-resolution images?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: Why does client-side compression preserve privacy better than cloud services?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Consumer web browsers impose strict canvas memory allocation limits (typically 16,384 x 16,384 pixels or roughly 268 megapixels). For massive photographs exceeding device RAM boundaries, PixelCraft AI applies proportional tile-based chunk downsampling to ensure flawless execution without browser tab crashes or memory out-of-bounds exceptions.
+          Traditional compression websites require uploading your confidential ID photos, marks cards, and personal pictures to remote servers. PixelCraft AI executes the compression algorithm locally inside your device browser memory via WebAssembly: zero bytes of your photo are ever uploaded to any server.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: Does compressing an image strip its EXIF and geolocation metadata?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Yes. When an image is rendered to an HTML5 Canvas and re-encoded, the browser creates a clean container from raw pixel buffers, automatically stripping camera serial numbers, GPS location coordinates, and metadata tags before export.
         </p>
       </div>
     </div>

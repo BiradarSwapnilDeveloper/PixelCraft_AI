@@ -90,6 +90,38 @@
       "mainEntity": [
         {
           "@type": "Question",
+          "name": "PNG ko JPG me kaise badle mobile me? (How to convert PNG to JPG online?)",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mobile me PNG ko JPG me convert karna behad aasan hai: PixelCraft AI tool par apni PNG photo upload karein, JPG format select karein, aur Download Converted par tap karein. Photo turant aapke mobile ki gallery me high quality JPG format me save ho jayegi. Kisi bhi app ya software ko download karne ki zarurat nahi hai."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "AVIF photo ko JPG me kaise convert kare?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Naye smartphones me photos AVIF format me save hoti hain. PixelCraft Format Converter me apni AVIF image upload karein aur output option me JPG choose karein. Browser ka native rendering engine AVIF stream ko decode karke standard JPG me transcode kar deta hai jise aap kisi bhi portal par upload kar sakte hain."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "iPhone HEIC photo ko JPG format me kaise kare bina upload ke?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Apple devices (iPhone/iPad) photos ko HEIC format me shoot karte hain. Safari ya Chrome browser me PixelCraft Format Converter open karein aur HEIC image select karein. Tool local hardware decoding use karke image ko direct JPG me render karta hai. Aapki photo kisi external server par upload nahi hoti, isliye full privacy bani rehti hai."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "WebP photo ko PNG me kaise badle transparent background ke sath?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "WebP image ko upload karke PNG option click karein. Agar original WebP image me transparent background (alpha channel) hai, to PNG format me convert hone ke baad bhi transparency bilkul preserve rahegi, jisse aap use logo, graphic design ya presentation me seamlessly use kar sakte hain."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Does converting a transparent PNG to JPG turn the background black?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -98,50 +130,18 @@
         },
         {
           "@type": "Question",
-          "name": "Is WebP better than PNG for logos and icons?",
+          "name": "Why do government exam portals reject PNG and WebP files in favor of JPG?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes! Lossless WebP maintains pixel-perfect edge clarity and full alpha transparency while typically producing files that are 26% smaller than optimized PNGs."
+            "text": "Indian recruitment and examination portals (UPSC, SSC, State PSC, NTA, IBPS, Railways) use legacy verification databases built to parse standardized JPEG JFIF/EXIF data. PNG files are typically 3x to 5x larger in file weight, and WebP is not yet indexed by legacy OCR passport verification systems. Converting to JPG ensures 100% acceptance without upload rejection errors."
           }
         },
         {
           "@type": "Question",
-          "name": "How do I serve WebP with fallback in modern HTML?",
+          "name": "Is there any file size limit or quality loss during format conversion?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Use the HTML5element: definefollowed by. Browsers automatically load WebP if supported, seamlessly falling back to JPG for legacy viewers."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I convert animated GIFs to animated WebP?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes! Animated WebP files support 24-bit true color and alpha transparency, shrinking heavy 10MB GIF files down to under 1.5MB while completely eliminating the 256-color dithering banding inherent in legacy GIFs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "When should I choose AVIF over WebP for web delivery?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "AVIF is the superior choice for high-resolution hero imagery, photographic banners, and HDR content where maximum bandwidth savings are paramount. AVIF delivers approximately 20% to 30% better compression efficiency than WebP at equivalent visual quality. However, WebP enjoys near 100% universal browser compatibility (including legacy Safari and edge devices) and requires significantly less CPU decoding overhead on older budget mobile hardware."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why does converting a JPEG to PNG often result in a LARGER file size?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "JPEG is a lossy compression format that permanently discards subtle high-frequency color variations and smooths pixel transitions. PNG is a strictly lossless format that stores exact pixel values using DEFLATE compression. When you convert a lossy JPEG to PNG, the PNG encoder must faithfully preserve every single JPEG compression artifact and ringing edge as literal, uncompressible high-frequency noise, causing the PNG file to swell by 200% to 400% without improving visual quality."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does client-side format conversion handle transparency (Alpha Channel)?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Both PNG and WebP support full 8-bit alpha channel transparency (256 levels of opacity). Standard JPEG does NOT support transparency; if you convert a transparent PNG to JPEG, the transparent background pixels will automatically composite against solid black or solid white. When converting between formats in PixelCraft AI, transparency is preserved automatically whenever the target container supports alpha blending."
+            "text": "No! PixelCraft AI runs 100% on your device's local browser engine using HTML5 Canvas. There are no server bandwidth limits or file upload restrictions. Lossless conversion (PNG, WebP Lossless) preserves 100% mathematical image data, and lossy JPEG conversion utilizes high-grade 92% quality matrices to eliminate visual artifacts while keeping file size small."
           }
         },
         {
@@ -216,6 +216,16 @@
         <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Step 3 • Convert & Download</div>
         <div style="font-size: 0.88rem; color: var(--text-body); line-height: 1.5;">Process instantly via client-side Canvas and download individual files or a ZIP archive.</div>
       </div>
+    </div>
+
+    <!-- Quick Conversion Intent Shortcuts (Popular Formats) -->
+    <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; margin:18px auto 6px auto; max-width:900px;">
+      <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-right:4px;">Popular Conversions:</span>
+      <button type="button" onclick="selectQuickFormat('jpg','image/jpeg')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">⚡ PNG to JPG</button>
+      <button type="button" onclick="selectQuickFormat('jpg','image/jpeg')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">📱 AVIF to JPG</button>
+      <button type="button" onclick="selectQuickFormat('jpg','image/jpeg')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🍏 HEIC to JPG</button>
+      <button type="button" onclick="selectQuickFormat('png','image/png')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🖼️ WebP to PNG</button>
+      <button type="button" onclick="selectQuickFormat('jpg','image/jpeg')" style="background:var(--surface-card); border:1px solid var(--border-color); border-radius:20px; padding:6px 14px; font-size:0.82rem; font-weight:600; color:var(--text-main); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">🌐 WebP to JPG</button>
     </div>
   </div>
   <div class="tool-workspace">
@@ -292,6 +302,7 @@
 <script src="../js/utils.js"></script>
 <script>
 let currentFile = null, currentImg = null, currentMime = null, currentExt = null;
+let preselectedFormat = null;
 const fileInput = document.getElementById('file-input');
 const uploadArea = document.getElementById('upload-area');
 const editor = document.getElementById('editor');
@@ -300,11 +311,22 @@ const resultCanvas = document.getElementById('result-canvas');
 setupDragDrop(uploadArea, handleFile);
 fileInput.addEventListener('change', e =>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
 
+function selectQuickFormat(targetExt, targetMime) {
+  preselectedFormat = { ext: targetExt, mime: targetMime };
+  fileInput.click();
+}
+
 async function handleFile(file) {
   currentFile = file;
   currentImg = await fileToImage(file);
   uploadArea.style.display = 'none';
   editor.style.display = 'block';
+  if (preselectedFormat) {
+    currentMime = preselectedFormat.mime;
+    currentExt = preselectedFormat.ext;
+    preselectedFormat = null;
+    convert();
+  }
 }
 
 document.querySelectorAll('.format-choice-btn').forEach(btn =>{
@@ -320,8 +342,19 @@ document.querySelectorAll('.format-choice-btn').forEach(btn =>{
 
 function convert() {
   if (!currentImg || !currentMime) return;
-  drawImageToCanvas(resultCanvas, currentImg, 900, 600);
-  const dataUrl = resultCanvas.toDataURL(currentMime, 0.9);
+  const w = currentImg.naturalWidth || currentImg.width;
+  const h = currentImg.naturalHeight || currentImg.height;
+  resultCanvas.width = w;
+  resultCanvas.height = h;
+  const ctx = resultCanvas.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+  // Guarantee clean white background for JPEG exports so transparent PNGs don't get black borders
+  if (currentMime === 'image/jpeg') {
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, w, h);
+  }
+  ctx.drawImage(currentImg, 0, 0, w, h);
+  const dataUrl = resultCanvas.toDataURL(currentMime, 0.92);
   const bytes = Math.round(atob(dataUrl.split(',')[1]).length);
   document.getElementById('orig-info').textContent = `${currentFile.name} (${formatFileSize(currentFile.size)})`;
   document.getElementById('new-info').textContent = `.${currentExt.toUpperCase()} • ~${formatFileSize(bytes)}`;
@@ -330,13 +363,13 @@ function convert() {
 
 document.getElementById('btn-download').addEventListener('click', () =>{
   if (!currentMime) return;
-  const dataUrl = resultCanvas.toDataURL(currentMime, 0.9);
+  const dataUrl = resultCanvas.toDataURL(currentMime, 0.92);
   const origName = currentFile.name.replace(/\.[^/.]+$/, '');
   downloadFile(dataUrl, `${origName}.${currentExt}`);
 });
 
 function resetTool() {
-  currentFile = null; currentImg = null;
+  currentFile = null; currentImg = null; preselectedFormat = null;
   document.getElementById('result-section').style.display = 'none';
   uploadArea.style.display = 'block'; editor.style.display = 'none'; fileInput.value = '';
 }
@@ -576,49 +609,86 @@ function resetTool() {
     </div>
 
         <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
-      5. Frequently Asked Questions (FAQ)
+      5. Online Image Format Converter — Photo Ka Format Kaise Change Kare (PNG, JPG, WebP &amp; AVIF Guide)
+    </h3>
+    <p>
+      Online forms, college admissions, sarkari exam applications, aur website upload portals par aksar specific image formats ki requirement hoti hai. Lekin modern smartphones photos ko default roop se AVIF ya HEIC formats me capture karte hain, jabki websites se download ki gayi photos aksar WebP format me hoti hain. Agar aap search kar rahe hain ki <strong>photo ka format kaise change kare</strong> ya <strong>PNG ko JPG me kaise badle</strong>, to PixelCraft AI browser ke andar hi bina kisi server upload ke direct conversion provide karta hai.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">1. PNG to JPG Converter (PNG Ko JPG Me Kaise Badle)</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          PNG ek lossless format hai jo transparency support karta hai, lekin iska file size kafi bada hota hai. Sarkari portals (jaise UPSC, SSC, IBPS, State PSC, NTA NEET/JEE) PNG files accept nahi karte aur strictly JPG/JPEG mangte hain. PixelCraft AI par transparent PNG ko JPG me convert karte waqt background automatically clean white composite hota hai, jisse black patch ki problem nahi aati.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">2. AVIF to JPG &amp; HEIC to JPG (Mobile Photo Format Change)</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          New Android phones me photos AVIF format me aur Apple iPhone me HEIC format me save hoti hain. Ye modern formats upload portals ya Windows PCs par open nahi hote. PixelCraft ke through aap bina kisi third-party software install kiye apne mobile me hi AVIF ya HEIC photo ko standard JPG format me convert kar sakte hain.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">3. WebP to PNG / JPG Converter (Internet Photo Conversion)</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          Google Chrome ya browser se images save karne par wo aksar <code>.webp</code> extension me download hoti hain jo Photoshop, MS Word ya printing software me open nahi hoti. PixelCraft AI me WebP file drop karke aap use 1 second me transparent PNG ya high-quality JPG me badal sakte hain.
+        </p>
+      </div>
+
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">4. Bina Quality Kharab Kiye Photo Format Change (Zero Quality Loss)</h4>
+        <p style="margin: 0; font-size: 0.93rem; color: var(--text-body); line-height: 1.6;">
+          Manual conversion me aksar photo pixelate ya blur ho jati hai. PixelCraft ka high-precision Canvas rendering engine image ke natural resolution aur sharpness ko preserve karta hai. High visual fidelity ke sath format transcode hota hai taaki text, signature, aur face details crystal-clear rahein.
+        </p>
+      </div>
+    </div>
+
+    <h3 style="color: var(--text-heading); font-size: 1.45rem; font-family: 'Outfit', sans-serif; font-weight: 700; margin-top: 36px; margin-bottom: 14px; border-bottom: 2px solid var(--primary-border); padding-bottom: 8px;">
+      6. Frequently Asked Questions (FAQ) — Common Conversion Queries
     </h3>
     <div style="display: flex; flex-direction: column; gap: 0px; margin-top: 18px;">
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: Does converting a transparent PNG to JPG turn the background black?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q1: PNG ko JPG me kaise badle mobile me? (How to convert PNG to JPG online?)</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Mobile me PNG ko JPG me convert karna behad aasan hai: PixelCraft AI tool par apni PNG photo upload karein, &ldquo;JPG&rdquo; format select karein, aur &ldquo;Download Converted&rdquo; par tap karein. Photo turant aapke mobile ki gallery me high quality JPG format me save ho jayegi. Kisi bhi app ya software ko download karne ki zarurat nahi hai.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: AVIF photo ko JPG me kaise convert kare?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Naye smartphones me photos AVIF format me save hoti hain. PixelCraft Format Converter me apni AVIF image upload karein aur output option me &ldquo;JPG&rdquo; choose karein. Browser ka native rendering engine AVIF stream ko decode karke standard JPG me transcode kar deta hai jise aap kisi bhi portal par upload kar sakte hain.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: iPhone HEIC photo ko JPG format me kaise kare bina upload ke?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Apple devices (iPhone/iPad) photos ko HEIC format me shoot karte hain. Safari ya Chrome browser me PixelCraft Format Converter open karein aur HEIC image select karein. Tool local hardware decoding use karke image ko direct JPG me render karta hai. Aapki photo kisi external server par upload nahi hoti, isliye full privacy bani rehti hai.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: WebP photo ko PNG me kaise badle transparent background ke sath?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          WebP image ko upload karke &ldquo;PNG&rdquo; option click karein. Agar original WebP image me transparent background (alpha channel) hai, to PNG format me convert hone ke baad bhi transparency bilkul preserve rahegi, jisse aap use logo, graphic design ya presentation me seamlessly use kar sakte hain.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: Does converting a transparent PNG to JPG turn the background black?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           JPEG does not support an alpha transparency channel. If you convert a transparent PNG directly to JPG without compositing, transparent pixels often render as black. PixelCraft's converter automatically composites transparent pixels onto a clean white canvas buffer before JPEG encoding to prevent ugly black borders.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q2: Is WebP better than PNG for logos and icons?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: Why do government exam portals reject PNG and WebP files in favor of JPG?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Yes! Lossless WebP maintains pixel-perfect edge clarity and full alpha transparency while typically producing files that are 26% smaller than optimized PNGs.
+          Indian recruitment and examination portals (UPSC, SSC, State PSC, NTA, IBPS, Railways) use legacy verification databases built to parse standardized JPEG JFIF/EXIF data. PNG files are typically 3x to 5x larger in file weight, and WebP is not yet indexed by legacy OCR passport verification systems. Converting to JPG ensures 100% acceptance without upload rejection errors.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q3: How do I serve WebP with fallback in modern HTML?</h4>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: Is there any file size limit or quality loss during format conversion?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Use the HTML5element: definefollowed by. Browsers automatically load WebP if supported, seamlessly falling back to JPG for legacy viewers.
-        </p>
-      </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: Can I convert animated GIFs to animated WebP?</h4>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Yes! Animated WebP files support 24-bit true color and alpha transparency, shrinking heavy 10MB GIF files down to under 1.5MB while completely eliminating the 256-color dithering banding inherent in legacy GIFs.
-        </p>
-      </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: When should I choose AVIF over WebP for web delivery?</h4>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          AVIF is the superior choice for high-resolution hero imagery, photographic banners, and HDR content where maximum bandwidth savings are paramount. AVIF delivers approximately 20% to 30% better compression efficiency than WebP at equivalent visual quality. However, WebP enjoys near 100% universal browser compatibility (including legacy Safari and edge devices) and requires significantly less CPU decoding overhead on older budget mobile hardware.
-        </p>
-      </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: Why does converting a JPEG to PNG often result in a LARGER file size?</h4>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          JPEG is a lossy compression format that permanently discards subtle high-frequency color variations and smooths pixel transitions. PNG is a strictly lossless format that stores exact pixel values using DEFLATE compression. When you convert a lossy JPEG to PNG, the PNG encoder must faithfully preserve every single JPEG compression artifact and ringing edge as literal, uncompressible high-frequency noise, causing the PNG file to swell by 200% to 400% without improving visual quality.
-        </p>
-      </div>
-      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: How does client-side format conversion handle transparency (Alpha Channel)?</h4>
-        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          Both PNG and WebP support full 8-bit alpha channel transparency (256 levels of opacity). Standard JPEG does NOT support transparency; if you convert a transparent PNG to JPEG, the transparent background pixels will automatically composite against solid black or solid white. When converting between formats in PixelCraft AI, transparency is preserved automatically whenever the target container supports alpha blending.
+          No! PixelCraft AI runs 100% on your device&rsquo;s local browser engine using HTML5 Canvas. There are no server bandwidth limits or file upload restrictions. Lossless conversion (PNG, WebP Lossless) preserves 100% mathematical image data, and lossy JPEG conversion utilizes high-grade 92% quality matrices to eliminate visual artifacts while keeping file size small.
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
