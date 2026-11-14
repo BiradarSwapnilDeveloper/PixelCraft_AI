@@ -85,16 +85,16 @@ print("   (approx. 30%-38% of width and height) for guaranteed commercial scanna
 print("\n--- TEST 2: SMART RESIZE PRESETS & MATHEMATICAL VERIFICATION ---")
 
 presets = [
-    {"label": "Indian Passport (Optional Print: 35x45 mm)", "w": 413, "h": 531, "aspect": 35/45, "authority": "MEA Passport Seva (Optional Print)"},
-    {"label": "IBPS Candidate Photo (Preferred 200x230 px)", "w": 200, "h": 230, "aspect": 200/230, "authority": "IBPS CRP Notification (Preferred)"},
-    {"label": "IBPS Scanned Signature (Preferred 140x60 px)", "w": 140, "h": 60, "aspect": 140/60, "authority": "IBPS CRP 7:3 Ratio (Preferred)"},
-    {"label": "SSC Signature (~4.0x2.0 cm / 2:1 Ratio)", "w": 400, "h": 200, "aspect": 2.0, "authority": "SSC CHSL 2024 / Annexure-IV (4x2 cm, 10-20 KB)"},
-    {"label": "SSC Signature (~6.0x2.0 cm / 3:1 Ratio)", "w": 600, "h": 200, "aspect": 3.0, "authority": "SSC CGL 2024 Para 9.6 (6x2 cm, 10-20 KB)"},
-    {"label": "UPSC CSE / OTR Photo (Current 10-Day Rule)", "w": 500, "h": 500, "aspect": 1.0, "authority": "UPSC Notice 05/2024-CSP Appx-II (10-Day DOP, 75% Face)"},
-    {"label": "UPSC ORA Portal Photo (General Bounds)", "w": 350, "h": 350, "aspect": 1.0, "authority": "UPSC Portal Validation Engine (350-1000 px, 20-300 KB)"},
-    {"label": "PAN Card UTIITSL (Suggested 213x213 px)", "w": 213, "h": 213, "aspect": 1.0, "authority": "UTIITSL Portal (Suggested)"},
-    {"label": "PAN Card Protean/NSDL (Suggested 200x280 px)", "w": 200, "h": 280, "aspect": 200/280, "authority": "Protean NSDL (Suggested)"},
-    {"label": "Exam Photo (Suggested 350x450 px)", "w": 350, "h": 450, "aspect": 350/450, "authority": "Suggested 7:9 Portrait (State PSC)"},
+    {"label": "Indian Passport (Optional Print: 35x45 mm)", "w": 413, "h": 531, "aspect": 35/45, "authority": "MEA Passport Seva (Optional Print Standard)"},
+    {"label": "IBPS Candidate Photo (Preferred 200x230 px)", "w": 200, "h": 230, "aspect": 200/230, "authority": "IBPS CRP Notification (Preferred Dimensions)"},
+    {"label": "IBPS Scanned Signature (Preferred 140x60 px)", "w": 140, "h": 60, "aspect": 140/60, "authority": "IBPS CRP 7:3 Ratio (Preferred Dimensions)"},
+    {"label": "SSC Signature (~4.0x2.0 cm / 2:1 Ratio)", "w": 400, "h": 200, "aspect": 2.0, "authority": "SSC CHSL 2024 / Annexure-IV (Notice-Specific)"},
+    {"label": "SSC Signature (~6.0x2.0 cm / 3:1 Ratio)", "w": 600, "h": 200, "aspect": 3.0, "authority": "SSC CGL 2024/2025 Para 9.6 (Notice-Specific)"},
+    {"label": "UPSC CSE Photo (Notice 05/2024-CSP Rule)", "w": 500, "h": 500, "aspect": 1.0, "authority": "UPSC Notice 05/2024-CSP Appx-II (Exam-Specific)"},
+    {"label": "UPSC Portal Photo (Observed Validation Bounds)", "w": 350, "h": 350, "aspect": 1.0, "authority": "UPSC Portal Form (Subject to Live Validation)"},
+    {"label": "PAN Card UTIITSL (Suggested 213x213 px)", "w": 213, "h": 213, "aspect": 1.0, "authority": "Convenience Preset (Not Verified Statutory Standard)"},
+    {"label": "PAN Card Protean/NSDL (Suggested 200x280 px)", "w": 200, "h": 280, "aspect": 200/280, "authority": "Convenience Preset (Not Verified Statutory Standard)"},
+    {"label": "Exam Photo (Suggested 350x450 px)", "w": 350, "h": 450, "aspect": 350/450, "authority": "Convenience Preset (Not Verified Statutory Standard)"},
     {"label": "Passport Ratio (150 DPI Screen: 207x266 px)", "w": 207, "h": 266, "aspect": 35/45, "authority": "Optional Screen Upload"}
 ]
 
