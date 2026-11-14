@@ -91,10 +91,6 @@ presets = [
     {"label": "SSC Signature (~4.0x2.0 cm / 2:1 Ratio)", "w": 400, "h": 200, "aspect": 2.0, "authority": "SSC CHSL 2024 / Annexure-IV (Notice-Specific)"},
     {"label": "SSC Signature (~6.0x2.0 cm / 3:1 Ratio)", "w": 600, "h": 200, "aspect": 3.0, "authority": "SSC CGL 2024/2025 Para 9.6 (Notice-Specific)"},
     {"label": "UPSC CSE Photo (Notice 05/2024-CSP Rule)", "w": 500, "h": 500, "aspect": 1.0, "authority": "UPSC Notice 05/2024-CSP Appx-II (Exam-Specific)"},
-    {"label": "UPSC Portal Photo (Observed Validation Bounds)", "w": 350, "h": 350, "aspect": 1.0, "authority": "UPSC Portal Form (Subject to Live Validation)"},
-    {"label": "PAN Card UTIITSL (Suggested 213x213 px)", "w": 213, "h": 213, "aspect": 1.0, "authority": "Convenience Preset (Not Verified Statutory Standard)"},
-    {"label": "PAN Card Protean/NSDL (Suggested 200x280 px)", "w": 200, "h": 280, "aspect": 200/280, "authority": "Convenience Preset (Not Verified Statutory Standard)"},
-    {"label": "Exam Photo (Suggested 350x450 px)", "w": 350, "h": 450, "aspect": 350/450, "authority": "Convenience Preset (Not Verified Statutory Standard)"},
     {"label": "Passport Ratio (150 DPI Screen: 207x266 px)", "w": 207, "h": 266, "aspect": 35/45, "authority": "Optional Screen Upload"}
 ]
 
