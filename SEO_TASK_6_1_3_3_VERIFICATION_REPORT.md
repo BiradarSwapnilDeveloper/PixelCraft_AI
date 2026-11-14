@@ -41,7 +41,7 @@ The `PLATFORMS` registry in [`smart-resize.html`](file:///d:/AI%20tools%20Websit
 | **4** | **SSC Scanned Signature (CHSL Variant)** | $400 \times 200\text{ px}$ | $2:1$ ($2.0000$) | **SSC CHSL 2024 Notice (F. No. HQ-C1102/5/2024-C-1) & Annexure-IV:** Verified for ~4.0 × 2.0 cm with 10–20 KB JPEG. Notice-specific. |
 | **5** | **SSC Scanned Signature (CGL Variant)** | $600 \times 200\text{ px}$ | $3:1$ ($3.0000$) | **SSC CGL 2024/2025 Notice (F. No. HQ-C11018/1/2024-C-1, Para 9.6):** Verified for ~6.0 × 2.0 cm with 10–20 KB JPEG. Notice-specific. |
 | **6** | **UPSC CSE Photo** | $500 \times 500\text{ px}$ | $1:1$ ($1.0000$) | **UPSC CSE 2024 (Notice No. 05/2024-CSP, Appendix-II):** Strictly verified requirements: max 10-day recency, printed candidate name and Date of Photograph (DOP) on bottom strip, ~75% face coverage. |
-| **7** | **Passport Ratio (Optional Screen Preview)** | $207 \times 266\text{ px}$ | $35:45$ ($0.7782$) | **Screen Upload Standard:** Convenient 150 DPI preview for digital forms adhering to the 35:45 passport proportion. |
+| **7** | **Passport Ratio (150 DPI Convenience Preview)** | $207 \times 266\text{ px}$ | $35:45$ ($0.7782$) | **Convenience Preview (Not Official Spec):** Mathematically derived $35\times 45\text{ mm}$ ratio at 150 DPI. Explicitly marked as a display convenience preview, not an officially prescribed upload specification. |
 
 ---
 
@@ -49,7 +49,7 @@ The `PLATFORMS` registry in [`smart-resize.html`](file:///d:/AI%20tools%20Websit
 
 ### 4.1 `public/tools/smart-resize.html`
 - **Quick Preset Shortcuts Bar (Lines ~240–250):** Removed button `📝 Suggested Exam Photo (350x450 px)`. The bar now cleanly contains 4 verified government shortcuts and 2 social shortcuts.
-- **`PLATFORMS` Array (Lines ~303–311):** Deleted the 4 unverified preset objects. Exactly 7 `govt` presets remain.
+- **`PLATFORMS` Array (Lines ~303–311):** Deleted the 4 unverified preset objects. Exactly 7 `govt` presets remain, with the $207\times 266\text{ px}$ preset explicitly labeled as `Passport Ratio (150 DPI Convenience Preview — Not Official Spec: 207x266 px)`.
 - **Section 5 Candidate Advisory (Lines ~725–740):**
   - Updated intro text from `(Passport Seva, UTIITSL PAN)` to `(Passport Seva, Banking & Commission Portals)`.
   - Removed bullets for `UPSC ORA Portal`, `PAN Card Presets`, and `Suggested Exam Photo`.
