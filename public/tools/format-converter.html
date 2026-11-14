@@ -316,12 +316,25 @@ function selectQuickFormat(targetExt, targetMime) {
   fileInput.click();
 }
 
+let currentConvertedBytes = 0;
+
 async function handleFile(file) {
+  if (!file) return;
+  if (!file.type || !file.type.startsWith('image/')) {
+    showToast('Please upload a valid image file.', 'error');
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackError('Format Converter', 'invalid_input');
+    }
+    return;
+  }
   currentFile = file;
   try {
     currentImg = await fileToImage(file);
   } catch (err) {
     showToast('Could not decode image format. Your browser cannot open this file natively (e.g. HEIC is only natively supported on Apple/Safari). Please upload PNG, JPG, WebP, or AVIF.', 'error');
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackError('Format Converter', 'unsupported_format');
+    }
     resetTool();
     return;
   }
@@ -348,23 +361,36 @@ document.querySelectorAll('.format-choice-btn').forEach(btn =>{
 
 function convert() {
   if (!currentImg || !currentMime) return;
-  const w = currentImg.naturalWidth || currentImg.width;
-  const h = currentImg.naturalHeight || currentImg.height;
-  resultCanvas.width = w;
-  resultCanvas.height = h;
-  const ctx = resultCanvas.getContext('2d');
-  ctx.clearRect(0, 0, w, h);
-  // Guarantee clean white background for JPEG exports so transparent PNGs don't get black borders
-  if (currentMime === 'image/jpeg') {
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, 0, w, h);
+  try {
+    const w = currentImg.naturalWidth || currentImg.width;
+    const h = currentImg.naturalHeight || currentImg.height;
+    resultCanvas.width = w;
+    resultCanvas.height = h;
+    const ctx = resultCanvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h);
+    // Guarantee clean white background for JPEG exports so transparent PNGs don't get black borders
+    if (currentMime === 'image/jpeg') {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, w, h);
+    }
+    ctx.drawImage(currentImg, 0, 0, w, h);
+    const dataUrl = resultCanvas.toDataURL(currentMime, 0.92);
+    const bytes = Math.round(atob(dataUrl.split(',')[1]).length);
+    currentConvertedBytes = bytes;
+    document.getElementById('orig-info').textContent = `${currentFile.name} (${formatFileSize(currentFile.size)})`;
+    document.getElementById('new-info').textContent = `.${currentExt.toUpperCase()} • ~${formatFileSize(bytes)}`;
+    document.getElementById('result-section').style.display = 'block';
+
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackCompletion('Format Converter', currentExt, bytes);
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('Error during conversion. Try another format.', 'error');
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackError('Format Converter', 'processing_failed');
+    }
   }
-  ctx.drawImage(currentImg, 0, 0, w, h);
-  const dataUrl = resultCanvas.toDataURL(currentMime, 0.92);
-  const bytes = Math.round(atob(dataUrl.split(',')[1]).length);
-  document.getElementById('orig-info').textContent = `${currentFile.name} (${formatFileSize(currentFile.size)})`;
-  document.getElementById('new-info').textContent = `.${currentExt.toUpperCase()} • ~${formatFileSize(bytes)}`;
-  document.getElementById('result-section').style.display = 'block';
 }
 
 document.getElementById('btn-download').addEventListener('click', () =>{
@@ -372,10 +398,13 @@ document.getElementById('btn-download').addEventListener('click', () =>{
   const dataUrl = resultCanvas.toDataURL(currentMime, 0.92);
   const origName = currentFile.name.replace(/\.[^/.]+$/, '');
   downloadFile(dataUrl, `${origName}.${currentExt}`);
+  if (window.PixelCraftAnalytics) {
+    window.PixelCraftAnalytics.trackDownload('Format Converter', currentExt, currentConvertedBytes || (currentFile ? currentFile.size : 0));
+  }
 });
 
 function resetTool() {
-  currentFile = null; currentImg = null; preselectedFormat = null;
+  currentFile = null; currentImg = null; preselectedFormat = null; currentConvertedBytes = 0;
   document.getElementById('result-section').style.display = 'none';
   uploadArea.style.display = 'block'; editor.style.display = 'none'; fileInput.value = '';
 }

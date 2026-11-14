@@ -330,6 +330,7 @@
       { category: 'social', platform: 'TikTok', type: 'Profile Photo', w: 200, h: 200, icon: '🎵' },
     ];
 
+    let currentFile = null;
     let currentImg = null;
     let currentFilter = 'all';
     let preselectedCategory = 'all';
@@ -362,7 +363,24 @@
     }
 
     async function handleFile(file) {
-      currentImg = await fileToImage(file);
+      if (!file) return;
+      if (!file.type || !file.type.startsWith('image/')) {
+        showToast('Please upload a valid image file.', 'error');
+        if (window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackError('Smart Social Resize', 'invalid_input');
+        }
+        return;
+      }
+      currentFile = file;
+      try {
+        currentImg = await fileToImage(file);
+      } catch (err) {
+        showToast('Could not load image. Please try another file.', 'error');
+        if (window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackError('Smart Social Resize', 'unsupported_format');
+        }
+        return;
+      }
       uploadArea.style.display = 'none';
       editor.style.display = 'block';
       if (preselectedCategory && preselectedCategory !== 'all') {
@@ -376,6 +394,9 @@
         preselectedCategory = 'all';
       }
       renderCards();
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackCompletion('Smart Social Resize', 'png', file.size);
+      }
     }
 
     function resizeToCanvas(img, w, h) {
@@ -425,7 +446,12 @@
           const visiblePresets = PLATFORMS.filter(p => currentFilter === 'all' || p.category === currentFilter);
           const p = visiblePresets[parseInt(btn.dataset.idx)];
           const c = resizeToCanvas(currentImg, p.w, p.h);
-          downloadFile(c.toDataURL('image/png'), `${p.platform.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${p.type.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${p.w}x${p.h}.png`);
+          const dataUrl = c.toDataURL('image/png');
+          const approxBytes = Math.round(atob(dataUrl.split(',')[1]).length);
+          downloadFile(dataUrl, `${p.platform.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${p.type.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${p.w}x${p.h}.png`);
+          if (window.PixelCraftAnalytics) {
+            window.PixelCraftAnalytics.trackDownload('Smart Social Resize', 'png', approxBytes);
+          }
         });
       });
     }
@@ -443,10 +469,13 @@
       const blob = await zip.generateAsync({ type: 'blob' });
       saveAs(blob, `pixelcraft-resized-${currentFilter}.zip`);
       showToast('ZIP downloaded!', 'success');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackDownload('Smart Social Resize', 'zip', blob.size);
+      }
     });
 
     function resetTool() {
-      currentImg = null; currentFilter = 'all'; preselectedCategory = 'all'; sizesGrid.innerHTML = '';
+      currentFile = null; currentImg = null; currentFilter = 'all'; preselectedCategory = 'all'; sizesGrid.innerHTML = '';
       uploadArea.style.display = 'block'; editor.style.display = 'none'; fileInput.value = '';
     }
   </script>

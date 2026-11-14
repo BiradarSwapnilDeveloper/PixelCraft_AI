@@ -488,6 +488,7 @@
     let qrCode = null;
     let isDefaultLogo = false;
     let logoUrl = null;
+    let hasUserInteracted = false;
     
     // Dynamic PixelCraft Logo SVG Matcher
     function getContrast(hexcolor){
@@ -617,6 +618,10 @@
       qrCode = new QRCodeStyling(qrConfig);
       qrCode.append(document.getElementById("qr-preview"));
       updateStyleCompatibilityWarning();
+
+      if (hasUserInteracted && window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackCompletionDebounced('Custom QR Generator', 'png', 12000, 750);
+      }
     }
 
     function updateUrlStatus() {
@@ -626,6 +631,9 @@
       if (!val) {
         statusEl.textContent = 'Please enter a valid website URL or link.';
         statusEl.style.color = '#ef4444';
+        if (hasUserInteracted && window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackError('Custom QR Generator', 'invalid_input');
+        }
       } else if (/^https?:\/\//i.test(val)) {
         statusEl.textContent = 'Direct static web URL (http/https). Scannable worldwide without redirects.';
         statusEl.style.color = 'var(--text-muted)';
@@ -636,18 +644,19 @@
     }
 
     qrData.addEventListener('input', () => {
+      hasUserInteracted = true;
       updateUrlStatus();
       renderQR();
     });
-    dotType.addEventListener('change', renderQR);
-    cornerType.addEventListener('change', renderQR);
-    fgGradCheck.addEventListener('change', renderQR);
-    bgGradCheck.addEventListener('change', renderQR);
+    dotType.addEventListener('change', () => { hasUserInteracted = true; renderQR(); });
+    cornerType.addEventListener('change', () => { hasUserInteracted = true; renderQR(); });
+    fgGradCheck.addEventListener('change', () => { hasUserInteracted = true; renderQR(); });
+    bgGradCheck.addEventListener('change', () => { hasUserInteracted = true; renderQR(); });
     
-    colorFg1.addEventListener('input', (e) =>{ fgVal1.textContent = e.target.value; renderQR(); });
-    colorFg2.addEventListener('input', (e) =>{ fgVal2.textContent = e.target.value; renderQR(); });
-    colorBg1.addEventListener('input', (e) =>{ bgVal1.textContent = e.target.value; renderQR(); });
-    colorBg2.addEventListener('input', (e) =>{ bgVal2.textContent = e.target.value; renderQR(); });
+    colorFg1.addEventListener('input', (e) =>{ hasUserInteracted = true; fgVal1.textContent = e.target.value; renderQR(); });
+    colorFg2.addEventListener('input', (e) =>{ hasUserInteracted = true; fgVal2.textContent = e.target.value; renderQR(); });
+    colorBg1.addEventListener('input', (e) =>{ hasUserInteracted = true; bgVal1.textContent = e.target.value; renderQR(); });
+    colorBg2.addEventListener('input', (e) =>{ hasUserInteracted = true; bgVal2.textContent = e.target.value; renderQR(); });
 
     // Handle Brand Icon and Logo Controls
     const btnToggleBrandLogo = document.getElementById('btn-toggle-brand-logo');
@@ -690,11 +699,15 @@
 
       if (file.size >2 * 1024 * 1024) {
         showToast('Logo file too large! Please use under 2MB.', 'error');
+        if (window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackError('Custom QR Generator', 'file_too_large');
+        }
         return;
       }
 
       const reader = new FileReader();
       reader.onload = (event) =>{
+        hasUserInteracted = true;
         isDefaultLogo = false;
         logoUrl = event.target.result;
         logoPreviewText.style.display = 'flex';
@@ -720,6 +733,9 @@
           const qrCanvas = previewDiv.querySelector('canvas');
           if (!qrCanvas) {
              qrCode.download({ name: "PixelCraft-AI-QR", extension: "png" });
+             if (window.PixelCraftAnalytics) {
+               window.PixelCraftAnalytics.trackDownload('Custom QR Generator', 'png', 15000);
+             }
              return;
           }
           
@@ -742,10 +758,16 @@
           link.download = "PixelCraft-AI-3D-QR.png";
           link.href = finalCanvas.toDataURL("image/png");
           link.click();
+          if (window.PixelCraftAnalytics) {
+            window.PixelCraftAnalytics.trackDownload('Custom QR Generator', 'png', 35000);
+          }
         };
       } else {
         qrCode.download({ name: "PixelCraft-QR", extension: "png" });
         showToast('Downloading PNG...', 'success');
+        if (window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackDownload('Custom QR Generator', 'png', 15000);
+        }
       }
     });
 
@@ -753,6 +775,9 @@
       if(!qrCode) return;
       qrCode.download({ name: "PixelCraft-QR-Vector", extension: "svg" });
       showToast('Downloading SVG...', 'success');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackDownload('Custom QR Generator', 'svg', 8000);
+      }
     });
 
     // Handle 3D AI QR Logic

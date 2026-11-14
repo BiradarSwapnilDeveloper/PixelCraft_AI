@@ -768,3 +768,110 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('PWA: Service Worker error', err));
   });
 }
+
+// 9. GA4 CUSTOM TOOL EVENT INSTRUMENTATION (Zero-PII, Safe Enterprise Analytics)
+window.PixelCraftAnalytics = (function() {
+  function getFileSizeBucket(bytes) {
+    if (typeof bytes !== 'number' || isNaN(bytes) || bytes <= 0) return 'unknown';
+    var kb = bytes / 1024;
+    if (kb < 20) return '<20KB';
+    if (kb <= 50) return '20KB-50KB';
+    if (kb <= 100) return '50KB-100KB';
+    if (kb <= 200) return '100KB-200KB';
+    if (kb <= 500) return '200KB-500KB';
+    return '>500KB';
+  }
+
+  function trackEvent(eventName, params) {
+    try {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', eventName, params || {});
+      } else if (window.dataLayer && Array.isArray(window.dataLayer)) {
+        window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
+      }
+    } catch (err) {
+      if (typeof console !== 'undefined' && console.warn) {
+        console.warn('PixelCraftAnalytics dispatch bypassed:', err);
+      }
+    }
+  }
+
+  var debounceTimers = {};
+  function debounce(key, delayMs, fn) {
+    if (debounceTimers[key]) {
+      clearTimeout(debounceTimers[key]);
+    }
+    debounceTimers[key] = setTimeout(function() {
+      delete debounceTimers[key];
+      fn();
+    }, delayMs);
+  }
+
+  var EVENT_NAME_MAP = {
+    'Image Compressor': 'image_compressed',
+    'Format Converter': 'format_converted',
+    'Custom QR Generator': 'qr_generated',
+    'Smart Social Resize': 'image_resized',
+    'Images to PDF': 'pdf_created'
+  };
+
+  return {
+    getFileSizeBucket: getFileSizeBucket,
+    trackEvent: trackEvent,
+
+    trackCompletion: function(toolName, format, byteSize, extraParams) {
+      try {
+        var eventName = EVENT_NAME_MAP[toolName] || 'tool_completed';
+        var payload = {
+          tool_name: toolName,
+          output_format: (format || 'unknown').toLowerCase().replace(/^\./, ''),
+          operation_status: 'success',
+          file_size_bucket: getFileSizeBucket(byteSize)
+        };
+        if (extraParams && typeof extraParams === 'object') {
+          for (var k in extraParams) {
+            if (Object.prototype.hasOwnProperty.call(extraParams, k)) {
+              if (['filename', 'file_name', 'name', 'url', 'data', 'text', 'prompt', 'secret', 'password'].indexOf(k.toLowerCase()) === -1) {
+                payload[k] = extraParams[k];
+              }
+            }
+          }
+        }
+        trackEvent(eventName, payload);
+      } catch (e) {}
+    },
+
+    trackCompletionDebounced: function(toolName, format, byteSize, delayMs, extraParams) {
+      var key = 'comp_' + toolName;
+      var self = this;
+      debounce(key, delayMs || 600, function() {
+        self.trackCompletion(toolName, format, byteSize, extraParams);
+      });
+    },
+
+    trackDownload: function(toolName, format, byteSize) {
+      try {
+        var payload = {
+          tool_name: toolName,
+          output_format: (format || 'unknown').toLowerCase().replace(/^\./, ''),
+          operation_status: 'success',
+          file_size_bucket: getFileSizeBucket(byteSize)
+        };
+        trackEvent('tool_output_downloaded', payload);
+      } catch (e) {}
+    },
+
+    trackError: function(toolName, errorCategory) {
+      try {
+        var allowed = ['invalid_input', 'unsupported_format', 'processing_failed', 'file_too_large'];
+        var cat = allowed.indexOf(errorCategory) !== -1 ? errorCategory : 'processing_failed';
+        trackEvent('tool_operation_error', {
+          tool_name: toolName,
+          error_type: cat,
+          operation_status: 'error'
+        });
+      } catch (e) {}
+    }
+  };
+})();
+

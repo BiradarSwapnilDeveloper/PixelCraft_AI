@@ -468,9 +468,12 @@
   });
 
   async function handleFiles(files) {
-    const validFiles = files.filter(f => f.type.startsWith('image/'));
+    const validFiles = files.filter(f => f.type && f.type.startsWith('image/'));
     if(validFiles.length === 0) {
       showToast('Please upload valid image files.', 'error');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackError('Images to PDF', 'invalid_input');
+      }
       return;
     }
 
@@ -622,11 +625,24 @@
         }
       }
 
+      let pdfBytes = 0;
+      try {
+        const pdfBlob = doc.output('blob');
+        if (pdfBlob) pdfBytes = pdfBlob.size;
+      } catch (err) {}
+
       doc.save("pixelcraft-converted.pdf");
       showToast('PDF Generated successfully!', 'success');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackCompletion('Images to PDF', 'pdf', pdfBytes);
+        window.PixelCraftAnalytics.trackDownload('Images to PDF', 'pdf', pdfBytes);
+      }
     } catch (e) {
       console.error(e);
       showToast('Error generating PDF. Please try again.', 'error');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackError('Images to PDF', 'processing_failed');
+      }
     } finally {
       generateBtn.disabled = false;
       document.getElementById('loading-indicator').style.display = 'none';
