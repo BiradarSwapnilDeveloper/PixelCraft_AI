@@ -93,74 +93,74 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Can an attacker detect that data is hidden in my audio file?",
+          "name": "Can video players like VLC, QuickTime, Chrome, or Smart TVs play stego videos?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Because PixelCraft encrypts your payload with AES-256 before embedding, the resulting bitstream has maximum Shannon entropy, closely resembling natural high-frequency analog thermal noise. While specialized statistical tools (such as RS-analysis) might flag anomalies in completely silent audio, embedding in rich natural recordings makes detection practically impossible."
+            "text": "Yes! The output file is a 100% standards-compliant MP4 (ISO-BMFF) or MKV container. Because secret payloads are embedded inside custom ISO metadata atoms or container multiplexing blocks rather than modifying underlying H.264/H.265 video bitstreams, standard media players decode and play the video completely normally with zero visual distortion, lag, or container errors."
           }
         },
         {
           "@type": "Question",
-          "name": "What happens if the recipient types the wrong passphrase?",
+          "name": "Does video steganography re-encode or compress the original video quality?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "AES-256-GCM features authenticated encryption. If the passphrase or initialization vector is incorrect by even a single character, cryptographic authentication fails immediately and the system returns a decryption error without exposing partial plaintext."
+            "text": "No. Unlike rudimentary browser tools that play videos through a canvas and re-record with lossy WebM codecs, PixelCraft operates directly at the container level via ArrayBuffer multiplexing. Your original 4K, 1080p, 60fps video slices remain pristine with zero transcoding delay and zero loss of quality."
           }
         },
         {
           "@type": "Question",
-          "name": "How much text can I hide inside a 3-minute song?",
+          "name": "How does Dual-Vault Plausible Deniability work in Video Mode?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "In a 3-minute stereo WAV recording at 44.1kHz, there are approximately 15.8 million audio samples. Using 1 bit per sample, the carrier can store roughly 1.9 Megabytes of data-enough to embed hundreds of pages of confidential text, spreadsheets, or small encrypted archives."
+            "text": "When encoding, you can define both a Real Password and a Fake (Decoy) Password. If an adversary forces you to surrender your password, you disclose the Decoy Password. The extraction engine decrypts only the harmless cover message and presents a valid decryption badge. The primary classified secret remains mathematically undetectable and unrecoverable without the Master Key."
           }
         },
         {
           "@type": "Question",
-          "name": "Can I play the stego audio in normal media players like VLC or QuickTime?",
+          "name": "What happens if I send the stego file over WhatsApp, Telegram, or Discord?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes! The output file is a 100% compliant standard WAV audio file. It plays completely normally in iTunes, VLC, Windows Media Player, and web browsers with zero distortion or error messages."
+            "text": "If you send video or audio via standard Gallery/Photos sharing, WhatsApp and other platforms run a server-side FFmpeg compression pipeline that recompresses frames, recalculates audio MDCT, and strips custom container atoms-destroying the secret. To guarantee 100% secret survival: Always download and send the WhatsApp Armor (.ZIP) file or attach the media file via Paperclip -> Document. In Document mode, WhatsApp transmits binary streams bit-for-bit without server-side transcoding!"
           }
         },
         {
           "@type": "Question",
-          "name": "Does PixelCraft transmit my passphrase or audio to remote servers?",
+          "name": "Can an attacker detect that data is hidden in my audio or video file?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Zero bytes leave your computer. Both the encryption, bit injection, audio reconstruction, and decryption routines run locally in your browser using standard Web Audio and Web Crypto APIs."
+            "text": "Because PixelCraft encrypts your payload with AES-256 before embedding, the resulting bitstream possesses maximum Shannon entropy, mirroring pseudorandom thermal noise or standard application container metadata. Without possessing the decryption key, an outside observer cannot distinguish the ciphertext from random cryptographic padding."
           }
         },
         {
           "@type": "Question",
-          "name": "Can I hide files like images or PDFs inside an audio track?",
+          "name": "How much data can I embed in a video or audio carrier?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes! Any digital asset that can be base64-encoded or converted to an ArrayBuffer can be serialized into the encrypted bitstream, provided the audio track has sufficient duration and sample count to hold the payload."
+            "text": "In Audio Mode, a 3-minute stereo WAV recording at 44.1kHz can store approximately 1.9 Megabytes of data. In Video Mode, because ISO-BMFF container multiplexing accommodates extended atoms without fixed audio sample length constraints, you can embed several megabytes of confidential text, coordinates, source code, or private keys with negligible file size overhead."
           }
         },
         {
           "@type": "Question",
-          "name": "Why does saving as MP3 destroy the hidden secret?",
+          "name": "Does PixelCraft transmit my passphrase or media files to remote servers?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "MP3 uses lossy perceptual encoding: it applies modified discrete cosine transforms (MDCT) and quantizes frequency bands according to psychoacoustic curves. This process alters or drops least significant bits entirely, wiping out LSB data. Lossless formats (WAV/FLAC) are required."
+            "text": "Zero bytes leave your computer. Both the encryption, atom multiplexing, bit injection, container reconstruction, and decryption routines run locally in your browser using standard Web Crypto and TypedArray APIs."
           }
         },
         {
           "@type": "Question",
-          "name": "Can payload data survive audio conversion to MP3, AAC, or Opus?",
+          "name": "Why does converting audio to MP3 destroy LSB data while video container multiplexing survives?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. Perceptual lossy audio codecs (MP3, AAC, OGG Vorbis) function by performing a Modified Discrete Cosine Transform (MDCT) and ruthlessly discarding frequency components beneath psychoacoustic masking curves. Because standard LSB steganography stores bits in the least significant bit of raw PCM amplitudes, the lossy psychoacoustic quantization process obliterates those bits. For lossless secret transmission, carriers must remain in uncompressed WAV, AIFF, or FLAC formats."
+            "text": "MP3 compression uses lossy perceptual encoding: it applies modified discrete cosine transforms (MDCT) and quantizes frequency bands according to psychoacoustic curves, obliterating raw sample LSBs. In contrast, PixelCraft's Video Steganography operates at the container multiplexing layer, preserving both original video and audio packets byte-for-byte while safely housing the ciphertext in standards-compliant container atoms."
           }
         },
         {
           "@type": "Question",
-          "name": "Why is AES-256-GCM utilized over legacy CBC mode in audio carriers?",
+          "name": "Audio ya video me secret message ya file kaise chupaye? (How to hide secret files in audio and video?)",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Galois/Counter Mode (GCM) provides Authenticated Encryption with Associated Data (AEAD). In legacy CBC mode, an adversary could modify bit values in the carrier file without triggering a decryption crash, potentially inducing padding oracle vulnerabilities. GCM computes a 128-bit authentication tag; if even a single byte of the audio file is tampered with or corrupted during transfer, the decryption algorithm instantly rejects the payload before execution."
+            "text": "Audio ya video file me secret message ya file chupana behad saral hai: PixelCraft Audio & Video Steganography tool par apna video (MP4) ya audio (WAV) upload karein, apna secret text ya file paste karein, aur password set karein. Tool local hardware decoding use karke data ko bina kisi visual ya audio quality loss ke container me encrypt karke embed kar deta hai. Download ki gayi file bilkul normal video/audio ki tarah play hoti hai."
           }
         }
       ]
@@ -2159,6 +2159,12 @@
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q8: Why does converting audio to MP3 destroy LSB data while video container multiplexing survives?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           MP3 compression uses lossy perceptual encoding: it applies modified discrete cosine transforms (MDCT) and quantizes frequency bands according to psychoacoustic curves, obliterating raw sample LSBs. In contrast, PixelCraft's Video Steganography operates at the container multiplexing layer, preserving both original video and audio packets byte-for-byte while safely housing the ciphertext in standards-compliant container atoms.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q9: Audio ya video me secret message ya file kaise chupaye? (How to hide secret files in audio and video?)</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Audio ya video file me secret message ya file chupana behad saral hai: PixelCraft Audio &amp; Video Steganography tool par apna video (MP4) ya audio (WAV) upload karein, apna secret text ya file paste karein, aur password set karein. Tool local hardware decoding use karke data ko bina kisi visual ya audio quality loss ke container me encrypt karke embed kar deta hai. Download ki gayi file bilkul normal video/audio ki tarah play hoti hai.
         </p>
       </div>
     </div>
