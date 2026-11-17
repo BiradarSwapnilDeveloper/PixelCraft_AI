@@ -135,6 +135,22 @@
             "@type": "Answer",
             "text": "When preparing decoys for production seeding, always test them in an isolated test environment with a dedicated staging webhook. Document the token ID in your incident response database before placing it in production directories so your SOC team can instantly identify the decoy location when an alert triggers."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "How does plausible deniability protect me if forced to reveal a password?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If an adversary or coercive actor forces you to disclose your encryption password, you supply the Decoy Password instead of your Real Password. The decryption engine unlocks only the innocent decoy message (such as a generic note or shopping list) with zero cryptographic markers or statistical indicators revealing that a second, real confidential message is embedded within the exact same image."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which steganography mode should I choose for sharing images over WhatsApp or chat apps?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Select 'Social Safe Mode' when sending images over WhatsApp, Telegram, or social media networks. Social Safe Mode employs an adaptive scale-invariant macro-grid designed to survive aggressive lossy JPEG re-compression, auto-resizing, and metadata stripping. For large files, long letters, or source code where maximum pixel-perfect capacity is required, use 'Ultra-HD Lossless Mode' and share the file as an uncompressed document attachment."
+          }
         }
       ]
     }
@@ -1583,6 +1599,18 @@
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: How should our security team test decoys without triggering alerts?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           When preparing decoys for production seeding, always test them in an isolated test environment with a dedicated staging webhook. Document the token ID in your incident response database before placing it in production directories so your SOC team can instantly identify the decoy location when an alert triggers.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: How does plausible deniability protect me if forced to reveal a password?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          If an adversary or coercive actor forces you to disclose your encryption password, you supply the Decoy Password instead of your Real Password. The decryption engine unlocks only the innocent decoy message (such as a generic note or shopping list) with zero cryptographic markers or statistical indicators revealing that a second, real confidential message is embedded within the exact same image.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q8: Which steganography mode should I choose for sharing images over WhatsApp or chat apps?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Select 'Social Safe Mode' when sending images over WhatsApp, Telegram, or social media networks. Social Safe Mode employs an adaptive scale-invariant macro-grid designed to survive aggressive lossy JPEG re-compression, auto-resizing, and metadata stripping. For large files, long letters, or source code where maximum pixel-perfect capacity is required, use 'Ultra-HD Lossless Mode' and share the file as an uncompressed document attachment.
         </p>
       </div>
     </div>
