@@ -348,11 +348,27 @@ async function handleFile(file) {
   }
 }
 
+let isConverting = false;
+
+function setConversionControlsState(disabled) {
+  document.querySelectorAll('.format-choice-btn').forEach(btn => {
+    btn.disabled = disabled;
+    btn.style.pointerEvents = disabled ? 'none' : 'auto';
+    btn.style.opacity = disabled ? '0.6' : '1';
+  });
+  const dlBtn = document.getElementById('btn-download');
+  if (dlBtn) {
+    dlBtn.disabled = disabled;
+    dlBtn.style.pointerEvents = disabled ? 'none' : 'auto';
+  }
+}
+
 document.querySelectorAll('.format-choice-btn').forEach(btn =>{
   btn.style.cssText = 'background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:20px 16px;cursor:pointer;transition:all 0.2s;text-align:center;';
-  btn.addEventListener('mouseenter', () =>{ btn.style.borderColor = 'var(--primary)'; btn.style.background = 'var(--primary-light)'; });
-  btn.addEventListener('mouseleave', () =>{ btn.style.borderColor = 'var(--border)'; btn.style.background = 'var(--white)'; });
+  btn.addEventListener('mouseenter', () =>{ if (!isConverting) { btn.style.borderColor = 'var(--primary)'; btn.style.background = 'var(--primary-light)'; } });
+  btn.addEventListener('mouseleave', () =>{ if (!isConverting) { btn.style.borderColor = 'var(--border)'; btn.style.background = 'var(--white)'; } });
   btn.addEventListener('click', () =>{
+    if (isConverting) return;
     currentMime = btn.dataset.mime;
     currentExt = btn.dataset.ext;
     convert();
@@ -361,6 +377,10 @@ document.querySelectorAll('.format-choice-btn').forEach(btn =>{
 
 function convert() {
   if (!currentImg || !currentMime) return;
+  if (isConverting) return;
+  isConverting = true;
+  setConversionControlsState(true);
+
   try {
     const w = currentImg.naturalWidth || currentImg.width;
     const h = currentImg.naturalHeight || currentImg.height;
@@ -390,11 +410,14 @@ function convert() {
     if (window.PixelCraftAnalytics) {
       window.PixelCraftAnalytics.trackError('Format Converter', 'processing_failed');
     }
+  } finally {
+    isConverting = false;
+    setConversionControlsState(false);
   }
 }
 
 document.getElementById('btn-download').addEventListener('click', () =>{
-  if (!currentMime) return;
+  if (!currentMime || isConverting) return;
   const dataUrl = resultCanvas.toDataURL(currentMime, 0.92);
   const origName = currentFile.name.replace(/\.[^/.]+$/, '');
   downloadFile(dataUrl, `${origName}.${currentExt}`);
@@ -404,6 +427,8 @@ document.getElementById('btn-download').addEventListener('click', () =>{
 });
 
 function resetTool() {
+  isConverting = false;
+  setConversionControlsState(false);
   currentFile = null; currentImg = null; preselectedFormat = null; currentConvertedBytes = 0;
   document.getElementById('result-section').style.display = 'none';
   uploadArea.style.display = 'block'; editor.style.display = 'none'; fileInput.value = '';

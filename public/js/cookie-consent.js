@@ -64,7 +64,29 @@
       document.head.appendChild(gaScript);
 
       gtag('js', new Date());
-      gtag('config', GA_ID);
+
+      // Safe Staging/Development-only Debug Configuration
+      // Restricts debug_mode strictly to local development and staging environments.
+      // Normal production users and external visitors NEVER receive debug_mode.
+      const isDevHost = (function () {
+        try {
+          const h = window.location.hostname;
+          return h === 'localhost' || h === '127.0.0.1' || h === '0.0.0.0' || h.endsWith('.local') || h.endsWith('.internal');
+        } catch (e) {
+          return false;
+        }
+      })();
+
+      const gaConfig = {};
+      if (isDevHost) {
+        try {
+          if (window.location.search.includes('ga_debug=1') || localStorage.getItem('pc_ga_debug') === 'true') {
+            gaConfig.debug_mode = true;
+          }
+        } catch (e) {}
+      }
+
+      gtag('config', GA_ID, gaConfig);
     }
 
     // 2. Google AdSense Script Injection

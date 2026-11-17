@@ -153,7 +153,7 @@ runTest('Tool Completion Events: Maps tool names to exact custom GA4 event names
     file_size_bucket: '<20KB'
   });
 
-  assert.strictEqual(eventsCaptured[3].eventName, 'image_resized');
+  assert.strictEqual(eventsCaptured[3].eventName, 'resize_previews_generated');
   assert.deepStrictEqual(eventsCaptured[3].params, {
     tool_name: 'Smart Social Resize',
     output_format: 'png',
@@ -285,7 +285,7 @@ runTest('HTML Codebase Audit: Priority tool pages contain instrumented PixelCraf
     { file: 'image-compressor.html', completion: 'image_compressed', toolName: 'Image Compressor' },
     { file: 'format-converter.html', completion: 'format_converted', toolName: 'Format Converter' },
     { file: 'qr-generator.html', completion: 'qr_generated', toolName: 'Custom QR Generator' },
-    { file: 'smart-resize.html', completion: 'image_resized', toolName: 'Smart Social Resize' },
+    { file: 'smart-resize.html', completion: 'resize_previews_generated', toolName: 'Smart Social Resize' },
     { file: 'images-to-pdf.html', completion: 'pdf_created', toolName: 'Images to PDF' }
   ];
 

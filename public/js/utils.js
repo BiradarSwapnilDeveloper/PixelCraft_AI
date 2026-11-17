@@ -811,7 +811,7 @@ window.PixelCraftAnalytics = (function() {
     'Image Compressor': 'image_compressed',
     'Format Converter': 'format_converted',
     'Custom QR Generator': 'qr_generated',
-    'Smart Social Resize': 'image_resized',
+    'Smart Social Resize': 'resize_previews_generated',
     'Images to PDF': 'pdf_created'
   };
 
@@ -821,9 +821,10 @@ window.PixelCraftAnalytics = (function() {
 
     trackCompletion: function(toolName, format, byteSize, extraParams) {
       try {
-        var eventName = EVENT_NAME_MAP[toolName] || 'tool_completed';
+        var eventName = EVENT_NAME_MAP[toolName] || (toolName === 'resize_previews_generated' ? 'resize_previews_generated' : 'tool_completed');
+        var resolvedToolName = toolName === 'resize_previews_generated' ? 'Smart Social Resize' : toolName;
         var payload = {
-          tool_name: toolName,
+          tool_name: resolvedToolName,
           output_format: (format || 'unknown').toLowerCase().replace(/^\./, ''),
           operation_status: 'success',
           file_size_bucket: getFileSizeBucket(byteSize)
