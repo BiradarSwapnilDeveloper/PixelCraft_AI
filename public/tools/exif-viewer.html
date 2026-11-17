@@ -127,6 +127,30 @@
             "@type": "Answer",
             "text": "Modern smartphones use Assisted GPS (A-GPS), GLONASS, Galileo, and Wi-Fi SSID trilateration. In open outdoor conditions, GPS coordinates recorded in EXIF metadata are typically accurate within 3 to 5 meters (10 to 16 feet). If an image is taken inside a building, Wi-Fi BSSID geolocation databases can still record coordinates accurate within the specific room or floor level."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "Photo ki location aur camera details kaise check kare online? (How to find photo location and camera details?)",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Kisi bhi photo ki hidden location aur camera details check karne ke liye: PixelCraft AI EXIF Viewer par apni JPEG ya RAW image upload karein. Tool turant photo ke embedded EXIF tags decode karke camera brand, lens model, shutter speed, ISO, aur exact Google Maps GPS location pin dikha deta hai. Ye complete process aapke browser me locally hoti hai, isliye aapki photo 100% private rehti hai."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I strip or remove GPS coordinates and EXIF data before uploading photos online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Photos se sensitive GPS coordinates aur camera metadata hatane ke liye use HTML5 Canvas me re-encode karna sabse surakshit tareeka hai. PixelCraft ke companion tools (Image Compressor ya Forensic Sanitizer) me image ko open karke save karein. Browser naye pixel container se clean image file export karta hai jismein koi bhi purana GPS tag, serial number ya camera history shamil nahi hoti."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does my photo show a location even if location services were turned off?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Modern smartphone camera apps often cache nearby Wi-Fi network BSSIDs or cellular cell tower IDs at the time of exposure, embedding approximate coordinates even if direct GPS satellites were weak. Additionally, transferring photos via messaging apps or cloud backup syncing can append location metadata inherited from album organization settings."
+          }
         }
       ]
     }
@@ -481,8 +505,12 @@ window.resetTool = resetTool;
         In open-source intelligence (OSINT) journalism, EXIF timestamps and sun angle calculations (shadow analysis verified against astronomical ephemerides) allow investigators to prove whether state-sponsored propaganda videos were filmed on the date claimed or staged months in advance.
       </p>
       <h4 style="color: var(--primary); font-size: 1.15rem; margin-top: 16px; margin-bottom: 8px;">Industrial Espionage via Device Serial Correlation</h4>
-      <p style="margin-bottom: 0; font-size: 0.95rem;">
+      <p style="margin-bottom: 12px; font-size: 0.95rem;">
         Competitors analyzing unreleased product prototype leaks match the internal lens serial number and camera serial in EXIF MakerNotes to company equipment registries, identifying the exact contractor or employee who captured the leak.
+      </p>
+      <h4 style="color: var(--primary); font-size: 1.15rem; margin-top: 16px; margin-bottom: 8px;">Online Marketplace &amp; Social Privacy (Classified Ads &amp; Public Forums)</h4>
+      <p style="margin-bottom: 0; font-size: 0.95rem;">
+        Sellers posting photos of furniture, cars, or electronics to classified portals (OLX, Craigslist, Facebook Marketplace) routinely overlook embedded GPS metadata. Stalkers and burglars can inspect uploaded vehicle or pet photos to determine exact garage addresses and physical home locations. Inspecting and scrubbing EXIF telemetry prior to listing ensures personal physical safety.
       </p>
     </div>
 
@@ -593,6 +621,24 @@ window.resetTool = resetTool;
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q5: How accurate are GPS coordinates embedded in smartphone photos?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
           Modern smartphones use Assisted GPS (A-GPS), GLONASS, Galileo, and Wi-Fi SSID trilateration. In open outdoor conditions, GPS coordinates recorded in EXIF metadata are typically accurate within 3 to 5 meters (10 to 16 feet). If an image is taken inside a building, Wi-Fi BSSID geolocation databases can still record coordinates accurate within the specific room or floor level.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q6: Photo ki location aur camera details kaise check kare online? (How to find photo location and camera details?)</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Kisi bhi photo ki hidden location aur camera details check karne ke liye: PixelCraft AI EXIF Viewer par apni JPEG ya RAW image upload karein. Tool turant photo ke embedded EXIF tags decode karke camera brand, lens model, shutter speed, ISO, aur exact Google Maps GPS location pin dikha deta hai. Ye complete process aapke browser me locally hoti hai, isliye aapki photo 100% private rehti hai.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q7: How do I strip or remove GPS coordinates and EXIF data before uploading photos online?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Photos se sensitive GPS coordinates aur camera metadata hatane ke liye use HTML5 Canvas me re-encode karna sabse surakshit tareeka hai. PixelCraft ke companion tools (Image Compressor ya Forensic Sanitizer) me image ko open karke save karein. Browser naye pixel container se clean image file export karta hai jismein koi bhi purana GPS tag, serial number ya camera history shamil nahi hoti.
+        </p>
+      </div>
+      <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q8: Why does my photo show a location even if location services were turned off?</h4>
+        <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
+          Modern smartphone camera apps often cache nearby Wi-Fi network BSSIDs or cellular cell tower IDs at the time of exposure, embedding approximate coordinates even if direct GPS satellites were weak. Additionally, transferring photos via messaging apps or cloud backup syncing can append location metadata inherited from album organization settings.
         </p>
       </div>
     </div>
