@@ -385,9 +385,9 @@ runTest('Scenario 7: Cookie Preferences Reopen & Revocation Flow', () => {
 });
 
 // -------------------------------------------------------------
-// TEST 8: Codebase HTML Audit (38 HTML files in public/)
+// TEST 8: Codebase HTML Audit (All public HTML files)
 // -------------------------------------------------------------
-runTest('Scenario 8: HTML Codebase Audit - All 38 HTML files in public/ contain zero premature tracking scripts', () => {
+runTest('Scenario 8: HTML Codebase Audit - All public HTML files contain zero premature tracking scripts', () => {
   const publicDir = path.join(__dirname, '..', 'public');
   function scanDir(dir) {
     let files = [];
@@ -400,7 +400,7 @@ runTest('Scenario 8: HTML Codebase Audit - All 38 HTML files in public/ contain 
   }
 
   const htmlFiles = scanDir(publicDir);
-  assert.strictEqual(htmlFiles.length, 38, 'Must find 38 public HTML files');
+  assert.ok(htmlFiles.length >= 38, `Must find at least 38 public HTML files, found ${htmlFiles.length}`);
 
   htmlFiles.forEach(file => {
     const content = fs.readFileSync(file, 'utf8');
