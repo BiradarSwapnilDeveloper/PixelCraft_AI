@@ -313,6 +313,52 @@ runTest('HTML Codebase Audit: Priority tool pages contain instrumented PixelCraf
   });
 });
 
+// TEST 8: Blog-to-Tool & Internal Discovery CTA Event Structure
+runTest('Tool CTA Click: Correctly structures tool_cta_clicked event with safe parameters', () => {
+  const { analytics, eventsCaptured } = setupEnvironment();
+  assert(typeof analytics.trackToolCtaClick === 'function', 'trackToolCtaClick must be defined');
+
+  analytics.trackToolCtaClick(
+    '/blog/passport-and-exam-photo-resizing-guide.html?ref=google#section2',
+    '../tools/smart-resize.html?utm_source=blog',
+    'blog_mid_cta',
+    'blog_article'
+  );
+
+  assert.strictEqual(eventsCaptured.length, 1);
+  const event = eventsCaptured[0];
+  assert.strictEqual(event.eventName, 'tool_cta_clicked');
+  assert.deepStrictEqual(event.params, {
+    source_page: 'passport-and-exam-photo-resizing-guide.html',
+    destination_tool: 'smart-resize.html',
+    cta_location: 'blog_mid_cta',
+    content_type: 'blog_article'
+  });
+});
+
+// TEST 9: Duplicate Suppression for Rapid Clicks
+runTest('Duplicate Suppression: Prevents multiple tool_cta_clicked events within cooldown window', () => {
+  const { analytics, eventsCaptured } = setupEnvironment();
+
+  analytics.trackToolCtaClick('blog-post.html', 'image-compressor.html', 'body', 'blog_article');
+  analytics.trackToolCtaClick('blog-post.html', 'image-compressor.html', 'body', 'blog_article'); // duplicate within 1000ms
+  analytics.trackToolCtaClick('blog-post.html', 'image-compressor.html', 'footer', 'blog_article'); // different location -> allowed
+
+  assert.strictEqual(eventsCaptured.length, 2);
+  assert.strictEqual(eventsCaptured[0].params.cta_location, 'body');
+  assert.strictEqual(eventsCaptured[1].params.cta_location, 'footer');
+});
+
+// TEST 10: Fault Tolerance for CTA Click Tracking
+runTest('CTA Fault Tolerance: Does not throw if gtag throws or is blocked', () => {
+  const { analytics, sandbox } = setupEnvironment();
+  sandbox.window.gtag = () => { throw new Error('Blocked by privacy protection'); };
+
+  assert.doesNotThrow(() => {
+    analytics.trackToolCtaClick('article.html', 'qr-generator.html', 'blog_end', 'blog_article');
+  });
+});
+
 console.log(`\n================================================================`);
 console.log(`Test Execution Results: ${passedTests}/${totalTests} Passed`);
 console.log('================================================================\n');

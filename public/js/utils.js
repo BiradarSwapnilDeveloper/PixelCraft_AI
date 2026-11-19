@@ -872,7 +872,52 @@ window.PixelCraftAnalytics = (function() {
           operation_status: 'error'
         });
       } catch (e) {}
+    },
+
+    trackToolCtaClick: function(sourcePage, destinationTool, ctaLocation, contentType) {
+      try {
+        var rawSource = sourcePage || (typeof window !== 'undefined' && window.location ? window.location.pathname : 'unknown');
+        var safeSource = (rawSource || 'unknown').replace(/[?#].*$/, '').split('/').pop() || 'index.html';
+
+        var rawDest = destinationTool || 'unknown';
+        var safeDest = (rawDest || 'unknown').replace(/[?#].*$/, '').split('/').pop() || 'unknown';
+
+        var safeLoc = (ctaLocation || 'body').toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+        var safeType = (contentType || 'blog_cta').toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+
+        // Prevent rapid duplicate clicks within 1000ms
+        var dedupeKey = 'cta_' + safeSource + '_' + safeDest + '_' + safeLoc;
+        var now = Date.now ? Date.now() : new Date().getTime();
+        if (this._lastCtaClicks && this._lastCtaClicks[dedupeKey] && (now - this._lastCtaClicks[dedupeKey] < 1000)) {
+          return;
+        }
+        if (!this._lastCtaClicks) this._lastCtaClicks = {};
+        this._lastCtaClicks[dedupeKey] = now;
+
+        var payload = {
+          source_page: safeSource,
+          destination_tool: safeDest,
+          cta_location: safeLoc,
+          content_type: safeType
+        };
+        trackEvent('tool_cta_clicked', payload);
+      } catch (e) {}
     }
   };
 })();
+
+// 10. AUTOMATIC TOOL CTA INTERACTION TRACKING
+if (typeof document !== 'undefined' && document.addEventListener) {
+  document.addEventListener('click', function(e) {
+    try {
+      var ctaEl = e.target && e.target.closest ? e.target.closest('a[data-tool-cta="true"], .tool-cta-btn, .blog-tool-cta, .related-tool-card') : null;
+      if (!ctaEl || !window.PixelCraftAnalytics) return;
+      var dest = ctaEl.getAttribute('data-dest-tool') || ctaEl.getAttribute('href') || 'unknown';
+      var loc = ctaEl.getAttribute('data-cta-location') || 'body';
+      var cType = ctaEl.getAttribute('data-content-type') || (window.location && window.location.pathname && window.location.pathname.indexOf('/blog/') !== -1 ? 'blog_article' : 'tool_page');
+      window.PixelCraftAnalytics.trackToolCtaClick(window.location ? window.location.pathname : '', dest, loc, cType);
+    } catch (err) {}
+  });
+}
+
 

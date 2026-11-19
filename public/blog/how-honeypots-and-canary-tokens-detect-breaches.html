@@ -232,20 +232,63 @@ aws s3 ls --profile decoy
         <li><strong>Preserve Forensic Evidence:</strong> In accordance with CERT-In and international standards, place relevant audit logs on <em>Legal Hold</em> to prevent automated TTL purges.</li>
       </ol>
 
-      <h2>5. Frequently Asked Questions</h2>
+      
+      <!-- CONTEXTUAL BLOG-TO-TOOL CTA (MID-ARTICLE) -->
+      <div class="blog-tool-cta-card">
+        <div class="blog-tool-cta-header">
+          <span class="blog-tool-cta-icon">🛡️</span>
+          <h3 class="blog-tool-cta-title">Audit Links & Traps with Threat Intelligence</h3>
+        </div>
+        <p class="blog-tool-cta-desc">
+          Scan suspect links for tracking tokens, malicious redirects, and credential harvesting infrastructure in sandboxed memory.
+        </p>
+        <div class="blog-tool-cta-actions">
+          <a href="../tools/phishing-scanner.html" class="tool-cta-btn" data-tool-cta="true" data-dest-tool="phishing-scanner.html" data-cta-location="blog_mid" data-content-type="blog_article">
+            <span>🚀 Open Phishing Link Scanner</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="../tools/advanced-decoy.html" class="tool-cta-secondary-link" data-tool-cta="true" data-dest-tool="advanced-decoy.html" data-cta-location="blog_mid_secondary" data-content-type="blog_article">
+            <span>Deploy plausible deniability payloads? Advanced Decoy &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+<h2>5. Frequently Asked Questions</h2>
       <h3>Can canary documents trigger if opened without internet access?</h3>
       <p>If an attacker opens a canary document in an air-gapped environment without external network connectivity, the HTTP or DNS callback cannot reach the alerting server immediately. However, if the document or extracted text is subsequently opened on an internet-connected workstation, the callback will fire immediately.</p>
 
       <h3>How does PixelCraft AI protect its own infrastructure using traps?</h3>
       <p>PixelCraft AI employs an automated <code>HoneytokenTrap</code> middleware across its API gateways. Any attempt to interact with simulated administrative endpoints or falsified canary keys triggers immediate rate limiting, IP logging, and real-time security alerting-ensuring our public utilities remain resilient against automated exploitation.</p>
 
-      <div class="related-tools">
-        <h3>Fortify Your Digital Infrastructure</h3>
-        <p>Explore tools designed to audit attack surfaces and secure critical data:</p>
-        <p>
-          👉 <a href="../tools/advanced-decoy.html" style="color: #d8b4fe; font-weight: 600;">Advanced Decoy Generator</a> - Craft deceptive honeypot files to detect file system breaches.<br>
-          👉 <a href="../tools/phishing-scanner.html" style="color: #d8b4fe; font-weight: 600;">Phishing Threat Scanner</a> - Detect deceptive links before they fool your workforce.
-        </p>
+            <div class="related-tools">
+        <h3>Recommended Security & Defensive Utilities</h3>
+        <p>Enhance your productivity with PixelCraft AI's client-side, zero-knowledge utilities:</p>
+        <div class="blog-related-grid">
+          <a href="../tools/phishing-scanner.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="phishing-scanner.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🛡️</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Phishing & Malware Scanner</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Scan incoming links and attachments for credential harvesters and tracking beacons.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+          <a href="../tools/advanced-decoy.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="advanced-decoy.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🎭</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Advanced Decoy Steganography</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Conceal sensitive operational keys in encrypted decoy carriers for plausible deniability.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+          <a href="../tools/exif-viewer.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="exif-viewer.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🔍</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">EXIF Data Viewer</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Check embedded author and device metadata on shared security documentation.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+        </div>
       </div>
 
       <div style="margin-top: 40px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1);">

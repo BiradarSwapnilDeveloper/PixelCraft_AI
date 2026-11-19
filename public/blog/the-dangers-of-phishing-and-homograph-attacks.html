@@ -232,20 +232,63 @@ DNS Query: xn--pple-43d.com
         <li><strong>Strict Transport Security (HSTS) Preloading:</strong> Ensure company domains are included in browser HSTS preload lists so that man-in-the-middle downgrade attempts on homoglyph sites trigger explicit security warnings.</li>
       </ol>
 
-      <h2>5. Frequently Asked Questions</h2>
+      
+      <!-- CONTEXTUAL BLOG-TO-TOOL CTA (MID-ARTICLE) -->
+      <div class="blog-tool-cta-card">
+        <div class="blog-tool-cta-header">
+          <span class="blog-tool-cta-icon">🛡️</span>
+          <h3 class="blog-tool-cta-title">Analyze Suspicious Links for IDN Homoglyphs</h3>
+        </div>
+        <p class="blog-tool-cta-desc">
+          Evaluate URLs using Shannon entropy, punycode spoof detection, and credential harvester heuristics in isolated memory.
+        </p>
+        <div class="blog-tool-cta-actions">
+          <a href="../tools/phishing-scanner.html" class="tool-cta-btn" data-tool-cta="true" data-dest-tool="phishing-scanner.html" data-cta-location="blog_mid" data-content-type="blog_article">
+            <span>🚀 Open Phishing Link Scanner</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="../tools/qr-generator.html" class="tool-cta-secondary-link" data-tool-cta="true" data-dest-tool="qr-generator.html" data-cta-location="blog_mid_secondary" data-content-type="blog_article">
+            <span>Generate secure, direct QR links? QR Generator &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+<h2>5. Frequently Asked Questions</h2>
       <h3>Can an attacker obtain a valid HTTPS padlock for a homograph domain?</h3>
       <p>Yes. Certificate Authorities (CAs) like Let's Encrypt, DigiCert, and Sectigo issue certificates to whoever controls the DNS records of a domain. Because the attacker legitimately registered the Punycode domain <code>xn--pple-43d.com</code>, the automated ACME challenge succeeds, granting an authentic SSL/TLS certificate with a valid padlock icon.</p>
 
       <h3>How can I detect if a link is using Punycode before clicking?</h3>
       <p>You can inspect the URL by pasting it into a raw text editor or passing it through an automated threat analyzer. If the domain contains non-ASCII codepoints or transforms into an <code>xn--</code> string, it is utilizing IDNA encoding.</p>
 
-      <div class="related-tools">
-        <h3>Scan Suspicious URLs with PixelCraft AI</h3>
-        <p>Test URLs for Punycode obfuscation, typosquatting patterns, and phishing heuristics:</p>
-        <p>
-          👉 <a href="../tools/phishing-scanner.html" style="color: #60a5fa; font-weight: 600;">PixelCraft AI Phishing URL Checker</a> - Real-time heuristic scanning and domain origin inspection.<br>
-          👉 <a href="qr-code-security-quishing-and-malicious-redirects.html" style="color: #60a5fa; font-weight: 600;">Quishing Analysis Guide</a> - How QR codes weaponize deceptive redirects on mobile devices.
-        </p>
+            <div class="related-tools">
+        <h3>Recommended Security & Verification Tools</h3>
+        <p>Enhance your productivity with PixelCraft AI's client-side, zero-knowledge utilities:</p>
+        <div class="blog-related-grid">
+          <a href="../tools/phishing-scanner.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="phishing-scanner.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🛡️</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Phishing & Malware Scanner</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Detect IDN homograph impersonations, tracking tokens, and malicious URL redirects.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+          <a href="../tools/qr-generator.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="qr-generator.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">📱</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Custom QR Generator</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Generate clean, transparent QR codes with zero intermediate tracking redirects.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+          <a href="../tools/exif-viewer.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="exif-viewer.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🔍</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">EXIF Data Viewer</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Verify image origin and metadata headers to detect forged or tampered visual assets.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+        </div>
       </div>
 
       <div class="references-section">

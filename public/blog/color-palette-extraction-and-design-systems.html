@@ -224,6 +224,26 @@
 }
       </div>
 
+      <!-- CONTEXTUAL BLOG-TO-TOOL CTA (MID-ARTICLE) -->
+      <div class="blog-tool-cta-card">
+        <div class="blog-tool-cta-header">
+          <span class="blog-tool-cta-icon">🎨</span>
+          <h3 class="blog-tool-cta-title">Extract Dominant Palettes from Any Image Now</h3>
+        </div>
+        <p class="blog-tool-cta-desc">
+          Upload any photograph, branding mockup, or UI screenshot to compute median-cut palettes, copy HEX/RGB CSS tokens, and test WCAG contrast client-side.
+        </p>
+        <div class="blog-tool-cta-actions">
+          <a href="../tools/color-palette.html" class="tool-cta-btn" data-tool-cta="true" data-dest-tool="color-palette.html" data-cta-location="blog_mid" data-content-type="blog_article">
+            <span>🚀 Open Color Palette Extractor</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="../tools/format-converter.html" class="tool-cta-secondary-link" data-tool-cta="true" data-dest-tool="format-converter.html" data-cta-location="blog_mid_secondary" data-content-type="blog_article">
+            <span>Convert between WebP, AVIF &amp; PNG? Launch Converter &rarr;</span>
+          </a>
+        </div>
+      </div>
+
       <h2>5. Frequently Asked Questions</h2>
       <h3>Does image compression affect extracted color codes?</h3>
       <p>Aggressive lossy compression (such as JPEG quality below 50%) introduces chroma subsampling (4:2:0) and DCT quantization artifacts, slightly shifting pixel values near sharp edges. For exact brand reproduction, always feed high-quality PNGs or clean uncompressed JPEGs into the palette extractor.</p>
@@ -235,13 +255,34 @@
       <p>No. Color quantization and pixel parsing run 100% client-side via hardware-accelerated HTML5 Canvas contexts. Zero image data is ever uploaded, stored, or processed on remote cloud infrastructure.</p>
 
       <div class="related-tools">
-        <h3>Create and Refine Your Visual Assets</h3>
+        <h3>Recommended Creative &amp; Design Utilities</h3>
         <p>Speed up your creative workflow with PixelCraft AI's client-side design suite:</p>
-        <p>
-          👉 <a href="../tools/color-palette.html" style="color: #60a5fa; font-weight: 600;">Color Palette Extractor</a> - Extract HEX, RGB, and CSS palettes from images instantly.<br>
-          👉 <a href="browser-side-vs-server-side-file-processing.html" style="color: #60a5fa; font-weight: 600;">Browser vs Cloud Processing</a> - Why in-browser client-side media manipulation is faster and safer.<br>
-          👉 <a href="mastering-lossless-image-compression-for-web.html" style="color: #60a5fa; font-weight: 600;">Mastering Image Compression</a> - Understand how color spaces interact with modern image codecs.
-        </p>
+        <div class="blog-related-grid">
+          <a href="../tools/color-palette.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="color-palette.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🎨</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Color Palette Extractor</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Extract harmonious HEX/RGB palettes &amp; CSS tokens with median-cut quantization.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+          <a href="../tools/format-converter.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="format-converter.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🔄</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Format Converter</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Batch transcode design assets across PNG, SVG, WebP, and AVIF formats.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+          <a href="../tools/image-compressor.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="image-compressor.html" data-cta-location="blog_end" data-content-type="blog_article">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🗜️</div>
+              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Image Compressor</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Optimize brand graphics and hero banners for optimal web page performance.</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+          </a>
+        </div>
       </div>
 
       <div style="margin-top: 40px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
