@@ -42,3 +42,8 @@ find_*.py
 # Python cache
 __pycache__/
 *.pyc
+
+# Ephemeral runtime uploads
+public/uploads/
+uploads/
+
