@@ -4,7 +4,8 @@ Allow: /
 # Sitemap location
 Sitemap: https://pixelcraftaitools.com/sitemap.xml
 
-# Disallow backend routes
+# Disallow backend routes and ephemeral uploads
 Disallow: /auth/
 Disallow: /logout
 Disallow: /api/
+Disallow: /uploads/

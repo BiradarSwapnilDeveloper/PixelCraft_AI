@@ -19,6 +19,23 @@ const { sendTelegramAlert } = require('./utils/telegramAlert');
 const honeytokenTrap = require('./middlewares/honeytokenTrap');
 const app = express();
 app.set('trust proxy', 1); // Trust the Render proxy to fix HTTP/HTTPS mismatch
+
+// Enterprise SEO: Enforce HTTPS & Canonical Domain (pixelcraftaitools.com) in Production (Task 6.3.6)
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    const proto = req.headers['x-forwarded-proto'];
+    const host = req.headers['host'] || '';
+    if (proto && proto !== 'https') {
+      return res.redirect(301, `https://${host}${req.originalUrl}`);
+    }
+    if (host.startsWith('www.')) {
+      const cleanHost = host.slice(4);
+      return res.redirect(301, `https://${cleanHost}${req.originalUrl}`);
+    }
+  }
+  next();
+});
+
 const PORT = process.env.PORT || 8080;
 
 // Auto-initialize SEAL_SECRET if missing or default in production environment to prevent startup warnings and runtime faults
@@ -2876,8 +2893,44 @@ app.get('/ads.txt', (req, res) => {
   res.send('google.com, pub-3788374704176398, DIRECT, f08c47fec0942fa0\n');
 });
 
+// ===== ENTERPRISE SEO: CANONICAL URL & REDIRECT NORMALIZATION (TASK 6.3.6) =====
+
+// 1. Canonical Redirect: Consolidate /index.html onto root /
+app.get('/index.html', (req, res) => {
+  res.redirect(301, '/');
+});
+
+// 2. Canonical Redirect: Consolidate legacy /blog.html and directory /blog onto /blog/index.html
+app.get(['/blog.html', '/blog'], (req, res) => {
+  res.redirect(301, '/blog/index.html');
+});
+
+// 3. Prevent 404 on /tools and /tools/ by redirecting to tools discovery section on homepage
+app.get(['/tools', '/tools/'], (req, res) => {
+  res.redirect(301, '/#tools');
+});
+
+// 4. Canonical Redirect for extensionless HTML requests (e.g. /tools/image-compressor -> /tools/image-compressor.html)
+app.use((req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+  
+  // Skip API, auth, and asset requests
+  if (req.path.startsWith('/api/') || req.path.startsWith('/auth/') || req.path.startsWith('/p/') || req.path.includes('.')) {
+    return next();
+  }
+  
+  const publicDir = path.join(__dirname, 'public');
+  const targetHtml = path.join(publicDir, req.path + '.html');
+  
+  if (fs.existsSync(targetHtml)) {
+    const queryString = req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '';
+    return res.redirect(301, req.path + '.html' + queryString);
+  }
+  next();
+});
+
 // Serve all static files (HTML, CSS, JS) from the 'public' folder
-app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
