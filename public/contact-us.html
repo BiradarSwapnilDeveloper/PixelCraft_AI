@@ -118,10 +118,64 @@
       justify-content: center;
       font-size: 1.5rem;
     }
-    /* Mobile Responsive */
+    .section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      box-sizing: border-box;
+      padding-top: 130px;
+      min-height: 80vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto !important;
+      box-sizing: border-box;
+    }
+    /* Mobile & Tablet Responsive */
     @media (max-width: 768px) {
+      .section {
+        padding-top: 95px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        min-height: auto;
+      }
+      .container {
+        padding: 24px 14px !important;
+        border-radius: 16px !important;
+        margin: 0 auto !important;
+      }
+      .contact-glass-section {
+        padding: 4px 2px !important;
+        gap: 20px !important;
+      }
+      .contact-glass-section h1 {
+        font-size: 1.85rem !important;
+      }
+      .contact-glass-section p {
+        font-size: 0.95rem !important;
+        margin-bottom: 20px !important;
+      }
+      .contact-form {
+        padding: 22px 14px !important;
+        border-radius: 16px !important;
+      }
       .contact-wrapper {
         grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 480px) {
+      .section {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+      }
+      .container {
+        padding: 18px 10px !important;
+      }
+      .contact-form {
+        padding: 18px 10px !important;
       }
     }
   </style>
@@ -162,8 +216,8 @@
   </div>
 </nav>
 
-  <section class="section" style="padding-top: 150px; min-height: 80vh;">
-    <div class="container" style="max-width: 1000px; background: var(--glass-bg); padding: 50px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px);">
+  <section class="section">
+    <div class="container" style="background: var(--glass-bg); padding: 50px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px);">
       <div class="contact-glass-section" style="
           display: flex;
           flex-direction: column;
@@ -346,6 +400,7 @@
             <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; border-radius: 12px; padding: 14px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 6px;" id="contactSubmitBtn">
               Send Message 🚀
             </button>
+            <div id="contactStatusMsg" style="display:none; margin-top:12px; padding:14px 18px; border-radius:12px; font-size:0.95rem; font-weight:600; text-align:center; transition:all 0.3s ease;"></div>
           </form>
         </div>
 
@@ -460,10 +515,29 @@
   <script>
     const form = document.getElementById('contactForm');
     const submitBtn = document.getElementById('contactSubmitBtn');
+    const statusMsg = document.getElementById('contactStatusMsg');
+
+    function displayStatus(msg, isSuccess) {
+      if (!statusMsg) return;
+      statusMsg.style.display = 'block';
+      if (isSuccess) {
+        statusMsg.style.background = 'rgba(16, 185, 129, 0.15)';
+        statusMsg.style.border = '1px solid rgba(16, 185, 129, 0.4)';
+        statusMsg.style.color = '#10b981';
+        statusMsg.innerHTML = '✓ ' + msg;
+      } else {
+        statusMsg.style.background = 'rgba(239, 68, 68, 0.15)';
+        statusMsg.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+        statusMsg.style.color = '#ef4444';
+        statusMsg.innerHTML = '✗ ' + msg;
+      }
+    }
 
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        if (statusMsg) statusMsg.style.display = 'none';
 
         const nameInput = document.getElementById('contactName');
         const emailInput = document.getElementById('contactEmail');
@@ -475,32 +549,23 @@
 
         // Client-side validation
         if (!name || name.length < 2) {
-          if (typeof showToast === 'function') {
-            showToast('Please provide your name (at least 2 characters).', 'error');
-          } else {
-            alert('Please provide your name (at least 2 characters).');
-          }
+          displayStatus('Please provide your name (at least 2 characters).', false);
+          if (typeof showToast === 'function') showToast('Please provide your name (at least 2 characters).', 'error');
           if (nameInput) nameInput.focus();
           return;
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email || !emailRegex.test(email)) {
-          if (typeof showToast === 'function') {
-            showToast('Please provide a valid email address.', 'error');
-          } else {
-            alert('Please provide a valid email address.');
-          }
+          displayStatus('Please provide a valid email address.', false);
+          if (typeof showToast === 'function') showToast('Please provide a valid email address.', 'error');
           if (emailInput) emailInput.focus();
           return;
         }
 
         if (!message || message.length < 10) {
-          if (typeof showToast === 'function') {
-            showToast('Please provide a message with at least 10 characters.', 'error');
-          } else {
-            alert('Please provide a message with at least 10 characters.');
-          }
+          displayStatus('Please provide a message with at least 10 characters.', false);
+          if (typeof showToast === 'function') showToast('Please provide a message with at least 10 characters.', 'error');
           if (messageInput) messageInput.focus();
           return;
         }
@@ -509,34 +574,50 @@
         submitBtn.innerHTML = 'Sending... ⏳';
         submitBtn.disabled = true;
 
+        // AbortController to prevent the client from hanging indefinitely
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
         try {
           const res = await fetch('/api/contact', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, message })
+            body: JSON.stringify({ name, email, message }),
+            signal: controller.signal
           });
 
-          const data = await res.json();
+          clearTimeout(timeoutId);
+
+          let data;
+          try {
+            data = await res.json();
+          } catch (jsonErr) {
+            data = { error: 'Invalid response from server' };
+          }
+
           if (res.ok && data.success) {
+            const successText = 'Message sent successfully! We will get back to you soon. 🎉';
+            displayStatus(successText, true);
             if (typeof showToast === 'function') {
-              showToast('Message sent successfully! We will get back to you soon. 🎉', 'success');
-            } else {
-              alert('Message sent successfully!');
+              showToast(successText, 'success');
             }
             form.reset();
           } else {
-            const errMsg = data.error || 'Failed to send message.';
+            const errMsg = data.error || 'Failed to send message. Please try again.';
+            displayStatus(errMsg, false);
             if (typeof showToast === 'function') {
               showToast('Error: ' + errMsg, 'error');
-            } else {
-              alert('Error: ' + errMsg);
             }
           }
         } catch (err) {
+          clearTimeout(timeoutId);
+          let errorMsg = 'Network error while sending message. Please try again.';
+          if (err.name === 'AbortError') {
+            errorMsg = 'Request timed out after 15 seconds. Please check your connection or contact support.pixelcraft205@gmail.com directly.';
+          }
+          displayStatus(errorMsg, false);
           if (typeof showToast === 'function') {
-            showToast('Network error while sending message. Please try again.', 'error');
-          } else {
-            alert('Network error while sending message.');
+            showToast(errorMsg, 'error');
           }
         } finally {
           submitBtn.innerHTML = btnOriginalText;

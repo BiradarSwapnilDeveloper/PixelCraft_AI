@@ -1430,22 +1430,33 @@ app.post('/api/contact', async (req, res) => {
   }
 
   try {
+    const emailUser = (process.env.EMAIL_USER || '').trim();
+    const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
+
+    if (!emailUser || !emailPass) {
+      console.error("🔴 Email Send Error: EMAIL_USER or EMAIL_PASS environment variable is missing.");
+      return res.status(500).json({ error: "Email service is currently misconfigured. Please contact support.pixelcraft205@gmail.com directly." });
+    }
+
     console.log(`📩 Preparing to send email from contact form (Name: ${trimmedName}, Email: ${trimmedEmail})`);
 
-    // Explicitly configure Gmail SMTP
+    // Explicitly configure Gmail SMTP with strict timeouts
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
+        user: emailUser,
+        pass: emailPass
+      },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000
     });
 
     // Gmail requires 'from' to match the authenticated email to prevent spam blocking
     const mailOptions = {
-      from: `"PixelCraft Contact" <${process.env.EMAIL_USER}>`,
+      from: `"PixelCraft Contact" <${emailUser}>`,
       replyTo: trimmedEmail,
-      to: process.env.EMAIL_USER, // Sends the contact message to the website owner's email
+      to: emailUser, // Sends the contact message to the website owner's email
       subject: `New Message from PixelCraft Website: ${trimmedName}`,
       text: `Someone just sent a message from your website contact form!
       
@@ -1457,12 +1468,18 @@ ${trimmedMessage}
 `
     };
 
-    // Attempt to send email
-    await transporter.sendMail(mailOptions);
+    // Attempt to send email with a 12s safety timeout to prevent indefinite socket hanging
+    const sendPromise = transporter.sendMail(mailOptions);
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Email server timed out after 12 seconds')), 12000)
+    );
+    await Promise.race([sendPromise, timeoutPromise]);
+
+    console.log(`✅ Contact email sent successfully from ${trimmedEmail} (${trimmedName})`);
     res.json({ success: true, message: 'Email sent successfully!' });
   } catch (err) {
     console.error("🔴 Email Send Error (Check EMAIL_PASS App Password):", err.message);
-    res.status(500).json({ error: "Failed to send email. Please try again later or contact us directly." });
+    res.status(500).json({ error: "Failed to send email. Please try again later or email support.pixelcraft205@gmail.com directly." });
   }
 });
 

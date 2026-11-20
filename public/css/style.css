@@ -2389,3 +2389,101 @@ html.dark .code-snippet {
   }
 }
 
+/* ========================================================
+   GLOBAL HORIZONTAL CENTERING & CORNER-TO-CORNER MOBILE UI/UX
+   ======================================================== */
+.container,
+.legal-page-container,
+.policy-body,
+.whitepaper-container {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 768px) {
+  /* Prevent excessive desktop gutters on mobile - bring content close to corner */
+  .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .legal-page-container,
+  .contact-glass-section,
+  .download-hero-card,
+  .policy-section,
+  .wp-section,
+  .content-section {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .legal-content p,
+  .legal-content li {
+    text-align: left !important;
+    word-break: break-word !important;
+  }
+
+  /* Reflow tables with smooth touch scrolling and clear visible scroll indicator */
+  .table-responsive,
+  .table-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  .data-table,
+  .whitepaper-table,
+  .cookie-table {
+    min-width: 480px;
+  }
+
+  .data-table th,
+  .data-table td,
+  .whitepaper-table th,
+  .whitepaper-table td,
+  .cookie-table th,
+  .cookie-table td {
+    padding: 10px 10px !important;
+    font-size: 0.83rem !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  /* Prevent auto-zoom on iOS when tapping input fields */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .legal-page-container,
+  .contact-glass-section,
+  .download-hero-card,
+  .policy-section,
+  .wp-section,
+  .content-section {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    border-radius: 12px !important;
+  }
+}
+
+

@@ -105,14 +105,37 @@
       margin: 0;
       text-align: center;
     }
-    @media (max-width: 600px) {
-      .legal-page-container { padding: 24px 18px !important; border-radius: 16px !important; }
-      .legal-page-section { padding-top: 100px !important; }
-      .legal-content h1 { font-size: 1.8rem; }
-      .legal-content h2 { font-size: 1.2rem; margin-top: 28px; }
-      .legal-content p, .legal-content li { font-size: 0.95rem; }
-      .about-stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; }
+    .legal-page-section {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      box-sizing: border-box;
+      padding-top: 130px;
+      min-height: 80vh;
+    }
+    .legal-page-container {
+      width: 100%;
+      max-width: 900px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      box-sizing: border-box;
+    }
+    @media (max-width: 768px) {
+      .legal-page-section { padding: 95px 10px 40px !important; min-height: auto; }
+      .legal-page-container { padding: 22px 14px !important; border-radius: 16px !important; }
+      .legal-content h1 { font-size: 1.85rem; }
+      .legal-content h2 { font-size: 1.3rem; margin-top: 28px; }
+      .legal-content p, .legal-content li { font-size: 0.96rem; line-height: 1.7; text-align: left !important; }
+      .about-stats-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 24px 0; }
+      .about-stat-box { padding: 20px 10px; border-radius: 12px; }
       .about-stat-box h3, .about-stat-box .stat-number { font-size: 1.8rem; }
+      .about-stat-box p { font-size: 0.8rem; }
+    }
+    @media (max-width: 480px) {
+      .legal-page-section { padding: 90px 8px 30px !important; }
+      .legal-page-container { padding: 18px 10px !important; }
+      .about-stats-grid { grid-template-columns: 1fr; gap: 10px; }
     }
     .footer-legal-links {
       display: flex; flex-wrap: wrap; justify-content: center;
@@ -168,8 +191,8 @@
   </div>
 </nav>
 
-  <section class="section legal-page-section" style="padding-top: 150px; min-height: 80vh;">
-    <div class="container legal-page-container" style="max-width: 900px; background: var(--glass-bg); padding: 50px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px);">
+  <section class="section legal-page-section">
+    <div class="container legal-page-container" style="background: var(--glass-bg); padding: 50px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px);">
       <div class="legal-content">
         <h1>About PixelCraft AI</h1>
 

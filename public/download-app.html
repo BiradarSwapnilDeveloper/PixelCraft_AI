@@ -239,6 +239,38 @@
       font-size: 0.95rem;
       line-height: 1.8;
     }
+    .section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      box-sizing: border-box;
+      padding-top: 130px;
+      min-height: 80vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      box-sizing: border-box;
+    }
+    @media (max-width: 768px) {
+      .section { padding: 95px 10px 40px !important; min-height: auto; }
+      .container { padding: 22px 14px !important; border-radius: 16px !important; }
+      .download-hero-card { padding: 24px 14px !important; border-radius: 16px !important; margin-bottom: 28px !important; }
+      .download-hero-card h1 { font-size: 1.85rem !important; }
+      .pwa-feature-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+      .platform-cards-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+      .pwa-guide-section h2 { font-size: 1.35rem !important; }
+      .matrix-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+    }
+    @media (max-width: 480px) {
+      .section { padding: 90px 8px 30px !important; }
+      .container { padding: 18px 10px !important; }
+      .download-hero-card { padding: 20px 10px !important; }
+    }
   </style>
 </head>
 <body>
@@ -278,8 +310,8 @@
   </nav>
 
   <!-- MAIN SECTION -->
-  <section class="section" style="padding-top: 130px; min-height: 80vh;">
-    <div class="container" style="max-width: 960px; background: var(--glass-bg); padding: 48px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px);">
+  <section class="section">
+    <div class="container" style="background: var(--glass-bg); padding: 48px; border-radius: 24px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px);">
       
       <!-- HERO INSTALL CARD -->
       <div class="download-hero-card">
