@@ -250,6 +250,9 @@
             <button class="btn btn-gray" onclick="resetTool()">New Image</button>
             <button class="btn btn-green" id="btn-download">Download</button>
           </div>
+          <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+            Need to compress protected photos for web? Try <a href="image-compressor.html" style="color:var(--primary);text-decoration:underline;">Image Compressor</a> or resize with <a href="smart-resize.html" style="color:var(--primary);text-decoration:underline;">Photo Resizer</a>.
+          </div>
         </div>
         <div class="result-body">
           <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:24px;">
@@ -330,9 +333,19 @@ setupDragDrop(uploadArea, handleFile);
 fileInput.addEventListener('change', e =>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
 
 async function handleFile(file) {
+  if (!file || !file.type || !file.type.startsWith('image/')) {
+    showToast('Please upload a valid image file.', 'error');
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackError('Watermark Adder', 'invalid_input');
+    }
+    return;
+  }
   currentImg = await fileToImage(file);
   uploadArea.style.display = 'none';
   editor.style.display = 'block';
+  if (typeof editor.scrollIntoView === 'function') {
+    editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
   applyWatermark();
 }
 
@@ -396,10 +409,17 @@ function applyWatermark() {
     ctx.restore();
   }
   ctx.restore();
+  if (window.PixelCraftAnalytics) {
+    window.PixelCraftAnalytics.trackCompletion('Watermark Adder', 'png', 0);
+  }
 }
 
 document.getElementById('btn-download').addEventListener('click', () =>{
   downloadFile(canvas.toDataURL('image/png'), 'pixelcraft-watermarked.png');
+  showToast('Watermarked image downloaded!', 'success');
+  if (window.PixelCraftAnalytics) {
+    window.PixelCraftAnalytics.trackDownload('Watermark Adder', 'png', 0);
+  }
 });
 
 function resetTool() {

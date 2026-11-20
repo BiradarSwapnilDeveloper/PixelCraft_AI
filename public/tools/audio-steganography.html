@@ -600,6 +600,9 @@
             Test Decryption →
           </button>
         </div>
+        <div class="next-step-hint" style="margin-top:16px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+          Need forensic file sanitization? Try <a href="forensic-sanitizer.html" style="color:var(--primary);text-decoration:underline;">Forensic Sanitizer</a> or plausible deniability with <a href="advanced-decoy.html" style="color:var(--primary);text-decoration:underline;">Advanced Decoy</a>.
+        </div>
       </div>
     </div>
 
@@ -1045,7 +1048,7 @@
         const errorCallback = (err) => {
             console.error("Audio Decode Error:", err);
             hideLoading();
-            alert("Error decoding audio! Please ensure it is a valid audio file or WhatsApp Armor ZIP.");
+            showToast("Error decoding audio! Please ensure it is a valid audio file or WhatsApp Armor ZIP.", "error");
             document.getElementById('audio-name-display').innerText = "";
             loadedAudioBuffer = null;
         };
@@ -1057,7 +1060,7 @@
             errorCallback(e);
         }
       };
-      reader.onerror = () => { hideLoading(); alert("Error reading file."); };
+      reader.onerror = () => { hideLoading(); showToast("Error reading file.", "error"); };
       reader.readAsArrayBuffer(file);
     });
 
@@ -1270,7 +1273,7 @@
 
     async function handleVideoEncode(realMsg, realPass, fakeMsg, fakePass) {
         if (!loadedVideoFile) {
-            alert("Please select a video file first!");
+            showToast("Please select a video file first!", "error");
             return;
         }
 
@@ -1406,6 +1409,9 @@
                     videoPreview.style.display = 'block';
                 }
                 if (cardTitle) cardTitle.innerText = 'Video Steganography Successful!';
+                if (window.PixelCraftAnalytics) {
+                    window.PixelCraftAnalytics.trackCompletion('Audio & Video Steganography', 'mp4', 0);
+                }
                 if (cardDesc) cardDesc.innerText = `Classified payload multiplexed into ${ext.toUpperCase()} video container via AES-256 with Zero Quality Loss.`;
                 if (downloadBtn) {
                     downloadBtn.href = url;
@@ -1424,14 +1430,17 @@
             }
         } catch(err) {
             hideLoading();
-            alert("Video Encoding error: " + (err.message || err));
+            showToast("Video Encoding error: " + (err.message || err), "error");
+            if (window.PixelCraftAnalytics) {
+                window.PixelCraftAnalytics.trackError('Audio & Video Steganography', 'processing_failed');
+            }
         }
     }
 
     async function handleVideoDecode(pass) {
         let file = loadedVideoFile || (document.getElementById('video-input').files && document.getElementById('video-input').files[0]) || currentStegoFile || currentStegoBlob;
         if (!file) {
-            alert("Please select the video file to extract from!");
+            showToast("Please select the video file to extract from!", "error");
             return;
         }
 
@@ -1550,7 +1559,7 @@
             }, 100);
         } catch(err) {
             hideLoading();
-            alert("Video Decoding error: " + (err.message || err));
+            showToast("Video Decoding error: " + (err.message || err), "error"); if (window.PixelCraftAnalytics) { window.PixelCraftAnalytics.trackError("Audio & Video Steganography", "processing_failed"); }
         }
     }
     /* =======================================================
@@ -1558,7 +1567,7 @@
        ======================================================= */
     document.getElementById('btn-encode').onclick = async () => {
         if (!document.getElementById('legal-check').checked) {
-            alert("Please check the 'Terms & Privacy Policy' checkbox before proceeding.");
+            showToast("Please check the Terms & Privacy Policy checkbox before proceeding.", "error");
             document.getElementById('legal-check').focus();
             return;
         }
@@ -1568,10 +1577,10 @@
         const fakeMsg = document.getElementById('fake-msg').value;
         const fakePass = document.getElementById('fake-password').value;
 
-        if(!realMsg || !realPass) return alert("Real Message and Real Password are required!");
+        if(!realMsg || !realPass) return showToast("Real Message and Real Password are required!", "error");
 
         if (currentMode === 'audio') {
-            if(!loadedAudioBuffer) return alert("Please upload an audio file first!");
+            if(!loadedAudioBuffer) return showToast("Please upload an audio file first!", "error");
             
             // Hide previous result card
             const resultCard = document.getElementById('encode-result-card');
@@ -1708,6 +1717,9 @@
                         preview.style.display = 'block';
                     }
                     if (cardTitle) cardTitle.innerText = 'Audio Steganography Successful!';
+                    if (window.PixelCraftAnalytics) {
+                        window.PixelCraftAnalytics.trackCompletion('Audio & Video Steganography', 'wav', 0);
+                    }
                     if (cardDesc) cardDesc.innerText = 'Classified payload embedded into 16-bit WAV PCM carrier via QIM & AES-256 with Zero Quality Loss.';
                     if (downloadBtn) {
                         downloadBtn.href = url;
@@ -1725,21 +1737,21 @@
                 }
             } catch(err) {
                 hideLoading();
-                alert(err.message || "Encoding error.");
+                showToast(err.message || "Encoding error.", "error"); if (window.PixelCraftAnalytics) { window.PixelCraftAnalytics.trackError("Audio & Video Steganography", "processing_failed"); }
             }
         } else {
-            if(!loadedVideoFile) return alert("Please upload a video file first!");
+            if(!loadedVideoFile) { showToast("Please upload a video file first!", "error"); return; }
             handleVideoEncode(realMsg, realPass, fakeMsg, fakePass);
         }
     };
 
     document.getElementById('btn-decode').onclick = async () => {
       const pass = document.getElementById('dec-password').value;
-      if(!pass) return alert("Password required!");
+      if(!pass) return showToast("Password required!", "error");
 
       if (currentMode === 'audio') {
           let file = (document.getElementById('audio-input').files && document.getElementById('audio-input').files[0]) || currentStegoFile || currentStegoBlob;
-          if(!file) return alert("Please upload audio file!");
+          if(!file) return showToast("Please upload audio file!", "error");
 
           const statusBadge = document.getElementById('decode-status-badge');
           const copyBtn = document.getElementById('btn-copy-extracted');
@@ -1813,11 +1825,11 @@
               }, 100);
           } catch(e) {
               hideLoading();
-              alert("Error decoding audio for extraction: " + (e.message || e));
+              showToast("Error decoding audio for extraction: " + (e.message || e), "error"); if (window.PixelCraftAnalytics) { window.PixelCraftAnalytics.trackError("Audio & Video Steganography", "processing_failed"); }
           }
       } else {
           let file = loadedVideoFile || (document.getElementById('video-input').files && document.getElementById('video-input').files[0]) || currentStegoFile || currentStegoBlob;
-          if(!file) return alert("Please upload video file!");
+          if(!file) return showToast("Please upload video file!", "error");
           handleVideoDecode(pass);
       }
     };
@@ -1903,7 +1915,28 @@
 
   
 
-<script src="../js/utils.js"></script>
+<script src="../js/utils.js">
+    // GA4 & Toast Integration for Steganography Downloads
+    const dlWavBtn = document.getElementById('btn-download-wav');
+    if (dlWavBtn) {
+      dlWavBtn.addEventListener('click', () => {
+        showToast('Encrypted media downloaded!', 'success');
+        if (window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackDownload('Audio & Video Steganography', currentMode === 'video' ? 'mp4' : 'wav', 0);
+        }
+      });
+    }
+    const dlArmorBtn = document.getElementById('btn-download-armor');
+    if (dlArmorBtn) {
+      dlArmorBtn.addEventListener('click', () => {
+        showToast('WhatsApp Armor ZIP downloaded!', 'success');
+        if (window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackDownload('Audio & Video Steganography', 'zip', 0);
+        }
+      });
+    }
+
+</script>
 
 <!-- RELATED TOOLS FOR SEO INTERNAL LINKING -->
       <div style="max-width: 1000px; margin: 60px auto 40px; padding: 0 20px;">

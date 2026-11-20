@@ -478,6 +478,9 @@
             </div>
           </div>
           <button class="btn btn-success" id="btn-download" style="width: 100%; padding: 14px; font-size: 1rem;">Download Secure Image</button>
+          <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+            Need forensic sanitization for regular media? Try <a href="forensic-sanitizer.html" style="color:var(--primary);text-decoration:underline;">Forensic Sanitizer</a> or scan suspicious links with <a href="phishing-scanner.html" style="color:var(--primary);text-decoration:underline;">Phishing Scanner</a>.
+          </div>
         </div>
       </div>
 
@@ -554,7 +557,7 @@
 
     function handleFile(file, isEncrypt) {
         if (!file || !file.type.startsWith('image/')) {
-            alert('Please select an image file (PNG or JPEG).');
+            showToast('Please select an image file (PNG or JPEG).', 'error');
             return;
         }
         const reader = new FileReader();
@@ -1085,26 +1088,28 @@
 
     // Handlers
     document.getElementById('btn-encrypt').addEventListener('click', async () => {
-        if(!targetImage) return alert('Please select a carrier image first.');
+        if(!targetImage) return showToast('Please select a carrier image first.', 'error');
         const rMsg = document.getElementById('enc-real-msg').value.trim();
         const rPwd = document.getElementById('enc-real-pwd').value;
         const dMsg = document.getElementById('enc-decoy-msg').value.trim();
         const dPwd = document.getElementById('enc-decoy-pwd').value;
 
-        if(!rMsg || !rPwd) return alert('Real message and Real password are required.');
+        if(!rMsg || !rPwd) return showToast('Real message and Real password are required.', 'error');
         if((dMsg && !dPwd) || (!dMsg && dPwd)) {
-            return alert('To enable Decoy channel, both Decoy message and Decoy password must be provided.');
+            return showToast('To enable Decoy channel, both Decoy message and Decoy password must be provided.', 'warning');
         }
         if(dMsg && dPwd && rPwd === dPwd) {
-            return alert('Decoy password must be different from Real password to ensure plausible deniability.');
+            return showToast('Decoy password must be different from Real password to ensure plausible deniability.', 'warning');
         }
 
         if (currentStegoMode === 'whatsapp') {
             if (rMsg.length > 200) {
-                return alert(`Your real secret is ${rMsg.length} characters. For Social Safe mode, secrets should be 200 characters or fewer for optimal resilience against social media lossy compression. For massive text or documents, switch to "Ultra-HD Lossless Mode" and send as an uncompressed file or document attachment (📎 Document).`);
+                showToast(`Your real secret is ${rMsg.length} characters. For Social Safe mode, secrets should be 200 characters or fewer for optimal resilience against social media lossy compression. For massive text or documents, switch to "Ultra-HD Lossless Mode" and send as an uncompressed file or document attachment (📎 Document).`, 'warning');
+                return;
             }
             if (dMsg && dMsg.length > 200) {
-                return alert(`Your decoy message is ${dMsg.length} characters. Please shorten it to 200 characters or switch to Ultra-HD Lossless Mode.`);
+                showToast(`Your decoy message is ${dMsg.length} characters. Please shorten it to 200 characters or switch to Ultra-HD Lossless Mode.`, 'warning');
+                return;
             }
         }
 
@@ -1177,7 +1182,16 @@
                 if (typeof showToast === 'function') {
                     showToast('Secure image downloaded!', 'success');
                 }
+                if (window.PixelCraftAnalytics) {
+                    window.PixelCraftAnalytics.trackDownload('Advanced Decoy Steganography', 'png', 0);
+                }
             };
+            if (typeof encResult.scrollIntoView === 'function') {
+                encResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            if (window.PixelCraftAnalytics) {
+                window.PixelCraftAnalytics.trackCompletion('Advanced Decoy Steganography', 'png', 0);
+            }
             document.getElementById('enc-result').style.display = 'block';
             hideLoading();
             if (typeof showToast === 'function') {
@@ -1185,7 +1199,7 @@
             }
         } catch(e) {
             hideLoading();
-            alert('Encryption failed: ' + (e.message || e));
+            showToast('Encryption failed: ' + (e.message || e), 'error'); if (window.PixelCraftAnalytics) { window.PixelCraftAnalytics.trackError('Advanced Decoy Steganography', 'processing_failed'); }
         }
     });
 
@@ -1200,7 +1214,7 @@
                 errBox.innerText = 'Please select or drop an encrypted image first.';
                 errBox.style.display = 'block';
             } else {
-                alert('Please select an encrypted image first.');
+                showToast('Please select an encrypted image first.', 'error');
             }
             return;
         }
@@ -1210,7 +1224,7 @@
                 errBox.innerText = 'Please enter your password to extract payload.';
                 errBox.style.display = 'block';
             } else {
-                alert('Password is required.');
+                showToast('Password is required.', 'error');
             }
             return;
         }
@@ -1341,7 +1355,7 @@
                     errBox.innerText = 'Extraction failed: Incorrect password or image does not contain an encrypted payload.';
                     errBox.style.display = 'block';
                 } else {
-                    alert('Wrong password or corrupted image.');
+                    showToast('Wrong password or corrupted image.', 'error'); if (window.PixelCraftAnalytics) { window.PixelCraftAnalytics.trackError('Advanced Decoy Steganography', 'processing_failed'); }
                 }
             }
         } catch(e) {
@@ -1350,7 +1364,7 @@
                 errBox.innerText = 'Extraction failed: ' + (e.message || e);
                 errBox.style.display = 'block';
             } else {
-                alert('Extraction failed: ' + (e.message || e));
+                showToast('Extraction failed: ' + (e.message || e), 'error'); if (window.PixelCraftAnalytics) { window.PixelCraftAnalytics.trackError('Advanced Decoy Steganography', 'processing_failed'); }
             }
         }
     });
@@ -1365,7 +1379,7 @@
                 if (typeof showToast === 'function') {
                     showToast('Message copied to clipboard!', 'success');
                 } else {
-                    alert('Copied to clipboard!');
+                    showToast('Copied to clipboard!', 'success');
                 }
             });
         });

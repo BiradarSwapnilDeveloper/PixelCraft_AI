@@ -400,6 +400,7 @@
     <div class="scan-input-group">
       <input type="url" id="url-input" placeholder="https://suspicious-link.com/login..." required/>
       <button class="btn btn-primary" id="scan-btn" style="padding: 14px 28px; font-size: 1rem;">Initiate Scan</button>
+      <button class="btn btn-outline" id="clear-btn" type="button" style="padding: 14px 20px; font-size: 1rem;" title="Clear input and reset scanner">Clear</button>
     </div>
 
       <div class="scan-results" id="scan-results">
@@ -449,6 +450,9 @@
         <div class="terminal-output" id="terminal">
           <div class="term-line term-sys">> System initialized. Awaiting target...</div>
         </div>
+        <div class="next-step-hint" style="margin-top:16px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+          Need to generate a verified clean QR code? Try <a href="qr-generator.html" style="color:var(--primary);text-decoration:underline;">QR Code Generator</a> or protect files with <a href="advanced-decoy.html" style="color:var(--primary);text-decoration:underline;">Advanced Decoy</a>.
+        </div>
       </div>
     </div>
   </div>
@@ -456,6 +460,7 @@
 <script src="../js/utils.js"></script>
 <script>
   const scanBtn = document.getElementById('scan-btn');
+  const clearBtn = document.getElementById('clear-btn');
   const urlInput = document.getElementById('url-input');
   const resultsDiv = document.getElementById('scan-results');
   const terminal = document.getElementById('terminal');
@@ -463,6 +468,15 @@
   const riskTitleEl = document.getElementById('risk-title');
   const riskDescEl = document.getElementById('risk-desc');
   const riskContainer = document.getElementById('risk-container');
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      urlInput.value = '';
+      resultsDiv.style.display = 'none';
+      terminal.innerHTML = '<div class="term-line term-sys">> System initialized. Awaiting target...</div>';
+      urlInput.focus();
+    });
+  }
 
   function logTerminal(msg, type="normal") {
     const div = document.createElement('div');
@@ -498,6 +512,9 @@
     let targetUrl = urlInput.value.trim();
     if (!targetUrl) {
       showToast('Please enter a valid URL', 'error');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackError('Phishing Link Scanner', 'invalid_input');
+      }
       return;
     }
     if (!/^https?:\/\//i.test(targetUrl)) {
@@ -603,9 +620,20 @@
         riskDescEl.innerText = 'No obvious threats detected. However, always ensure you trust the sender.';
       }
 
+      if (typeof resultsDiv.scrollIntoView === 'function') {
+        resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackCompletion('Phishing Link Scanner', 'report', 0, { risk_score: data.riskScore });
+      }
+
     } catch(err) {
       logTerminal(`ERROR: ${err.message}`, 'error');
       showToast('Scan failed', 'error');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackError('Phishing Link Scanner', 'processing_failed');
+      }
     } finally {
       scanBtn.disabled = false;
       scanBtn.innerText = 'Initiate Scan';

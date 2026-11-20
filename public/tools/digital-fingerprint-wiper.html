@@ -406,7 +406,7 @@
           <div class="scanner" id="scanner"></div>
           <img id="previewImg" src="" alt="Target Image">
         </div>
-        <button class="btn-outline" id="btnChange">Abord & Select New Target</button>
+        <button class="btn-outline" id="btnChange">Select New Image</button>
       </div>
     </div>
     
@@ -438,6 +438,9 @@
         
         <button class="btn-cyber" id="btnProcess">Clean & Anonymize Image</button>
         <button class="btn-success" id="btnDownload">Download Secure Image</button>
+        <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+          Need to remove embedded payloads and EXIF? Try <a href="forensic-sanitizer.html" style="color:var(--primary);text-decoration:underline;">Forensic Sanitizer</a> or inspect metadata with <a href="exif-viewer.html" style="color:var(--primary);text-decoration:underline;">EXIF Viewer</a>.
+        </div>
       </div>
       
       <div class="terminal" id="terminal">
@@ -495,6 +498,10 @@
     function handleFile(file) {
         if (!file.type.startsWith('image/')) {
             logTerminal('ERROR: Invalid media format.', 'err');
+            showToast('Please upload a valid image file.', 'error');
+            if (window.PixelCraftAnalytics) {
+                window.PixelCraftAnalytics.trackError('Digital Fingerprint Wiper', 'invalid_input');
+            }
             return;
         }
         const reader = new FileReader();
@@ -505,10 +512,18 @@
                 dropzone.style.display = 'none';
                 previewImg.src = e.target.result;
                 previewWrapper.style.display = 'flex';
+                if (typeof previewWrapper.scrollIntoView === 'function') {
+                    previewWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
                 logTerminal(`TARGET ACQUIRED: ${file.name} [${img.width}x${img.height}]`, 'sys');
                 if (legalCheck.checked) btnProcess.classList.add('active');
             };
-            img.onerror = () => logTerminal('ERROR: Data corruption detected.', 'err');
+            img.onerror = () => {
+                logTerminal('ERROR: Data corruption detected.', 'err');
+                if (window.PixelCraftAnalytics) {
+                    window.PixelCraftAnalytics.trackError('Digital Fingerprint Wiper', 'processing_failed');
+                }
+            };
             img.src = e.target.result;
         };
         reader.readAsDataURL(file);
@@ -795,8 +810,18 @@
                 a.download = "secure_camouflaged_image.jpg";
                 a.click();
                 logTerminal('File download initiated.', 'sys');
+                showToast('Secured image downloaded!', 'success');
+                if (window.PixelCraftAnalytics) {
+                    window.PixelCraftAnalytics.trackDownload('Digital Fingerprint Wiper', 'jpg', 0);
+                }
             };
             btnDownload.style.display = 'block';
+            if (typeof btnDownload.scrollIntoView === 'function') {
+                btnDownload.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            if (window.PixelCraftAnalytics) {
+                window.PixelCraftAnalytics.trackCompletion('Digital Fingerprint Wiper', 'jpg', 0);
+            }
             
         }, 1000);
     });

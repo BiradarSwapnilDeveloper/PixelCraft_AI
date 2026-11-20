@@ -331,6 +331,9 @@
             </div>
             
             <button class="btn btn-success" id="btn-download" style="width: 100%; padding: 14px; font-size: 1rem;">Download Dubbed Media</button>
+            <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+              Need to hide secret audio notes? Try <a href="audio-steganography.html" style="color:var(--primary);text-decoration:underline;">Audio Steganography</a> or convert media with <a href="format-converter.html" style="color:var(--primary);text-decoration:underline;">Format Converter</a>.
+            </div>
           </div>
         </div>
       </div>
@@ -360,12 +363,18 @@ function handleFile(file) {
     // Validate type
     if(!file.type.startsWith('video/') && !file.type.startsWith('audio/')) {
         showToast("Please upload a valid audio or video file.", "error");
+        if (window.PixelCraftAnalytics) {
+            window.PixelCraftAnalytics.trackError('AI Audio & Video Dubbing', 'unsupported_format');
+        }
         return;
     }
     
     // Validate size (e.g. max 50MB)
     if(file.size > 50 * 1024 * 1024) {
         showToast("File is too large. Max size is 50MB.", "error");
+        if (window.PixelCraftAnalytics) {
+            window.PixelCraftAnalytics.trackError('AI Audio & Video Dubbing', 'file_too_large');
+        }
         return;
     }
 
@@ -373,6 +382,9 @@ function handleFile(file) {
     fileNameDisplay.textContent = file.name;
     uploadArea.style.display = 'none';
     editor.style.display = 'block';
+    if (typeof editor.scrollIntoView === 'function') {
+        editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 }
 
 async function processDubbing() {
@@ -411,12 +423,24 @@ async function processDubbing() {
         }
         
         overlay.style.display = 'none';
-        document.getElementById('result-section').style.display = 'block';
+        const resSection = document.getElementById('result-section');
+        resSection.style.display = 'block';
+        if (typeof resSection.scrollIntoView === 'function') {
+            resSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
         showToast(`Success! Dubbed into ${targetLang}`, "success");
+
+        if (window.PixelCraftAnalytics) {
+            const ext = currentFile.name.split('.').pop() || 'media';
+            window.PixelCraftAnalytics.trackCompletion('AI Audio & Video Dubbing', ext, currentFile.size);
+        }
 
     } catch (err) {
         overlay.style.display = 'none';
         showToast(err.message, "error");
+        if (window.PixelCraftAnalytics) {
+            window.PixelCraftAnalytics.trackError('AI Audio & Video Dubbing', 'processing_failed');
+        }
     }
 }
 
@@ -428,6 +452,10 @@ document.getElementById('btn-download').addEventListener('click', () => {
     const ext = currentFile.name.split('.').pop();
     
     downloadFile(dubbedMediaUrl, `${origName}_${lang}_dubbed.${ext}`);
+    showToast('Dubbed media downloaded!', 'success');
+    if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackDownload('AI Audio & Video Dubbing', ext, currentFile ? currentFile.size : 0);
+    }
 });
 
 function resetTool() {

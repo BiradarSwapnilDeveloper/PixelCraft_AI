@@ -259,6 +259,9 @@
                 <button class="btn btn-blue" id="btn-copy-all">Copy All HEX</button>
                 <button class="btn btn-green" id="btn-export">Export Palette PNG</button>
               </div>
+              <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+                Need to convert or compress images? Try <a href="format-converter.html" style="color:var(--primary);text-decoration:underline;">Format Converter</a> or <a href="image-compressor.html" style="color:var(--primary);text-decoration:underline;">Image Compressor</a>.
+              </div>
             </div>
           </div>
         </div>
@@ -291,10 +294,20 @@ fileInput.addEventListener('change', e =>{ if(e.target.files[0]) handleFile(e.ta
 document.getElementById('num-colors').addEventListener('change', () =>{ if(currentImg) extractColors(); });
 
 async function handleFile(file) {
+  if (!file || !file.type || !file.type.startsWith('image/')) {
+    showToast('Please upload a valid image file.', 'error');
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackError('Color Palette Extractor', 'invalid_input');
+    }
+    return;
+  }
   currentImg = await fileToImage(file);
   document.getElementById('preview-img').src = URL.createObjectURL(file);
   uploadArea.style.display = 'none';
   editor.style.display = 'block';
+  if (typeof editor.scrollIntoView === 'function') {
+    editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
   extractColors();
 }
 
@@ -317,6 +330,9 @@ function extractColors() {
   // k-means lite
   extractedColors = kMeans(pixels, numColors);
   renderPalette();
+  if (window.PixelCraftAnalytics) {
+    window.PixelCraftAnalytics.trackCompletion('Color Palette Extractor', 'palette', 0);
+  }
 }
 
 function kMeans(pixels, k) {
@@ -405,6 +421,9 @@ document.getElementById('btn-copy-all').addEventListener('click', () =>{
   const hexes = extractedColors.map(([r,g,b]) =>rgbToHex(r,g,b)).join(', ');
   copyToClipboard(hexes, null);
   showToast('All colors copied!', 'success');
+  if (window.PixelCraftAnalytics) {
+    window.PixelCraftAnalytics.trackDownload('Color Palette Extractor', 'hex', 0);
+  }
 });
 
 document.getElementById('btn-export').addEventListener('click', () =>{
@@ -424,6 +443,10 @@ document.getElementById('btn-export').addEventListener('click', () =>{
     ctx.fillText(`rgb(${r},${g},${b})`, i*sw + sw/2, sh*0.7 + 40);
   });
   downloadFile(c.toDataURL('image/png'), 'color-palette.png');
+  showToast('Palette PNG exported!', 'success');
+  if (window.PixelCraftAnalytics) {
+    window.PixelCraftAnalytics.trackDownload('Color Palette Extractor', 'png', 0);
+  }
 });
 
 function resetTool() {

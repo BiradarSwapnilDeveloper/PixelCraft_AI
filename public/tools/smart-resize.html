@@ -263,6 +263,9 @@
             <button class="btn btn-blue" id="btn-download-all">Download All (ZIP)</button>
             <button class="btn btn-gray" onclick="resetTool()">New Image</button>
           </div>
+          <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+            Need to reduce image size to exact KB? Try <a href="image-compressor.html" style="color:var(--primary);text-decoration:underline;">Image Compressor</a> or <a href="format-converter.html" style="color:var(--primary);text-decoration:underline;">Format Converter</a>.
+          </div>
         </div>
 
         <!-- Preset Filter Tabs -->
@@ -384,6 +387,9 @@
       }
       uploadArea.style.display = 'none';
       editor.style.display = 'block';
+      if (typeof editor.scrollIntoView === 'function') {
+        editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
       if (preselectedCategory && preselectedCategory !== 'all') {
         currentFilter = preselectedCategory;
         document.querySelectorAll('.preset-filter-btn').forEach(b => {

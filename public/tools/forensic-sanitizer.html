@@ -450,6 +450,9 @@
             <button class="btn btn-primary" id="btnProcess" style="width: 100%;">1. Scan & Sanitize Image</button>
             <button class="btn btn-secondary" id="btnVerify" style="width: 100%;">2. Verify Cryptographic Seal</button>
             <button class="btn btn-success" id="btnDownload" style="width: 100%; display: none;">Download Secured Image</button>
+            <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+              Need to scrub camera sensor PRNU noise? Try <a href="digital-fingerprint-wiper.html" style="color:var(--primary);text-decoration:underline;">Digital Fingerprint Wiper</a> or inspect metadata with <a href="exif-viewer.html" style="color:var(--primary);text-decoration:underline;">EXIF Viewer</a>.
+            </div>
           </div>
         </div>
         
@@ -518,6 +521,10 @@
     function handleFile(file) {
         if (!file.type.startsWith('image/')) {
             logTerminal('ERROR: Invalid media format.', 'err');
+            showToast('Please upload a valid image file.', 'error');
+            if (window.PixelCraftAnalytics) {
+                window.PixelCraftAnalytics.trackError('Forensic Image Sanitizer', 'invalid_input');
+            }
             return;
         }
         currentFile = file;
@@ -527,6 +534,9 @@
             dropzone.style.display = 'none';
             previewImg.src = e.target.result;
             previewWrapper.style.display = 'flex';
+            if (typeof previewWrapper.scrollIntoView === 'function') {
+                previewWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
             threatDashboard.style.display = 'none';
             btnDownload.style.display = 'none';
             sanitizedDataUrl = null;
@@ -618,9 +628,18 @@
             previewImg.src = sanitizedDataUrl;
             
             btnDownload.style.display = 'block';
+            if (typeof btnDownload.scrollIntoView === 'function') {
+                btnDownload.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            if (window.PixelCraftAnalytics) {
+                window.PixelCraftAnalytics.trackCompletion('Forensic Image Sanitizer', 'png', currentFile ? currentFile.size : 0);
+            }
             
         } catch (err) {
             logTerminal('ERROR: ' + err.message, 'err');
+            if (window.PixelCraftAnalytics) {
+                window.PixelCraftAnalytics.trackError('Forensic Image Sanitizer', 'processing_failed');
+            }
         } finally {
             scanner.style.display = 'none';
             btnProcess.textContent = "1. Scan & Sanitize Image";
@@ -701,6 +720,10 @@
         a.download = "Pixelcraft_Sanitized_Image.png";
         a.click();
         logTerminal('Secure download initiated.', 'sys');
+        showToast('Sanitized image downloaded!', 'success');
+        if (window.PixelCraftAnalytics) {
+            window.PixelCraftAnalytics.trackDownload('Forensic Image Sanitizer', 'png', 0);
+        }
     });
 
   </script>

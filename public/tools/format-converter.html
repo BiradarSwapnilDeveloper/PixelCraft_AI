@@ -281,6 +281,9 @@
               <button class="btn btn-green" id="btn-download">Download Converted</button>
             </div>
             <canvas id="result-canvas" style="width:100%;max-height:400px;object-fit:contain;border-radius:12px;border:1.5px solid var(--border);display:block;background:var(--bg2);"></canvas>
+            <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+              Need to compress your converted photo? Try <a href="image-compressor.html" style="color:var(--primary);text-decoration:underline;">Image Compressor</a> or <a href="images-to-pdf.html" style="color:var(--primary);text-decoration:underline;">Images to PDF</a>.
+            </div>
           </div>
         </div>
       </div>
@@ -341,6 +344,9 @@ async function handleFile(file) {
   }
   uploadArea.style.display = 'none';
   editor.style.display = 'block';
+  if (typeof editor.scrollIntoView === 'function') {
+    editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
   if (preselectedFormat) {
     currentMime = preselectedFormat.mime;
     currentExt = preselectedFormat.ext;
@@ -422,6 +428,7 @@ document.getElementById('btn-download').addEventListener('click', () =>{
   const dataUrl = resultCanvas.toDataURL(currentMime, 0.92);
   const origName = currentFile.name.replace(/\.[^/.]+$/, '');
   downloadFile(dataUrl, `${origName}.${currentExt}`);
+  showToast('Converted image downloaded successfully!', 'success');
   if (window.PixelCraftAnalytics) {
     window.PixelCraftAnalytics.trackDownload('Format Converter', currentExt, currentConvertedBytes || (currentFile ? currentFile.size : 0));
   }

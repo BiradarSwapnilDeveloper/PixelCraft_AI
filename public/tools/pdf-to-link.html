@@ -497,6 +497,9 @@
           <div style="text-align: center; margin-top: 25px;">
              <button class="btn btn-outline" onclick="resetTool()" style="color: var(--text-main); border-color: rgba(255,255,255,0.2);">🔄 Upload Another PDF</button>
           </div>
+          <div class="next-step-hint" style="margin-top:16px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+            Need to merge scanned photos into PDF? Try <a href="images-to-pdf.html" style="color:var(--primary);text-decoration:underline;">Images to PDF</a> or create custom QR codes with <a href="qr-generator.html" style="color:var(--primary);text-decoration:underline;">QR Generator</a>.
+          </div>
         </div>
 
       </div>
@@ -645,6 +648,9 @@
     .catch(err => {
       clearInterval(progressInterval);
       showToast('Upload failed. Please try again.', 'error');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackError('PDF to Link Converter', 'processing_failed');
+      }
       resetTool();
     });
   }
@@ -652,6 +658,9 @@
   function showResult(url, filename) {
     uploadStatus.style.display = 'none';
     resultBox.style.display = 'block';
+    if (typeof resultBox.scrollIntoView === 'function') {
+      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
     
     pdfLinkInput.value = url;
     document.getElementById('open-link').href = url;
@@ -670,6 +679,9 @@
 
     fireConfetti();
     showToast('Link generated successfully!', 'success');
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackCompletion('PDF to Link Converter', 'url', 0);
+    }
   }
 
   function copyLink() {
@@ -679,6 +691,9 @@
     const oldText = copyBtn.textContent;
     copyBtn.textContent = '✅ Copied!';
     showToast('Link copied to clipboard!', 'success');
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackDownload('PDF to Link Converter', 'link', 0);
+    }
     setTimeout(() => { copyBtn.textContent = oldText; }, 2000);
   }
 
@@ -717,10 +732,17 @@
         a.click();
         a.remove();
         window.URL.revokeObjectURL(url);
+        showToast('QR code downloaded!', 'success');
+        if (window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackDownload('PDF to Link Converter', 'png', blob.size);
+        }
       })
       .catch(err => {
         console.error(err);
         showToast('Error downloading QR code', 'error');
+        if (window.PixelCraftAnalytics) {
+          window.PixelCraftAnalytics.trackError('PDF to Link Converter', 'processing_failed');
+        }
       });
   }
 </script>

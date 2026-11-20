@@ -234,6 +234,9 @@
             <button class="btn btn-blue" id="btn-copy-all">Copy All Data</button>
             <button class="btn btn-gray" onclick="resetTool()">New Image</button>
           </div>
+          <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+            Need to strip GPS and camera telemetry? Try <a href="digital-fingerprint-wiper.html" style="color:var(--primary);text-decoration:underline;">Digital Fingerprint Wiper</a> or <a href="forensic-sanitizer.html" style="color:var(--primary);text-decoration:underline;">Forensic Sanitizer</a>.
+          </div>
         </div>
         <div class="result-body">
           <div style="display:grid;grid-template-columns:1fr 2fr;gap:24px;">
@@ -283,6 +286,9 @@ async function handleFile(file) {
   `;
   uploadArea.style.display = 'none';
   editor.style.display = 'block';
+  if (typeof editor.scrollIntoView === 'function') {
+    editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 
   try {
     const exif = await Exifr.parse(file, true);
@@ -290,12 +296,21 @@ async function handleFile(file) {
       document.getElementById('exif-grid').innerHTML = `
         <div class="info-box">ℹ No EXIF data found in this image. Try a JPEG taken with a camera or smartphone.</div>
       `;
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackCompletion('EXIF Data Viewer', 'none', file.size);
+      }
       return;
     }
     renderExif(exif);
     storeExifText(exif);
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackCompletion('EXIF Data Viewer', 'metadata', file.size);
+    }
   } catch(e) {
     document.getElementById('exif-grid').innerHTML = `<div class="info-box" style="color:var(--error)">Could not read EXIF data from this file.</div>`;
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackError('EXIF Data Viewer', 'processing_failed');
+    }
   }
 }
 
@@ -353,7 +368,14 @@ function storeExifText(exif) {
 }
 
 document.getElementById('btn-copy-all').addEventListener('click', () =>{
-  if(allExifText) navigator.clipboard.writeText(allExifText).then(() =>showToast('EXIF data copied!','success'));
+  if(allExifText) {
+    navigator.clipboard.writeText(allExifText).then(() =>{
+      showToast('EXIF data copied!','success');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackDownload('EXIF Data Viewer', 'txt', allExifText.length);
+      }
+    });
+  }
 });
 
 function resetTool() {
