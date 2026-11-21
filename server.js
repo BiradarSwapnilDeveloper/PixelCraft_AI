@@ -1,7 +1,11 @@
 require('dotenv').config();
 const dns = require('dns');
-dns.setDefaultResultOrder('ipv4first');
-dns.setServers(['8.8.8.8', '8.8.4.4']); // Force Google DNS to bypass ISP block on SRV records
+try {
+  dns.setDefaultResultOrder('ipv4first');
+  dns.setServers(['8.8.8.8', '8.8.4.4']); // Force Google DNS to bypass ISP block on SRV records
+} catch (dnsErr) {
+  console.warn('DNS server configuration note:', dnsErr.message);
+}
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -1366,6 +1370,7 @@ app.post('/api/generate-comment', aiGenerationLimiterMiddleware, async (req, res
 
 
 const nodemailer = require('nodemailer');
+const ContactMessage = require('./models/ContactMessage');
 
 // Contact Form Rate Limiter (Max 5 submissions per 15 minutes per IP)
 const contactRateLimiter = new Map();
@@ -1398,7 +1403,7 @@ app.post('/api/contact', async (req, res) => {
     return res.status(429).json({ error: `Too many messages sent. Please wait ${Math.ceil(rateCheck.retryAfter / 60)} minutes before trying again.` });
   }
 
-  const { name, email, message } = req.body;
+  const { name, email, message } = req.body || {};
   if (!name || typeof name !== 'string' || !name.trim()) {
     return res.status(400).json({ error: "Your name is required." });
   }
@@ -1422,65 +1427,109 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: "Please enter a valid email address." });
   }
 
-  if (trimmedMessage.length < 10) {
-    return res.status(400).json({ error: "Message must be at least 10 characters long." });
+  if (trimmedMessage.length < 5) {
+    return res.status(400).json({ error: "Message must be at least 5 characters long." });
   }
   if (trimmedMessage.length > 5000) {
     return res.status(400).json({ error: "Message is too long (maximum 5000 characters allowed)." });
   }
 
+  // Step 1: Persist message safely to MongoDB
+  let savedDoc = null;
   try {
-    const emailUser = (process.env.EMAIL_USER || '').trim();
-    const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
-
-    if (!emailUser || !emailPass) {
-      console.error("🔴 Email Send Error: EMAIL_USER or EMAIL_PASS environment variable is missing.");
-      return res.status(500).json({ error: "Email service is currently misconfigured. Please contact support.pixelcraft205@gmail.com directly." });
-    }
-
-    console.log(`📩 Preparing to send email from contact form (Name: ${trimmedName}, Email: ${trimmedEmail})`);
-
-    // Explicitly configure Gmail SMTP with strict timeouts
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: emailUser,
-        pass: emailPass
-      },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000
+    savedDoc = await ContactMessage.create({
+      name: trimmedName,
+      email: trimmedEmail,
+      message: trimmedMessage,
+      clientIp: clientIp,
+      emailDelivered: false
     });
+    console.log(`💾 Contact inquiry stored in MongoDB Atlas (ID: ${savedDoc._id})`);
+  } catch (dbErr) {
+    console.error("⚠️ Failed to persist contact inquiry to MongoDB:", dbErr.message);
+  }
 
-    // Gmail requires 'from' to match the authenticated email to prevent spam blocking
+  // Step 2: Instant Telegram Alert to admin
+  try {
+    const sanitizeHtml = (str) => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const telegramText = `📬 <b>New Website Contact Message!</b>\n\n` +
+      `👤 <b>Name:</b> ${sanitizeHtml(trimmedName)}\n` +
+      `📧 <b>Email:</b> ${sanitizeHtml(trimmedEmail)}\n` +
+      `🌐 <b>IP:</b> <code>${sanitizeHtml(clientIp)}</code>\n\n` +
+      `💬 <b>Message:</b>\n${sanitizeHtml(trimmedMessage)}`;
+    sendTelegramAlert(telegramText).catch(e => console.warn('Telegram contact alert error:', e.message));
+  } catch (tgErr) {
+    console.warn("⚠️ Telegram alert dispatch error:", tgErr.message);
+  }
+
+  // Step 3: SMTP Email Dispatch with Dual-Port Fallback (Port 465 SSL -> Port 587 STARTTLS)
+  const emailUser = (process.env.EMAIL_USER || '').trim();
+  const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
+  let emailDelivered = false;
+
+  if (emailUser && emailPass) {
     const mailOptions = {
       from: `"PixelCraft Contact" <${emailUser}>`,
       replyTo: trimmedEmail,
-      to: emailUser, // Sends the contact message to the website owner's email
+      to: emailUser,
       subject: `New Message from PixelCraft Website: ${trimmedName}`,
-      text: `Someone just sent a message from your website contact form!
-      
-Name: ${trimmedName}
-Email: ${trimmedEmail}
-
-Message: 
-${trimmedMessage}
-`
+      text: `Someone sent a message from your website contact form!\n\nName: ${trimmedName}\nEmail: ${trimmedEmail}\nIP: ${clientIp}\n\nMessage:\n${trimmedMessage}\n`
     };
 
-    // Attempt to send email with a 12s safety timeout to prevent indefinite socket hanging
-    const sendPromise = transporter.sendMail(mailOptions);
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Email server timed out after 12 seconds')), 12000)
-    );
-    await Promise.race([sendPromise, timeoutPromise]);
+    // Primary: Port 465 (Direct SSL)
+    try {
+      const transporter465 = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: { user: emailUser, pass: emailPass },
+        connectionTimeout: 6000,
+        greetingTimeout: 6000,
+        socketTimeout: 8000
+      });
+      await transporter465.sendMail(mailOptions);
+      emailDelivered = true;
+      console.log(`✅ Contact email delivered via SMTP Port 465 from ${trimmedEmail}`);
+    } catch (err465) {
+      console.warn("⚠️ SMTP Port 465 failed, trying Port 587 STARTTLS...", err465.message);
+      // Fallback: Port 587 (STARTTLS)
+      try {
+        const transporter587 = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+          auth: { user: emailUser, pass: emailPass },
+          connectionTimeout: 6000,
+          greetingTimeout: 6000,
+          socketTimeout: 8000
+        });
+        await transporter587.sendMail(mailOptions);
+        emailDelivered = true;
+        console.log(`✅ Contact email delivered via SMTP Port 587 fallback from ${trimmedEmail}`);
+      } catch (err587) {
+        console.warn("⚠️ SMTP Port 587 fallback also failed:", err587.message);
+      }
+    }
 
-    console.log(`✅ Contact email sent successfully from ${trimmedEmail} (${trimmedName})`);
-    res.json({ success: true, message: 'Email sent successfully!' });
-  } catch (err) {
-    console.error("🔴 Email Send Error (Check EMAIL_PASS App Password):", err.message);
-    res.status(500).json({ error: "Failed to send email. Please try again later or email support.pixelcraft205@gmail.com directly." });
+    if (emailDelivered && savedDoc) {
+      ContactMessage.updateOne({ _id: savedDoc._id }, { emailDelivered: true }).exec().catch(() => {});
+    }
+  } else {
+    console.warn("ℹ️ EMAIL_USER or EMAIL_PASS not configured. Message preserved in MongoDB and Telegram.");
   }
+
+  // If saved in DB, sent to Telegram, or sent via SMTP, consider it a full success
+  if (savedDoc || emailDelivered) {
+    return res.json({
+      success: true,
+      message: 'Message sent successfully! We will get back to you soon. 🎉'
+    });
+  }
+
+  // Only fail if both DB storage and SMTP failed
+  return res.status(500).json({
+    error: "Failed to deliver message. Please contact support.pixelcraft205@gmail.com directly."
+  });
 });
 
 // ===== TOOL FEATURE SUGGESTIONS ENDPOINT =====
