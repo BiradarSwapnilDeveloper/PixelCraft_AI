@@ -96,158 +96,110 @@
       color: var(--text-muted);
       line-height: 1.6;
     }
-    /* Cyber Running-Motion Live Button */
-    .cyber-install-wrapper {
-      position: relative;
-      display: inline-flex;
+    /* Professional Enterprise Install Button (Linear / Stripe Grade) */
+    .pro-install-wrapper {
+      display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 3px;
-      border-radius: 20px;
-      overflow: hidden;
-      max-width: 440px;
       width: 100%;
       margin: 0 auto;
-      box-shadow: 0 14px 40px -10px rgba(37, 99, 235, 0.55), 0 0 25px rgba(6, 182, 212, 0.35);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: pointer;
     }
-    .cyber-border-laser {
-      position: absolute;
-      inset: -200%;
-      background: conic-gradient(from 0deg, #2563eb, #06b6d4, #10b981, #8b5cf6, #ec4899, #2563eb);
-      animation: cyberLaserSpin 3.5s linear infinite;
-      z-index: 0;
-    }
-    @keyframes cyberLaserSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .btn-install-cyber {
+    .pro-install-btn {
       position: relative;
-      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      border: none;
-      outline: none;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.94) 100%);
-      border-radius: 17px;
-      padding: 16px 24px;
+      max-width: 440px;
+      padding: 14px 22px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
       cursor: pointer;
-      color: #fff;
       overflow: hidden;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 8px 22px -4px rgba(37, 99, 235, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
       box-sizing: border-box;
-      transition: all 0.25s ease;
     }
-    .cyber-scan-beam {
+    .pro-install-btn:hover {
+      background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.38);
+    }
+    .pro-install-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+    .pro-shimmer-sweep {
       position: absolute;
       top: 0;
-      left: -120%;
-      width: 60%;
+      left: 0;
+      width: 50%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), rgba(56, 189, 248, 0.4), transparent);
-      transform: skewX(-25deg);
-      animation: cyberSweepBeam 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+      transform: translateX(-150%) skewX(-20deg);
+      animation: proShimmerSweep 5s ease-in-out infinite;
       pointer-events: none;
-      z-index: 2;
     }
-    @keyframes cyberSweepBeam {
-      0% { left: -120%; }
-      40%, 100% { left: 160%; }
+    @keyframes proShimmerSweep {
+      0%, 35% { transform: translateX(-150%) skewX(-20deg); }
+      65%, 100% { transform: translateX(250%) skewX(-20deg); }
     }
-    .cyber-pixel-dots {
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(56, 189, 248, 0.25) 1.5px, transparent 1.5px);
-      background-size: 10px 10px;
-      animation: cyberPixelDrift 10s linear infinite;
-      opacity: 0.6;
-      pointer-events: none;
+    .pro-btn-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      position: relative;
       z-index: 1;
     }
-    @keyframes cyberPixelDrift {
-      from { background-position: 0 0; }
-      to { background-position: 20px 20px; }
-    }
-    .cyber-btn-content {
+    .pro-btn-icon-box {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      position: relative;
-      z-index: 3;
-    }
-    .cyber-beacon-pulse {
-      position: relative;
-      width: 16px;
-      height: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
       flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.22);
     }
-    .cyber-beacon-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 10px #10b981;
-    }
-    .cyber-beacon-wave {
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 2px solid #10b981;
-      animation: cyberBeaconPulse 1.8s infinite cubic-bezier(0, 0.2, 0.8, 1);
-    }
-    @keyframes cyberBeaconPulse {
-      0% { transform: scale(0.6); opacity: 1; }
-      100% { transform: scale(2.4); opacity: 0; }
-    }
-    .cyber-btn-text {
+    .pro-btn-text {
       display: flex;
       flex-direction: column;
       text-align: left;
+      flex: 1;
+      min-width: 0;
     }
-    .cyber-btn-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.12rem;
-      font-weight: 800;
+    .pro-btn-title {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 1.08rem;
+      font-weight: 700;
       color: #ffffff;
-      letter-spacing: -0.01em;
       line-height: 1.25;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      letter-spacing: -0.01em;
     }
-    .cyber-btn-sub {
-      font-size: 0.74rem;
-      color: #94a3b8;
+    .pro-btn-sub {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.85);
       font-weight: 500;
-      letter-spacing: 0.02em;
       margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .cyber-download-icon {
-      color: #38bdf8;
+    .pro-btn-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.8);
+      transition: transform 0.2s ease, color 0.2s ease;
       flex-shrink: 0;
-      animation: cyberIconBounce 2s infinite ease-in-out;
     }
-    @keyframes cyberIconBounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(3px); }
-    }
-    .cyber-install-wrapper:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 20px 48px -8px rgba(37, 99, 235, 0.7), 0 0 35px rgba(6, 182, 212, 0.5);
-    }
-    .cyber-install-wrapper:hover .cyber-border-laser {
-      animation-duration: 2s;
-    }
-    .cyber-install-wrapper:hover .cyber-btn-title {
-      color: #38bdf8;
-    }
-    .cyber-install-wrapper:active {
-      transform: translateY(0) scale(0.99);
+    .pro-install-btn:hover .pro-btn-arrow {
+      transform: translateX(3px);
+      color: #ffffff;
     }
 
     /* Metric stats strip */
@@ -503,26 +455,28 @@
         <h1>Install PixelCraft AI</h1>
         <p>Get the official Progressive Web App on your phone, tablet, or desktop for lightning-fast access, offline client-side image processing, and a native standalone window.</p>
         
-        <div class="cyber-install-wrapper" id="install-btn-wrapper">
-          <button id="install-btn" class="btn-install-cyber" aria-label="Download and Install PixelCraft AI App">
-            <span class="cyber-border-laser"></span>
-            <span class="cyber-scan-beam"></span>
-            <span class="cyber-pixel-dots"></span>
-            <span class="cyber-btn-content">
-              <span class="cyber-beacon-pulse">
-                <span class="cyber-beacon-dot"></span>
-                <span class="cyber-beacon-wave"></span>
-              </span>
-              <span class="cyber-btn-text">
-                <span class="cyber-btn-title">📲 Download &amp; Install App</span>
-                <span class="cyber-btn-sub">Offline PWA &bull; Native Hardware Speed &bull; Zero Bloat</span>
-              </span>
-              <svg class="cyber-download-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-            </span>
+        <div class="pro-install-wrapper" id="install-btn-wrapper">
+          <button id="install-btn" class="pro-install-btn" aria-label="Download and Install PixelCraft AI App">
+            <span class="pro-shimmer-sweep" aria-hidden="true"></span>
+            <div class="pro-btn-inner">
+              <div class="pro-btn-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </div>
+              <div class="pro-btn-text">
+                <span class="cyber-btn-title pro-btn-title">Install PixelCraft AI App</span>
+                <span class="cyber-btn-sub pro-btn-sub">Official Web App &bull; 1-Click Launch &bull; &lt; 5MB</span>
+              </div>
+              <div class="pro-btn-arrow">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </div>
+            </div>
           </button>
         </div>
 
@@ -584,8 +538,8 @@
             <p>No manual store downloads or approval queues. The Service Worker automatically syncs updated cryptographic algorithms quietly in the background.</p>
           </div>
           <div class="pwa-feature-box">
-            <h3>✈️ 100% Airplane Mode &amp; Offline Execution</h3>
-            <p>Execute digital forensic cleaning, steganography, format transcoding, and image optimization anywhere—even mid-flight or in zero-signal environments with zero internet.</p>
+            <h3>✈️ Offline-Capable Local Utilities</h3>
+            <p>Core utilities like Image Compressor, Steganography, Format Transcoder, and Metadata Strippers run entirely in your local device RAM without internet once cached.</p>
           </div>
           <div class="pwa-feature-box">
             <h3>🚀 Native GPU Acceleration &amp; Zero Bloat</h3>
