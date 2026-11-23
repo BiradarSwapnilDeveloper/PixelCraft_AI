@@ -68,6 +68,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Cloudflare Turnstile Invisible Bot Protection -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <style>
     .legal-content h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 24px; text-align: center; }
     .legal-content p.subtitle { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; text-align: center; max-width: 600px; margin: 0 auto 40px; }
@@ -400,6 +403,9 @@
               <label for="contactMessage" style="color: var(--text-main, #fff); font-weight: 600; font-size: 0.95rem;">Message <span style="color: #ef4444;">*</span></label>
               <textarea id="contactMessage" name="message" required rows="5" maxlength="5000" placeholder="How can we assist you today?" style="width: 100%; border: 1px solid var(--glass-border); background: var(--bg-dark, #0b0f19); color: #fff; padding: 14px 16px; border-radius: 12px; font-family: inherit; font-size: 0.95rem; outline: none; resize: vertical; transition: border-color 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='var(--primary, #2563eb)'" onblur="this.style.borderColor='var(--glass-border)'"></textarea>
             </div>
+
+            <!-- Cloudflare Turnstile Invisible Bot Check -->
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAAxE43kK4z5oYkYw" data-theme="dark" style="margin-top: 4px; margin-bottom: 4px;"></div>
 
             <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; border-radius: 12px; padding: 14px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 6px;" id="contactSubmitBtn">
               Send Message 🚀
@@ -759,11 +765,15 @@
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 15000);
 
+        // Optional Cloudflare Turnstile token
+        const turnstileInput = form.querySelector('[name="cf-turnstile-response"]');
+        const turnstileToken = turnstileInput ? turnstileInput.value : '';
+
         try {
           const res = await fetch('/api/contact', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, message, referrer: window.location.href }),
+            body: JSON.stringify({ name, email, message, referrer: window.location.href, turnstileToken }),
             signal: controller.signal
           });
 
@@ -816,7 +826,6 @@
         }
       });
     }
-  </script>
   </script>
 <script src="./js/cookie-consent.js"></script>
 </body>

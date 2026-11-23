@@ -844,6 +844,22 @@
           <div id="install-hint" class="install-subhint">Free, instant &bull; Standalone window &bull; &lt; 5MB</div>
         </div>
 
+        <!-- iOS Safari Auto-Detected Install Guide -->
+        <div id="ios-install-guide" class="fallback-card" style="display: none; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 20px 24px; text-align: left; margin-top: 20px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <span style="font-size: 1.5rem;">🍎</span>
+            <div>
+              <strong style="color: #38bdf8; font-size: 1.05rem;">Apple iOS / Safari Detected</strong>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Install PixelCraft AI to your Home Screen in 3 simple taps:</div>
+            </div>
+          </div>
+          <ol style="margin: 0; padding-left: 20px; line-height: 1.8; color: var(--text-main); font-size: 0.95rem;">
+            <li>Tap the <strong>Share</strong> button <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> in Safari's bottom toolbar.</li>
+            <li>Scroll down and tap <strong>"Add to Home Screen"</strong> (➕).</li>
+            <li>Tap <strong>"Add"</strong> in the top right. Launch PixelCraft in standalone full-screen mode!</li>
+          </ol>
+        </div>
+
         <!-- Edge / Chrome Top Banner Guide -->
         <div id="edge-top-guide-banner" class="edge-install-popup-guide" style="display: none;">
           <div class="edge-popup-header">
@@ -1237,6 +1253,14 @@
     const edgeGuideBanner = document.getElementById('edge-top-guide-banner');
     const closeEdgeGuide = document.getElementById('close-edge-guide');
     const fallbackInstructions = document.getElementById('fallback-instructions');
+    const iosGuide = document.getElementById('ios-install-guide');
+
+    // OS Auto-Detection for Apple iOS devices
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS && iosGuide) {
+      iosGuide.style.display = 'block';
+      if (installBtnLabel) installBtnLabel.textContent = "Add to Home Screen (iOS Guide)";
+    }
 
     if (closeEdgeGuide && edgeGuideBanner) {
       closeEdgeGuide.addEventListener('click', () => {
@@ -1271,6 +1295,8 @@
         } else if (window.matchMedia('(display-mode: standalone)').matches) {
           if (installBtnLabel) installBtnLabel.textContent = "App Already Installed";
           installBtn.disabled = true;
+        } else if (isIOS && iosGuide) {
+          iosGuide.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else {
           // In Edge or Chrome desktop when app is already installed or prompt icon is in top address bar
           if (edgeGuideBanner) {

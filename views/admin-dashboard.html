@@ -369,6 +369,7 @@
                 <span style="font-size:12px; color:var(--text-main); text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Require Login For Tools</span>
                 <button id="toggle-tools-login" style="background:var(--success); color:#fff; border:none; border-radius:12px; padding:4px 12px; font-size:11px; cursor:pointer; font-weight:bold; transition:0.3s;">ON</button>
             </div>
+            <button class="btn-primary" id="open-contacts-btn" style="width:auto; padding: 10px 20px; font-size: 13px; border-color: #10b981; color: #10b981;">📬 Contact Inquiries</button>
             <button class="btn-primary" id="open-retention-btn" style="width:auto; padding: 10px 20px; font-size: 13px; border-color: #38bdf8; color: #38bdf8;">Retention & Holds</button>
             <button class="btn-primary" id="open-forensics-btn" style="width:auto; padding: 10px 20px; font-size: 13px; border-color: var(--warning); color: var(--warning);">Forensics Hub</button>
             <button class="btn-primary" id="open-deploy-btn" style="width:auto; padding: 10px 20px; font-size: 13px;">Deployment Hub</button>
@@ -389,6 +390,10 @@
         <div class="glass-panel stat-card">
             <h3>Banned Entities</h3>
             <p class="value" id="stat-banned" style="color: var(--danger);">0</p>
+        </div>
+        <div class="glass-panel stat-card" style="border-left-color: #10b981;">
+            <h3 style="color: #10b981;">Contact Inquiries</h3>
+            <p class="value" id="stat-contacts" style="color: #10b981;">0</p>
         </div>
     </div>
 
@@ -621,6 +626,51 @@
     </div>
 </div>
 
+<!-- Contact Inquiries Hub Modal -->
+<div class="modal-overlay" id="contacts-modal-overlay">
+    <div class="user-modal" id="contacts-modal" style="max-width: 1200px; height: 85vh; display: flex; flex-direction: column;">
+        <div class="modal-header">
+            <div class="modal-user-info">
+                <div>
+                    <h2 class="modal-name" style="color: #10b981;">📬 Contact Inquiries &amp; Support Tickets</h2>
+                    <p class="modal-email">Real-time visitor inquiries, client telemetry, automated email status, and direct replies.</p>
+                </div>
+            </div>
+            <button class="modal-close" id="contacts-modal-close">&times;</button>
+        </div>
+
+        <div style="padding: 20px; overflow-y: auto; flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                <div style="display: flex; gap: 10px; align-items: center; flex: 1; max-width: 450px;">
+                    <input type="text" id="contact-search-input" placeholder="🔍 Search by name, email, or message..." style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-family: inherit; font-size: 13px; outline: none;">
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="btn-primary" id="contact-refresh-btn" style="width: auto; padding: 8px 16px; font-size: 12px; border-color: #10b981; color: #10b981;">↻ Refresh Inquiries</button>
+                    <span id="contact-pagination-info" style="font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">Page 1</span>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid var(--border);">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="min-width: 130px;">Date (IST)</th>
+                            <th style="min-width: 180px;">Sender</th>
+                            <th style="min-width: 140px;">IP / Device</th>
+                            <th>Message</th>
+                            <th style="min-width: 110px;">Status</th>
+                            <th style="min-width: 140px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contacts-tbody">
+                        <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">Loading contact inquiries...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Big Window Modal -->
 <div class="modal-overlay" id="modal-overlay">
     <div class="user-modal" id="user-modal">
@@ -796,6 +846,7 @@
             await fetchDashboardData();
             await fetchSettings();
             await fetchForensicLogs();
+            await loadContactMessages(1);
         } catch (e) {
             console.error("Session init failed:", e);
         }
@@ -2066,6 +2117,154 @@
             });
         }
     }
+
+    // ===== CONTACT INQUIRIES HUB LOGIC =====
+    const contactsModal = document.getElementById('contacts-modal-overlay');
+    const openContactsBtn = document.getElementById('open-contacts-btn');
+    const closeContactsBtn = document.getElementById('contacts-modal-close');
+    const contactsTbody = document.getElementById('contacts-tbody');
+    const contactSearchInput = document.getElementById('contact-search-input');
+    const contactRefreshBtn = document.getElementById('contact-refresh-btn');
+    const statContacts = document.getElementById('stat-contacts');
+    let cachedContacts = [];
+    let currentContactPage = 1;
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, m => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[m]));
+    }
+
+    if (openContactsBtn) {
+        openContactsBtn.addEventListener('click', () => {
+            contactsModal.classList.add('open');
+            loadContactMessages(1);
+        });
+    }
+
+    if (closeContactsBtn) {
+        closeContactsBtn.addEventListener('click', () => {
+            contactsModal.classList.remove('open');
+        });
+    }
+
+    if (contactRefreshBtn) {
+        contactRefreshBtn.addEventListener('click', () => {
+            loadContactMessages(currentContactPage);
+        });
+    }
+
+    if (contactSearchInput) {
+        contactSearchInput.addEventListener('input', () => {
+            const query = contactSearchInput.value.toLowerCase().trim();
+            if (!query) {
+                renderContactsTable(cachedContacts);
+            } else {
+                const filtered = cachedContacts.filter(c => 
+                    (c.name && c.name.toLowerCase().includes(query)) ||
+                    (c.email && c.email.toLowerCase().includes(query)) ||
+                    (c.message && c.message.toLowerCase().includes(query)) ||
+                    (c.clientIp && c.clientIp.toLowerCase().includes(query))
+                );
+                renderContactsTable(filtered);
+            }
+        });
+    }
+
+    async function loadContactMessages(page = 1) {
+        try {
+            if (contactsTbody) {
+                contactsTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 25px;">Fetching contact inquiries...</td></tr>';
+            }
+            const res = await fetch(`/api/admin/contact-messages?page=${page}&limit=50`);
+            if (res.status === 401) {
+                window.location.reload();
+                return;
+            }
+            const data = await res.json();
+            if (res.ok && data.success) {
+                cachedContacts = data.messages || [];
+                currentContactPage = data.page || 1;
+                if (statContacts) statContacts.textContent = data.total ?? cachedContacts.length;
+                const paginationInfo = document.getElementById('contact-pagination-info');
+                if (paginationInfo) paginationInfo.textContent = `Page ${data.page} of ${data.pages || 1} (${data.total} total)`;
+                renderContactsTable(cachedContacts);
+            } else {
+                if (contactsTbody) contactsTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger); padding: 20px;">${data.error || 'Failed to load messages'}</td></tr>`;
+            }
+        } catch (err) {
+            if (contactsTbody) contactsTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger); padding: 20px;">Network error loading contact messages</td></tr>';
+        }
+    }
+
+    function renderContactsTable(list) {
+        if (!contactsTbody) return;
+        if (!list || list.length === 0) {
+            contactsTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">No contact inquiries found.</td></tr>';
+            return;
+        }
+
+        contactsTbody.innerHTML = list.map(item => {
+            const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' }) : 'Unknown';
+            const safeName = escapeHtml(item.name || 'Anonymous');
+            const safeEmail = escapeHtml(item.email || '');
+            const safeIp = escapeHtml(item.clientIp || '127.0.0.1');
+            const safeMsg = escapeHtml(item.message || '');
+            const safeUa = escapeHtml((item.userAgent || 'Unknown').substring(0, 45));
+            const mailtoUrl = `mailto:${encodeURIComponent(item.email)}?subject=${encodeURIComponent('Re: PixelCraft AI Support Inquiry')}&body=${encodeURIComponent(`Hi ${item.name || 'there'},\n\nThank you for reaching out to PixelCraft AI!\n\nRegarding your inquiry:\n"${item.message || ''}"\n\n`)}`;
+
+            const statusBadge = item.emailDelivered 
+                ? '<span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;">✓ Delivered</span>'
+                : '<span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;">Stored in DB</span>';
+
+            return `
+                <tr>
+                    <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">${dateStr}</td>
+                    <td>
+                        <strong style="color: #fff; font-size: 13.5px;">${safeName}</strong>
+                        <div style="font-size: 12px; color: #38bdf8; font-family: 'JetBrains Mono', monospace;">${safeEmail}</div>
+                    </td>
+                    <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">
+                        <span style="color: #cbd5e1;">${safeIp}</span>
+                        <div style="font-size: 10.5px; color: var(--text-muted);">${safeUa}...</div>
+                    </td>
+                    <td style="max-width: 380px; font-size: 13px; color: #e2e8f0; line-height: 1.5; white-space: pre-wrap; word-break: break-word;">${safeMsg}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <a href="${mailtoUrl}" target="_blank" class="btn-primary" style="width: auto; padding: 6px 12px; font-size: 11px; text-decoration: none; border-color: #10b981; color: #10b981;">Reply ✉️</a>
+                            <button onclick="deleteContactMessage('${item._id}')" class="btn-primary" style="width: auto; padding: 6px 10px; font-size: 11px; border-color: var(--danger); color: var(--danger);">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    window.deleteContactMessage = async function(id) {
+        if (!confirm('Are you sure you want to delete this contact inquiry? This cannot be undone.')) return;
+        try {
+            const res = await fetch('/api/admin/contact-messages/delete', {
+                method: 'POST',
+                headers: getCsrfHeaders(),
+                body: JSON.stringify({ id })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                showCustomAlert('Message deleted successfully', true);
+                loadContactMessages(currentContactPage);
+            } else {
+                showCustomAlert(data.error || 'Failed to delete message', false);
+            }
+        } catch (err) {
+            showCustomAlert('Network error deleting message', false);
+        }
+    };
 
     // Launch
     initSession();

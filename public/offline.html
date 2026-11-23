@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline Mode - PixelCraft AI</title>
+  <meta name="description" content="PixelCraft AI offline dashboard. Client-side image and privacy utilities continue running locally in your browser RAM without an internet connection.">
+  <link rel="icon" href="logo.jpg?v=5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --border: rgba(255, 255, 255, 0.08);
+      --primary: #2563eb;
+      --accent: #38bdf8;
+      --success: #10b981;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      line-height: 1.6;
+      background-image: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 60%);
+    }
+    .offline-container {
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--success);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.lead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 640px;
+      margin: 0 auto 32px;
+    }
+    .action-bar {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 14.5px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      text-align: left;
+    }
+    .tool-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: var(--text);
+      backdrop-filter: blur(12px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+    .tool-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+    }
+    .tool-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .tool-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .tool-badge {
+      margin-top: 14px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    footer {
+      margin-top: auto;
+      padding-top: 48px;
+      color: #64748b;
+      font-size: 12.5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="header-badge">
+      <span class="pulse-dot"></span> In-Memory RAM Engine Active
+    </div>
+    <h1>You are Currently Offline</h1>
+    <p class="lead">
+      No internet connection detected, but no problem! PixelCraft AI executes client-side utilities directly in your browser memory (RAM) with <strong>zero server uploads</strong>. All cached tools below remain 100% operational:
+    </p>
+
+    <div class="action-bar">
+      <button class="btn btn-primary" onclick="window.location.reload();">
+        ↻ Check Connection &amp; Reload
+      </button>
+      <a href="/" class="btn btn-secondary">
+        🏠 Return to Homepage
+      </a>
+    </div>
+
+    <div class="tools-grid">
+      <!-- Image Compressor -->
+      <a href="/tools/image-compressor.html" class="tool-card">
+        <div class="tool-icon">🗜️</div>
+        <div class="tool-title">Image Compressor</div>
+        <div class="tool-desc">Reduce JPEG, PNG, and WebP file sizes in KB using in-browser Canvas quantization.</div>
+        <div class="tool-badge">● 100% Client-Side RAM</div>
+      </a>
+
+      <!-- Format Converter -->
+      <a href="/tools/format-converter.html" class="tool-card">
+        <div class="tool-icon">🔄</div>
+        <div class="tool-title">Format Converter</div>
+        <div class="tool-desc">Convert between WebP, PNG, JPEG, and BMP formats instantly without leaving your device.</div>
+        <div class="tool-badge">● 100% Client-Side RAM</div>
+      </a>
+
+      <!-- Smart Social Resize -->
+      <a href="/tools/smart-resize.html" class="tool-card">
+        <div class="tool-icon">📐</div>
+        <div class="tool-title">Smart Social Resize</div>
+        <div class="tool-desc">Preset crops and dimensional scaling for Instagram, LinkedIn, YouTube, and X headers.</div>
+        <div class="tool-badge">● 100% Client-Side RAM</div>
+      </a>
+
+      <!-- EXIF Metadata Viewer -->
+      <a href="/tools/exif-viewer.html" class="tool-card">
+        <div class="tool-icon">🔍</div>
+        <div class="tool-title">EXIF Data Inspector</div>
+        <div class="tool-desc">Inspect GPS coordinates, camera specs, timestamps, and sanitize sensitive image metadata.</div>
+        <div class="tool-badge">● 100% Client-Side RAM</div>
+      </a>
+
+      <!-- Watermark Adder -->
+      <a href="/tools/watermark-adder.html" class="tool-card">
+        <div class="tool-icon">🏷️</div>
+        <div class="tool-title">Watermark Adder</div>
+        <div class="tool-desc">Overlay custom text or logo watermarks with opacity and positioning controls.</div>
+        <div class="tool-badge">● 100% Client-Side RAM</div>
+      </a>
+
+      <!-- Images to PDF -->
+      <a href="/tools/images-to-pdf.html" class="tool-card">
+        <div class="tool-icon">📄</div>
+        <div class="tool-title">Images to PDF</div>
+        <div class="tool-desc">Bundle multi-page receipts, documents, or photos into a clean downloadable PDF.</div>
+        <div class="tool-badge">● 100% Client-Side RAM</div>
+      </a>
+
+      <!-- Decoy Steganography -->
+      <a href="/tools/advanced-decoy.html" class="tool-card">
+        <div class="tool-icon">🎭</div>
+        <div class="tool-title">Decoy Steganography</div>
+        <div class="tool-desc">Conceal secret files inside carrier PNG images with plausible deniability payloads.</div>
+        <div class="tool-badge">● 100% Client-Side RAM</div>
+      </a>
+
+      <!-- Custom QR Code Generator -->
+      <a href="/tools/qr-generator.html" class="tool-card">
+        <div class="tool-icon">📱</div>
+        <div class="tool-title">Custom QR Generator</div>
+        <div class="tool-desc">Generate high-density scannable QR codes with custom colors and logo embedding.</div>
+        <div class="tool-badge">● 100% Client-Side RAM</div>
+      </a>
+    </div>
+
+    <footer>
+      &copy; 2026 PixelCraft AI &bull; Decentralized Privacy, Cryptography &amp; Digital Media Suite
+    </footer>
+  </div>
+
+  <script>
+    // Automatic reload as soon as network returns
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

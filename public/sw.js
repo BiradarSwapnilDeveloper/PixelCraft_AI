@@ -1,7 +1,8 @@
-const CACHE_NAME = 'pixelcraft-ai-cache-v3';
+const CACHE_NAME = 'pixelcraft-ai-cache-v4';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/offline.html',
   '/css/style.css',
   '/js/utils.js',
   '/manifest.json',
@@ -14,7 +15,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
+        console.log('Opened cache v4');
         return cache.addAll(urlsToCache);
       })
   );
@@ -26,7 +27,17 @@ self.addEventListener('fetch', event => {
   }
   
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    fetch(event.request)
+      .catch(async () => {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+        // Navigation fallback for offline mode
+        if (event.request.mode === 'navigate') {
+          const offlinePage = await caches.match('/offline.html');
+          if (offlinePage) return offlinePage;
+        }
+        return new Response('Network error while offline', { status: 503, statusText: 'Service Unavailable' });
+      })
   );
 });
 

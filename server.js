@@ -20,6 +20,7 @@ const { spawn } = require('child_process');
 const crypto = require('crypto');
 const net = require('net');
 const { sendTelegramAlert } = require('./utils/telegramAlert');
+const { runDailyBackup } = require('./utils/dbBackup');
 const honeytokenTrap = require('./middlewares/honeytokenTrap');
 const app = express();
 app.set('trust proxy', 1); // Trust the Render proxy to fix HTTP/HTTPS mismatch
@@ -1534,6 +1535,23 @@ app.post('/api/contact', async (req, res) => {
     return res.status(429).json({ error: `Too many messages sent. Please wait ${Math.ceil(rateCheck.retryAfter / 60)} minutes before trying again.` });
   }
 
+  // Cloudflare Turnstile Invisible Bot Check (if TURNSTILE_SECRET_KEY is configured in env)
+  const turnstileToken = (req.body && (req.body['cf-turnstile-response'] || req.body['turnstileToken'])) || '';
+  if (process.env.TURNSTILE_SECRET_KEY && turnstileToken) {
+    try {
+      const cfRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${encodeURIComponent(process.env.TURNSTILE_SECRET_KEY)}&response=${encodeURIComponent(turnstileToken)}&remoteip=${encodeURIComponent(clientIp)}`
+      }).then(r => r.json());
+      if (!cfRes.success) {
+        return res.status(403).json({ error: "Cloudflare Turnstile bot verification failed. Please try again." });
+      }
+    } catch (cfErr) {
+      console.warn("Turnstile verification warning:", cfErr.message);
+    }
+  }
+
   const { name, email, message } = req.body || {};
   if (!name || typeof name !== 'string' || !name.trim()) {
     return res.status(400).json({ error: "Your name is required." });
@@ -1781,11 +1799,84 @@ app.post('/api/contact', async (req, res) => {
     ContactMessage.updateOne({ _id: savedDoc._id }, { emailDelivered: true }).exec().catch(() => {});
   }
 
+  // Step 4: Dispatch Instant Auto-Reply Confirmation to the Visitor
+  try {
+    const autoReplySubject = `✓ We received your message - PixelCraft AI Support`;
+    const autoReplyHtml = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin: 0; padding: 24px 12px; background-color: #0b0f19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f8fafc;">
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #111827; border: 1px solid #1e293b; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+    <tr>
+      <td style="background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); padding: 28px 24px; color: #ffffff;">
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700;">✓ Message Received!</h1>
+        <p style="margin: 6px 0 0; font-size: 14px; opacity: 0.9; color: #e0e7ff;">Thank you for contacting PixelCraft AI</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 28px 24px;">
+        <p style="font-size: 16px; font-weight: 600; color: #ffffff; margin-top: 0;">Dear ${safeName},</p>
+        <p style="color: #cbd5e1; font-size: 15px; line-height: 1.6;">Thank you for reaching out to PixelCraft AI! We have safely received your inquiry and our engineering support team will review it and get back to you within <strong>24–48 hours</strong>.</p>
+        
+        <div style="background: #0f172a; border-left: 4px solid #2563eb; border-radius: 8px; padding: 16px 18px; margin: 20px 0;">
+          <div style="font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Your Inquiry Summary:</div>
+          <div style="font-size: 14px; color: #f1f5f9; line-height: 1.6; white-space: pre-wrap; word-break: break-word;">${safeMsg}</div>
+        </div>
+
+        <p style="color: #94a3b8; font-size: 13px; line-height: 1.6;">If you have additional details or screenshots to share, feel free to reply directly to this email or write to <a href="mailto:support.pixelcraft205@gmail.com" style="color: #38bdf8; text-decoration: none; font-weight: 600;">support.pixelcraft205@gmail.com</a>.</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="background: #0f172a; padding: 18px 24px; font-size: 12px; color: #64748b; text-align: center; border-top: 1px solid #1e293b;">
+        PixelCraft AI &bull; Decentralized Privacy, Cryptography &amp; Digital Media Suite<br>
+        <a href="https://pixelcraftaitools.com" style="color: #64748b; text-decoration: underline;">pixelcraftaitools.com</a>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+    // Send auto-reply via Google Apps Script Webhook
+    fetch('https://script.google.com/macros/s/AKfycbzoAyBCCB3XS153lCTFmbuV83GrrjuxLJbaq4pMcgtEln7Db02lr2ayvKIB-Ejjbw5W/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pass: "PixelCraft_Secret_Key_9988",
+        to: trimmedEmail,
+        subject: autoReplySubject,
+        replyTo: targetRecipient,
+        html: autoReplyHtml
+      })
+    }).catch(e => console.warn('Auto-reply webhook note:', e.message));
+
+    // Also send via SMTP if configured
+    if (emailUser && emailPass) {
+      const autoReplyTransporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: { user: emailUser, pass: emailPass },
+        connectionTimeout: 5000,
+        greetingTimeout: 5000,
+        socketTimeout: 6000
+      });
+      autoReplyTransporter.sendMail({
+        from: `"PixelCraft AI Support" <${emailUser}>`,
+        to: trimmedEmail,
+        replyTo: targetRecipient,
+        subject: autoReplySubject,
+        html: autoReplyHtml
+      }).catch(e => console.warn('Auto-reply SMTP note:', e.message));
+    }
+  } catch (autoErr) {
+    console.warn('⚠️ Auto-reply dispatch error:', autoErr.message);
+  }
+
   // If saved in DB, sent to Telegram, or sent via SMTP, consider it a full success
   if (savedDoc || emailDelivered) {
     return res.json({
       success: true,
-      message: 'Message sent successfully! We will get back to you soon. 🎉'
+      message: 'Message sent successfully! A confirmation email has also been sent to your address. 🎉'
     });
   }
 
@@ -1793,6 +1884,41 @@ app.post('/api/contact', async (req, res) => {
   return res.status(500).json({
     error: "Failed to deliver message. Please contact support.pixelcraft205@gmail.com directly."
   });
+});
+
+// ===== ADMIN API: CONTACT MESSAGES VIEWER =====
+app.get('/api/admin/contact-messages', requireAdminSession, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 50;
+    const skip = (page - 1) * limit;
+
+    const [messages, total] = await Promise.all([
+      ContactMessage.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      ContactMessage.countDocuments()
+    ]);
+
+    res.json({
+      success: true,
+      messages,
+      total,
+      page,
+      pages: Math.ceil(total / limit)
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch contact messages' });
+  }
+});
+
+app.post('/api/admin/contact-messages/delete', requireAdminSession, async (req, res) => {
+  try {
+    const { id } = req.body || {};
+    if (!id) return res.status(400).json({ error: 'Message ID is required' });
+    await ContactMessage.deleteOne({ _id: id });
+    res.json({ success: true, message: 'Message deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete message' });
+  }
 });
 
 // ===== TOOL FEATURE SUGGESTIONS ENDPOINT =====
@@ -3271,6 +3397,25 @@ app.listen(PORT, () => {
       console.warn("⚠️ [SECURITY WARNING]: GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET not configured in production. Google OAuth logins will fail until set.");
     }
   }
+
+  // Telegram Live Server Start Alert
+  const startTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'medium' });
+  sendTelegramAlert(`🚀 <b>PixelCraft AI Server Started & Online!</b>\n\n🌐 <b>Environment:</b> ${process.env.NODE_ENV || 'production'}\n🕒 <b>Time:</b> ${startTime} (IST)\n⚡ <b>Engine:</b> Node ${process.version}\n🛡️ <b>Security & Anti-Bot:</b> Active`);
+
+  // Daily Automated MongoDB Cloud Backup (Snapshot every 24 hours)
+  setTimeout(() => runDailyBackup(), 15 * 1000);
+  setInterval(() => runDailyBackup(), 24 * 60 * 60 * 1000);
+
+  // Hourly Memory & Health Watcher
+  setInterval(() => {
+    const mem = process.memoryUsage();
+    const heapUsedMB = Math.round(mem.heapUsed / 1024 / 1024);
+    const heapTotalMB = Math.round(mem.heapTotal / 1024 / 1024);
+    const ratio = mem.heapUsed / mem.heapTotal;
+    if (ratio > 0.85 && heapUsedMB > 450) {
+      sendTelegramAlert(`⚠️ <b>High Server Memory Alert!</b>\n\nHeap Used: <b>${heapUsedMB} MB</b> / ${heapTotalMB} MB (${Math.round(ratio * 100)}%)\nAction: Volatile cleanup cycle initiated.`);
+    }
+  }, 60 * 60 * 1000);
 });
 
 

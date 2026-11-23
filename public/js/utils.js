@@ -920,4 +920,74 @@ if (typeof document !== 'undefined' && document.addEventListener) {
   });
 }
 
+// 11. OFFLINE / AIRPLANE MODE FLOATING ALERT PILL
+(function initOfflineDetector() {
+  if (typeof window === 'undefined') return;
+
+  function createOfflinePill() {
+    var pill = document.getElementById('pixelcraft-network-pill');
+    if (!pill) {
+      pill = document.createElement('div');
+      pill.id = 'pixelcraft-network-pill';
+      pill.setAttribute('role', 'status');
+      pill.setAttribute('aria-live', 'polite');
+      pill.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:999999;display:none;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:13.5px;font-weight:600;letter-spacing:0.01em;box-shadow:0 10px 30px rgba(0,0,0,0.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:opacity 0.3s cubic-bezier(0.16,1,0.3,1),transform 0.3s cubic-bezier(0.16,1,0.3,1);transform:translateY(20px);opacity:0;pointer-events:none;max-width:90vw;';
+      document.body.appendChild(pill);
+    }
+    return pill;
+  }
+
+  function showOffline() {
+    var pill = createOfflinePill();
+    pill.innerHTML = '<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#10b981;box-shadow:0 0 10px #10b981;"></span><span>⚡ Offline Mode Active: In-memory tools run locally in RAM.</span>';
+    pill.style.background = 'rgba(15, 23, 42, 0.94)';
+    pill.style.color = '#34d399';
+    pill.style.border = '1px solid rgba(16, 185, 129, 0.4)';
+    pill.style.display = 'flex';
+    if (window.requestAnimationFrame) {
+      window.requestAnimationFrame(function() {
+        pill.style.transform = 'translateY(0)';
+        pill.style.opacity = '1';
+      });
+    } else {
+      pill.style.transform = 'translateY(0)';
+      pill.style.opacity = '1';
+    }
+  }
+
+  function showOnline() {
+    var pill = createOfflinePill();
+    pill.innerHTML = '<span style="color:#38bdf8;font-weight:bold;">✓</span><span style="color:#f8fafc;">Back Online</span>';
+    pill.style.background = 'rgba(15, 23, 42, 0.94)';
+    pill.style.color = '#f8fafc';
+    pill.style.border = '1px solid rgba(56, 189, 248, 0.4)';
+    pill.style.display = 'flex';
+    if (window.requestAnimationFrame) {
+      window.requestAnimationFrame(function() {
+        pill.style.transform = 'translateY(0)';
+        pill.style.opacity = '1';
+      });
+    } else {
+      pill.style.transform = 'translateY(0)';
+      pill.style.opacity = '1';
+    }
+    setTimeout(function() {
+      pill.style.transform = 'translateY(20px)';
+      pill.style.opacity = '0';
+      setTimeout(function() { pill.style.display = 'none'; }, 300);
+    }, 3500);
+  }
+
+  window.addEventListener('offline', showOffline);
+  window.addEventListener('online', showOnline);
+
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', showOffline);
+    } else {
+      showOffline();
+    }
+  }
+})();
+
 
