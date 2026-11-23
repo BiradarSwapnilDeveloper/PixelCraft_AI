@@ -23,6 +23,14 @@ const ContactMessageSchema = new mongoose.Schema({
     type: String,
     default: '127.0.0.1'
   },
+  userAgent: {
+    type: String,
+    default: 'Unknown'
+  },
+  referrer: {
+    type: String,
+    default: 'Website Contact Form'
+  },
   emailDelivered: {
     type: Boolean,
     default: false

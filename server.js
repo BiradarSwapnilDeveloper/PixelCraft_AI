@@ -1434,7 +1434,11 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: "Message is too long (maximum 5000 characters allowed)." });
   }
 
-  // Step 1: Persist message safely to MongoDB
+  const userAgent = req.headers['user-agent'] || 'Unknown Device';
+  const referrer = req.body && req.body.referrer ? String(req.body.referrer).slice(0, 255) : (req.headers['referer'] || req.headers['origin'] || 'https://pixelcraftaitools.com/contact-us.html');
+  const submissionTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'long' });
+
+  // Step 1: Persist message safely to MongoDB with all audit details
   let savedDoc = null;
   try {
     savedDoc = await ContactMessage.create({
@@ -1442,6 +1446,8 @@ app.post('/api/contact', async (req, res) => {
       email: trimmedEmail,
       message: trimmedMessage,
       clientIp: clientIp,
+      userAgent: userAgent,
+      referrer: referrer,
       emailDelivered: false
     });
     console.log(`💾 Contact inquiry stored in MongoDB Atlas (ID: ${savedDoc._id})`);
@@ -1449,13 +1455,16 @@ app.post('/api/contact', async (req, res) => {
     console.error("⚠️ Failed to persist contact inquiry to MongoDB:", dbErr.message);
   }
 
-  // Step 2: Instant Telegram Alert to admin
+  // Step 2: Instant Telegram Alert to admin with full sender details
   try {
     const sanitizeHtml = (str) => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const telegramText = `📬 <b>New Website Contact Message!</b>\n\n` +
-      `👤 <b>Name:</b> ${sanitizeHtml(trimmedName)}\n` +
-      `📧 <b>Email:</b> ${sanitizeHtml(trimmedEmail)}\n` +
-      `🌐 <b>IP:</b> <code>${sanitizeHtml(clientIp)}</code>\n\n` +
+      `👤 <b>Sender Name:</b> ${sanitizeHtml(trimmedName)}\n` +
+      `📧 <b>Sender Email:</b> <a href="mailto:${sanitizeHtml(trimmedEmail)}">${sanitizeHtml(trimmedEmail)}</a>\n` +
+      `🕒 <b>Time:</b> ${submissionTime} (IST)\n` +
+      `🌐 <b>Client IP:</b> <code>${sanitizeHtml(clientIp)}</code>\n` +
+      `📱 <b>Device:</b> <code>${sanitizeHtml(userAgent.substring(0, 100))}</code>\n` +
+      `🔗 <b>Page:</b> ${sanitizeHtml(referrer)}\n\n` +
       `💬 <b>Message:</b>\n${sanitizeHtml(trimmedMessage)}`;
     sendTelegramAlert(telegramText).catch(e => console.warn('Telegram contact alert error:', e.message));
   } catch (tgErr) {
@@ -1463,17 +1472,111 @@ app.post('/api/contact', async (req, res) => {
   }
 
   // Step 3: SMTP Email Dispatch with Dual-Port Fallback (Port 465 SSL -> Port 587 STARTTLS)
+  // Ensures emails arrive at support.pixelcraft205@gmail.com with sender details & 1-click replyTo
   const emailUser = (process.env.EMAIL_USER || '').trim();
   const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
+  const targetRecipient = 'support.pixelcraft205@gmail.com';
+  const toRecipients = (emailUser && emailUser.toLowerCase() !== targetRecipient.toLowerCase())
+    ? [targetRecipient, emailUser]
+    : targetRecipient;
+
   let emailDelivered = false;
 
   if (emailUser && emailPass) {
+    const sanitizeForHtml = (str) => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const safeName = sanitizeForHtml(trimmedName);
+    const safeEmail = sanitizeForHtml(trimmedEmail);
+    const safeMsg = sanitizeForHtml(trimmedMessage);
+    const safeIp = sanitizeForHtml(clientIp);
+    const safeUserAgent = sanitizeForHtml(userAgent);
+    const safeReferrer = sanitizeForHtml(referrer);
+
     const mailOptions = {
-      from: `"PixelCraft Contact" <${emailUser}>`,
-      replyTo: trimmedEmail,
-      to: emailUser,
-      subject: `New Message from PixelCraft Website: ${trimmedName}`,
-      text: `Someone sent a message from your website contact form!\n\nName: ${trimmedName}\nEmail: ${trimmedEmail}\nIP: ${clientIp}\n\nMessage:\n${trimmedMessage}\n`
+      // SENDER: The display name clearly highlights the sender's real name and email
+      from: `"${trimmedName} - ${trimmedEmail}" <${emailUser}>`,
+      // REPLY-TO: Hitting "Reply" in Gmail/Outlook automatically answers the sender
+      replyTo: `"${trimmedName}" <${trimmedEmail}>`,
+      to: toRecipients,
+      subject: `📬 [Contact Inquiry] from ${trimmedName} (${trimmedEmail}) - PixelCraft AI`,
+      text: `📬 NEW WEBSITE CONTACT INQUIRY\n` +
+        `====================================================\n` +
+        `👤 Sender Name:    ${trimmedName}\n` +
+        `📧 Sender Email:   ${trimmedEmail}\n` +
+        `🕒 Date & Time:    ${submissionTime} (IST)\n` +
+        `🌐 Client IP:      ${clientIp}\n` +
+        `📱 Browser/Device: ${userAgent}\n` +
+        `🔗 Submitted From: ${referrer}\n` +
+        `====================================================\n\n` +
+        `💬 MESSAGE CONTENT:\n` +
+        `${trimmedMessage}\n\n` +
+        `====================================================\n` +
+        `👉 To reply directly to this sender, hit "Reply" in your email client or write to: ${trimmedEmail}\n`,
+      html: `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Contact Message from ${safeName}</title>
+</head>
+<body style="margin: 0; padding: 24px 12px; background-color: #0b0f19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f8fafc;">
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 640px; margin: 0 auto; background-color: #111827; border: 1px solid #1e293b; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+    <tr>
+      <td style="background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); padding: 28px 24px; color: #ffffff; text-align: left;">
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em;">📬 New Website Contact Message</h1>
+        <p style="margin: 6px 0 0; font-size: 14px; opacity: 0.9; color: #e0e7ff;">PixelCraft AI Direct Customer Inquiry</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 28px 24px;">
+        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 20px;">
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; width: 140px; font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Sender Name</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 16px; font-weight: 700; color: #ffffff;">${safeName}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Sender Email</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 16px; font-weight: 600;"><a href="mailto:${safeEmail}" style="color: #38bdf8; text-decoration: none;">${safeEmail}</a></td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Date &amp; Time</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 14px; color: #cbd5e1;">${submissionTime} (IST)</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Sender IP</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 14px; color: #cbd5e1;"><code style="background: #0f172a; padding: 2px 6px; border-radius: 4px; border: 1px solid #334155; font-family: monospace;">${safeIp}</code></td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Device / OS</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 13px; color: #94a3b8; word-break: break-all;">${safeUserAgent}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Page Source</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 13px; color: #94a3b8;"><a href="${safeReferrer}" style="color: #60a5fa; text-decoration: underline;" target="_blank">${safeReferrer}</a></td>
+          </tr>
+        </table>
+
+        <div style="margin-top: 24px;">
+          <div style="font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Message Content:</div>
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-left: 4px solid #2563eb; border-radius: 10px; padding: 18px 20px; font-size: 15px; line-height: 1.7; color: #f1f5f9; white-space: pre-wrap; word-break: break-word;">${safeMsg}</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 28px; margin-bottom: 10px;">
+          <a href="mailto:${safeEmail}?subject=Re:%20PixelCraft%20AI%20Support%20Inquiry" style="background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff !important; padding: 13px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px; display: inline-block; box-shadow: 0 4px 14px rgba(37,99,235,0.4);">
+            ✉️ Direct Reply to ${safeName}
+          </a>
+          <p style="margin: 10px 0 0; font-size: 12px; color: #64748b;">Or simply hit "Reply" in your email client to answer ${safeEmail}</p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="background: #0f172a; padding: 18px 24px; font-size: 12px; color: #64748b; text-align: center; border-top: 1px solid #1e293b;">
+        PixelCraft AI Security &amp; Customer Support Pipeline &bull; <a href="https://pixelcraftaitools.com" style="color: #64748b; text-decoration: underline;">pixelcraftaitools.com</a><br>
+        Direct Inquiries sent to: <strong style="color: #94a3b8;">support.pixelcraft205@gmail.com</strong>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
     };
 
     // Primary: Port 465 (Direct SSL)
@@ -1489,7 +1592,7 @@ app.post('/api/contact', async (req, res) => {
       });
       await transporter465.sendMail(mailOptions);
       emailDelivered = true;
-      console.log(`✅ Contact email delivered via SMTP Port 465 from ${trimmedEmail}`);
+      console.log(`✅ Contact email delivered via SMTP Port 465 from ${trimmedEmail} to ${toRecipients}`);
     } catch (err465) {
       console.warn("⚠️ SMTP Port 465 failed, trying Port 587 STARTTLS...", err465.message);
       // Fallback: Port 587 (STARTTLS)
@@ -1505,7 +1608,7 @@ app.post('/api/contact', async (req, res) => {
         });
         await transporter587.sendMail(mailOptions);
         emailDelivered = true;
-        console.log(`✅ Contact email delivered via SMTP Port 587 fallback from ${trimmedEmail}`);
+        console.log(`✅ Contact email delivered via SMTP Port 587 fallback from ${trimmedEmail} to ${toRecipients}`);
       } catch (err587) {
         console.warn("⚠️ SMTP Port 587 fallback also failed:", err587.message);
       }
