@@ -486,10 +486,10 @@
               <td><strong>PDF-to-Link Sharing</strong></td>
               <td><span class="tag tag-server">Server-Side</span></td>
               <td><span class="code-chip">POST /api/upload-pdf</span></td>
-              <td>Disk: <span class="code-chip">uploads/</span>. Auto-deleted after <strong>24 hours</strong> (hourly cron)</td>
-              <td>None (Local server filesystem)</td>
+              <td>Ephemeral Disk: <span class="code-chip">uploads/pdf/</span> (Zero MongoDB Storage). Auto-deleted after <strong>24 hours</strong> (hourly cron)</td>
+              <td>None (Local server filesystem only; 0 bytes in database)</td>
               <td>No</td>
-              <td><span class="tag tag-tier">VERIFIED BY TEST</span></td>
+              <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
             </tr>
             <tr>
               <td><strong>AI Dubbing & Translation</strong></td>
@@ -570,7 +570,7 @@
           Server-assisted tools enforce strict, automated data lifecycles to prevent permanent data accumulation:
         </p>
         <ul style="color: var(--text-muted); font-size: 0.92rem; padding-left: 20px; line-height: 1.8;">
-          <li><strong>PDF-to-Link:</strong> Uploaded files are assigned cryptographic UUIDs and stored on isolated disk storage for up to <strong>24 hours</strong>. An automated hourly cron job checks file creation timestamps and purges expired files.</li>
+          <li><strong>PDF-to-Link:</strong> Uploaded files are assigned cryptographic UUIDs and stored on isolated temporary disk storage (<span class="code-chip">public/uploads/pdf/</span>) for up to <strong>24 hours</strong>. <strong>Files, document contents, and metadata are NEVER inserted into MongoDB Atlas or database collections.</strong> An automated hourly cron job checks file creation timestamps and permanently unlinks expired files.</li>
           <li><strong>AI Dubbing:</strong> Audio and video chunks are written to temporary system storage (<span class="code-chip">os.tmpdir()</span>) and deleted <span class="code-chip">unlinkSync</span> immediately after processing.</li>
           <li><strong>Forensic Sanitizer:</strong> Operates entirely in memory buffers (<span class="code-chip">multer.memoryStorage()</span>); nothing is written to disk.</li>
         </ul>
@@ -760,7 +760,7 @@
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
         <div>
           <strong style="color: var(--text-heading); display: block; margin-bottom: 6px;">Public PDF Links & Search Indexing</strong>
-          Files uploaded via PDF-to-Link receive an unguessable UUID. However, anyone who possesses this URL during the 24-hour lifetime can download the file. While we instruct search engines not to index uploaded PDF directories, users should exercise caution and avoid sharing confidential personal identifiers via public links.
+          Files uploaded via PDF-to-Link receive an unguessable UUID. Documents reside strictly on isolated temporary server disk storage with <strong>zero MongoDB database persistence</strong>. However, anyone who possesses this URL during the 24-hour lifetime can download the file. While we instruct search engines not to index uploaded PDF directories, users should exercise caution and avoid sharing confidential personal identifiers via public links.
         </div>
       </div>
 

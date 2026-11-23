@@ -210,6 +210,7 @@
           <li><strong>Client-Side Execution:</strong> Core image utilities (including compression, WebP/PNG conversions, steganographic payload embedding, and EXIF removal) run entirely within volatile client browser memory (RAM) utilizing HTML5 Canvas APIs, WebAssembly, and local JavaScript threads.</li>
           <li><strong>Absence of Server Custody:</strong> Source images, private photos, steganographic plaintext payloads, and carrier files are <strong>NEVER transmitted to or stored on PixelCraft AI web servers</strong>. PixelCraft AI operators do not hold, possess, or inspect user files. Consequently, PixelCraft AI has no constructive possession, direct knowledge, or editorial control over user payloads.</li>
           <li><strong>No Master Key or Decryption Backdoor:</strong> We enforce zero-knowledge encryption protocols. PixelCraft AI does not maintain, escrow, or possess private decryption keys, decoy passwords, or steganographic extractors for user files. If a user loses their encryption password, the data is permanently and mathematically unrecoverable.</li>
+          <li><strong>PDF-to-Link Ephemeral Hosting Notice:</strong> Unlike our in-memory client-side editing utilities, our optional "PDF to Link" feature requires temporary file placement on isolated, unindexed server storage strictly to generate public download links (<span style="font-family: monospace;">/p/:id</span>). Uploaded documents are <strong>NEVER stored in our MongoDB database</strong>, are never indexed by search engines, and are automatically and permanently unlinked after <strong>24 hours</strong>. Any link generated is publicly accessible to any party possessing the URL. The uploader assumes sole legal, copyright, and confidentiality responsibility for any document shared through public links.</li>
         </ul>
 
         <h2>3. Steganography, Plausible Deniability &amp; Social Delivery Disclaimer</h2>
@@ -232,6 +233,7 @@
         <p>PixelCraft AI operates automated lifecycle scripts in the ordinary course of business to prevent disk exhaustion and safeguard privacy:</p>
         <ul>
           <li><strong>Rolling 30-Day Backup Snapshots:</strong> Platform database snapshots and system telemetry are backed up on a rolling 30-day schedule. Snapshots older than 30 days are automatically deleted and overwritten by automated routines.</li>
+          <li><strong>PDF-to-Link 24-Hour Purge:</strong> Uploaded PDF files are unlinked hourly by automated cron routines and permanently deleted after 24 hours. PixelCraft AI disclaims all liability for expired links, unrecoverable documents, or recipient access failures occurring after the 24-hour expiration window.</li>
           <li><strong>Ordinary Course of Business:</strong> Automated, policy-driven deletion of expiring snapshots or temporary volatile caches prior to the receipt of an official, formal legal preservation notice constitutes standard routine technical maintenance. In accordance with established legal doctrine, such automated lifecycle purges do not constitute spoliation of evidence.</li>
         </ul>
 

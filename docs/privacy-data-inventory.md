@@ -50,6 +50,7 @@ The following tools transmit data to the PixelCraft AI backend server or third-p
 * **Endpoint:** `POST /api/upload-pdf` (`server.js:L1345-1353`) `[VERIFIED IN CODE]`
 * **Data Collected:** User-uploaded PDF document (max 50MB).
 * **Storage Location:** Persistent server disk storage at `public/uploads/pdf/<shortId>.pdf`. `[VERIFIED IN CODE]`
+* **Database Storage:** Zero (0 bytes). File payloads, document contents, and text are NEVER written to MongoDB Atlas or database collections. `[VERIFIED IN CODE]`
 * **Public Access:** File is accessible to anyone possessing the short link (`/p/:id`). `[VERIFIED IN CODE]`
 * **Retention Mechanism:** Evaluated by `cleanupExpiredPdfs(maxAgeMs = 24 * 60 * 60 * 1000)` (`server.js:L1356-1385`). Files with `now - stats.mtimeMs > 24 hours` are unlinked with `fs.promises.unlink()`. `[VERIFIED IN CODE]`
 * **Cleanup Schedule:** Runs once on server startup, and once every 60 minutes thereafter via `setInterval(..., 60 * 60 * 1000)`. `[VERIFIED IN CODE]`

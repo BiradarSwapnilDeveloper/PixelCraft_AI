@@ -47,3 +47,6 @@ __pycache__/
 public/uploads/
 uploads/
 
+
+# Local generated reports
+reports/
