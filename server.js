@@ -1395,6 +1395,137 @@ function checkContactRateLimit(ip) {
   return { allowed: true };
 }
 
+// ===== STRICT EMAIL AUTHENTICITY & GIBBERISH VERIFICATION =====
+const DISPOSABLE_EMAIL_DOMAINS = new Set([
+  'mailinator.com', 'tempmail.com', '10minutemail.com', 'guerrillamail.com',
+  'yopmail.com', 'trashmail.com', 'sharklasers.com', 'dispostable.com',
+  'getairmail.com', 'throwawaymail.com', 'temp-mail.org', 'fakeinbox.com',
+  'fakemailgenerator.com', 'emailondeck.com', 'mohmal.com', 'mytemp.email',
+  'crazymailing.com', 'generator.email', 'dropmail.me', 'inboxkitten.com',
+  'burnermail.io', 'trashmail.net', 'tempmailo.com', 'getnada.com',
+  'maildrop.cc', 'disposablemail.com', 'tempr.email', 'discard.email',
+  'mytempemail.com', 'mailcatch.com', 'nada.ltd', 'emailfake.com'
+]);
+
+const COMMON_DOMAIN_TYPOS = {
+  'gamil.com': 'gmail.com',
+  'gmaill.com': 'gmail.com',
+  'gmial.com': 'gmail.com',
+  'gmai.com': 'gmail.com',
+  'gmeil.com': 'gmail.com',
+  'yaho.com': 'yahoo.com',
+  'yahooo.com': 'yahoo.com',
+  'hotmial.com': 'hotmail.com',
+  'hotmaill.com': 'hotmail.com',
+  'outlok.com': 'outlook.com',
+  'outloo.com': 'outlook.com',
+  'iclud.com': 'icloud.com'
+};
+
+function checkGibberishEmail(username) {
+  const clean = username.toLowerCase().replace(/[^a-z]/g, '');
+  if (clean.length < 3) return { isGibberish: false };
+
+  // 1. Unnatural consecutive consonants (e.g., "adkfhkdsh" has 8 consecutive consonants)
+  const vowels = new Set(['a', 'e', 'i', 'o', 'u']);
+  let maxConsonants = 0;
+  let currentConsonants = 0;
+
+  for (const ch of clean) {
+    if (!vowels.has(ch)) {
+      currentConsonants++;
+      if (currentConsonants > maxConsonants) maxConsonants = currentConsonants;
+    } else {
+      currentConsonants = 0;
+    }
+  }
+
+  if (maxConsonants >= 5) {
+    return { isGibberish: true, reason: `Unnatural character sequence (${maxConsonants} consecutive consonants)` };
+  }
+
+  // 2. Excessively low vowel ratio for longer usernames
+  if (clean.length >= 6) {
+    let vowelCount = 0;
+    for (const ch of clean) {
+      if (vowels.has(ch)) vowelCount++;
+    }
+    const vowelRatio = vowelCount / clean.length;
+    if (vowelRatio < 0.15) {
+      return { isGibberish: true, reason: 'Unnatural vowel-to-consonant ratio' };
+    }
+  }
+
+  // 3. Repeated identical characters (e.g., "aaaaa")
+  if (/(.)\1{3,}/.test(clean)) {
+    return { isGibberish: true, reason: 'Excessive repeated characters' };
+  }
+
+  // 4. Keyboard row walks (e.g., "asdfgh", "qwert")
+  const keyboardWalks = [
+    'asdfgh', 'sdfghj', 'dfghjk', 'fghjkl',
+    'qwert', 'werty', 'ertyu', 'rtyui', 'tyuio', 'yuiop',
+    'zxcvb', 'xcvbn', 'cvbnm',
+    '123456', '234567', '345678', '456789'
+  ];
+  for (const walk of keyboardWalks) {
+    if (clean.includes(walk)) {
+      return { isGibberish: true, reason: `Keyboard sequence pattern ('${walk}')` };
+    }
+  }
+
+  return { isGibberish: false };
+}
+
+async function verifyEmailAuthenticity(email) {
+  const trimmed = String(email || '').trim().toLowerCase();
+  
+  // RFC 5322 standard regex
+  const strictRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+  if (!strictRegex.test(trimmed) || trimmed.length > 120) {
+    return { valid: false, error: 'Please enter a valid email format (e.g. name@example.com).' };
+  }
+
+  const parts = trimmed.split('@');
+  if (parts.length !== 2) return { valid: false, error: 'Invalid email structure.' };
+  const [username, domain] = parts;
+
+  if (!username || username.length < 2) {
+    return { valid: false, error: 'Email username is too short.' };
+  }
+  if (!domain || domain.indexOf('.') === -1) {
+    return { valid: false, error: 'Please enter a complete email domain (e.g. @gmail.com).' };
+  }
+
+  // Check for common typos
+  if (COMMON_DOMAIN_TYPOS[domain]) {
+    return { valid: false, error: `Spelling error: Did you mean @${COMMON_DOMAIN_TYPOS[domain]} instead of @${domain}?` };
+  }
+
+  // Check for disposable / temp emails
+  if (DISPOSABLE_EMAIL_DOMAINS.has(domain)) {
+    return { valid: false, error: 'Temporary or disposable email addresses are not permitted. Please use your real, permanent email.' };
+  }
+
+  // Check for gibberish / keyboard-mashing
+  const gibberish = checkGibberishEmail(username);
+  if (gibberish.isGibberish) {
+    return { valid: false, error: `Invalid email: ${gibberish.reason}. Please enter a real, active email address so we can reply to you.` };
+  }
+
+  // DNS MX record check (checks if the domain actually exists and has active mail exchange servers)
+  try {
+    const mxRecords = await dns.promises.resolveMx(domain);
+    if (!mxRecords || mxRecords.length === 0) {
+      return { valid: false, error: `The domain '@${domain}' does not have any active mail exchange (MX) servers.` };
+    }
+  } catch (dnsErr) {
+    return { valid: false, error: `The domain '@${domain}' does not exist or cannot accept emails. Please check for typos.` };
+  }
+
+  return { valid: true };
+}
+
 app.post('/api/contact', async (req, res) => {
   const clientIp = req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0].trim() : (req.socket.remoteAddress || req.ip || '127.0.0.1');
   const rateCheck = checkContactRateLimit(clientIp);
@@ -1422,9 +1553,10 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: "Name must be between 2 and 100 characters." });
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(trimmedEmail) || trimmedEmail.length > 120) {
-    return res.status(400).json({ error: "Please enter a valid email address." });
+  // Strict email authenticity & MX check
+  const emailCheck = await verifyEmailAuthenticity(trimmedEmail);
+  if (!emailCheck.valid) {
+    return res.status(400).json({ error: emailCheck.error });
   }
 
   if (trimmedMessage.length < 5) {

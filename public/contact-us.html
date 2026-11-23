@@ -388,8 +388,12 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-              <label for="contactEmail" style="color: var(--text-main, #fff); font-weight: 600; font-size: 0.95rem;">Your Email <span style="color: #ef4444;">*</span></label>
-              <input type="email" id="contactEmail" name="email" required maxlength="120" placeholder="john@example.com" style="width: 100%; border: 1px solid var(--glass-border); background: var(--bg-dark, #0b0f19); color: #fff; padding: 14px 16px; border-radius: 12px; font-family: inherit; font-size: 0.95rem; outline: none; transition: border-color 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='var(--primary, #2563eb)'" onblur="this.style.borderColor='var(--glass-border)'" />
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label for="contactEmail" style="color: var(--text-main, #fff); font-weight: 600; font-size: 0.95rem;">Your Email <span style="color: #ef4444;">*</span></label>
+                <span id="emailVerifyBadge" style="font-size: 0.76rem; font-weight: 600; display: none;"></span>
+              </div>
+              <input type="email" id="contactEmail" name="email" required maxlength="120" placeholder="john@example.com" autocomplete="email" style="width: 100%; border: 1px solid var(--glass-border); background: var(--bg-dark, #0b0f19); color: #fff; padding: 14px 16px; border-radius: 12px; font-family: inherit; font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; box-sizing: border-box;" />
+              <div id="contactEmailWarning" style="display: none; font-size: 0.85rem; padding: 8px 12px; border-radius: 8px; line-height: 1.45; transition: all 0.2s ease;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -516,6 +520,182 @@
     const form = document.getElementById('contactForm');
     const submitBtn = document.getElementById('contactSubmitBtn');
     const statusMsg = document.getElementById('contactStatusMsg');
+    const emailInput = document.getElementById('contactEmail');
+    const emailWarning = document.getElementById('contactEmailWarning');
+    const emailBadge = document.getElementById('emailVerifyBadge');
+
+    // Disposable domains
+    const DISPOSABLE_DOMAINS = new Set([
+      'mailinator.com', 'tempmail.com', '10minutemail.com', 'guerrillamail.com',
+      'yopmail.com', 'trashmail.com', 'sharklasers.com', 'dispostable.com',
+      'getairmail.com', 'throwawaymail.com', 'temp-mail.org', 'fakeinbox.com',
+      'fakemailgenerator.com', 'emailondeck.com', 'mohmal.com', 'mytemp.email',
+      'crazymailing.com', 'generator.email', 'dropmail.me', 'inboxkitten.com',
+      'burnermail.io', 'trashmail.net', 'tempmailo.com', 'getnada.com',
+      'maildrop.cc', 'disposablemail.com', 'tempr.email', 'discard.email'
+    ]);
+
+    // Common domain typos with corrections
+    const DOMAIN_TYPOS = {
+      'gamil.com': 'gmail.com',
+      'gmaill.com': 'gmail.com',
+      'gmial.com': 'gmail.com',
+      'gmai.com': 'gmail.com',
+      'gmeil.com': 'gmail.com',
+      'yaho.com': 'yahoo.com',
+      'yahooo.com': 'yahoo.com',
+      'hotmial.com': 'hotmail.com',
+      'hotmaill.com': 'hotmail.com',
+      'outlok.com': 'outlook.com',
+      'outloo.com': 'outlook.com',
+      'iclud.com': 'icloud.com'
+    };
+
+    // Client-side gibberish & keyboard mash detection
+    function isGibberish(username) {
+      const clean = username.toLowerCase().replace(/[^a-z]/g, '');
+      if (clean.length < 3) return false;
+
+      const vowels = new Set(['a', 'e', 'i', 'o', 'u']);
+      let maxConsonants = 0;
+      let currentConsonants = 0;
+
+      for (const ch of clean) {
+        if (!vowels.has(ch)) {
+          currentConsonants++;
+          if (currentConsonants > maxConsonants) maxConsonants = currentConsonants;
+        } else {
+          currentConsonants = 0;
+        }
+      }
+
+      // 5+ consecutive consonants (e.g., "adkfhkdsh", "qwrtyp")
+      if (maxConsonants >= 5) return true;
+
+      // Low vowel ratio for longer strings
+      if (clean.length >= 6) {
+        let vowelCount = 0;
+        for (const ch of clean) {
+          if (vowels.has(ch)) vowelCount++;
+        }
+        if ((vowelCount / clean.length) < 0.15) return true;
+      }
+
+      // 4+ repeated identical characters
+      if (/(.)\1{3,}/.test(clean)) return true;
+
+      // Keyboard walk
+      const walks = ['asdfgh', 'sdfghj', 'dfghjk', 'qwert', 'werty', 'zxcvb', 'xcvbn', '123456'];
+      for (const w of walks) {
+        if (clean.includes(w)) return true;
+      }
+
+      return false;
+    }
+
+    function validateClientEmail(email) {
+      if (!email || !email.trim()) {
+        return { valid: false, error: 'Email address is required.' };
+      }
+      const trimmed = email.trim().toLowerCase();
+      const rfcRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+      
+      if (!rfcRegex.test(trimmed)) {
+        return { valid: false, error: 'Please enter a complete, valid email (e.g. name@gmail.com).' };
+      }
+
+      const parts = trimmed.split('@');
+      if (parts.length !== 2) return { valid: false, error: 'Invalid email structure.' };
+      const [user, domain] = parts;
+
+      if (user.length < 2) {
+        return { valid: false, error: 'Email username is too short.' };
+      }
+
+      if (DOMAIN_TYPOS[domain]) {
+        return {
+          valid: false,
+          isTypo: true,
+          suggestedEmail: `${user}@${DOMAIN_TYPOS[domain]}`,
+          error: `Did you mean @${DOMAIN_TYPOS[domain]} instead of @${domain}?`
+        };
+      }
+
+      if (DISPOSABLE_DOMAINS.has(domain)) {
+        return { valid: false, error: 'Temporary or disposable email addresses are not permitted. Please use your permanent email.' };
+      }
+
+      if (isGibberish(user)) {
+        return { valid: false, error: 'Unnatural or keyboard-mashed email detected. Please enter a real, active email address so we can reply.' };
+      }
+
+      return { valid: true };
+    }
+
+    // Real-time live email validation feedback
+    if (emailInput && emailWarning && emailBadge) {
+      function checkLiveEmail() {
+        const val = emailInput.value.trim();
+        if (!val) {
+          emailWarning.style.display = 'none';
+          emailBadge.style.display = 'none';
+          emailInput.style.borderColor = 'var(--glass-border)';
+          emailInput.style.boxShadow = 'none';
+          return;
+        }
+
+        // Only validate if user typed an '@' or blurred
+        if (!val.includes('@') && val.length < 8) {
+          emailWarning.style.display = 'none';
+          emailBadge.style.display = 'none';
+          return;
+        }
+
+        const check = validateClientEmail(val);
+        if (check.valid) {
+          emailWarning.style.display = 'none';
+          emailBadge.style.display = 'inline-block';
+          emailBadge.style.color = '#10b981';
+          emailBadge.innerHTML = '✓ Format Valid';
+          emailInput.style.borderColor = '#10b981';
+          emailInput.style.boxShadow = '0 0 0 1px rgba(16, 185, 129, 0.3)';
+        } else if (check.isTypo) {
+          emailBadge.style.display = 'inline-block';
+          emailBadge.style.color = '#f59e0b';
+          emailBadge.innerHTML = '⚠️ Possible Typo';
+          emailWarning.style.display = 'block';
+          emailWarning.style.background = 'rgba(245, 158, 11, 0.12)';
+          emailWarning.style.border = '1px solid rgba(245, 158, 11, 0.35)';
+          emailWarning.style.color = '#fbbf24';
+          emailWarning.innerHTML = `💡 ${check.error} <button type="button" id="fixEmailTypoBtn" style="background:none;border:none;color:#38bdf8;text-decoration:underline;cursor:pointer;font-weight:700;padding:0 4px;font-size:inherit;">Fix to ${check.suggestedEmail}</button>`;
+          emailInput.style.borderColor = '#f59e0b';
+          emailInput.style.boxShadow = '0 0 0 1px rgba(245, 158, 11, 0.3)';
+
+          const fixBtn = document.getElementById('fixEmailTypoBtn');
+          if (fixBtn) {
+            fixBtn.onclick = () => {
+              emailInput.value = check.suggestedEmail;
+              checkLiveEmail();
+            };
+          }
+        } else {
+          emailBadge.style.display = 'inline-block';
+          emailBadge.style.color = '#ef4444';
+          emailBadge.innerHTML = '✗ Invalid Email';
+          emailWarning.style.display = 'block';
+          emailWarning.style.background = 'rgba(239, 68, 68, 0.12)';
+          emailWarning.style.border = '1px solid rgba(239, 68, 68, 0.35)';
+          emailWarning.style.color = '#f87171';
+          emailWarning.innerHTML = `⚠️ ${check.error}`;
+          emailInput.style.borderColor = '#ef4444';
+          emailInput.style.boxShadow = '0 0 0 1px rgba(239, 68, 68, 0.3)';
+        }
+      }
+
+      emailInput.addEventListener('input', checkLiveEmail);
+      emailInput.addEventListener('blur', checkLiveEmail);
+      emailInput.addEventListener('change', checkLiveEmail);
+    }
 
     function displayStatus(msg, isSuccess) {
       if (!statusMsg) return;
@@ -540,7 +720,6 @@
         if (statusMsg) statusMsg.style.display = 'none';
 
         const nameInput = document.getElementById('contactName');
-        const emailInput = document.getElementById('contactEmail');
         const messageInput = document.getElementById('contactMessage');
 
         const name = nameInput ? nameInput.value.trim() : '';
@@ -555,11 +734,14 @@
           return;
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email || !emailRegex.test(email)) {
-          displayStatus('Please provide a valid email address.', false);
-          if (typeof showToast === 'function') showToast('Please provide a valid email address.', 'error');
-          if (emailInput) emailInput.focus();
+        const emailCheck = validateClientEmail(email);
+        if (!emailCheck.valid) {
+          displayStatus(emailCheck.error, false);
+          if (typeof showToast === 'function') showToast(emailCheck.error, 'error');
+          if (emailInput) {
+            emailInput.focus();
+            emailInput.style.borderColor = '#ef4444';
+          }
           return;
         }
 
@@ -571,10 +753,9 @@
         }
 
         const btnOriginalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = 'Sending... ⏳';
+        submitBtn.innerHTML = 'Verifying & Sending... ⏳';
         submitBtn.disabled = true;
 
-        // AbortController to prevent the client from hanging indefinitely
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 15000);
 
@@ -602,11 +783,21 @@
               showToast(successText, 'success');
             }
             form.reset();
+            if (emailWarning) emailWarning.style.display = 'none';
+            if (emailBadge) emailBadge.style.display = 'none';
+            if (emailInput) {
+              emailInput.style.borderColor = 'var(--glass-border)';
+              emailInput.style.boxShadow = 'none';
+            }
           } else {
             const errMsg = data.error || 'Failed to send message. Please try again.';
             displayStatus(errMsg, false);
             if (typeof showToast === 'function') {
               showToast('Error: ' + errMsg, 'error');
+            }
+            if (emailInput && (errMsg.toLowerCase().includes('email') || errMsg.toLowerCase().includes('domain'))) {
+              emailInput.focus();
+              emailInput.style.borderColor = '#ef4444';
             }
           }
         } catch (err) {
@@ -625,6 +816,7 @@
         }
       });
     }
+  </script>
   </script>
 <script src="./js/cookie-consent.js"></script>
 </body>
