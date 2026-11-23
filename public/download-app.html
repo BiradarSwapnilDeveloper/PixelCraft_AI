@@ -83,6 +83,17 @@
   }
   </script>
 
+  <!-- Early Theme Init to Prevent Flash of Unstyled Color Theme -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('pixelcraft-theme') || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" href="css/style.css" />
 

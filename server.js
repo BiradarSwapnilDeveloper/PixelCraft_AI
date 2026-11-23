@@ -1471,8 +1471,8 @@ app.post('/api/contact', async (req, res) => {
     console.warn("⚠️ Telegram alert dispatch error:", tgErr.message);
   }
 
-  // Step 3: SMTP Email Dispatch with Dual-Port Fallback (Port 465 SSL -> Port 587 STARTTLS)
-  // Ensures emails arrive at support.pixelcraft205@gmail.com with sender details & 1-click replyTo
+  // Step 3: Dual-Channel Email Dispatch (Google Apps Script Webhook HTTPS + Nodemailer SMTP)
+  // Guarantees delivery to support.pixelcraft205@gmail.com even if Render blocks SMTP ports or EMAIL_PASS is missing in cloud env
   const emailUser = (process.env.EMAIL_USER || '').trim();
   const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
   const targetRecipient = 'support.pixelcraft205@gmail.com';
@@ -1482,36 +1482,16 @@ app.post('/api/contact', async (req, res) => {
 
   let emailDelivered = false;
 
-  if (emailUser && emailPass) {
-    const sanitizeForHtml = (str) => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    const safeName = sanitizeForHtml(trimmedName);
-    const safeEmail = sanitizeForHtml(trimmedEmail);
-    const safeMsg = sanitizeForHtml(trimmedMessage);
-    const safeIp = sanitizeForHtml(clientIp);
-    const safeUserAgent = sanitizeForHtml(userAgent);
-    const safeReferrer = sanitizeForHtml(referrer);
+  const sanitizeForHtml = (str) => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const safeName = sanitizeForHtml(trimmedName);
+  const safeEmail = sanitizeForHtml(trimmedEmail);
+  const safeMsg = sanitizeForHtml(trimmedMessage);
+  const safeIp = sanitizeForHtml(clientIp);
+  const safeUserAgent = sanitizeForHtml(userAgent);
+  const safeReferrer = sanitizeForHtml(referrer);
 
-    const mailOptions = {
-      // SENDER: The display name clearly highlights the sender's real name and email
-      from: `"${trimmedName} - ${trimmedEmail}" <${emailUser}>`,
-      // REPLY-TO: Hitting "Reply" in Gmail/Outlook automatically answers the sender
-      replyTo: `"${trimmedName}" <${trimmedEmail}>`,
-      to: toRecipients,
-      subject: `📬 [Contact Inquiry] from ${trimmedName} (${trimmedEmail}) - PixelCraft AI`,
-      text: `📬 NEW WEBSITE CONTACT INQUIRY\n` +
-        `====================================================\n` +
-        `👤 Sender Name:    ${trimmedName}\n` +
-        `📧 Sender Email:   ${trimmedEmail}\n` +
-        `🕒 Date & Time:    ${submissionTime} (IST)\n` +
-        `🌐 Client IP:      ${clientIp}\n` +
-        `📱 Browser/Device: ${userAgent}\n` +
-        `🔗 Submitted From: ${referrer}\n` +
-        `====================================================\n\n` +
-        `💬 MESSAGE CONTENT:\n` +
-        `${trimmedMessage}\n\n` +
-        `====================================================\n` +
-        `👉 To reply directly to this sender, hit "Reply" in your email client or write to: ${trimmedEmail}\n`,
-      html: `<!DOCTYPE html>
+  const emailSubject = `📬 [Contact Inquiry] from ${trimmedName} (${trimmedEmail}) - PixelCraft AI`;
+  const emailHtml = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -1576,10 +1556,58 @@ app.post('/api/contact', async (req, res) => {
     </tr>
   </table>
 </body>
-</html>`
+</html>`;
+
+  // Channel 1: High-Reliability Google Apps Script HTTPS Webhook (Bypasses Render SMTP port blocking)
+  try {
+    const webhookPromise = fetch('https://script.google.com/macros/s/AKfycbzoAyBCCB3XS153lCTFmbuV83GrrjuxLJbaq4pMcgtEln7Db02lr2ayvKIB-Ejjbw5W/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pass: "PixelCraft_Secret_Key_9988",
+        to: targetRecipient,
+        subject: emailSubject,
+        replyTo: trimmedEmail,
+        html: emailHtml
+      })
+    }).then(r => r.json());
+
+    const webhookTimeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Webhook Timeout')), 8000));
+    const webhookRes = await Promise.race([webhookPromise, webhookTimeout]);
+    if (webhookRes && webhookRes.success) {
+      emailDelivered = true;
+      console.log(`✅ Contact email delivered via Google Apps Script Webhook to ${targetRecipient}`);
+    } else {
+      console.warn("⚠️ Google Apps Script Webhook returned non-success:", webhookRes);
+    }
+  } catch (whErr) {
+    console.warn("⚠️ Google Apps Script Webhook dispatch warning:", whErr.message);
+  }
+
+  // Channel 2: Direct Nodemailer SMTP Dispatch (if EMAIL_USER and EMAIL_PASS are configured)
+  if (emailUser && emailPass) {
+    const mailOptions = {
+      from: `"${trimmedName} - ${trimmedEmail}" <${emailUser}>`,
+      replyTo: `"${trimmedName}" <${trimmedEmail}>`,
+      to: toRecipients,
+      subject: emailSubject,
+      text: `📬 NEW WEBSITE CONTACT INQUIRY\n` +
+        `====================================================\n` +
+        `👤 Sender Name:    ${trimmedName}\n` +
+        `📧 Sender Email:   ${trimmedEmail}\n` +
+        `🕒 Date & Time:    ${submissionTime} (IST)\n` +
+        `🌐 Client IP:      ${clientIp}\n` +
+        `📱 Browser/Device: ${userAgent}\n` +
+        `🔗 Submitted From: ${referrer}\n` +
+        `====================================================\n\n` +
+        `💬 MESSAGE CONTENT:\n` +
+        `${trimmedMessage}\n\n` +
+        `====================================================\n` +
+        `👉 To reply directly to this sender, hit "Reply" in your email client or write to: ${trimmedEmail}\n`,
+      html: emailHtml
     };
 
-    // Primary: Port 465 (Direct SSL)
+    // Try Port 465 SSL
     try {
       const transporter465 = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -1613,12 +1641,12 @@ app.post('/api/contact', async (req, res) => {
         console.warn("⚠️ SMTP Port 587 fallback also failed:", err587.message);
       }
     }
+  } else if (!emailDelivered) {
+    console.warn("ℹ️ EMAIL_USER or EMAIL_PASS not set and Webhook did not dispatch. Message preserved in MongoDB and Telegram.");
+  }
 
-    if (emailDelivered && savedDoc) {
-      ContactMessage.updateOne({ _id: savedDoc._id }, { emailDelivered: true }).exec().catch(() => {});
-    }
-  } else {
-    console.warn("ℹ️ EMAIL_USER or EMAIL_PASS not configured. Message preserved in MongoDB and Telegram.");
+  if (emailDelivered && savedDoc) {
+    ContactMessage.updateOne({ _id: savedDoc._id }, { emailDelivered: true }).exec().catch(() => {});
   }
 
   // If saved in DB, sent to Telegram, or sent via SMTP, consider it a full success
