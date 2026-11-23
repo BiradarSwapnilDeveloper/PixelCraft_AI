@@ -40,18 +40,18 @@ async function runDailyBackup() {
 
     console.log(`💾 Daily MongoDB backup created successfully: ${backupFile} (${sizeKb} KB)`);
 
-    // Retain only last 7 backups to save disk
+    // Retain last 30 daily backups (30-day retention window)
     const files = fs.readdirSync(backupDir)
       .filter(f => f.startsWith('backup-') && f.endsWith('.json'))
       .sort();
-    if (files.length > 7) {
-      const toDelete = files.slice(0, files.length - 7);
+    if (files.length > 30) {
+      const toDelete = files.slice(0, files.length - 30);
       for (const oldFile of toDelete) {
         fs.unlinkSync(path.join(backupDir, oldFile));
       }
     }
 
-    sendTelegramAlert(`💾 <b>Daily Database Backup Completed!</b>\n\n📅 <b>Date:</b> ${timestamp}\n📦 <b>Size:</b> ${sizeKb} KB\n📂 <b>Snapshot:</b> users, contactmessages, traplogs`);
+    sendTelegramAlert(`💾 <b>Daily Database Backup Completed!</b>\n\n📅 <b>Date:</b> ${timestamp}\n📦 <b>Size:</b> ${sizeKb} KB\n📂 <b>Snapshot:</b> users, contactmessages, traplogs\n🛡️ <b>Retention:</b> 30 Days Rolling Window`);
   } catch (err) {
     console.error('❌ Daily database backup error:', err.message);
   }
