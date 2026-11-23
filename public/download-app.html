@@ -48,7 +48,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
   <meta name="application-name" content="PixelCraft AI" />
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="/manifest.json" />
   <link rel="icon" href="logo.jpg?v=5" />
 
   <!-- Early PWA Capture & Service Worker Init -->
@@ -1273,7 +1273,16 @@
       });
     }
 
-    // Check if running in standalone mode (already installed)
+    // Listener when installation succeeds
+    window.addEventListener('appinstalled', () => {
+      console.log('✅ PixelCraft AI successfully installed');
+      if (installBtnLabel) installBtnLabel.textContent = "App Installed";
+      if (installBtn) installBtn.disabled = true;
+      if (edgeGuideBanner) edgeGuideBanner.style.display = 'none';
+      if (fallbackInstructions) fallbackInstructions.style.display = 'none';
+    });
+
+    // Check if running in standalone mode (already installed & running inside app window)
     if (window.matchMedia('(display-mode: standalone)').matches) {
       if (installBtnLabel) {
         installBtnLabel.textContent = "App Already Installed";
