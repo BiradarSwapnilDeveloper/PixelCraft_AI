@@ -70,39 +70,142 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     .legal-content h1 { font-size: clamp(2.2rem, 4.5vw, 3.2rem); font-weight: 800; margin-bottom: 8px; color: var(--text-main); font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; }
-    .legal-content .last-updated { font-size: 0.88rem; color: #38bdf8; font-weight: 700; margin-bottom: 30px; display: inline-block; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(56, 189, 248, 0.1); padding: 4px 14px; border-radius: 999px; border: 1px solid rgba(56, 189, 248, 0.25); }
-    .legal-content h2 { font-size: 1.55rem; font-weight: 700; margin-top: 44px; margin-bottom: 16px; color: #38bdf8; font-family: 'Outfit', sans-serif; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; }
-    .legal-content h3 { font-size: 1.22rem; font-weight: 600; margin-top: 26px; margin-bottom: 12px; color: var(--text-main); font-family: 'Outfit', sans-serif; }
-    .legal-content p, .legal-content li { font-size: 1.02rem; color: var(--text-muted); line-height: 1.85; margin-bottom: 16px; }
+    .legal-content .last-updated { font-size: 0.88rem; color: #0284c7; font-weight: 700; margin-bottom: 30px; display: inline-block; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(2, 132, 199, 0.08); padding: 4px 14px; border-radius: 999px; border: 1px solid rgba(2, 132, 199, 0.25); }
+    [data-theme="dark"] .legal-content .last-updated, html.dark .legal-content .last-updated { color: #38bdf8; background: rgba(56, 189, 248, 0.12); border-color: rgba(56, 189, 248, 0.3); }
+    
+    .legal-content h2 { font-size: 1.55rem; font-weight: 700; margin-top: 44px; margin-bottom: 16px; color: #1d4ed8; font-family: 'Outfit', sans-serif; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; }
+    [data-theme="dark"] .legal-content h2, html.dark .legal-content h2 { color: #38bdf8; }
+    
+    .legal-content h3 { font-size: 1.22rem; font-weight: 700; margin-top: 26px; margin-bottom: 12px; color: var(--text-heading); font-family: 'Outfit', sans-serif; }
+    .legal-content p, .legal-content li { font-size: 1.02rem; color: var(--text-body); font-weight: 400; line-height: 1.85; margin-bottom: 16px; }
     .legal-content ul, .legal-content ol { padding-left: 24px; margin-bottom: 24px; }
     .legal-content li { margin-bottom: 10px; }
-    .legal-content strong { color: var(--text-main); font-weight: 600; }
-    .legal-content a { color: #38bdf8; text-decoration: underline; transition: 0.2s ease; }
-    .legal-content a:hover { color: #60a5fa; }
+    .legal-content strong { color: var(--text-main); font-weight: 700; }
+    .legal-content a { color: #2563eb; text-decoration: underline; font-weight: 600; transition: 0.2s ease; }
+    [data-theme="dark"] .legal-content a, html.dark .legal-content a { color: #38bdf8; }
+    .legal-content a:hover { color: #1d4ed8; }
+    [data-theme="dark"] .legal-content a:hover, html.dark .legal-content a:hover { color: #60a5fa; }
     
+    /* NOTICE BOXES - High contrast for light & dark themes */
     .legal-notice-box {
-      background: rgba(239, 68, 68, 0.08);
-      border-left: 4px solid #ef4444;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 5px solid #dc2626;
       border-radius: 12px;
-      padding: 20px 24px;
+      padding: 22px 24px;
       margin: 28px 0;
-      color: #f8fafc;
+      color: #7f1d1d;
     }
-    .legal-notice-box.info {
-      background: rgba(56, 189, 248, 0.08);
-      border-left: 4px solid #38bdf8;
+    .legal-notice-box p {
+      color: #991b1b !important;
+      font-weight: 500;
     }
-    .legal-notice-box.warning {
-      background: rgba(245, 158, 11, 0.08);
-      border-left: 4px solid #f59e0b;
+    .legal-notice-box strong {
+      color: #7f1d1d !important;
     }
-    .legal-notice-title {
+    .legal-notice-box .legal-notice-title {
       font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: #dc2626 !important;
+    }
+    
+    .legal-notice-box.info {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 5px solid #0284c7;
+      color: #0c4a6e;
+    }
+    .legal-notice-box.info p {
+      color: #075985 !important;
+      font-weight: 500;
+    }
+    .legal-notice-box.info strong {
+      color: #0c4a6e !important;
+    }
+    .legal-notice-box.info .legal-notice-title {
+      color: #0284c7 !important;
+    }
+    
+    .legal-notice-box.warning {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 5px solid #d97706;
+      color: #78350f;
+    }
+    .legal-notice-box.warning p {
+      color: #92400e !important;
+      font-weight: 500;
+    }
+    .legal-notice-box.warning strong {
+      color: #78350f !important;
+    }
+    .legal-notice-box.warning .legal-notice-title {
+      color: #b45309 !important;
+    }
+    
+    /* DARK MODE ADAPTATIONS FOR NOTICE BOXES */
+    [data-theme="dark"] .legal-notice-box,
+    html.dark .legal-notice-box {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-left: 5px solid #ef4444;
+      color: #fca5a5;
+    }
+    [data-theme="dark"] .legal-notice-box p,
+    html.dark .legal-notice-box p {
+      color: #fecaca !important;
+    }
+    [data-theme="dark"] .legal-notice-box strong,
+    html.dark .legal-notice-box strong {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .legal-notice-box .legal-notice-title,
+    html.dark .legal-notice-box .legal-notice-title {
+      color: #f87171 !important;
+    }
+    
+    [data-theme="dark"] .legal-notice-box.info,
+    html.dark .legal-notice-box.info {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-left: 5px solid #38bdf8;
+      color: #bae6fd;
+    }
+    [data-theme="dark"] .legal-notice-box.info p,
+    html.dark .legal-notice-box.info p {
+      color: #e0f2fe !important;
+    }
+    [data-theme="dark"] .legal-notice-box.info strong,
+    html.dark .legal-notice-box.info strong {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .legal-notice-box.info .legal-notice-title,
+    html.dark .legal-notice-box.info .legal-notice-title {
+      color: #38bdf8 !important;
+    }
+    
+    [data-theme="dark"] .legal-notice-box.warning,
+    html.dark .legal-notice-box.warning {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-left: 5px solid #f59e0b;
+      color: #fde68a;
+    }
+    [data-theme="dark"] .legal-notice-box.warning p,
+    html.dark .legal-notice-box.warning p {
+      color: #fef3c7 !important;
+    }
+    [data-theme="dark"] .legal-notice-box.warning strong,
+    html.dark .legal-notice-box.warning strong {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .legal-notice-box.warning .legal-notice-title,
+    html.dark .legal-notice-box.warning .legal-notice-title {
+      color: #fbbf24 !important;
     }
 
     .legal-page-section {
@@ -178,10 +281,10 @@
 
         <!-- STATUTORY SAFE HARBOR SHIELD -->
         <div class="legal-notice-box info">
-          <div class="legal-notice-title" style="color: #38bdf8;">
+          <div class="legal-notice-title">
             <span>🛡️</span> Statutory Intermediary Status &amp; Legal Safe Harbor Protection
           </div>
-          <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.7; color: #cbd5e1;">
+          <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.7;">
             PixelCraft AI functions solely as a neutral technology provider and digital intermediary under <strong>Section 2(1)(w)</strong> of the <strong>Information Technology Act, 2000 (India)</strong> and is shielded by statutory safe harbor immunity under <strong>Section 79 of the IT Act, 2000</strong>, the <strong>Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021</strong>, <strong>Section 512 of the U.S. Digital Millennium Copyright Act (DMCA)</strong>, <strong>47 U.S. Code &sect; 230</strong>, and the <strong>EU Digital Services Act (Regulation EU 2022/2065)</strong>. PixelCraft AI does not initiate transmissions, does not select receivers, and does not alter or monitor client-side user payloads.
           </p>
         </div>
@@ -196,10 +299,10 @@
 
         <!-- SEVERE CRIMINAL WARNING -->
         <div class="legal-notice-box">
-          <div class="legal-notice-title" style="color: #ef4444;">
+          <div class="legal-notice-title">
             <span>⚠️</span> CRIMINAL MISUSE DISCLAIMER &amp; PROSECUTION WARNING
           </div>
-          <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.7; color: #fecaca;">
+          <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.7;">
             PixelCraft AI is engineered solely for lawful software utility, academic exploration, personal media optimization, and defensive digital privacy. We explicitly disclaim all liability for any illegal, tortious, fraudulent, or criminal acts committed by third-party users utilizing our utilities. Perpetrators who abuse this platform to smuggle contraband, exfiltrate stolen corporate intelligence, distribute malware, or create non-consensual deepfakes bear 100% individual criminal liability under the Bharatiya Nyaya Sanhita (BNS), Indian Penal Code, IT Act 2000, and international criminal statutes. Safe harbor protections protect neutral platform infrastructure, not individual criminal offenders.
           </p>
         </div>

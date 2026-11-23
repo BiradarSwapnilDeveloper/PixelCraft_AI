@@ -1,9 +1,8 @@
 // ===== PIXELCRAFT AI - ENTERPRISE CORE SHARED UTILITIES =====
 
-// 1. THEME MANAGEMENT SYSTEM (Light Mode / Dark Mode - GitHub & LinkedIn Style)
+// 1. THEME MANAGEMENT SYSTEM (Light Mode by Default / Optional Dark Mode)
 (function initTheme() {
-  const savedTheme = localStorage.getItem('pixelcraft-theme') || 
-    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const savedTheme = localStorage.getItem('pixelcraft-theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
 })();
 
@@ -38,7 +37,7 @@ function updateThemeUI() {
     toggleBtn.title = current === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
   }
   document.querySelectorAll('.theme-choice-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.themeChoice === (localStorage.getItem('pixelcraft-theme') || 'system'));
+    btn.classList.toggle('active', btn.dataset.themeChoice === (localStorage.getItem('pixelcraft-theme') || 'light'));
   });
 }
 

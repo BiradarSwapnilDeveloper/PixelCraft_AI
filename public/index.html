@@ -117,6 +117,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Early Theme Init (Default Light Mode) -->
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('pixelcraft-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
   <!-- Global enterprise stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
 
