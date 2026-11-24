@@ -2,320 +2,320 @@
 <html lang="en">
 <head>
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-3788374704176398">
+ <!-- Google AdSense -->
+ <meta name="google-adsense-account" content="ca-pub-3788374704176398">
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
-  <title>Color Palette Extraction &amp; Design Guide | PixelCraft AI</title>
-  <meta name="description" content="Extract dominant HEX color palettes from images using color quantization. Learn median-cut algorithms, color harmony, and WCAG accessibility standards." />
-  <meta name="keywords" content="color palette extractor online, extract hex codes from image, photo color picker, dominant colors from picture, color quantization median cut, brand color palette generator" />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-  <meta name="author" content="PixelCraft AI" />
-  <meta name="publisher" content="PixelCraft AI" />
-  <meta name="language" content="English" />
-  <meta name="distribution" content="Global" />
-  <meta name="revisit-after" content="1 days" />
-  <meta name="rating" content="Safe For Kids" />
-  <link rel="canonical" href="https://pixelcraftaitools.com/blog/color-palette-extraction-and-design-systems.html" />
+ <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
+ <title>Color Palette Extraction &amp; Design Guide | PixelCraft AI</title>
+ <meta name="description" content="Extract dominant HEX color palettes from images using color quantization. Learn median-cut algorithms, color harmony, and WCAG accessibility standards." />
+ <meta name="keywords" content="color palette extractor online, extract hex codes from image, photo color picker, dominant colors from picture, color quantization median cut, brand color palette generator" />
+ <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+ <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+ <meta name="author" content="PixelCraft AI" />
+ <meta name="publisher" content="PixelCraft AI" />
+ <meta name="language" content="English" />
+ <meta name="distribution" content="Global" />
+ <meta name="revisit-after" content="1 days" />
+ <meta name="rating" content="Safe For Kids" />
+ <link rel="canonical" href="https://pixelcraftaitools.com/blog/color-palette-extraction-and-design-systems.html" />
 
-  <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="PixelCraft AI" />
-  <meta property="og:url" content="https://pixelcraftaitools.com/blog/color-palette-extraction-and-design-systems.html" />
-  <meta property="og:title" content="Color Palette Extraction &amp; Design Guide | PixelCraft AI" />
-  <meta property="og:description" content="Extract dominant HEX color palettes from images using color quantization. Learn median-cut algorithms, color harmony, and WCAG accessibility standards." />
-  <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:locale" content="en_IN" />
-  <meta property="og:locale:alternate" content="en_US" />
+ <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+ <meta property="og:type" content="article" />
+ <meta property="og:site_name" content="PixelCraft AI" />
+ <meta property="og:url" content="https://pixelcraftaitools.com/blog/color-palette-extraction-and-design-systems.html" />
+ <meta property="og:title" content="Color Palette Extraction &amp; Design Guide | PixelCraft AI" />
+ <meta property="og:description" content="Extract dominant HEX color palettes from images using color quantization. Learn median-cut algorithms, color harmony, and WCAG accessibility standards." />
+ <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
+ <meta property="og:image:width" content="1200" />
+ <meta property="og:image:height" content="630" />
+ <meta property="og:image:type" content="image/png" />
+ <meta property="og:locale" content="en_IN" />
+ <meta property="og:locale:alternate" content="en_US" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@PixelCraftAI" />
-  <meta name="twitter:title" content="Color Palette Extraction &amp; Design Guide | PixelCraft AI" />
-  <meta name="twitter:description" content="Extract dominant HEX color palettes from images using color quantization. Learn median-cut algorithms, color harmony, and WCAG accessibility standards." />
-  <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
+ <!-- Twitter Card -->
+ <meta name="twitter:card" content="summary_large_image" />
+ <meta name="twitter:site" content="@PixelCraftAI" />
+ <meta name="twitter:title" content="Color Palette Extraction &amp; Design Guide | PixelCraft AI" />
+ <meta name="twitter:description" content="Extract dominant HEX color palettes from images using color quantization. Learn median-cut algorithms, color harmony, and WCAG accessibility standards." />
+ <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
 
-  <!-- Technical SEO & PWA -->
-  <meta name="theme-color" content="#2563eb" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
-  <meta name="application-name" content="PixelCraft AI" />
-  <link rel="manifest" href="../manifest.json" />
-  <link rel="icon" href="../logo.jpg?v=5" />
+ <!-- Technical SEO & PWA -->
+ <meta name="theme-color" content="#2563eb" />
+ <meta name="mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
+ <meta name="application-name" content="PixelCraft AI" />
+ <link rel="manifest" href="../manifest.json" />
+ <link rel="icon" href="../logo.jpg?v=5" />
 
-  <!-- Schema.org BlogPosting JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "Color Palette Extraction Guide: From Imagery to Accessible Design Tokens",
-    "description": "Extract dominant HEX color palettes from images using color quantization. Learn median-cut algorithms, color harmony, and WCAG accessibility standards.",
-    "image": "https://pixelcraftaitools.com/og-image.png",
-    "author": {
-      "@type": "Organization",
-      "name": "PixelCraft AI Design Engineering Team"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "PixelCraft AI",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://pixelcraftaitools.com/logo.jpg"
-      }
-    },
-    "datePublished": "2026-11-18",
-    "dateModified": "2026-11-18",
-    "mainEntityOfPage": "https://pixelcraftaitools.com/blog/color-palette-extraction-and-design-systems.html"
-  }
-  </script>
+ <!-- Schema.org BlogPosting JSON-LD -->
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Color Palette Extraction Guide: From Imagery to Accessible Design Tokens",
+ "description": "Extract dominant HEX color palettes from images using color quantization. Learn median-cut algorithms, color harmony, and WCAG accessibility standards.",
+ "image": "https://pixelcraftaitools.com/og-image.png",
+ "author": {
+ "@type": "Organization",
+ "name": "PixelCraft AI Design Engineering Team"
+ },
+ "publisher": {
+ "@type": "Organization",
+ "name": "PixelCraft AI",
+ "logo": {
+ "@type": "ImageObject",
+ "url": "https://pixelcraftaitools.com/logo.jpg"
+ }
+ },
+ "datePublished": "2026-11-18",
+ "dateModified": "2026-11-18",
+ "mainEntityOfPage": "https://pixelcraftaitools.com/blog/color-palette-extraction-and-design-systems.html"
+ }
+ </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="../css/style.css" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="stylesheet" href="../css/style.css" />
 
 </head>
 <body>
-  <div id="toast-container" class="toast-container"></div>
+ <div id="toast-container" class="toast-container"></div>
 
-  <nav class="navbar" id="navbar">
-  <div class="nav-container">
-    <a href="/" class="nav-logo">
-      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
-      <span>PixelCraft AI</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/#tools">All Tools</a></li>
-      <li><a href="/#features">Features</a></li>
-      <li><a href="/">Research Blog</a></li>
-      <li><a href="../contact-us.html">Contact</a></li>
-    </ul>
-    <div class="nav-actions">
-      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
-        <span style="font-size: 1.15rem;">🌙</span>
-      </button>
-      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
-      </button>
-      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-        </svg>
-        <span>Sign In</span>
-      </a>
-    </div>
-  </div>
+ <nav class="navbar" id="navbar">
+ <div class="nav-container">
+ <a href="/" class="nav-logo">
+ <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+ <span>PixelCraft AI</span>
+ </a>
+ <ul class="nav-links">
+ <li><a href="/#tools">All Tools</a></li>
+ <li><a href="/#features">Features</a></li>
+ <li><a href="/">Research Blog</a></li>
+ <li><a href="../contact-us.html">Contact</a></li>
+ </ul>
+ <div class="nav-actions">
+ <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+ <span style="font-size: 1.15rem;">🌙</span>
+ </button>
+ <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+ <circle cx="12" cy="12" r="3"></circle>
+ <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+ </svg>
+ </button>
+ <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+ <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+ <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+ </svg>
+ <span>Sign In</span>
+ </a>
+ </div>
+ </div>
 </nav>
 
-  <article class="article-container">
-    <div class="article-breadcrumb">
-      <a href="/">Home</a>
-      <span>&rsaquo;</span>
-      <a href="/">Research Blog</a>
-      <span>&rsaquo;</span>
-      <span>Color Palette Extraction &amp; Design</span>
-    </div>
+ <article class="article-container">
+ <div class="article-breadcrumb">
+ <a href="/">Home</a>
+ <span>&rsaquo;</span>
+ <a href="/">Research Blog</a>
+ <span>&rsaquo;</span>
+ <span>Color Palette Extraction &amp; Design</span>
+ </div>
 
-    <div class="article-card">
-      <span class="post-badge">Design Systems &amp; Color Theory</span>
-      <h1>Color Palette Extraction Guide: From Imagery to Accessible Design Tokens</h1>
+ <div class="article-card">
+ <span class="post-badge">Design Systems &amp; Color Theory</span>
+ <h1>Color Palette Extraction Guide: From Imagery to Accessible Design Tokens</h1>
 
-      <div class="post-meta">
-        <span>✍️ By PixelCraft AI Design Engineering Team</span>
-        <span>📅 Nov 18, 2026</span>
-        <span>⏱️ 9 Min Read</span>
-        <span>🎨 Computational Color Science</span>
-      </div>
+ <div class="post-meta">
+ <span>✍️ By PixelCraft AI Design Engineering Team</span>
+ <span>📅 Nov 18, 2026</span>
+ <span>⏱️ 9 Min Read</span>
+ <span>🎨 Computational Color Science</span>
+ </div>
 
-      <div class="editorial-disclosure">
-        <strong>Editorial Disclosure:</strong> Researched and authored by the PixelCraft AI Design Engineering Team. Technical review supervised by Swapnil Biradar (Lead Security Architect). Conforms to W3C Web Content Accessibility Guidelines (WCAG 2.1 Level AA/AAA) and CIE 1976 (L*, a*, b*) color space metrics. Feedback or corrections: <em>support.pixelcraft205@gmail.com</em>.
-      </div>
+ <div class="editorial-disclosure">
+ <strong>Editorial Disclosure:</strong> Researched and authored by the PixelCraft AI Design Engineering Team. Technical review supervised by Swapnil Biradar (Lead Security Architect). Conforms to W3C Web Content Accessibility Guidelines (WCAG 2.1 Level AA/AAA) and CIE 1976 (L*, a*, b*) color space metrics. Feedback or corrections: <em>support.pixelcraft205@gmail.com</em>.
+ </div>
 
-      <p>Visual branding and digital user interfaces rarely succeed through random color selection. The most engaging website designs, digital product interfaces, and mobile applications derive their aesthetic harmony directly from nature, photography, or fine art. <strong>Color palette extraction</strong> bridges the gap between raw photography and structured design tokens, algorithmically condensing millions of raw image pixels into an actionable, harmonious color swatch.</p>
+ <p>Visual branding and digital user interfaces rarely succeed through random color selection. The most engaging website designs, digital product interfaces, and mobile applications derive their aesthetic harmony directly from nature, photography, or fine art. <strong>Color palette extraction</strong> bridges the gap between raw photography and structured design tokens, algorithmically condensing millions of raw image pixels into an actionable, harmonious color swatch.</p>
 
-      <div class="callout-box">
-        <strong>The Math of Color Quantization:</strong> A typical 12-megapixel smartphone photo contains over 12 million pixels, often spanning several hundred thousand distinct RGB values. Color quantization algorithms (such as Median-Cut and K-Means clustering) group these points in 3D color space, identifying the centroids that represent the image's true chromatic essence.
-      </div>
+ <div class="callout-box">
+ <strong>The Math of Color Quantization:</strong> A typical 12-megapixel smartphone photo contains over 12 million pixels, often spanning several hundred thousand distinct RGB values. Color quantization algorithms (such as Median-Cut and K-Means clustering) group these points in 3D color space, identifying the centroids that represent the image's true chromatic essence.
+ </div>
 
-      <h2>1. How Color Quantization Algorithms Work</h2>
-      <p>To reduce hundreds of thousands of discrete colors down to a cohesive 6-swatch palette without losing visual balance, computers rely on dimensional spatial partitioning:</p>
-      <ul>
-        <li><strong>The Median-Cut Algorithm:</strong> The algorithm places all pixel RGB vectors into a 3D bounding box. It finds the axis (Red, Green, or Blue) with the greatest spread, sorts the pixels along that axis, and splits the box at the median. Repeating this subdivision recursively yields $2^n$ distinct color clusters. The centroid of each cluster becomes an extracted palette color.</li>
-        <li><strong>K-Means Clustering:</strong> Random initial centroids are seeded in CIELAB or RGB space. Pixels are assigned to the nearest centroid using Euclidean distance formulas, and centroids iteratively recalculate their positions until statistical convergence is reached.</li>
-        <li><strong>Luminance Threshold Filtering:</strong> High-quality extractors apply perceptual filters to discard near-identical extreme blacks (<code>#000000</code> to <code>#121212</code>) or blowout whites (<code>#ffffff</code>), prioritizing vibrant, high-entropy chromatic tones.</li>
-      </ul>
+ <h2>1. How Color Quantization Algorithms Work</h2>
+ <p>To reduce hundreds of thousands of discrete colors down to a cohesive 6-swatch palette without losing visual balance, computers rely on dimensional spatial partitioning:</p>
+ <ul>
+ <li><strong>The Median-Cut Algorithm:</strong> The algorithm places all pixel RGB vectors into a 3D bounding box. It finds the axis (Red, Green, or Blue) with the greatest spread, sorts the pixels along that axis, and splits the box at the median. Repeating this subdivision recursively yields $2^n$ distinct color clusters. The centroid of each cluster becomes an extracted palette color.</li>
+ <li><strong>K-Means Clustering:</strong> Random initial centroids are seeded in CIELAB or RGB space. Pixels are assigned to the nearest centroid using Euclidean distance formulas, and centroids iteratively recalculate their positions until statistical convergence is reached.</li>
+ <li><strong>Luminance Threshold Filtering:</strong> High-quality extractors apply perceptual filters to discard near-identical extreme blacks (<code>#000000</code> to <code>#121212</code>) or blowout whites (<code>#ffffff</code>), prioritizing vibrant, high-entropy chromatic tones.</li>
+ </ul>
 
-      <h2>2. Color Spaces: RGB, HSL, and CIELAB</h2>
-      <p>Different color spaces serve distinct purposes during design asset creation and development:</p>
+ <h2>2. Color Spaces: RGB, HSL, and CIELAB</h2>
+ <p>Different color spaces serve distinct purposes during design asset creation and development:</p>
 
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Color Space</th>
-            <th>Primary Coordinates</th>
-            <th>Best Suited For</th>
-            <th>Key Advantage</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>HEX / sRGB</td>
-            <td><code>#RRGGBB</code> (0–255 per channel)</td>
-            <td>Web CSS properties, digital styling</td>
-            <td>Universal web browser support</td>
-          </tr>
-          <tr>
-            <td>HSL</td>
-            <td>Hue (&deg;), Saturation (%), Lightness (%)</td>
-            <td>Creating tints, shades, and hover states</td>
-            <td>Intuitive perceptual adjustments</td>
-          </tr>
-          <tr>
-            <td>CIELAB (L*a*b*)</td>
-            <td>Luminance ($L^*$), Green-Red ($a^*$), Blue-Yellow ($b^*$)</td>
-            <td>Quantization math, delta-E difference</td>
-            <td>Perceptually uniform color distance</td>
-          </tr>
-          <tr>
-            <td>Display P3</td>
-            <td>Wide Gamut RGB vectors</td>
-            <td>Modern Apple displays, OLED mobile screens</td>
-            <td>25% wider green/red color gamut</td>
-          </tr>
-        </tbody>
-      </table>
+ <table class="data-table">
+ <thead>
+ <tr>
+ <th>Color Space</th>
+ <th>Primary Coordinates</th>
+ <th>Best Suited For</th>
+ <th>Key Advantage</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>HEX / sRGB</td>
+ <td><code>#RRGGBB</code> (0-255 per channel)</td>
+ <td>Web CSS properties, digital styling</td>
+ <td>Universal web browser support</td>
+ </tr>
+ <tr>
+ <td>HSL</td>
+ <td>Hue (&deg;), Saturation (%), Lightness (%)</td>
+ <td>Creating tints, shades, and hover states</td>
+ <td>Intuitive perceptual adjustments</td>
+ </tr>
+ <tr>
+ <td>CIELAB (L*a*b*)</td>
+ <td>Luminance ($L^*$), Green-Red ($a^*$), Blue-Yellow ($b^*$)</td>
+ <td>Quantization math, delta-E difference</td>
+ <td>Perceptually uniform color distance</td>
+ </tr>
+ <tr>
+ <td>Display P3</td>
+ <td>Wide Gamut RGB vectors</td>
+ <td>Modern Apple displays, OLED mobile screens</td>
+ <td>25% wider green/red color gamut</td>
+ </tr>
+ </tbody>
+ </table>
 
-      <h2>3. The Accessibility Imperative: WCAG 2.1 Contrast Standards</h2>
-      <p>A color palette may look visually stunning in an art portfolio, but if it fails readability standards, it violates digital accessibility mandates:</p>
-      <ul>
-        <li><strong>WCAG 2.1 Level AA:</strong> Requires a minimum contrast ratio of <strong>4.5:1</strong> for normal text and <strong>3.0:1</strong> for large text (18pt+ or bold 14pt+) against the background.</li>
-        <li><strong>WCAG 2.1 Level AAA:</strong> Requires an enhanced contrast ratio of <strong>7.0:1</strong> for body typography.</li>
-        <li><strong>The Luminance Contrast Formula:</strong> Contrast is calculated as $\frac{L_1 + 0.05}{L_2 + 0.05}$, where $L_1$ is the relative luminance of the lighter color and $L_2$ is the relative luminance of the darker color. When extracting colors from an image, always pair extracted primary tones with validated high-contrast neutrals.</li>
-      </ul>
+ <h2>3. The Accessibility Imperative: WCAG 2.1 Contrast Standards</h2>
+ <p>A color palette may look visually stunning in an art portfolio, but if it fails readability standards, it violates digital accessibility mandates:</p>
+ <ul>
+ <li><strong>WCAG 2.1 Level AA:</strong> Requires a minimum contrast ratio of <strong>4.5:1</strong> for normal text and <strong>3.0:1</strong> for large text (18pt+ or bold 14pt+) against the background.</li>
+ <li><strong>WCAG 2.1 Level AAA:</strong> Requires an enhanced contrast ratio of <strong>7.0:1</strong> for body typography.</li>
+ <li><strong>The Luminance Contrast Formula:</strong> Contrast is calculated as $\frac{L_1 + 0.05}{L_2 + 0.05}$, where $L_1$ is the relative luminance of the lighter color and $L_2$ is the relative luminance of the darker color. When extracting colors from an image, always pair extracted primary tones with validated high-contrast neutrals.</li>
+ </ul>
 
-      <h2>4. Step-by-Step: Extracting Palettes and Generating CSS Tokens</h2>
-      <p>Follow these steps to extract color codes client-side using the <a href="../tools/color-palette.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">PixelCraft AI Color Palette Extractor</a>:</p>
-      <ol>
-        <li><strong>Upload Inspiration Artwork:</strong> Drop any photography, brand asset, UI screenshot, or moodboard graphic. The file is analyzed strictly in your local device memory using an offscreen canvas.</li>
-        <li><strong>Sample Dominant Swatches:</strong> The quantization engine instantly displays the dominant color hierarchy, sorting swatches by frequency and chromatic saturation.</li>
-        <li><strong>Copy HEX, RGB, or HSL:</strong> Click any swatch to immediately copy its exact CSS code to your clipboard.</li>
-        <li><strong>Map to CSS Design Tokens:</strong> Structure the extracted colors into standardized CSS Custom Properties for immediate frontend development:</li>
-      </ol>
+ <h2>4. Step-by-Step: Extracting Palettes and Generating CSS Tokens</h2>
+ <p>Follow these steps to extract color codes client-side using the <a href="../tools/color-palette.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">PixelCraft AI Color Palette Extractor</a>:</p>
+ <ol>
+ <li><strong>Upload Inspiration Artwork:</strong> Drop any photography, brand asset, UI screenshot, or moodboard graphic. The file is analyzed strictly in your local device memory using an offscreen canvas.</li>
+ <li><strong>Sample Dominant Swatches:</strong> The quantization engine instantly displays the dominant color hierarchy, sorting swatches by frequency and chromatic saturation.</li>
+ <li><strong>Copy HEX, RGB, or HSL:</strong> Click any swatch to immediately copy its exact CSS code to your clipboard.</li>
+ <li><strong>Map to CSS Design Tokens:</strong> Structure the extracted colors into standardized CSS Custom Properties for immediate frontend development:</li>
+ </ol>
 
-      <div class="code-snippet">
+ <div class="code-snippet">
 :root {
-  /* Extracted Brand Palette Tokens */
-  --brand-primary: #1e3a8a;       /* Dominant deep hue */
-  --brand-accent: #0284c7;        /* Vibrant focal accent */
-  --brand-surface: #f8fafc;       /* Tinted background neutral */
-  --brand-text: #0f172a;          /* High-contrast WCAG-compliant body */
-  
-  /* Linear Gradient Derivative */
-  --brand-gradient: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+ /* Extracted Brand Palette Tokens */
+ --brand-primary: #1e3a8a; /* Dominant deep hue */
+ --brand-accent: #0284c7; /* Vibrant focal accent */
+ --brand-surface: #f8fafc; /* Tinted background neutral */
+ --brand-text: #0f172a; /* High-contrast WCAG-compliant body */
+ 
+ /* Linear Gradient Derivative */
+ --brand-gradient: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
 }
-      </div>
+ </div>
 
-      <!-- CONTEXTUAL BLOG-TO-TOOL CTA (MID-ARTICLE) -->
-      <div class="blog-tool-cta-card">
-        <div class="blog-tool-cta-header">
-          <span class="blog-tool-cta-icon">🎨</span>
-          <h3 class="blog-tool-cta-title">Extract Dominant Palettes from Any Image Now</h3>
-        </div>
-        <p class="blog-tool-cta-desc">
-          Upload any photograph, branding mockup, or UI screenshot to compute median-cut palettes, copy HEX/RGB CSS tokens, and test WCAG contrast client-side.
-        </p>
-        <div class="blog-tool-cta-actions">
-          <a href="../tools/color-palette.html" class="tool-cta-btn" data-tool-cta="true" data-dest-tool="color-palette.html" data-cta-location="blog_mid" data-content-type="blog_article">
-            <span>🚀 Open Color Palette Extractor</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="../tools/format-converter.html" class="tool-cta-secondary-link" data-tool-cta="true" data-dest-tool="format-converter.html" data-cta-location="blog_mid_secondary" data-content-type="blog_article">
-            <span>Convert between WebP, AVIF &amp; PNG? Launch Converter &rarr;</span>
-          </a>
-        </div>
-      </div>
+ <!-- CONTEXTUAL BLOG-TO-TOOL CTA (MID-ARTICLE) -->
+ <div class="blog-tool-cta-card">
+ <div class="blog-tool-cta-header">
+ <span class="blog-tool-cta-icon">🎨</span>
+ <h3 class="blog-tool-cta-title">Extract Dominant Palettes from Any Image Now</h3>
+ </div>
+ <p class="blog-tool-cta-desc">
+ Upload any photograph, branding mockup, or UI screenshot to compute median-cut palettes, copy HEX/RGB CSS tokens, and test WCAG contrast client-side.
+ </p>
+ <div class="blog-tool-cta-actions">
+ <a href="../tools/color-palette.html" class="tool-cta-btn" data-tool-cta="true" data-dest-tool="color-palette.html" data-cta-location="blog_mid" data-content-type="blog_article">
+ <span>🚀 Open Color Palette Extractor</span>
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+ </a>
+ <a href="../tools/format-converter.html" class="tool-cta-secondary-link" data-tool-cta="true" data-dest-tool="format-converter.html" data-cta-location="blog_mid_secondary" data-content-type="blog_article">
+ <span>Convert between WebP, AVIF &amp; PNG? Launch Converter &rarr;</span>
+ </a>
+ </div>
+ </div>
 
-      <h2>5. Frequently Asked Questions</h2>
-      <h3>Does image compression affect extracted color codes?</h3>
-      <p>Aggressive lossy compression (such as JPEG quality below 50%) introduces chroma subsampling (4:2:0) and DCT quantization artifacts, slightly shifting pixel values near sharp edges. For exact brand reproduction, always feed high-quality PNGs or clean uncompressed JPEGs into the palette extractor.</p>
+ <h2>5. Frequently Asked Questions</h2>
+ <h3>Does image compression affect extracted color codes?</h3>
+ <p>Aggressive lossy compression (such as JPEG quality below 50%) introduces chroma subsampling (4:2:0) and DCT quantization artifacts, slightly shifting pixel values near sharp edges. For exact brand reproduction, always feed high-quality PNGs or clean uncompressed JPEGs into the palette extractor.</p>
 
-      <h3>Can I extract colors directly from a client's logo?</h3>
-      <p>Yes. Uploading a PNG logo with an alpha channel allows the extractor to isolate the brand's primary trademark colors while automatically filtering out the transparent background canvas.</p>
+ <h3>Can I extract colors directly from a client's logo?</h3>
+ <p>Yes. Uploading a PNG logo with an alpha channel allows the extractor to isolate the brand's primary trademark colors while automatically filtering out the transparent background canvas.</p>
 
-      <h3>Are uploaded images stored on PixelCraft AI servers?</h3>
-      <p>No. Color quantization and pixel parsing run 100% client-side via hardware-accelerated HTML5 Canvas contexts. Zero image data is ever uploaded, stored, or processed on remote cloud infrastructure.</p>
+ <h3>Are uploaded images stored on PixelCraft AI servers?</h3>
+ <p>No. Color quantization and pixel parsing run 100% client-side via hardware-accelerated HTML5 Canvas contexts. Zero image data is ever uploaded, stored, or processed on remote cloud infrastructure.</p>
 
-      <div class="related-tools">
-        <h3>Recommended Creative &amp; Design Utilities</h3>
-        <p>Speed up your creative workflow with PixelCraft AI's client-side design suite:</p>
-        <div class="blog-related-grid">
-          <a href="../tools/color-palette.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="color-palette.html" data-cta-location="blog_end" data-content-type="blog_article">
-            <div>
-              <div style="font-size: 1.5rem; margin-bottom: 6px;">🎨</div>
-              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Color Palette Extractor</strong>
-              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Extract harmonious HEX/RGB palettes &amp; CSS tokens with median-cut quantization.</span>
-            </div>
-            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
-          </a>
-          <a href="../tools/format-converter.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="format-converter.html" data-cta-location="blog_end" data-content-type="blog_article">
-            <div>
-              <div style="font-size: 1.5rem; margin-bottom: 6px;">🔄</div>
-              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Format Converter</strong>
-              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Batch transcode design assets across PNG, SVG, WebP, and AVIF formats.</span>
-            </div>
-            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
-          </a>
-          <a href="../tools/image-compressor.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="image-compressor.html" data-cta-location="blog_end" data-content-type="blog_article">
-            <div>
-              <div style="font-size: 1.5rem; margin-bottom: 6px;">🗜️</div>
-              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Image Compressor</strong>
-              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Optimize brand graphics and hero banners for optimal web page performance.</span>
-            </div>
-            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
-          </a>
-        </div>
-      </div>
+ <div class="related-tools">
+ <h3>Recommended Creative &amp; Design Utilities</h3>
+ <p>Speed up your creative workflow with PixelCraft AI's client-side design suite:</p>
+ <div class="blog-related-grid">
+ <a href="../tools/color-palette.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="color-palette.html" data-cta-location="blog_end" data-content-type="blog_article">
+ <div>
+ <div style="font-size: 1.5rem; margin-bottom: 6px;">🎨</div>
+ <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Color Palette Extractor</strong>
+ <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Extract harmonious HEX/RGB palettes &amp; CSS tokens with median-cut quantization.</span>
+ </div>
+ <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+ </a>
+ <a href="../tools/format-converter.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="format-converter.html" data-cta-location="blog_end" data-content-type="blog_article">
+ <div>
+ <div style="font-size: 1.5rem; margin-bottom: 6px;">🔄</div>
+ <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Format Converter</strong>
+ <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Batch transcode design assets across PNG, SVG, WebP, and AVIF formats.</span>
+ </div>
+ <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+ </a>
+ <a href="../tools/image-compressor.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="image-compressor.html" data-cta-location="blog_end" data-content-type="blog_article">
+ <div>
+ <div style="font-size: 1.5rem; margin-bottom: 6px;">🗜️</div>
+ <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Image Compressor</strong>
+ <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Optimize brand graphics and hero banners for optimal web page performance.</span>
+ </div>
+ <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+ </a>
+ </div>
+ </div>
 
-      <div style="margin-top: 40px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-        <h3 style="color: #e2e8f0; font-size: 1.1rem; margin-bottom: 12px;">Standards, Color Specifications &amp; Citations</h3>
-        <ol style="padding-left: 20px; font-size: 0.9rem; color: #94a3b8; line-height: 1.7;">
-          <li style="margin-bottom: 8px;">Heckbert, P. (1982). <em>Color image quantization for frame buffer display</em>. ACM SIGGRAPH Computer Graphics, 16(3), 297-307. <a href="https://doi.org/10.1145/965145.801294" target="_blank" rel="noopener">ACM Digital Library</a>.</li>
-          <li style="margin-bottom: 8px;">World Wide Web Consortium (W3C). (2018). <em>Web Content Accessibility Guidelines (WCAG) 2.1: Contrast (Minimum) - Success Criterion 1.4.3</em>.</li>
-          <li style="margin-bottom: 8px;">International Commission on Illumination (CIE). (2004). <em>CIE 15: Technical Report: Colorimetry (3rd ed.)</em>. Vienna: CIE Central Bureau.</li>
-          <li>MacEvoy, B. (2015). <em>Color Vision and Modern Colorimetry: The Development of CIE Colorimetry</em>. Handprint Technical Notes.</li>
-        </ol>
-      </div>
-    </div>
-  </article>
+ <div style="margin-top: 40px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+ <h3 style="color: #e2e8f0; font-size: 1.1rem; margin-bottom: 12px;">Standards, Color Specifications &amp; Citations</h3>
+ <ol style="padding-left: 20px; font-size: 0.9rem; color: #94a3b8; line-height: 1.7;">
+ <li style="margin-bottom: 8px;">Heckbert, P. (1982). <em>Color image quantization for frame buffer display</em>. ACM SIGGRAPH Computer Graphics, 16(3), 297-307. <a href="https://doi.org/10.1145/965145.801294" target="_blank" rel="noopener">ACM Digital Library</a>.</li>
+ <li style="margin-bottom: 8px;">World Wide Web Consortium (W3C). (2018). <em>Web Content Accessibility Guidelines (WCAG) 2.1: Contrast (Minimum) - Success Criterion 1.4.3</em>.</li>
+ <li style="margin-bottom: 8px;">International Commission on Illumination (CIE). (2004). <em>CIE 15: Technical Report: Colorimetry (3rd ed.)</em>. Vienna: CIE Central Bureau.</li>
+ <li>MacEvoy, B. (2015). <em>Color Vision and Modern Colorimetry: The Development of CIE Colorimetry</em>. Handprint Technical Notes.</li>
+ </ol>
+ </div>
+ </div>
+ </article>
 
-  <footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
-  <div style="max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
-      <a href="../about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
-      <a href="../privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
-      <a href="../terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
-      <a href="../disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
-      <a href="../cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
-      <a href="/" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
-      <a href="../contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
-    </div>
-    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
-      &copy; 2026 PixelCraft AI. All rights reserved.<br>
-      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
-    </p>
-  </div>
+ <footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+ <div style="max-width: 1200px; margin: 0 auto;">
+ <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+ <a href="../about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+ <a href="../privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+ <a href="../terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+ <a href="../disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+ <a href="../cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+ <a href="/" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+ <a href="../contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
+ </div>
+ <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+ &copy; 2026 PixelCraft AI. All rights reserved.<br>
+ A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+ </p>
+ </div>
 </footer>
 
-  <script src="../js/utils.js"></script>
-  <script src="../js/cookie-consent.js"></script>
+ <script src="../js/utils.js"></script>
+ <script src="../js/cookie-consent.js"></script>
 </body>
 </html>

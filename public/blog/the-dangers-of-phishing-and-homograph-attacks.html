@@ -2,161 +2,161 @@
 <html lang="en">
 <head>
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-3788374704176398">
+ <!-- Google AdSense -->
+ <meta name="google-adsense-account" content="ca-pub-3788374704176398">
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
-  <title>Phishing & IDN Homograph Attacks Explained | PixelCraft AI</title>
-  <meta name="description" content="Examine internationalized domain name (IDN) homograph attacks, lookalike Cyrillic domains, typosquatting, and how modern heuristic analyzers stop attacks." />
-  <meta name="keywords" content="idn homograph attack explained, lookalike domain phishing, punycode domain spoofing, typosquatting detection, phishing scam defense guide, how to spot fake urls" />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-  <meta name="author" content="PixelCraft AI" />
-  <meta name="publisher" content="PixelCraft AI" />
-  <meta name="language" content="English" />
-  <meta name="distribution" content="Global" />
-  <meta name="revisit-after" content="1 days" />
-  <meta name="rating" content="Safe For Kids" />
-  <link rel="canonical" href="https://pixelcraftaitools.com/blog/the-dangers-of-phishing-and-homograph-attacks.html" />
+ <!-- ===== ENTERPRISE SEO & SEARCH ENGINE META TAGS ===== -->
+ <title>Phishing & IDN Homograph Attacks Explained | PixelCraft AI</title>
+ <meta name="description" content="Examine internationalized domain name (IDN) homograph attacks, lookalike Cyrillic domains, typosquatting, and how modern heuristic analyzers stop attacks." />
+ <meta name="keywords" content="idn homograph attack explained, lookalike domain phishing, punycode domain spoofing, typosquatting detection, phishing scam defense guide, how to spot fake urls" />
+ <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+ <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+ <meta name="author" content="PixelCraft AI" />
+ <meta name="publisher" content="PixelCraft AI" />
+ <meta name="language" content="English" />
+ <meta name="distribution" content="Global" />
+ <meta name="revisit-after" content="1 days" />
+ <meta name="rating" content="Safe For Kids" />
+ <link rel="canonical" href="https://pixelcraftaitools.com/blog/the-dangers-of-phishing-and-homograph-attacks.html" />
 
-  <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="PixelCraft AI" />
-  <meta property="og:url" content="https://pixelcraftaitools.com/blog/the-dangers-of-phishing-and-homograph-attacks.html" />
-  <meta property="og:title" content="Phishing & IDN Homograph Attacks Explained | PixelCraft AI" />
-  <meta property="og:description" content="Examine internationalized domain name (IDN) homograph attacks, lookalike Cyrillic domains, typosquatting, and how modern heuristic analyzers stop attacks." />
-  <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:locale" content="en_IN" />
-  <meta property="og:locale:alternate" content="en_US" />
+ <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+ <meta property="og:type" content="article" />
+ <meta property="og:site_name" content="PixelCraft AI" />
+ <meta property="og:url" content="https://pixelcraftaitools.com/blog/the-dangers-of-phishing-and-homograph-attacks.html" />
+ <meta property="og:title" content="Phishing & IDN Homograph Attacks Explained | PixelCraft AI" />
+ <meta property="og:description" content="Examine internationalized domain name (IDN) homograph attacks, lookalike Cyrillic domains, typosquatting, and how modern heuristic analyzers stop attacks." />
+ <meta property="og:image" content="https://pixelcraftaitools.com/og-image.png" />
+ <meta property="og:image:width" content="1200" />
+ <meta property="og:image:height" content="630" />
+ <meta property="og:image:type" content="image/png" />
+ <meta property="og:locale" content="en_IN" />
+ <meta property="og:locale:alternate" content="en_US" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@PixelCraftAI" />
-  <meta name="twitter:title" content="Phishing & IDN Homograph Attacks Explained | PixelCraft AI" />
-  <meta name="twitter:description" content="Examine internationalized domain name (IDN) homograph attacks, lookalike Cyrillic domains, typosquatting, and how modern heuristic analyzers stop attacks." />
-  <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
+ <!-- Twitter Card -->
+ <meta name="twitter:card" content="summary_large_image" />
+ <meta name="twitter:site" content="@PixelCraftAI" />
+ <meta name="twitter:title" content="Phishing & IDN Homograph Attacks Explained | PixelCraft AI" />
+ <meta name="twitter:description" content="Examine internationalized domain name (IDN) homograph attacks, lookalike Cyrillic domains, typosquatting, and how modern heuristic analyzers stop attacks." />
+ <meta name="twitter:image" content="https://pixelcraftaitools.com/og-image.png" />
 
-  <!-- Technical SEO & PWA -->
-  <meta name="theme-color" content="#2563eb" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
-  <meta name="application-name" content="PixelCraft AI" />
-  <link rel="manifest" href="../manifest.json" />
-  <link rel="icon" href="../logo.jpg?v=5" />
+ <!-- Technical SEO & PWA -->
+ <meta name="theme-color" content="#2563eb" />
+ <meta name="mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-title" content="PixelCraft AI" />
+ <meta name="application-name" content="PixelCraft AI" />
+ <link rel="manifest" href="../manifest.json" />
+ <link rel="icon" href="../logo.jpg?v=5" />
 
-  <!-- Schema.org BlogPosting JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "The Dangers of Phishing & IDN Homograph Attacks",
-    "description": "Examine internationalized domain name (IDN) homograph attacks, lookalike Cyrillic domains, typosquatting, and how modern heuristic analyzers stop attacks.",
-    "image": "https://pixelcraftaitools.com/og-image.png",
-    "author": {
-      "@type": "Organization",
-      "name": "PixelCraft AI Security Research Team"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "PixelCraft AI",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://pixelcraftaitools.com/logo.jpg"
-      }
-    },
-    "datePublished": "2026-08-18",
-    "dateModified": "2026-10-11",
-    "mainEntityOfPage": "https://pixelcraftaitools.com/blog/the-dangers-of-phishing-and-homograph-attacks.html"
-  }
-  </script>
+ <!-- Schema.org BlogPosting JSON-LD -->
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "The Dangers of Phishing & IDN Homograph Attacks",
+ "description": "Examine internationalized domain name (IDN) homograph attacks, lookalike Cyrillic domains, typosquatting, and how modern heuristic analyzers stop attacks.",
+ "image": "https://pixelcraftaitools.com/og-image.png",
+ "author": {
+ "@type": "Organization",
+ "name": "PixelCraft AI Security Research Team"
+ },
+ "publisher": {
+ "@type": "Organization",
+ "name": "PixelCraft AI",
+ "logo": {
+ "@type": "ImageObject",
+ "url": "https://pixelcraftaitools.com/logo.jpg"
+ }
+ },
+ "datePublished": "2026-08-18",
+ "dateModified": "2026-10-11",
+ "mainEntityOfPage": "https://pixelcraftaitools.com/blog/the-dangers-of-phishing-and-homograph-attacks.html"
+ }
+ </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="../css/style.css" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="stylesheet" href="../css/style.css" />
 
 </head>
 <body>
-  <div id="toast-container" class="toast-container"></div>
+ <div id="toast-container" class="toast-container"></div>
 
-  <nav class="navbar" id="navbar">
-  <div class="nav-container">
-    <a href="/" class="nav-logo">
-      <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
-      <span>PixelCraft AI</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/#tools">All Tools</a></li>
-      <li><a href="/#features">Features</a></li>
-      <li><a href="/">Research Blog</a></li>
-      <li><a href="../contact-us.html">Contact</a></li>
-    </ul>
-    <div class="nav-actions">
-      <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
-        <span style="font-size: 1.15rem;">🌙</span>
-      </button>
-      <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
-      </button>
-      <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-        </svg>
-        <span>Sign In</span>
-      </a>
-    </div>
-  </div>
+ <nav class="navbar" id="navbar">
+ <div class="nav-container">
+ <a href="/" class="nav-logo">
+ <img src="../logo.jpg?v=5" alt="PixelCraft Logo" style="height: 38px; border-radius: 8px; vertical-align: middle;">
+ <span>PixelCraft AI</span>
+ </a>
+ <ul class="nav-links">
+ <li><a href="/#tools">All Tools</a></li>
+ <li><a href="/#features">Features</a></li>
+ <li><a href="/">Research Blog</a></li>
+ <li><a href="../contact-us.html">Contact</a></li>
+ </ul>
+ <div class="nav-actions">
+ <button id="theme-toggle-btn" class="nav-icon-btn" title="Toggle Theme (Dark / Light)" aria-label="Toggle Theme">
+ <span style="font-size: 1.15rem;">🌙</span>
+ </button>
+ <button id="settings-toggle-btn" class="nav-icon-btn" title="Platform Settings & Account Info" aria-label="Open Platform Settings">
+ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+ <circle cx="12" cy="12" r="3"></circle>
+ <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+ </svg>
+ </button>
+ <a href="/auth/google" class="nav-cta" id="nav-auth-btn">
+ <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+ <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+ </svg>
+ <span>Sign In</span>
+ </a>
+ </div>
+ </div>
 </nav>
 
-  <article class="article-container">
-    <div class="article-breadcrumb">
-      <a href="/">Home</a>
-      <span>&rsaquo;</span>
-      <a href="/">Research Blog</a>
-      <span>&rsaquo;</span>
-      <span>Homograph & Punycode Attacks</span>
-    </div>
+ <article class="article-container">
+ <div class="article-breadcrumb">
+ <a href="/">Home</a>
+ <span>&rsaquo;</span>
+ <a href="/">Research Blog</a>
+ <span>&rsaquo;</span>
+ <span>Homograph & Punycode Attacks</span>
+ </div>
 
-    <div class="article-card">
-      <span class="post-badge">Threat Intelligence & DNS</span>
-      <h1>The Complete Guide to Phishing, IDN Homograph & Punycode Attacks</h1>
+ <div class="article-card">
+ <span class="post-badge">Threat Intelligence & DNS</span>
+ <h1>The Complete Guide to Phishing, IDN Homograph & Punycode Attacks</h1>
 
-      <div class="post-meta">
-        <span>✍️ By PixelCraft AI Security Research Team</span>
-        <span>📅 Aug 18, 2026 (Updated Oct 11, 2026)</span>
-        <span>⏱️ 10 Min Read</span>
-        <span>🔒 Peer-Reviewed Technical Paper</span>
-      </div>
+ <div class="post-meta">
+ <span>✍️ By PixelCraft AI Security Research Team</span>
+ <span>📅 Aug 18, 2026 (Updated Oct 11, 2026)</span>
+ <span>⏱️ 10 Min Read</span>
+ <span>🔒 Peer-Reviewed Technical Paper</span>
+ </div>
 
-      <div class="editorial-box">
-        <strong>Editorial Disclosure:</strong> Researched and authored by the PixelCraft AI Cybersecurity Research Team. Fact-checked and technical review led by Swapnil Biradar (Lead Security Architect). Conforms to IETF RFC standards and Unicode Consortium security specifications. Feedback or corrections: <em>support.pixelcraft205@gmail.com</em>.
-      </div>
+ <div class="editorial-box">
+ <strong>Editorial Disclosure:</strong> Researched and authored by the PixelCraft AI Cybersecurity Research Team. Fact-checked and technical review led by Swapnil Biradar (Lead Security Architect). Conforms to IETF RFC standards and Unicode Consortium security specifications. Feedback or corrections: <em>support.pixelcraft205@gmail.com</em>.
+ </div>
 
-      <p>In modern operational security (OPSEC), human visual inspection is often treated as the frontline filter against deceptive links. When evaluating an email or SMS, security-conscious users are trained to look closely at the URL bar: <em>"Does it say bank.com or something else?"</em> However, the underlying architecture of the internet's Domain Name System (DNS) harbors an inherent visual ambiguity known as the <strong>IDN Homograph Attack</strong>.</p>
+ <p>In modern operational security (OPSEC), human visual inspection is often treated as the frontline filter against deceptive links. When evaluating an email or SMS, security-conscious users are trained to look closely at the URL bar: <em>"Does it say bank.com or something else?"</em> However, the underlying architecture of the internet's Domain Name System (DNS) harbors an inherent visual ambiguity known as the <strong>IDN Homograph Attack</strong>.</p>
 
-      <div class="callout-box">
-        <strong>Core Vulnerability:</strong> A homograph attack exploits character sets across different human alphabets (such as Latin, Cyrillic, Greek, and Hebrew) that render identically in common digital typefaces. An attacker can register a domain that looks 100% identical to a legitimate corporate brand, completely deceiving naked-eye visual verification.
-      </div>
+ <div class="callout-box">
+ <strong>Core Vulnerability:</strong> A homograph attack exploits character sets across different human alphabets (such as Latin, Cyrillic, Greek, and Hebrew) that render identically in common digital typefaces. An attacker can register a domain that looks 100% identical to a legitimate corporate brand, completely deceiving naked-eye visual verification.
+ </div>
 
-      <h2>1. The Technical Roots: Internationalized Domain Names (IDNs)</h2>
-      <p>The original DNS standard (RFC 1034) was designed strictly around ASCII characters: letters <code>a-z</code>, digits <code>0-9</code>, and hyphens <code>-</code>. As the internet expanded globally, this Anglo-centric constraint created substantial usability barriers for billions of non-Latin speakers worldwide.</p>
+ <h2>1. The Technical Roots: Internationalized Domain Names (IDNs)</h2>
+ <p>The original DNS standard (RFC 1034) was designed strictly around ASCII characters: letters <code>a-z</code>, digits <code>0-9</code>, and hyphens <code>-</code>. As the internet expanded globally, this Anglo-centric constraint created substantial usability barriers for billions of non-Latin speakers worldwide.</p>
 
-      <p>To accommodate multilingual top-level and second-level domains without overhauling core internet root servers, the Internet Engineering Task Force (IETF) ratified the <strong>Internationalized Domain Names in Applications (IDNA)</strong> standard (RFC 3490 / RFC 5890). IDNA introduced a clever client-side conversion protocol called <strong>Punycode</strong> (RFC 3492).</p>
+ <p>To accommodate multilingual top-level and second-level domains without overhauling core internet root servers, the Internet Engineering Task Force (IETF) ratified the <strong>Internationalized Domain Names in Applications (IDNA)</strong> standard (RFC 3490 / RFC 5890). IDNA introduced a clever client-side conversion protocol called <strong>Punycode</strong> (RFC 3492).</p>
 
-      <h2>2. Understanding Punycode: How Unicode Maps to ASCII</h2>
-      <p>Punycode is a reversible Bootstring encoding algorithm that translates arbitrary Unicode strings into a restricted ASCII character subset. Every Punycode-encoded domain is prefixed with the four-character marker <code>xn--</code> (known as the ACE prefix - ASCII Compatible Encoding).</p>
+ <h2>2. Understanding Punycode: How Unicode Maps to ASCII</h2>
+ <p>Punycode is a reversible Bootstring encoding algorithm that translates arbitrary Unicode strings into a restricted ASCII character subset. Every Punycode-encoded domain is prefixed with the four-character marker <code>xn--</code> (known as the ACE prefix - ASCII Compatible Encoding).</p>
 
-      <p>Consider the Cyrillic lowercase letter <strong>а</strong> (Unicode codepoint <code>U+0430</code>). In the Lucida Console, Arial, and Roboto font families, Cyrillic <code>а</code> is visually indistinguishable from Latin lowercase <strong>a</strong> (<code>U+0061</code>).</p>
+ <p>Consider the Cyrillic lowercase letter <strong>а</strong> (Unicode codepoint <code>U+0430</code>). In the Lucida Console, Arial, and Roboto font families, Cyrillic <code>а</code> is visually indistinguishable from Latin lowercase <strong>a</strong> (<code>U+0061</code>).</p>
 
-      <div class="code-snippet">
+ <div class="code-snippet">
 // Legitimate Domain (All Latin ASCII)
 URL: https://apple.com
 Hex Bytes: 61 70 70 6c 65 2e 63 6f 6d
@@ -166,164 +166,164 @@ DNS Query: apple.com
 Unicode String: \u0430pple.com
 Punycode Encoding: xn--pple-43d.com
 DNS Query: xn--pple-43d.com
-      </div>
+ </div>
 
-      <p>When the victim types or clicks the spoofed link, DNS resolvers never see <code>apple.com</code>; they resolve the server IP mapped to <code>xn--pple-43d.com</code>, delivering the victim straight into an attacker-controlled credential harvesting portal equipped with a valid, trusted TLS/SSL certificate.</p>
+ <p>When the victim types or clicks the spoofed link, DNS resolvers never see <code>apple.com</code>; they resolve the server IP mapped to <code>xn--pple-43d.com</code>, delivering the victim straight into an attacker-controlled credential harvesting portal equipped with a valid, trusted TLS/SSL certificate.</p>
 
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Attack Vector</th>
-            <th>Primary Mechanism</th>
-            <th>Example Transformation</th>
-            <th>Detection Difficulty</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>IDN Homoglyph</strong></td>
-            <td>Cross-script visual mimicry (Cyrillic/Greek)</td>
-            <td><code>google.com</code> vs <code>gооgle.com</code> (Cyrillic 'о')</td>
-            <td>Extreme (Visually Identical)</td>
-          </tr>
-          <tr>
-            <td><strong>Typosquatting</strong></td>
-            <td>Common human keyboard errors / omissions</td>
-            <td><code>goolge.com</code>, <code>paypa1.com</code></td>
-            <td>Moderate (Visible upon scrutiny)</td>
-          </tr>
-          <tr>
-            <td><strong>Combosquatting</strong></td>
-            <td>Adding legitimate service keywords</td>
-            <td><code>paypal-security-verify.com</code></td>
-            <td>Low to Moderate (Grammatically suspicious)</td>
-          </tr>
-          <tr>
-            <td><strong>Bitsquatting</strong></td>
-            <td>Hardware RAM single-bit memory flips</td>
-            <td><code>amzon.com</code>, <code>epay.com</code></td>
-            <td>Invisible (Triggered by faulty DRAM hardware)</td>
-          </tr>
-        </tbody>
-      </table>
+ <table class="data-table">
+ <thead>
+ <tr>
+ <th>Attack Vector</th>
+ <th>Primary Mechanism</th>
+ <th>Example Transformation</th>
+ <th>Detection Difficulty</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td><strong>IDN Homoglyph</strong></td>
+ <td>Cross-script visual mimicry (Cyrillic/Greek)</td>
+ <td><code>google.com</code> vs <code>gооgle.com</code> (Cyrillic 'о')</td>
+ <td>Extreme (Visually Identical)</td>
+ </tr>
+ <tr>
+ <td><strong>Typosquatting</strong></td>
+ <td>Common human keyboard errors / omissions</td>
+ <td><code>goolge.com</code>, <code>paypa1.com</code></td>
+ <td>Moderate (Visible upon scrutiny)</td>
+ </tr>
+ <tr>
+ <td><strong>Combosquatting</strong></td>
+ <td>Adding legitimate service keywords</td>
+ <td><code>paypal-security-verify.com</code></td>
+ <td>Low to Moderate (Grammatically suspicious)</td>
+ </tr>
+ <tr>
+ <td><strong>Bitsquatting</strong></td>
+ <td>Hardware RAM single-bit memory flips</td>
+ <td><code>amzon.com</code>, <code>epay.com</code></td>
+ <td>Invisible (Triggered by faulty DRAM hardware)</td>
+ </tr>
+ </tbody>
+ </table>
 
-      <h2>3. The Browser Defense Matrix & Where Defenses Still Fail</h2>
-      <p>Modern web browsers have implemented mitigation heuristics defined by Unicode Technical Report #36 (Security Considerations). Rather than rendering raw Unicode glyphs blindly, browsers enforce <em>confusable detection rules</em>:</p>
-      <ul>
-        <li><strong>Mixed-Script Detection:</strong> If a single domain label contains characters from two distinct scripts (e.g., Latin mixed with Cyrillic), the browser refuses to display the rendered Unicode and instead forces the raw Punycode (<code>xn--...</code>) in the address bar.</li>
-        <li><strong>Whole-Script Confusables:</strong> Attackers countered mixed-script filters by registering domains where <em>every single character</em> belongs to a single non-Latin script (for example, completely Cyrillic <code>аvito.ru</code> or Greek characters). Browser vendors maintain whitelists of accepted national TLDs and character combinations to curb this vector.</li>
-      </ul>
+ <h2>3. The Browser Defense Matrix & Where Defenses Still Fail</h2>
+ <p>Modern web browsers have implemented mitigation heuristics defined by Unicode Technical Report #36 (Security Considerations). Rather than rendering raw Unicode glyphs blindly, browsers enforce <em>confusable detection rules</em>:</p>
+ <ul>
+ <li><strong>Mixed-Script Detection:</strong> If a single domain label contains characters from two distinct scripts (e.g., Latin mixed with Cyrillic), the browser refuses to display the rendered Unicode and instead forces the raw Punycode (<code>xn--...</code>) in the address bar.</li>
+ <li><strong>Whole-Script Confusables:</strong> Attackers countered mixed-script filters by registering domains where <em>every single character</em> belongs to a single non-Latin script (for example, completely Cyrillic <code>аvito.ru</code> or Greek characters). Browser vendors maintain whitelists of accepted national TLDs and character combinations to curb this vector.</li>
+ </ul>
 
-      <div class="callout-box">
-        <strong>The Remaining Attack Surfaces:</strong>
-        While Google Chrome and Firefox actively flag suspicious IDN domains in their URL bars, homograph links still bypass filters in:
-        <ul style="margin: 10px 0 0; padding-left: 20px;">
-          <li>Mobile messaging apps (WhatsApp, Telegram, Signal, iMessage) which render links without full Punycode address bars.</li>
-          <li>Email clients (Outlook desktop, Thunderbird, Mail.app) that display rich HTML hyperlinks without displaying Punycode conversions.</li>
-          <li>QR Codes in physical spaces (Quishing) where mobile camera scanners only show the rendered Unicode preview text.</li>
-        </ul>
-      </div>
+ <div class="callout-box">
+ <strong>The Remaining Attack Surfaces:</strong>
+ While Google Chrome and Firefox actively flag suspicious IDN domains in their URL bars, homograph links still bypass filters in:
+ <ul style="margin: 10px 0 0; padding-left: 20px;">
+ <li>Mobile messaging apps (WhatsApp, Telegram, Signal, iMessage) which render links without full Punycode address bars.</li>
+ <li>Email clients (Outlook desktop, Thunderbird, Mail.app) that display rich HTML hyperlinks without displaying Punycode conversions.</li>
+ <li>QR Codes in physical spaces (Quishing) where mobile camera scanners only show the rendered Unicode preview text.</li>
+ </ul>
+ </div>
 
-      <h2>4. Practical Technical Defenses for Engineers & Users</h2>
-      <ol>
-        <li><strong>Enforce Password Manager Autofill:</strong> Password managers evaluate URLs based on strict cryptographic domain origin matching, not rendered glyphs. A password manager will never offer to auto-fill credentials for <code>apple.com</code> on <code>xn--pple-43d.com</code>.</li>
-        <li><strong>Deploy Automated Heuristic Link Scanners:</strong> Security gateways and email inspection pipelines should automatically execute Punycode conversion and calculate the Damerau-Levenshtein distance between incoming links and known critical domains.</li>
-        <li><strong>Register Defensive TLDs and Variants:</strong> Brand protection teams should identify high-risk homoglyph variants across Greek and Cyrillic scripts and register or block them through trademark clearinghouses.</li>
-        <li><strong>Strict Transport Security (HSTS) Preloading:</strong> Ensure company domains are included in browser HSTS preload lists so that man-in-the-middle downgrade attempts on homoglyph sites trigger explicit security warnings.</li>
-      </ol>
+ <h2>4. Practical Technical Defenses for Engineers & Users</h2>
+ <ol>
+ <li><strong>Enforce Password Manager Autofill:</strong> Password managers evaluate URLs based on strict cryptographic domain origin matching, not rendered glyphs. A password manager will never offer to auto-fill credentials for <code>apple.com</code> on <code>xn--pple-43d.com</code>.</li>
+ <li><strong>Deploy Automated Heuristic Link Scanners:</strong> Security gateways and email inspection pipelines should automatically execute Punycode conversion and calculate the Damerau-Levenshtein distance between incoming links and known critical domains.</li>
+ <li><strong>Register Defensive TLDs and Variants:</strong> Brand protection teams should identify high-risk homoglyph variants across Greek and Cyrillic scripts and register or block them through trademark clearinghouses.</li>
+ <li><strong>Strict Transport Security (HSTS) Preloading:</strong> Ensure company domains are included in browser HSTS preload lists so that man-in-the-middle downgrade attempts on homoglyph sites trigger explicit security warnings.</li>
+ </ol>
 
-      
-      <!-- CONTEXTUAL BLOG-TO-TOOL CTA (MID-ARTICLE) -->
-      <div class="blog-tool-cta-card">
-        <div class="blog-tool-cta-header">
-          <span class="blog-tool-cta-icon">🛡️</span>
-          <h3 class="blog-tool-cta-title">Analyze Suspicious Links for IDN Homoglyphs</h3>
-        </div>
-        <p class="blog-tool-cta-desc">
-          Evaluate URLs using Shannon entropy, punycode spoof detection, and credential harvester heuristics in isolated memory.
-        </p>
-        <div class="blog-tool-cta-actions">
-          <a href="../tools/phishing-scanner.html" class="tool-cta-btn" data-tool-cta="true" data-dest-tool="phishing-scanner.html" data-cta-location="blog_mid" data-content-type="blog_article">
-            <span>🚀 Open Phishing Link Scanner</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="../tools/qr-generator.html" class="tool-cta-secondary-link" data-tool-cta="true" data-dest-tool="qr-generator.html" data-cta-location="blog_mid_secondary" data-content-type="blog_article">
-            <span>Generate secure, direct QR links? QR Generator &rarr;</span>
-          </a>
-        </div>
-      </div>
+ 
+ <!-- CONTEXTUAL BLOG-TO-TOOL CTA (MID-ARTICLE) -->
+ <div class="blog-tool-cta-card">
+ <div class="blog-tool-cta-header">
+ <span class="blog-tool-cta-icon">🛡️</span>
+ <h3 class="blog-tool-cta-title">Analyze Suspicious Links for IDN Homoglyphs</h3>
+ </div>
+ <p class="blog-tool-cta-desc">
+ Evaluate URLs using Shannon entropy, punycode spoof detection, and credential harvester heuristics in isolated memory.
+ </p>
+ <div class="blog-tool-cta-actions">
+ <a href="../tools/phishing-scanner.html" class="tool-cta-btn" data-tool-cta="true" data-dest-tool="phishing-scanner.html" data-cta-location="blog_mid" data-content-type="blog_article">
+ <span>🚀 Open Phishing Link Scanner</span>
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+ </a>
+ <a href="../tools/qr-generator.html" class="tool-cta-secondary-link" data-tool-cta="true" data-dest-tool="qr-generator.html" data-cta-location="blog_mid_secondary" data-content-type="blog_article">
+ <span>Generate secure, direct QR links? QR Generator &rarr;</span>
+ </a>
+ </div>
+ </div>
 
 <h2>5. Frequently Asked Questions</h2>
-      <h3>Can an attacker obtain a valid HTTPS padlock for a homograph domain?</h3>
-      <p>Yes. Certificate Authorities (CAs) like Let's Encrypt, DigiCert, and Sectigo issue certificates to whoever controls the DNS records of a domain. Because the attacker legitimately registered the Punycode domain <code>xn--pple-43d.com</code>, the automated ACME challenge succeeds, granting an authentic SSL/TLS certificate with a valid padlock icon.</p>
+ <h3>Can an attacker obtain a valid HTTPS padlock for a homograph domain?</h3>
+ <p>Yes. Certificate Authorities (CAs) like Let's Encrypt, DigiCert, and Sectigo issue certificates to whoever controls the DNS records of a domain. Because the attacker legitimately registered the Punycode domain <code>xn--pple-43d.com</code>, the automated ACME challenge succeeds, granting an authentic SSL/TLS certificate with a valid padlock icon.</p>
 
-      <h3>How can I detect if a link is using Punycode before clicking?</h3>
-      <p>You can inspect the URL by pasting it into a raw text editor or passing it through an automated threat analyzer. If the domain contains non-ASCII codepoints or transforms into an <code>xn--</code> string, it is utilizing IDNA encoding.</p>
+ <h3>How can I detect if a link is using Punycode before clicking?</h3>
+ <p>You can inspect the URL by pasting it into a raw text editor or passing it through an automated threat analyzer. If the domain contains non-ASCII codepoints or transforms into an <code>xn--</code> string, it is utilizing IDNA encoding.</p>
 
-            <div class="related-tools">
-        <h3>Recommended Security & Verification Tools</h3>
-        <p>Enhance your productivity with PixelCraft AI's client-side, zero-knowledge utilities:</p>
-        <div class="blog-related-grid">
-          <a href="../tools/phishing-scanner.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="phishing-scanner.html" data-cta-location="blog_end" data-content-type="blog_article">
-            <div>
-              <div style="font-size: 1.5rem; margin-bottom: 6px;">🛡️</div>
-              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Phishing & Malware Scanner</strong>
-              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Detect IDN homograph impersonations, tracking tokens, and malicious URL redirects.</span>
-            </div>
-            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
-          </a>
-          <a href="../tools/qr-generator.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="qr-generator.html" data-cta-location="blog_end" data-content-type="blog_article">
-            <div>
-              <div style="font-size: 1.5rem; margin-bottom: 6px;">📱</div>
-              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Custom QR Generator</strong>
-              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Generate clean, transparent QR codes with zero intermediate tracking redirects.</span>
-            </div>
-            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
-          </a>
-          <a href="../tools/exif-viewer.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="exif-viewer.html" data-cta-location="blog_end" data-content-type="blog_article">
-            <div>
-              <div style="font-size: 1.5rem; margin-bottom: 6px;">🔍</div>
-              <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">EXIF Data Viewer</strong>
-              <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Verify image origin and metadata headers to detect forged or tampered visual assets.</span>
-            </div>
-            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
-          </a>
-        </div>
-      </div>
+ <div class="related-tools">
+ <h3>Recommended Security & Verification Tools</h3>
+ <p>Enhance your productivity with PixelCraft AI's client-side, zero-knowledge utilities:</p>
+ <div class="blog-related-grid">
+ <a href="../tools/phishing-scanner.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="phishing-scanner.html" data-cta-location="blog_end" data-content-type="blog_article">
+ <div>
+ <div style="font-size: 1.5rem; margin-bottom: 6px;">🛡️</div>
+ <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Phishing & Malware Scanner</strong>
+ <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Detect IDN homograph impersonations, tracking tokens, and malicious URL redirects.</span>
+ </div>
+ <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+ </a>
+ <a href="../tools/qr-generator.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="qr-generator.html" data-cta-location="blog_end" data-content-type="blog_article">
+ <div>
+ <div style="font-size: 1.5rem; margin-bottom: 6px;">📱</div>
+ <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">Custom QR Generator</strong>
+ <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Generate clean, transparent QR codes with zero intermediate tracking redirects.</span>
+ </div>
+ <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+ </a>
+ <a href="../tools/exif-viewer.html" class="blog-related-card" data-tool-cta="true" data-dest-tool="exif-viewer.html" data-cta-location="blog_end" data-content-type="blog_article">
+ <div>
+ <div style="font-size: 1.5rem; margin-bottom: 6px;">🔍</div>
+ <strong style="color: var(--text-heading); display: block; margin-bottom: 4px;">EXIF Data Viewer</strong>
+ <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; display: block;">Verify image origin and metadata headers to detect forged or tampered visual assets.</span>
+ </div>
+ <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: 10px; display: inline-flex; align-items: center; gap: 4px;">Launch Tool &rarr;</span>
+ </a>
+ </div>
+ </div>
 
-      <div class="references-section">
-        <h3 style="color: #e2e8f0; font-size: 1.1rem; margin-bottom: 12px;">Standards, Specifications & Research Citations</h3>
-        <ol>
-          <li>Costello, A. (2003). <em>RFC 3492 - Punycode: A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA)</em>. IETF Network Working Group. <a href="https://datatracker.ietf.org/doc/html/rfc3492" target="_blank" rel="noopener">RFC 3492</a>.</li>
-          <li>Klensin, J. (2010). <em>RFC 5890 - Internationalized Domain Names for Applications (IDNA): Definitions and Document Framework</em>. IETF. <a href="https://datatracker.ietf.org/doc/html/rfc5890" target="_blank" rel="noopener">RFC 5890</a>.</li>
-          <li>Davis, M., & Suignard, M. (2022). <em>Unicode Technical Report #36: Unicode Security Considerations</em>. Unicode Consortium. <a href="https://www.unicode.org/reports/tr36/" target="_blank" rel="noopener">Unicode TR#36</a>.</li>
-          <li>Zheng, X. (2017). <em>Phishing with Unicode Domains: An Investigation into Browser Confusable Rendering Vulnerabilities</em>. Wordfence Threat Intelligence Report.</li>
-          <li>National Institute of Standards and Technology (NIST). (2020). <em>SP 800-63B: Digital Identity Guidelines - Authentication and Lifecycle Management</em>. U.S. Dept of Commerce.</li>
-        </ol>
-      </div>
+ <div class="references-section">
+ <h3 style="color: #e2e8f0; font-size: 1.1rem; margin-bottom: 12px;">Standards, Specifications & Research Citations</h3>
+ <ol>
+ <li>Costello, A. (2003). <em>RFC 3492 - Punycode: A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA)</em>. IETF Network Working Group. <a href="https://datatracker.ietf.org/doc/html/rfc3492" target="_blank" rel="noopener">RFC 3492</a>.</li>
+ <li>Klensin, J. (2010). <em>RFC 5890 - Internationalized Domain Names for Applications (IDNA): Definitions and Document Framework</em>. IETF. <a href="https://datatracker.ietf.org/doc/html/rfc5890" target="_blank" rel="noopener">RFC 5890</a>.</li>
+ <li>Davis, M., & Suignard, M. (2022). <em>Unicode Technical Report #36: Unicode Security Considerations</em>. Unicode Consortium. <a href="https://www.unicode.org/reports/tr36/" target="_blank" rel="noopener">Unicode TR#36</a>.</li>
+ <li>Zheng, X. (2017). <em>Phishing with Unicode Domains: An Investigation into Browser Confusable Rendering Vulnerabilities</em>. Wordfence Threat Intelligence Report.</li>
+ <li>National Institute of Standards and Technology (NIST). (2020). <em>SP 800-63B: Digital Identity Guidelines - Authentication and Lifecycle Management</em>. U.S. Dept of Commerce.</li>
+ </ol>
+ </div>
 
-    </div>
-  </article>
+ </div>
+ </article>
 
-  <footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
-  <div style="max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
-      <a href="../about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
-      <a href="../privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
-      <a href="../terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
-      <a href="../disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
-      <a href="../cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
-      <a href="/" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
-      <a href="../contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
-    </div>
-    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
-      &copy; 2026 PixelCraft AI. All rights reserved.<br>
-      A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
-    </p>
-  </div>
+ <footer class="footer" style="background: var(--surface-card); padding: 50px 20px 30px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;">
+ <div style="max-width: 1200px; margin: 0 auto;">
+ <div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 24px;">
+ <a href="../about-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">About Us</a>
+ <a href="../privacy-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+ <a href="../terms-conditions.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Terms of Service</a>
+ <a href="../disclaimer.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Disclaimer</a>
+ <a href="../cookies-policy.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Cookies Policy</a>
+ <a href="/" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Research</a>
+ <a href="../contact-us.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Contact</a>
+ </div>
+ <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+ &copy; 2026 PixelCraft AI. All rights reserved.<br>
+ A Decentralized Privacy, Cryptography &amp; Digital Security Toolset.
+ </p>
+ </div>
 </footer>
 
-  <script src="../js/utils.js"></script>
-  <script src="../js/cookie-consent.js"></script>
+ <script src="../js/utils.js"></script>
+ <script src="../js/cookie-consent.js"></script>
 </body>
 </html>
