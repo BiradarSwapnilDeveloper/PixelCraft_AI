@@ -454,7 +454,7 @@
       <div style="margin-bottom: 12px; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--primary-light); color: var(--primary);">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
       </div>
-      <h1>Audio &amp; Video Steganography — Hide Secret Payloads in Media</h1>
+      <h1>Audio &amp; Video Steganography - Hide Secret Payloads in Media</h1>
       <p>Embed encrypted confidential messages and files inside WAV audio tracks and MP4 video containers without audible distortion. Utilizes AES-256 encryption and client-side container multiplexing so your hidden payload remains secure and undetectable.</p>
     <div id="quick-start-guide" class="quick-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px auto 8px auto; max-width: 900px; text-align: left;">
       <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;">
@@ -2000,7 +2000,7 @@
     </h2>
 
     <p style="font-size: 1.1rem; color: var(--text-body); margin-bottom: 24px; font-weight: 400;">
-      While cryptography focuses on scrambling the contents of a message so that unintended parties cannot decipher it, <strong>steganography</strong> conceals the very existence of the covert communication. In adversarial environments where possessing encrypted files invites targeted scrutiny, device confiscation, or hostile inspection, steganography enables secure, undetectable transmission. By embedding encrypted ciphertext inside harmless multimedia files—such as ambient voice notes, podcast recordings, MP4 video clips, or high-definition WebM films—multimedia steganography exploits psychoacoustic perception limits and container stream multiplexing to build resilient, deniable communication channels.
+      While cryptography focuses on scrambling the contents of a message so that unintended parties cannot decipher it, <strong>steganography</strong> conceals the very existence of the covert communication. In adversarial environments where possessing encrypted files invites targeted scrutiny, device confiscation, or hostile inspection, steganography enables secure, undetectable transmission. By embedding encrypted ciphertext inside harmless multimedia files (such as ambient voice notes, podcast recordings, MP4 video clips, or high-definition WebM films), multimedia steganography exploits psychoacoustic perception limits and container stream multiplexing to build resilient, deniable communication channels.
     </p>
 
     <div class="callout-box" style="margin: 28px 0;">
@@ -2019,7 +2019,7 @@
       In digital audio, continuous analog pressure waves are converted into discrete numeric representations via pulse-code modulation (PCM). Standard studio-quality audio samples acoustic amplitudes 44,100 or 48,000 times per second per channel at a quantization resolution of 16 bits. Each 16-bit signed integer represents an instantaneous sample amplitude between -32,768 and +32,767.
     </p>
     <p>
-      The <strong>Least Significant Bit (LSB)</strong> algorithm targets the 16th bit—the numerical component with the smallest amplitude weight (representing a delta of 1 part in 65,536). Modifying this bit to mirror an encrypted payload bit causes an imperceptible amplitude fluctuation of less than 0.0015% of the total dynamic range, which sits comfortably beneath the thermal noise floor of analog recording microphones.
+      The <strong>Least Significant Bit (LSB)</strong> algorithm targets the 16th bit: the numerical component with the smallest amplitude weight (representing a delta of 1 part in 65,536). Modifying this bit to mirror an encrypted payload bit causes an imperceptible amplitude fluctuation of less than 0.0015% of the total dynamic range, which sits comfortably beneath the thermal noise floor of analog recording microphones.
     </p>
     <ul>
       <li><strong>Payload Serialization:</strong> The message is converted to UTF-8 bytes, encrypted via AES-256, sealed with an authenticated session header, and serialized into a stream of binary bits.</li>
@@ -2181,7 +2181,7 @@
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">
         <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-top: 0; margin-bottom: 8px;">Q4: What happens if I send the stego file over WhatsApp, Telegram, or Discord?</h4>
         <p style="margin: 0; font-size: 0.95rem; color: var(--text-body); line-height: 1.6;">
-          If you send video or audio via standard <em>Gallery/Photos sharing</em>, WhatsApp and other platforms run a server-side FFmpeg compression pipeline that recompresses frames, recalculates audio MDCT, and strips custom container atoms—destroying the secret. <strong>To guarantee 100% secret survival</strong>: Always download and send the <strong>🛡️ WhatsApp Armor (.ZIP)</strong> file or attach the media file via <strong>📎 Paperclip &rarr; 📄 Document (दस्तावेज़)</strong>. In Document mode, WhatsApp transmits binary streams bit-for-bit without server-side transcoding!
+          If you send video or audio via standard <em>Gallery/Photos sharing</em>, WhatsApp and other platforms run a server-side FFmpeg compression pipeline that recompresses frames, recalculates audio MDCT, and strips custom container atoms, destroying the secret. <strong>To guarantee 100% secret survival</strong>: Always download and send the <strong>🛡️ WhatsApp Armor (.ZIP)</strong> file or attach the media file via <strong>📎 Paperclip &rarr; 📄 Document (दस्तावेज़)</strong>. In Document mode, WhatsApp transmits binary streams bit-for-bit without server-side transcoding!
         </p>
       </div>
       <div style="background: var(--surface-subtle); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 16px;">

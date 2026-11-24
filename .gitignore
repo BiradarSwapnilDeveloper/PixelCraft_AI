@@ -26,6 +26,7 @@ tmp/
 # Backups
 *.bak
 *.zip
+backups/
 
 # Temporary maintenance & audit scripts
 audit_*.py
