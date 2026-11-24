@@ -338,15 +338,6 @@ jobs:
       issues: write
 
     steps:
-      - name: "👥 Require Two Production Approvals"
-        uses: trstringer/manual-approval@v1
-        timeout-minutes: 60
-        with:
-          secret: ${{ github.token }}
-          approvers: BiradarSwapnilDeveloper,vaseflamingoseguru205-debug
-          minimum-approvals: 2
-          issue-title: Approve PixelCraft AI production deployment
-
       - name: "🚢 Deploying Application to Render"
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
@@ -413,9 +404,8 @@ jobs:
           echo "    A[💻 Main branch run] --> B[🛡️ Security reports];" >> $GITHUB_STEP_SUMMARY
           echo "    B --> C[🤖 AI reports and remediation];" >> $GITHUB_STEP_SUMMARY
           echo "    C --> D[🔒 Final Snyk scan];" >> $GITHUB_STEP_SUMMARY
-          echo "    D --> E((👥 Two approvals));" >> $GITHUB_STEP_SUMMARY
-          echo "    E --> F[🚀 Render deploy hook];" >> $GITHUB_STEP_SUMMARY
-          echo "    F --> G[🌐 HTTP 200 health check];" >> $GITHUB_STEP_SUMMARY
+          echo "    D --> E[🚀 Render deploy hook];" >> $GITHUB_STEP_SUMMARY
+          echo "    E --> F[🌐 HTTP 200 health check];" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📡 Live Health Status" >> $GITHUB_STEP_SUMMARY
