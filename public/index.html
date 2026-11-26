@@ -101,6 +101,103 @@
  "Phishing URL Scanner",
  "AI Multilingual Dubbing"
  ]
+ },
+ {
+     "@type": "FAQPage",
+     "@id": "https://pixelcraftaitools.com/#faq",
+     "isPartOf": {
+         "@id": "https://pixelcraftaitools.com/#webpage"
+     },
+     "mainEntity": [
+         {
+             "@type": "Question",
+             "name": "Are my files uploaded to any remote server?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Most of our tools run entirely client-side in your browser sandbox without sending your media to our servers. Specialized utilities (like temporary PDF-to-Link sharing and AI Dubbing) operate ephemerally with strict 24-hour cleanup and zero persistent storage."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "Is PixelCraft AI really completely free?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Yes, all 15+ tools are completely free with no hidden charges, required subscriptions, or watermarks placed on exported files. No usage limits or quotas are enforced."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "What file formats are supported?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "We support all major industry formats including JPG, PNG, WebP, AVIF, GIF, BMP, TIFF, SVG, PDF, MP3, WAV, and MP4. You can convert seamlessly between supported formats using our in-browser utilities."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "How does client-side steganography work?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Our algorithms utilize Least Significant Bit (LSB) manipulation and Quantization Index Modulation (QIM). Payload text is encrypted with standard AES-256 prior to injection. The modified carrier image or audio file remains perceptually and audibly identical to standard statistical decoders."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "Can I run PixelCraft AI on mobile browsers?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Yes. The application is a fully responsive Progressive Web App (PWA) compatible with mobile Safari on iOS and Chrome on Android, maintaining client-side processing speeds on modern smartphones."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "Is there an arbitrary file size ceiling?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Because computation executes directly inside your browser's memory sandbox, file limits are dictated solely by your hardware's available RAM. Most tools handle 20MB to 50MB files with zero latency."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "Do I need to create an account or sign up to use the tools?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "No account creation, email registration, or login is required. You can immediately access and use all 15+ utilities without entering a password, phone number, or payment card."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "How does the Image Compressor reduce size to specific limits like 20KB or 50KB?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Our Image Compressor uses client-side Discrete Cosine Transform (DCT) quantization and iterative downsampling directly within an offscreen HTML5 Canvas to meet strict upload specifications for exams and government portals without distorting aspect ratios."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "Can I use PixelCraft AI tools offline without an active internet connection?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Yes! PixelCraft AI is a certified Progressive Web App (PWA). Once installed to your desktop or mobile home screen, our core client-side engines are cached in your local device sandbox and continue functioning even while completely offline."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "What is PRNU camera sensor fingerprinting, and how does PixelCraft remove it?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Photo-Response Non-Uniformity (PRNU) is a microscopic hardware imperfection in physical digital camera sensors that acts like an invisible hardware serial number. Our Digital Fingerprint Wiper applies spatial frequency filtering and wavelet denoising to disrupt this noise pattern."
+             }
+         },
+         {
+             "@type": "Question",
+             "name": "How does the Phishing Scanner detect malicious links and fake websites?",
+             "acceptedAnswer": {
+                 "@type": "Answer",
+                 "text": "Our Phishing Link Scanner evaluates suspicious URLs inside a secure isolated sandbox, analyzing Internationalized Domain Name (IDN) homograph attacks, typosquatting domains, multi-hop redirect chains, and SSL certificate validity to protect users from cyber threats."
+             }
+         }
+     ]
  }
  ]
  }
@@ -3148,6 +3245,57 @@
  Because computation executes directly inside your browser's memory sandbox, file limits are dictated solely by your hardware's available RAM. Most tools handle 20MB to 50MB files with zero latency.
  </div>
  </div>
+
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>Do I need to create an account or sign up to use the tools?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            No account creation, email registration, or login is required. You can immediately access and use all 15+ utilities without entering a password, phone number, or payment card. We intentionally eliminate registration barriers to ensure maximum speed and protect your personal privacy from database leaks. (Optional Google Login is available only if you choose to sync your personal preferences).
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>How does the Image Compressor reduce size to specific limits like 20KB or 50KB?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Our Image Compressor uses client-side Discrete Cosine Transform (DCT) quantization and iterative downsampling directly within an offscreen HTML5 Canvas. You can choose targeted output sizes (such as 20KB, 50KB, or 100KB) specially designed to meet strict upload specifications for competitive exam portals, government recruitment forms, and visa applications without distorting visual aspect ratios.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>Can I use PixelCraft AI tools offline without an active internet connection?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Yes! PixelCraft AI is a certified Progressive Web App (PWA). Once installed to your desktop or mobile home screen via our <a href="download-app.html" style="color: var(--primary);">PWA installer</a>, our core client-side engines are cached in your local device sandbox. You can compress images, convert formats, wipe metadata, and use steganography even while completely offline or in airplane mode.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>What is PRNU camera sensor fingerprinting, and how does PixelCraft remove it?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Photo-Response Non-Uniformity (PRNU) is a microscopic hardware imperfection in physical digital camera sensors that acts like an invisible serial number linking photos to your specific phone. Our <strong>Digital Fingerprint Wiper</strong> applies spatial frequency filtering and wavelet denoising in browser memory to disrupt this noise pattern, ensuring true anonymity before sharing photos online.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" type="button">
+            <span>How does the Phishing Scanner detect malicious links and fake websites?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Our <strong>Phishing Link Scanner</strong> evaluates suspicious URLs inside a secure isolated sandbox before you open them. It analyzes Internationalized Domain Name (IDN) homograph attacks (such as deceptive look-alike Cyrillic characters), detects typosquatting domains, unpacks multi-hop redirect chains, and verifies SSL certificates to protect you against credential harvesting and malicious payloads.
+          </div>
+        </div>
+
  </div>
  </section>
 
