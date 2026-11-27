@@ -314,7 +314,7 @@
  <li><strong>Digital Fingerprint Wiper:</strong> Erases hardware fingerprint markers, injects micro-level canvas noise to thwart browser fingerprinting trackers, and wipes EXIF headers 100% client-side without any network request.</li>
  <li><strong>Advanced Decoy Steganography:</strong> Performs client-side PBKDF2 key stretching (100,000 iterations), AES-256-CBC encryption, HMAC-SHA256 authentication tag computation, and 2D prime-stride pixel luminance dispersion strictly within browser memory. Your confidential messages, decoy texts, carrier photos, and passphrases are never transmitted over the internet.</li>
  <li><strong>Audio Steganography:</strong> Embeds encrypted payload bits into audio PCM waveforms using the HTML5 Web Audio API. Audio processing occurs entirely on your device's audio subsystem with zero server communication.</li>
- <li><strong>Standard QR Code Generator:</strong> Renders static and dynamic QR code matrices directly to an HTML5 Canvas element via localized JavaScript algorithms. Entered URLs, Wi-Fi credentials, and contact cards remain strictly on your client screen.</li>
+ <li><strong>Next-Gen QR Code Studio:</strong> Renders 15 static QR payload protocols (including URLs + inline UTM Campaign tags, Wi-Fi, vCard 3.0, Social Profiles, UPI, Geo, and Calendar Events), 82+ procedural styles (Social, 32+ Fantasy scenic worlds, sculpted relief, paintings, diagrams, funny themes &amp; custom photo blends), 22 illustrated frames (clean frameless None default), optional center logo color quantization, live <code>jsQR</code> optical scanning/webcam decoding, Batch ZIP archiving, local Kinetic GIF89a/MP4/WebM rendering, and client-side Web Crypto PBKDF2 + AES-256-GCM encrypted QR vaults strictly inside local browser RAM. In Geo Location mode, clicking <em>Use Current GPS</em> triggers optional browser geolocation (<code>navigator.geolocation</code>) strictly in local RAM to pre-fill Latitude and Longitude—coordinates are never transmitted to or logged on any server, and users may skip permission anytime and type coordinates manually. Entered URLs, Wi-Fi passwords, logos, coordinates, and encrypted notes never leave your device.</li>
  </ul>
 
  <h3>3.2 Ephemeral Server-Assisted Utilities (Encrypted HTTPS &bull; Volatile Ephemeral Execution)</h3>
@@ -324,7 +324,6 @@
  <li><strong>PDF-to-Link Ephemeral File Sharing:</strong> Uploaded PDF files are stored on isolated, unindexed server storage for a strict, maximum lifecycle of <strong>24 hours</strong> to serve user-requested public download links (<span style="font-family: monospace;">/p/:id</span>). Documents are <strong>never stored in our MongoDB database</strong>, are never indexed by web search engines, and are never utilized for AI model training. An automated hourly cron job permanently unlinks, shreds, and purges all expired files. For full technical retention specifics, consult our <a href="data-practices.html">data-practices.html</a> inventory.</li>
  <li><strong>AI Audio &amp; Video Dubbing:</strong> Audio and video chunks are written to temporary system storage (<span style="font-family: monospace;">os.tmpdir()</span>) and deleted (<span style="font-family: monospace;">unlinkSync</span>) immediately after processing. Transcripts and synthesized speech are passed to trusted AI APIs (Groq for speech-to-text, Google Cloud for TTS) under transient inference rules. Media is never retained for training.</li>
  <li><strong>Phishing &amp; Threat Link Scanner:</strong> URLs submitted to <span style="font-family: monospace;">/api/scan-link</span> undergo automated server-side DNS resolution, TLS certificate validation, heuristic entropy analysis, and homoglyph evaluation. Destination server headers and redirect hops are evaluated in real-time. Target URLs are analyzed transiently and are not tied to user identity records.</li>
- <li><strong>AI 3D QR Code Generator (Optional Cloud Mode):</strong> When users voluntarily opt into neural 3D QR code styling, the prompt and matrix structure are routed to cloud inference GPUs (Hugging Face / Stable Diffusion XL). Standard QR codes remain 100% local in your browser.</li>
  </ul>
 
  <h2>4. Information We Collect, Purpose Limitation &amp; Legal Bases</h2>
@@ -435,8 +434,8 @@
  <tr style="border-bottom: 1px solid var(--border-color);">
  <td style="padding: 12px 16px; font-weight: 600;">Hugging Face Inc.</td>
  <td style="padding: 12px 16px;">United States / France</td>
- <td style="padding: 12px 16px;">Optional 3D AI QR Code Model Inference</td>
- <td style="padding: 12px 16px;">User style prompts and QR matrix payloads</td>
+ <td style="padding: 12px 16px;">Optional Phishing Threat Reasoning &amp; AI Inference</td>
+ <td style="padding: 12px 16px;">Heuristic URL threat summaries (when server AI key is configured)</td>
  <td style="padding: 12px 16px;">Transient inference execution &bull; No model training</td>
  </tr>
  </tbody>
@@ -455,7 +454,7 @@
  <li><strong>Right to Restriction of Processing (Article 18 GDPR):</strong> You may request that we suspend processing your personal data under contested accuracy conditions.</li>
  <li><strong>Right to Data Portability (Article 20 GDPR):</strong> You have the right to receive your personal account data in a structured, commonly used, machine-readable JSON format.</li>
  <li><strong>Right to Object (Article 21 GDPR):</strong> You have the right to object to processing based on legitimate interests or direct marketing.</li>
- <li><strong>Right to Withdraw Consent (Article 7(3) GDPR):</strong> Where processing is predicated on consent (e.g., analytics cookies or 3D AI generation), you may withdraw consent at any time without affecting the lawfulness of processing based on consent before withdrawal.</li>
+ <li><strong>Right to Withdraw Consent (Article 7(3) GDPR):</strong> Where processing is predicated on consent (e.g., analytics cookies or optional server-assisted AI workflows), you may withdraw consent at any time without affecting the lawfulness of processing based on consent before withdrawal.</li>
  <li><strong>Right to Lodge a Complaint:</strong> You have the right to lodge a formal complaint with an accredited supervisory authority in your EU member state of residence, workplace, or place of alleged infringement.</li>
  </ul>
 

@@ -162,6 +162,8 @@
  <!-- Extra Technical SEO -->
  <!-- Advanced JSON-LD Structured Data for High Ranking -->
  <link rel="stylesheet" href="../css/style.css"/>
+ <link rel="stylesheet" href="../css/exif-forensics.css"/>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
  <!-- AMP Auto Ads Head -->
 
 </head>
@@ -221,165 +223,1747 @@
  </div>
  <div class="tool-workspace">
  <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
- <input type="file" id="file-input" accept="image/jpeg,image/jpg,image/tiff" style="display:none"/>
- <div class="upload-icon"></div>
- <div class="dropzone-title" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Upload a JPEG photo to read metadata</div>
- <p>Best with JPEG/JPG files - PNG usually has no EXIF data</p>
+ <input type="file" id="file-input" accept="image/jpeg,image/jpg,image/png,image/webp,image/tiff,image/heic,image/heif,image/avif,.dng,.cr2,.nef,.arw" multiple style="display:none"/>
+ <input type="file" id="add-more-input" accept="image/jpeg,image/jpg,image/png,image/webp,image/tiff,image/heic,image/heif,image/avif,.dng,.cr2,.nef,.arw" multiple style="display:none"/>
+ <div class="upload-icon">🔬</div>
+ <div class="dropzone-title" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Drop 1 or More Photos for Deep Forensic EXIF &amp; AI Inspection</div>
+ <p>Supports JPEG, PNG (Stable Diffusion / ComfyUI chunks), WebP, TIFF, HEIC, AVIF &amp; RAW — 100% Local Sandbox</p>
+ <div class="upload-format-chips" style="margin-top:12px;">
+ <span class="upload-format-chip">EXIF / MakerNote</span>
+ <span class="upload-format-chip">Ghost Thumbnails</span>
+ <span class="upload-format-chip">Sun-Shadow Map</span>
+ <span class="upload-format-chip">AI / C2PA X-Ray</span>
+ <span class="upload-format-chip">ELA Heatmap</span>
+ <span class="upload-format-chip">Motion MP4 &amp; Stego</span>
+ <span class="upload-format-chip">Batch Diff</span>
  </div>
+ </div>
+
  <div id="editor" style="display:none;">
  <div class="result-area show" style="margin-top:0;">
  <div class="result-header">
- <span class="result-header-title">Image Metadata</span>
- <div style="display:flex;gap:10px;">
- <button class="btn btn-blue" id="btn-copy-all">Copy All Data</button>
- <button class="btn btn-gray" onclick="resetTool()">New Image</button>
+ <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+ <span class="result-header-title">Forensic Metadata Intelligence</span>
+ <span id="active-file-badge" style="font-size:0.78rem;padding:3px 9px;border-radius:999px;background:var(--primary-light);color:var(--primary);font-weight:700;"></span>
  </div>
- <div class="next-step-hint" style="margin-top:14px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
- Need to strip GPS and camera telemetry? Try <a href="digital-fingerprint-wiper.html" style="color:var(--primary);text-decoration:underline;">Digital Fingerprint Wiper</a> or <a href="forensic-sanitizer.html" style="color:var(--primary);text-decoration:underline;">Forensic Sanitizer</a>.
+ <div style="display:flex;gap:8px;flex-wrap:wrap;">
+ <button class="btn btn-secondary" id="btn-add-more" type="button" onclick="document.getElementById('add-more-input').click()">+ Add Photos</button>
+ <button class="btn btn-blue" id="btn-copy-all" type="button">Copy All Data</button>
+ <button class="btn btn-secondary" id="btn-export-json" type="button">Export JSON</button>
+ <button class="btn btn-secondary" id="btn-export-csv" type="button">Export CSV</button>
+ <button class="btn btn-secondary" id="btn-print-dossier" type="button">Print / PDF Dossier</button>
+ <button class="btn btn-gray" type="button" onclick="resetTool()">New Session</button>
+ </div>
+ <div class="next-step-hint" style="width:100%;margin-top:8px;font-size:0.85rem;color:var(--text-muted);text-align:center;">
+ Need PRNU sensor masking or full media sanitization? Try <a href="digital-fingerprint-wiper.html" style="color:var(--primary);text-decoration:underline;">Digital Fingerprint Wiper</a> or <a href="forensic-sanitizer.html" style="color:var(--primary);text-decoration:underline;">Forensic Sanitizer</a>.
  </div>
  </div>
+
+ <!-- Batch Photo Switcher Strip -->
+ <div id="batch-strip" class="exif-batch-strip" style="display:none;">
+ <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.04em;">Loaded Batch:</span>
+ <div id="batch-pills" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+ </div>
+
  <div class="result-body">
- <div style="display:grid;grid-template-columns:1fr 2fr;gap:24px;">
- <div>
- <img id="preview-img" alt="Uploaded image preview for EXIF metadata inspection" style="width:100%;border-radius:12px;border:1.5px solid var(--border);object-fit:contain;max-height:280px;"/>
- <div id="basic-info" style="margin-top:16px;background:var(--bg);border-radius:10px;padding:14px;font-size:0.85rem;line-height:1.7;color:var(--text);"></div>
+ <!-- 4 Executive KPI Threat / Provenance Cards -->
+ <div id="kpi-grid" class="exif-kpi-grid"></div>
+
+ <div class="exif-workspace-split">
+ <!-- LEFT RAIL: Visual Preview + Overlays + Histogram + Hashes -->
+ <div class="exif-left-rail">
+ <div class="exif-preview-stage" id="preview-stage">
+ <img id="preview-img" alt="Uploaded image preview for EXIF metadata inspection"/>
+ <canvas id="preview-canvas" style="display:none;"></canvas>
+ <svg id="overlay-svg" class="exif-overlay-svg" style="display:none;"></svg>
  </div>
+ <div class="exif-pill-bar" id="overlay-mode-bar">
+ <button type="button" class="exif-mini-btn active" data-overlay="normal">Normal</button>
+ <button type="button" class="exif-mini-btn" data-overlay="boxes">AF / Face Boxes</button>
+ <button type="button" class="exif-mini-btn" data-overlay="clipping">Clipping Mask</button>
+ </div>
+
+ <div id="horizon-box" class="exif-panel-card" style="display:none;margin-bottom:0;"></div>
+
+ <div class="exif-panel-card" style="margin-bottom:0;">
+ <div class="exif-panel-title" style="margin-bottom:8px;">
+ <span>RGB &amp; Luma Histogram</span>
+ <span id="histogram-stats" style="font-size:0.74rem;color:var(--text-muted);font-weight:600;"></span>
+ </div>
+ <canvas id="histogram-canvas" width="280" height="90" style="width:100%;height:90px;border-radius:8px;background:#0b0f19;display:block;"></canvas>
+ </div>
+
+ <div id="basic-info" class="exif-panel-card" style="margin-bottom:0;font-size:0.84rem;line-height:1.65;color:var(--text-body);"></div>
+ <div id="crypto-hashes" class="exif-panel-card" style="margin-bottom:0;font-size:0.78rem;"></div>
+ </div>
+
+ <!-- RIGHT PANEL: 7-Tab Forensic Command Center -->
+ <div>
+ <div class="exif-tabs-nav" id="tab-nav">
+ <button type="button" class="exif-tab-btn active" data-tab="overview">📋 Overview &amp; Optics</button>
+ <button type="button" class="exif-tab-btn" data-tab="map">☀️ GPS &amp; Sun-Shadow <span class="exif-tab-badge" id="badge-gps">—</span></button>
+ <button type="button" class="exif-tab-btn" data-tab="hidden">👻 Ghost &amp; Hidden <span class="exif-tab-badge" id="badge-hidden">0</span></button>
+ <button type="button" class="exif-tab-btn" data-tab="ai">🤖 AI X-Ray &amp; DQT</button>
+ <button type="button" class="exif-tab-btn" data-tab="ela">🔥 ELA &amp; Tampering</button>
+ <button type="button" class="exif-tab-btn" data-tab="binary">🩻 Binary Hex &amp; Stego</button>
+ <button type="button" class="exif-tab-btn" data-tab="batch">🧹 Strip &amp; Batch <span class="exif-tab-badge" id="badge-batch">1</span></button>
+ </div>
+
+ <!-- TAB 1: OVERVIEW, OPTICS & ALL TAGS -->
+ <div id="tab-overview" class="exif-tab-pane">
+ <div class="exif-panel-card" style="padding:12px 14px;">
+ <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+ <input type="text" id="tag-search-input" placeholder="Search 200+ tags (e.g. Serial, Shutter, GPS, Lens, Software)..." style="flex:1;min-width:200px;padding:8px 12px;border:1.5px solid var(--border-color);border-radius:8px;background:var(--surface-card);color:var(--text-heading);font-size:0.86rem;"/>
+ <div class="exif-pill-bar" id="tag-cat-pills">
+ <button type="button" class="exif-mini-btn active" data-cat="all">All</button>
+ <button type="button" class="exif-mini-btn" data-cat="camera">Camera</button>
+ <button type="button" class="exif-mini-btn" data-cat="exposure">Exposure</button>
+ <button type="button" class="exif-mini-btn" data-cat="gps">GPS</button>
+ <button type="button" class="exif-mini-btn" data-cat="hardware">Hardware/Maker</button>
+ <button type="button" class="exif-mini-btn" data-cat="raw">All Raw Tags</button>
+ </div>
+ </div>
+ </div>
+ <div id="timestamp-audit-panel"></div>
  <div id="exif-grid"></div>
+ <div id="optics-panel"></div>
+ <div id="all-tags-panel"></div>
+ </div>
+
+ <!-- TAB 2: GPS, CAMERA FOV CONE & SUN-SHADOW LIE DETECTOR -->
+ <div id="tab-map" class="exif-tab-pane" style="display:none;">
+ <div class="exif-panel-card">
+ <div class="exif-panel-title">
+ <span>Interactive OSINT Map, Camera FOV Cone &amp; Solar Shadow Vector</span>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+ <button type="button" class="exif-mini-btn active" id="map-layer-toggle">Switch to Satellite</button>
+ <select id="tz-override-select" style="padding:4px 8px;border-radius:7px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;">
+ <option value="auto">Timezone: Auto Detect</option>
+ <option value="-480">UTC-08:00 (PST)</option>
+ <option value="-300">UTC-05:00 (EST)</option>
+ <option value="0">UTC+00:00 (GMT)</option>
+ <option value="60">UTC+01:00 (CET)</option>
+ <option value="240">UTC+04:00 (GST)</option>
+ <option value="330">UTC+05:30 (IST)</option>
+ <option value="480">UTC+08:00 (CST/SGT)</option>
+ <option value="540">UTC+09:00 (JST)</option>
+ </select>
+ </div>
+ </div>
+ <div id="manual-coords-box"></div>
+ <div id="osint-map" class="exif-map-box"></div>
+ </div>
+ <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;">
+ <div class="exif-panel-card" style="text-align:center;">
+ <div class="exif-panel-title" style="justify-content:center;">Offline Sun &amp; Camera Compass Dial</div>
+ <svg id="sun-compass-svg" viewBox="0 0 260 260" style="width:230px;height:230px;max-width:100%;margin:0 auto;display:block;"></svg>
+ </div>
+ <div id="solar-telemetry-panel" class="exif-panel-card"></div>
+ </div>
+ </div>
+
+ <!-- TAB 3: GHOST THUMBNAIL, MOTION VIDEO & 3D DEPTH MAP -->
+ <div id="tab-hidden" class="exif-tab-pane" style="display:none;">
+ <div id="ghost-thumb-panel"></div>
+ <div id="motion-video-panel"></div>
+ <div id="depth-map-panel"></div>
+ </div>
+
+ <!-- TAB 4: AI PROVENANCE X-RAY, XMP TIMELINE & DQT DNA -->
+ <div id="tab-ai" class="exif-tab-pane" style="display:none;">
+ <div id="ai-verdict-panel"></div>
+ <div id="xmp-timeline-panel"></div>
+ <div id="dqt-dna-panel"></div>
+ </div>
+
+ <!-- TAB 5: ELA & PIXEL TAMPERING FORENSICS -->
+ <div id="tab-ela" class="exif-tab-pane" style="display:none;">
+ <div class="exif-panel-card">
+ <div class="exif-panel-title">
+ <span>Error Level Analysis (ELA) &amp; Noise Residual Inspector</span>
+ <button type="button" class="btn btn-secondary" id="btn-download-ela" style="padding:6px 12px;font-size:0.8rem;">Download ELA PNG</button>
+ </div>
+ <div class="exif-pill-bar" id="ela-mode-bar" style="margin-bottom:12px;">
+ <button type="button" class="exif-mini-btn active" data-elamode="ela">ELA Heatmap</button>
+ <button type="button" class="exif-mini-btn" data-elamode="split">Split Wipe Compare</button>
+ <button type="button" class="exif-mini-btn" data-elamode="noise">High-Pass Noise Residual</button>
+ <button type="button" class="exif-mini-btn" data-elamode="orig">Original Pixels</button>
+ </div>
+ <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:12px;">
+ <div class="control-group" style="min-width:0;">
+ <label>Amplification Gain: <strong id="ela-amp-val">18×</strong></label>
+ <input type="range" id="ela-amp-slider" min="4" max="45" value="18"/>
+ </div>
+ <div class="control-group" style="min-width:0;">
+ <label>Recompression Quality: <strong id="ela-qual-val">95%</strong></label>
+ <input type="range" id="ela-qual-slider" min="75" max="98" value="95"/>
+ </div>
+ <div class="control-group" id="ela-wipe-wrap" style="min-width:0;display:none;">
+ <label>Split Wipe Position: <strong id="ela-wipe-val">50%</strong></label>
+ <input type="range" id="ela-wipe-slider" min="0" max="100" value="50"/>
+ </div>
+ </div>
+ <div class="exif-split-compare">
+ <canvas id="ela-canvas"></canvas>
+ </div>
+ <div style="margin-top:10px;font-size:0.8rem;color:var(--text-muted);line-height:1.5;">
+ <strong>How to read ELA:</strong> Uniformly dark or evenly noisy surfaces suggest single-pass compression. Bright, sharply glowing edges or rectangular blocks at different error levels than surrounding areas can indicate spliced, pasted, or locally retouched regions.
+ </div>
+ </div>
+ </div>
+
+ <!-- TAB 6: BINARY HEX X-RAY & TRAILING PAYLOAD STEGO SCANNER -->
+ <div id="tab-binary" class="exif-tab-pane" style="display:none;">
+ <div id="trailing-panel"></div>
+ <div class="exif-panel-card">
+ <div class="exif-panel-title"><span>Container Segment Map &amp; Chunk Structure</span></div>
+ <div id="seg-bar" class="exif-seg-bar"></div>
+ <div class="table-responsive" style="max-height:290px;overflow:auto;">
+ <table class="data-table" style="font-size:0.8rem;">
+ <thead>
+ <tr><th>Offset</th><th>Marker / Chunk</th><th>Name</th><th>Size</th><th>Details</th></tr>
+ </thead>
+ <tbody id="seg-table-body"></tbody>
+ </table>
+ </div>
+ </div>
+ <div class="exif-panel-card">
+ <div class="exif-panel-title">
+ <span>Live Binary Hex &amp; ASCII Inspector</span>
+ <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+ <select id="hex-jump-select" style="padding:5px 9px;border-radius:7px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;"></select>
+ <button type="button" class="exif-mini-btn" id="btn-download-trailing" style="display:none;">Download Trailing Payload</button>
+ </div>
+ </div>
+ <div id="hex-viewer-box" class="exif-code-box"></div>
+ </div>
+ </div>
+
+ <!-- TAB 7: SURGICAL PRIVACY STRIPPER & BATCH DIFF / JOURNEY -->
+ <div id="tab-batch" class="exif-tab-pane" style="display:none;">
+ <div class="exif-panel-card">
+ <div class="exif-panel-title"><span>Surgical In-Browser Metadata Stripper</span></div>
+ <p style="font-size:0.84rem;color:var(--text-body);margin:0 0 12px 0;">Clean the active photo directly inside your browser without uploading a single byte.</p>
+ <div style="display:flex;gap:10px;flex-wrap:wrap;">
+ <button type="button" class="btn btn-blue" id="btn-strip-surgical">🎯 Surgical Strip (Keep Exposure, Wipe GPS/Serial/Thumb/XMP)</button>
+ <button type="button" class="btn btn-success" id="btn-strip-lossless">⚡ Lossless Full Strip (0% Pixel Loss)</button>
+ <button type="button" class="btn btn-secondary" id="btn-strip-canvas">🧹 Canvas Clean Re-Encode (Wipe DQT + Stego)</button>
+ </div>
+ <div id="strip-status-box" style="margin-top:12px;"></div>
+ </div>
+ <div id="batch-correlation-panel"></div>
+ <div id="batch-diff-panel"></div>
+ <div id="batch-route-panel"></div>
+ </div>
+ </div>
  </div>
  </div>
  </div>
  </div>
  </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.esm.js" type="module" id="exifr-script"></script>
-
- 
- 
-
- 
-
- 
-
-
- 
- 
-
-
+<script src="https://cdn.jsdelivr.net/npm/exifreader@4.44.1/dist/exif-reader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/piexifjs/1.0.6/piexif.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../js/exif-forensics.js"></script>
 <script src="../js/utils.js"></script>
 <script type="module">
 import * as Exifr from 'https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.esm.js';
 
+const F = window.PixelCraftExifForensics;
+const esc = F.escapeHtml;
+
 const fileInput = document.getElementById('file-input');
+const addMoreInput = document.getElementById('add-more-input');
 const uploadArea = document.getElementById('upload-area');
 const editor = document.getElementById('editor');
 
-setupDragDrop(uploadArea, handleFile);
-fileInput.addEventListener('change', e =>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
-
-async function handleFile(file) {
- const url = URL.createObjectURL(file);
- document.getElementById('preview-img').src = url;
- document.getElementById('basic-info').innerHTML = `
- <strong>File:</strong>${file.name}<br/>
- <strong>Size:</strong>${formatFileSize(file.size)}<br/>
- <strong>Type:</strong>${file.type}
- `;
- uploadArea.style.display = 'none';
- editor.style.display = 'block';
- if (typeof editor.scrollIntoView === 'function') {
- editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
- }
-
- try {
- const exif = await Exifr.parse(file, true);
- if (!exif || Object.keys(exif).length === 0) {
- document.getElementById('exif-grid').innerHTML = `
- <div class="info-box">ℹ No EXIF data found in this image. Try a JPEG taken with a camera or smartphone.</div>
- `;
- if (window.PixelCraftAnalytics) {
- window.PixelCraftAnalytics.trackCompletion('EXIF Data Viewer', 'none', file.size);
- }
- return;
- }
- renderExif(exif);
- storeExifText(exif);
- if (window.PixelCraftAnalytics) {
- window.PixelCraftAnalytics.trackCompletion('EXIF Data Viewer', 'metadata', file.size);
- }
- } catch(e) {
- document.getElementById('exif-grid').innerHTML = `<div class="info-box" style="color:var(--error)">Could not read EXIF data from this file.</div>`;
- if (window.PixelCraftAnalytics) {
- window.PixelCraftAnalytics.trackError('EXIF Data Viewer', 'processing_failed');
- }
- }
-}
+const state = {
+  records: [],
+  activeIdx: -1,
+  activeTab: 'overview',
+  overlayMode: 'normal',
+  elaMode: 'ela',
+  mapLayer: 'street',
+  leafletMap: null,
+  batchMap: null,
+  tileLayer: null,
+  subjectDistM: null,
+  tzOffsetMin: null,
+  manualCoords: null,
+  tagSearch: '',
+  tagCat: 'all'
+};
 
 let allExifText = '';
 
+setupDragDrop(uploadArea, handleFile);
+// Support dropping 2+ files simultaneously without double-firing the first file
+uploadArea.addEventListener('drop', (e) => {
+  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 1) {
+    Array.from(e.dataTransfer.files).slice(1).forEach((f) => handleFile(f, true));
+  }
+});
+editor.addEventListener('dragover', (e) => e.preventDefault());
+editor.addEventListener('drop', (e) => {
+  e.preventDefault();
+  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    Array.from(e.dataTransfer.files).forEach((f) => handleFile(f, true));
+  }
+});
+
+fileInput.addEventListener('change', (e) => {
+  const files = Array.from(e.target.files || []);
+  files.forEach((f, idx) => handleFile(f, idx > 0));
+  fileInput.value = '';
+});
+addMoreInput.addEventListener('change', (e) => {
+  const files = Array.from(e.target.files || []);
+  files.forEach((f) => handleFile(f, true));
+  addMoreInput.value = '';
+});
+
+function loadImgElement(src) {
+  return new Promise((resolve) => {
+    if (!src) return resolve(null);
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+async function handleFile(file, appendToBatch = false) {
+  if (!file) return;
+  if (!appendToBatch && state.records.length === 0) {
+    uploadArea.style.display = 'none';
+    editor.style.display = 'block';
+    if (typeof editor.scrollIntoView === 'function') {
+      editor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  } else {
+    uploadArea.style.display = 'none';
+    editor.style.display = 'block';
+  }
+
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const previewUrl = URL.createObjectURL(file);
+
+    const [hashes, binaryInfo, exifrMerged, exifrMulti, thumbUrl, mainImg] = await Promise.all([
+      F.computeFileHashes(arrayBuffer),
+      F.analyzeBinaryStructure(arrayBuffer),
+      Exifr.parse(file, true).catch(() => null),
+      Exifr.parse(file, {
+        tiff: true, xmp: true, iptc: true, icc: true, jfif: true, ihdr: true,
+        makerNote: true, userComment: true, multiSegment: true,
+        mergeOutput: true, translateKeys: true, translateValues: true, reviveValues: true
+      }).catch(() => null),
+      Exifr.thumbnailUrl(file).catch(() => null),
+      loadImgElement(previewUrl)
+    ]);
+
+    const exif = exifrMulti || exifrMerged || {};
+    let exifReaderExpanded = null;
+    if (typeof window.ExifReader !== 'undefined') {
+      try {
+        exifReaderExpanded = window.ExifReader.load(arrayBuffer, { expanded: true });
+      } catch (_) {}
+    }
+
+    // Grab any XMP string from ExifReader if binary parser didn't capture one (e.g. HEIC)
+    const xmpSources = [...(binaryInfo.xmpStrings || [])];
+    if (exifReaderExpanded && exifReaderExpanded.xmp && exifReaderExpanded.xmp._raw) {
+      xmpSources.push(exifReaderExpanded.xmp._raw);
+    }
+    const xmpInfo = F.extractXmpForensics(xmpSources);
+    const aiInfo = F.analyzeAiProvenance(exif, binaryInfo, xmpInfo);
+    const embeddedMedia = F.scanEmbeddedMedia(arrayBuffer, xmpInfo, exif);
+    const motionVideoUrl = embeddedMedia.motionVideoBlob ? URL.createObjectURL(embeddedMedia.motionVideoBlob) : null;
+
+    // Fallback thumbnail from ExifReader if exifr didn't yield one
+    let finalThumbUrl = thumbUrl;
+    if (!finalThumbUrl && exifReaderExpanded && exifReaderExpanded.Thumbnail && exifReaderExpanded.Thumbnail.base64) {
+      finalThumbUrl = 'data:image/jpeg;base64,' + exifReaderExpanded.Thumbnail.base64;
+    }
+    const thumbImg = await loadImgElement(finalThumbUrl);
+    const thumbDiff = F.compareMainAndThumbnail(mainImg, thumbImg);
+
+    const hwTelemetry = F.extractHardwareTelemetry(exif, exifReaderExpanded, xmpInfo);
+    const lat = Number.isFinite(exif.latitude) ? exif.latitude : null;
+    const lng = Number.isFinite(exif.longitude) ? exif.longitude : null;
+    const timeAudit = F.auditTimestamps(exif, lat, lng, null);
+    const optics = F.calculateOpticsPhysics(exif, null);
+    const privacyRisk = F.computePrivacyRisk({ exifrData: exif, hwTelemetry, thumbDiff, embeddedMedia, binaryInfo, xmpInfo });
+
+    const record = {
+      id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+      file,
+      arrayBuffer,
+      previewUrl,
+      mainImg,
+      thumbUrl: finalThumbUrl,
+      thumbImg,
+      thumbDiff,
+      motionVideoUrl,
+      embeddedMedia,
+      hashes,
+      binaryInfo,
+      exifr: exif,
+      exifReaderExpanded,
+      xmpInfo,
+      aiInfo,
+      hwTelemetry,
+      timeAudit,
+      optics,
+      privacyRisk
+    };
+
+    state.records.push(record);
+    state.activeIdx = state.records.length - 1;
+    state.subjectDistM = null;
+    state.tzOffsetMin = null;
+    state.manualCoords = null;
+
+    renderActiveRecord();
+
+    if (window.PixelCraftAnalytics) {
+      const hasMeta = Object.keys(exif).length > 0 || (binaryInfo.pngTextChunks && binaryInfo.pngTextChunks.length > 0);
+      window.PixelCraftAnalytics.trackCompletion('EXIF Data Viewer', hasMeta ? 'metadata' : 'none', file.size);
+    }
+  } catch (err) {
+    console.error('EXIF Viewer error:', err);
+    document.getElementById('exif-grid').innerHTML = `<div class="exif-alert-banner exif-alert-danger">Could not decode this file: ${esc(err && err.message ? err.message : 'Unsupported or corrupted binary')}</div>`;
+    if (window.PixelCraftAnalytics) {
+      window.PixelCraftAnalytics.trackError('EXIF Data Viewer', 'processing_failed');
+    }
+  }
+}
+
+function getActive() {
+  return state.records[state.activeIdx] || null;
+}
+
+function renderActiveRecord() {
+  const rec = getActive();
+  if (!rec) return;
+
+  renderBatchStrip();
+  document.getElementById('active-file-badge').textContent = `${rec.file.name} (${rec.binaryInfo.format})`;
+
+  // Left Rail Preview + Overlays + Histogram + Basic Info + Hashes
+  const previewImg = document.getElementById('preview-img');
+  previewImg.src = rec.previewUrl;
+  renderPreviewOverlay(rec);
+  renderHorizonGauge(rec);
+  renderHistogram(rec);
+
+  const dims = rec.mainImg && rec.mainImg.naturalWidth
+    ? `${rec.mainImg.naturalWidth} × ${rec.mainImg.naturalHeight} px (${((rec.mainImg.naturalWidth * rec.mainImg.naturalHeight) / 1e6).toFixed(1)} MP)`
+    : 'Image dimensions unavailable';
+  document.getElementById('basic-info').innerHTML = `
+    <div style="font-weight:700;color:var(--text-heading);margin-bottom:6px;">File Identity</div>
+    <div class="exif-kv-row"><span class="exif-kv-k">Filename</span><span class="exif-kv-v">${esc(rec.file.name)}</span></div>
+    <div class="exif-kv-row"><span class="exif-kv-k">Size</span><span class="exif-kv-v">${esc(formatFileSize(rec.file.size))}</span></div>
+    <div class="exif-kv-row"><span class="exif-kv-k">Container</span><span class="exif-kv-v">${esc(rec.binaryInfo.format)} (${esc(rec.file.type || 'unknown')})</span></div>
+    <div class="exif-kv-row"><span class="exif-kv-k">Resolution</span><span class="exif-kv-v">${esc(dims)}</span></div>
+  `;
+
+  document.getElementById('crypto-hashes').innerHTML = `
+    <div style="font-weight:700;color:var(--text-heading);margin-bottom:6px;">Cryptographic Verification</div>
+    <div style="margin-bottom:6px;">
+      <span style="color:var(--text-muted);font-weight:700;">SHA-256:</span>
+      <code style="display:block;word-break:break-all;font-size:0.72rem;color:var(--text-body);margin-top:2px;">${esc(rec.hashes.sha256)}</code>
+    </div>
+    <div>
+      <span style="color:var(--text-muted);font-weight:700;">SHA-512:</span>
+      <code style="display:block;word-break:break-all;font-size:0.72rem;color:var(--text-body);margin-top:2px;">${esc(rec.hashes.sha512.slice(0, 64))}…</code>
+    </div>
+    <button type="button" class="exif-mini-btn" style="margin-top:8px;" id="btn-copy-hashes">Copy SHA-256 + SHA-512</button>
+  `;
+  document.getElementById('btn-copy-hashes').onclick = () => {
+    navigator.clipboard.writeText(`File: ${rec.file.name}\nSHA-256: ${rec.hashes.sha256}\nSHA-512: ${rec.hashes.sha512}`);
+    showToast('Cryptographic hashes copied!', 'success');
+  };
+
+  // KPI Executive Grid
+  renderKpiCards(rec);
+  updateTabBadges(rec);
+
+  // Render Tabs
+  renderExif(rec.exifr);
+  storeExifText(rec.exifr);
+  renderTimestampAudit(rec);
+  renderOpticsPanel(rec);
+  renderAllTagsPanel(rec);
+  renderMapAndSunPanel(rec);
+  renderHiddenMediaPanel(rec);
+  renderAiAndDqtPanel(rec);
+  renderElaCanvas(rec);
+  renderBinaryInspector(rec);
+  renderBatchAndStripPanel(rec);
+}
+
+function renderBatchStrip() {
+  const strip = document.getElementById('batch-strip');
+  const pills = document.getElementById('batch-pills');
+  document.getElementById('badge-batch').textContent = String(state.records.length);
+  if (state.records.length === 0) {
+    strip.style.display = 'none';
+    return;
+  }
+  strip.style.display = 'flex';
+  pills.innerHTML = '';
+  state.records.forEach((r, idx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'exif-batch-chip' + (idx === state.activeIdx ? ' active' : '');
+    btn.innerHTML = `<img src="${r.previewUrl}" alt="thumb"/><span>${esc(r.file.name)}</span>`;
+    btn.onclick = () => {
+      state.activeIdx = idx;
+      state.subjectDistM = null;
+      state.tzOffsetMin = null;
+      renderActiveRecord();
+    };
+    pills.appendChild(btn);
+  });
+}
+
+function renderKpiCards(rec) {
+  const hiddenCount =
+    (rec.thumbDiff && rec.thumbDiff.isMismatch ? 1 : 0) +
+    (rec.embeddedMedia.motionVideoBlob ? 1 : 0) +
+    (rec.embeddedMedia.depthMapDataUrl ? 1 : 0) +
+    (rec.binaryInfo.trailingBytes && rec.binaryInfo.trailingBytes.length > 0 ? 1 : 0);
+
+  const aiColor =
+    rec.aiInfo.verdictType === 'ai-generated' ? 'var(--danger)' :
+    rec.aiInfo.verdictType === 'ai-edited' ? 'var(--warning)' :
+    rec.aiInfo.verdictType === 'edited' ? 'var(--primary)' : 'var(--success)';
+
+  const camModel = [rec.exifr.Make, rec.exifr.Model].filter(Boolean).join(' ') || 'Unknown / Stripped';
+  const shutterStr = rec.hwTelemetry.shutterCount ? ` • Shutter #${rec.hwTelemetry.shutterCount}` : '';
+  const evStr = rec.optics && rec.optics.ev100 !== null ? `EV₁₀₀ ${rec.optics.ev100.toFixed(1)}` : 'Exposure N/A';
+
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="exif-kpi-card">
+      <div class="exif-kpi-label">Privacy Doxx Risk</div>
+      <div class="exif-kpi-value" style="color:${rec.privacyRisk.color};">${rec.privacyRisk.score}/100 • ${esc(rec.privacyRisk.rating)}</div>
+      <div class="exif-kpi-sub">${rec.privacyRisk.factors.length} exposure vector(s) detected</div>
+    </div>
+    <div class="exif-kpi-card">
+      <div class="exif-kpi-label">AI &amp; Provenance Verdict</div>
+      <div class="exif-kpi-value" style="color:${aiColor};">${esc(rec.aiInfo.verdict)}</div>
+      <div class="exif-kpi-sub">${rec.binaryInfo.dqtAnalysis ? `Est. JPEG Q${rec.binaryInfo.dqtAnalysis.estimatedQuality} (${rec.binaryInfo.dqtAnalysis.subsampling.split(' ')[0]})` : esc(rec.binaryInfo.format + ' Container')}</div>
+    </div>
+    <div class="exif-kpi-card">
+      <div class="exif-kpi-label">Hidden Forensics Found</div>
+      <div class="exif-kpi-value" style="color:${hiddenCount > 0 ? 'var(--danger)' : 'var(--text-heading)'};">${hiddenCount} Artifact(s)</div>
+      <div class="exif-kpi-sub">${rec.thumbDiff && rec.thumbDiff.isMismatch ? '🚨 Ghost thumbnail mismatch!' : rec.embeddedMedia.motionVideoBlob ? '🎬 Hidden MP4 motion video' : rec.binaryInfo.trailingBytes ? '⚠️ Trailing post-EOI payload' : 'No hidden payloads detected'}</div>
+    </div>
+    <div class="exif-kpi-card">
+      <div class="exif-kpi-label">Hardware &amp; Optics</div>
+      <div class="exif-kpi-value">${esc(camModel)}</div>
+      <div class="exif-kpi-sub">${esc(evStr + shutterStr)}</div>
+    </div>
+  `;
+}
+
+function updateTabBadges(rec) {
+  const hasGps = Number.isFinite(rec.exifr.latitude) && Number.isFinite(rec.exifr.longitude);
+  document.getElementById('badge-gps').textContent = hasGps ? 'PIN' : 'NO GPS';
+  const hiddenCount =
+    (rec.thumbUrl ? 1 : 0) +
+    (rec.embeddedMedia.motionVideoBlob ? 1 : 0) +
+    (rec.embeddedMedia.depthMapDataUrl ? 1 : 0);
+  document.getElementById('badge-hidden').textContent = String(hiddenCount);
+}
+
+// =========================================================================
+// LEFT RAIL: OVERLAYS, HORIZON & HISTOGRAM
+// =========================================================================
+document.getElementById('overlay-mode-bar').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-overlay]');
+  if (!btn) return;
+  state.overlayMode = btn.dataset.overlay;
+  document.querySelectorAll('#overlay-mode-bar .exif-mini-btn').forEach((b) => b.classList.toggle('active', b === btn));
+  const rec = getActive();
+  if (rec) renderPreviewOverlay(rec);
+});
+
+function renderPreviewOverlay(rec) {
+  const imgEl = document.getElementById('preview-img');
+  const canvas = document.getElementById('preview-canvas');
+  const svg = document.getElementById('overlay-svg');
+
+  if (state.overlayMode === 'clipping' && rec.mainImg && rec.mainImg.naturalWidth) {
+    imgEl.style.display = 'none';
+    svg.style.display = 'none';
+    canvas.style.display = 'block';
+    const w = Math.min(600, rec.mainImg.naturalWidth);
+    const h = Math.round((w / rec.mainImg.naturalWidth) * rec.mainImg.naturalHeight);
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(rec.mainImg, 0, 0, w, h);
+    const imgData = ctx.getImageData(0, 0, w, h);
+    const d = imgData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+      if (r >= 253 && g >= 253 && b >= 253) {
+        d[i] = 255; d[i + 1] = 0; d[i + 2] = 128; // Highlight blowout magenta
+      } else if (r <= 2 && g <= 2 && b <= 2) {
+        d[i] = 0; d[i + 1] = 220; d[i + 2] = 255; // Crushed shadow cyan
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+    return;
+  }
+
+  imgEl.style.display = 'block';
+  canvas.style.display = 'none';
+
+  if (state.overlayMode === 'boxes') {
+    const boxes = rec.hwTelemetry.focusBoxes || [];
+    svg.style.display = 'block';
+    if (!boxes.length) {
+      svg.setAttribute('viewBox', '0 0 100 100');
+      svg.innerHTML = `<rect x="3" y="3" width="94" height="94" fill="none" stroke="rgba(255,255,255,0.2)" stroke-dasharray="3 3"/><text x="50" y="52" text-anchor="middle" fill="#fff" font-size="5" style="text-shadow:0 1px 3px #000">No AF / Face Box coordinates in EXIF/XMP</text>`;
+    } else {
+      svg.setAttribute('viewBox', '0 0 100 100');
+      svg.innerHTML = boxes.map((b) => {
+        const bx = (b.normalizedCenter ? b.x - b.w / 2 : b.x) * 100;
+        const by = (b.normalizedCenter ? b.y - b.h / 2 : b.y) * 100;
+        const bw = b.w * 100;
+        const bh = b.h * 100;
+        return `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="0.9"/><text x="${bx.toFixed(1)}" y="${Math.max(4, by - 1).toFixed(1)}" fill="#10b981" font-size="3.8" font-weight="bold">${esc(b.label)}</text>`;
+      }).join('');
+    }
+  } else {
+    svg.style.display = 'none';
+  }
+}
+
+function renderHorizonGauge(rec) {
+  const box = document.getElementById('horizon-box');
+  const roll = rec.hwTelemetry.rollDeg;
+  if (roll === null || !Number.isFinite(roll)) {
+    box.style.display = 'none';
+    return;
+  }
+  box.style.display = 'block';
+  box.innerHTML = `
+    <div class="exif-panel-title" style="margin-bottom:6px;">
+      <span>Sensor Tilt / Horizon</span>
+      <span style="font-size:0.8rem;color:var(--primary);">${roll.toFixed(1)}°</span>
+    </div>
+    <svg viewBox="0 0 200 44" style="width:100%;height:44px;">
+      <line x1="20" y1="22" x2="180" y2="22" stroke="var(--border-color)" stroke-width="1" stroke-dasharray="4 3"/>
+      <g transform="rotate(${(-roll).toFixed(1)} 100 22)">
+        <line x1="45" y1="22" x2="155" y2="22" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <circle cx="100" cy="22" r="4" fill="#10b981"/>
+    </svg>
+  `;
+}
+
+function renderHistogram(rec) {
+  const canvas = document.getElementById('histogram-canvas');
+  const stats = document.getElementById('histogram-stats');
+  if (!rec.mainImg || !rec.mainImg.naturalWidth) {
+    stats.textContent = 'Unavailable';
+    return;
+  }
+  const sampleC = document.createElement('canvas');
+  const sw = Math.min(256, rec.mainImg.naturalWidth);
+  const sh = Math.max(1, Math.round((sw / rec.mainImg.naturalWidth) * rec.mainImg.naturalHeight));
+  sampleC.width = sw;
+  sampleC.height = sh;
+  const sCtx = sampleC.getContext('2d', { willReadFrequently: true });
+  sCtx.drawImage(rec.mainImg, 0, 0, sw, sh);
+  const data = sCtx.getImageData(0, 0, sw, sh).data;
+
+  const rHist = new Uint32Array(256);
+  const gHist = new Uint32Array(256);
+  const bHist = new Uint32Array(256);
+  let blown = 0, crushed = 0;
+  const totalPx = sw * sh;
+
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i], g = data[i + 1], b = data[i + 2];
+    rHist[r]++; gHist[g]++; bHist[b]++;
+    if (r >= 253 && g >= 253 && b >= 253) blown++;
+    if (r <= 2 && g <= 2 && b <= 2) crushed++;
+  }
+
+  let maxVal = 1;
+  for (let i = 4; i < 252; i++) {
+    maxVal = Math.max(maxVal, rHist[i], gHist[i], bHist[i]);
+  }
+  const ctx = canvas.getContext('2d');
+  const cw = canvas.width, ch = canvas.height;
+  ctx.clearRect(0, 0, cw, ch);
+  ctx.fillStyle = '#0b0f19';
+  ctx.fillRect(0, 0, cw, ch);
+
+  const drawChannel = (hist, color) => {
+    ctx.beginPath();
+    ctx.moveTo(0, ch);
+    for (let i = 0; i < 256; i++) {
+      const x = (i / 255) * cw;
+      const h = Math.min(1, hist[i] / maxVal) * (ch - 6);
+      ctx.lineTo(x, ch - h);
+    }
+    ctx.lineTo(cw, ch);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+  };
+  ctx.globalCompositeOperation = 'screen';
+  drawChannel(rHist, 'rgba(239,68,68,0.55)');
+  drawChannel(gHist, 'rgba(34,197,94,0.55)');
+  drawChannel(bHist, 'rgba(59,130,246,0.55)');
+  ctx.globalCompositeOperation = 'source-over';
+
+  stats.textContent = `Blown: ${((blown / totalPx) * 100).toFixed(1)}% • Crushed: ${((crushed / totalPx) * 100).toFixed(1)}%`;
+}
+
+// =========================================================================
+// TAB SWITCHING
+// =========================================================================
+document.getElementById('tab-nav').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-tab]');
+  if (!btn) return;
+  const tab = btn.dataset.tab;
+  state.activeTab = tab;
+  document.querySelectorAll('#tab-nav .exif-tab-btn').forEach((b) => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.exif-tab-pane').forEach((p) => {
+    p.style.display = p.id === 'tab-' + tab ? 'block' : 'none';
+  });
+  if (tab === 'map') {
+    const rec = getActive();
+    if (rec) setTimeout(() => renderMapAndSunPanel(rec), 60);
+  }
+  if (tab === 'batch') {
+    setTimeout(() => renderBatchAndStripPanel(), 60);
+  }
+});
+
+// =========================================================================
+// TAB 1: EXIF CARDS, SEARCH, TIMESTAMP AUDIT, OPTICS PHYSICS & ALL TAGS
+// =========================================================================
+document.getElementById('tag-search-input').addEventListener('input', (e) => {
+  state.tagSearch = e.target.value.trim().toLowerCase();
+  const rec = getActive();
+  if (rec) {
+    renderExif(rec.exifr);
+    renderAllTagsPanel(rec);
+  }
+});
+document.getElementById('tag-cat-pills').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-cat]');
+  if (!btn) return;
+  state.tagCat = btn.dataset.cat;
+  document.querySelectorAll('#tag-cat-pills .exif-mini-btn').forEach((b) => b.classList.toggle('active', b === btn));
+  const rec = getActive();
+  if (rec) {
+    renderExif(rec.exifr);
+    renderAllTagsPanel(rec);
+  }
+});
+
+function formatTagValue(k, v) {
+  if (v === undefined || v === null) return '';
+  if (v instanceof Date) return v.toLocaleString();
+  if (v instanceof Uint8Array) return `[Binary ${v.length} bytes]`;
+  if (k === 'ExposureTime' && typeof v === 'number') return v < 1 ? `1/${Math.round(1 / v)}s (${v}s)` : `${v}s`;
+  if (k === 'FNumber' && typeof v === 'number') return `f/${v}`;
+  if ((k === 'FocalLength' || k === 'FocalLengthIn35mmFormat') && typeof v === 'number') return `${v} mm`;
+  if ((k === 'latitude' || k === 'longitude') && typeof v === 'number') return `${v.toFixed(6)}°`;
+  if (Array.isArray(v)) return v.map((x) => (typeof x === 'number' ? Number(x.toFixed(4)) : String(x))).join(', ');
+  if (typeof v === 'object') return JSON.stringify(v);
+  return String(v);
+}
+
 function renderExif(exif) {
- const groups = {
- ' Camera': ['Make','Model','LensModel','Software'],
- ' Capture Settings': ['ExposureTime','FNumber','ISO','FocalLength','Flash','WhiteBalance','MeteringMode','ExposureMode'],
- ' Image Info': ['ImageWidth','ImageHeight','Orientation','ColorSpace','BitsPerSample'],
- ' Date & Time': ['DateTimeOriginal','CreateDate','ModifyDate'],
- ' GPS Location': ['latitude','longitude','altitude','GPSAltitude'],
- ' Other': ['ApertureValue','ShutterSpeedValue','BrightnessValue','Copyright','Artist','XResolution','YResolution']
- };
+  const container = document.getElementById('exif-grid');
+  container.innerHTML = '';
+  const rec = getActive();
 
- const container = document.getElementById('exif-grid');
- container.innerHTML = '';
+  if (!exif || Object.keys(exif).length === 0) {
+    const hasChunks = rec && rec.binaryInfo && rec.binaryInfo.pngTextChunks && rec.binaryInfo.pngTextChunks.length > 0;
+    container.innerHTML = hasChunks
+      ? `<div class="exif-alert-banner exif-alert-info">Standard TIFF EXIF headers are absent, but <strong>${rec.binaryInfo.pngTextChunks.length} embedded PNG/Text metadata chunk(s)</strong> were found! Check the <strong>AI X-Ray &amp; DQT</strong> tab.</div>`
+      : `<div class="exif-alert-banner exif-alert-warning">No standard EXIF tags found in this image (common for screenshots or social-media downloads). Check <strong>AI X-Ray &amp; DQT</strong> and <strong>ELA &amp; Tampering</strong> tabs for deeper compression &amp; pixel forensics!</div>`;
+    return;
+  }
 
- Object.entries(groups).forEach(([group, keys]) =>{
- const entries = keys.map(k =>[k, exif[k]]).filter(([,v]) =>v !== undefined && v !== null && v !== '');
- if (!entries.length) return;
- const section = document.createElement('div');
- section.style.cssText = 'background:var(--bg);border-radius:12px;padding:16px;margin-bottom:12px;';
- section.innerHTML = `<div style="font-weight:700;color:var(--dark);font-size:0.9rem;margin-bottom:12px;">${group}</div>`;
- entries.forEach(([k, v]) =>{
- let display = String(v);
- if (k === 'ExposureTime' && typeof v === 'number') display = v < 1 ? `1/${Math.round(1/v)}s` : `${v}s`;
- if (k === 'FNumber') display = `f/${v}`;
- if (k === 'FocalLength') display = `${v}mm`;
- if (k === 'ISO') display = String(v);
- if ((k === 'latitude' || k === 'longitude') && typeof v === 'number') display = v.toFixed(6) + '°';
- if (k === 'DateTimeOriginal' && v instanceof Date) display = v.toLocaleString();
- const row = document.createElement('div');
- row.style.cssText = 'display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);font-size:0.84rem;';
- row.innerHTML = `<span style="color:var(--text-light);font-weight:500;">${k}</span><span style="color:var(--dark);font-weight:600;text-align:right;word-break:break-all;">${display}</span>`;
- section.appendChild(row);
- });
- container.appendChild(section);
- });
+  const groupDefs = [
+    { cat: 'camera', title: '📷 Camera & Lens Hardware', keys: ['Make', 'Model', 'LensMake', 'LensModel', 'LensInfo', 'Software', 'HostComputer', 'SerialNumber', 'BodySerialNumber', 'LensSerialNumber', 'CameraOwnerName'] },
+    { cat: 'exposure', title: '⚡ Exposure & Capture Settings', keys: ['ExposureTime', 'FNumber', 'ISO', 'FocalLength', 'FocalLengthIn35mmFormat', 'ExposureProgram', 'ExposureCompensation', 'Flash', 'WhiteBalance', 'MeteringMode', 'ExposureMode', 'SceneCaptureType', 'LightSource'] },
+    { cat: 'camera', title: '🖼️ Image Geometry & Color', keys: ['ImageWidth', 'ImageHeight', 'ExifImageWidth', 'ExifImageHeight', 'Orientation', 'ColorSpace', 'BitsPerSample', 'XResolution', 'YResolution', 'ProfileDescription'] },
+    { cat: 'camera', title: '🕒 Date, Time & Timezone', keys: ['DateTimeOriginal', 'CreateDate', 'ModifyDate', 'OffsetTimeOriginal', 'OffsetTime', 'SubSecTimeOriginal', 'GPSDateStamp', 'GPSTimeStamp'] },
+    { cat: 'gps', title: '📍 GPS Geolocation Telemetry', keys: ['latitude', 'longitude', 'GPSAltitude', 'GPSImgDirection', 'GPSImgDirectionRef', 'GPSSpeed', 'GPSSpeedRef', 'GPSHPositioningError', 'GPSProcessingMethod'] },
+    { cat: 'hardware', title: '🔧 Hardware Odometer & Copyright', keys: ['ApertureValue', 'ShutterSpeedValue', 'BrightnessValue', 'SubjectDistance', 'Copyright', 'Artist', 'ImageDescription', 'Rating', 'ImageUniqueID'] }
+  ];
 
- // GPS Map Link
- if (exif.latitude && exif.longitude) {
- const mapLink = document.createElement('a');
- mapLink.href = `https://maps.google.com/?q=${exif.latitude},${exif.longitude}`;
- mapLink.target = '_blank';
- mapLink.className = 'btn btn-blue';
- mapLink.style.marginTop = '12px';
- mapLink.textContent = ' View on Google Maps';
- container.appendChild(mapLink);
- }
+  // Inject decoded MakerNote fields into Hardware group dynamically
+  const extraHw = {};
+  if (rec && rec.hwTelemetry) {
+    if (rec.hwTelemetry.shutterCount) extraHw['Shutter Count (Decoded)'] = rec.hwTelemetry.shutterCount;
+    if (rec.hwTelemetry.bodySerial) extraHw['Body Serial (Decoded)'] = rec.hwTelemetry.bodySerial;
+    if (rec.hwTelemetry.lensSerial) extraHw['Lens Serial (Decoded)'] = rec.hwTelemetry.lensSerial;
+    if (rec.hwTelemetry.deviceUptime) extraHw['Device Uptime (RunTime)'] = rec.hwTelemetry.deviceUptime;
+  }
+
+  const q = state.tagSearch;
+  groupDefs.forEach((grp) => {
+    if (state.tagCat !== 'all' && state.tagCat !== grp.cat) return;
+    if (state.tagCat === 'raw') return;
+    let entries = grp.keys.map((k) => [k, exif[k]]).filter(([, v]) => v !== undefined && v !== null && v !== '');
+    if (grp.cat === 'hardware') {
+      Object.entries(extraHw).forEach(([k, v]) => entries.unshift([k, v]));
+    }
+    if (q) {
+      entries = entries.filter(([k, v]) => k.toLowerCase().includes(q) || formatTagValue(k, v).toLowerCase().includes(q));
+    }
+    if (!entries.length) return;
+
+    const section = document.createElement('div');
+    section.className = 'exif-panel-card';
+    section.innerHTML = `<div class="exif-panel-title"><span>${grp.title}</span></div>`;
+    entries.forEach(([k, v]) => {
+      const row = document.createElement('div');
+      row.className = 'exif-kv-row';
+      row.innerHTML = `<span class="exif-kv-k">${esc(k)}</span><span class="exif-kv-v">${esc(formatTagValue(k, v))}</span>`;
+      section.appendChild(row);
+    });
+    container.appendChild(section);
+  });
+}
+
+function renderTimestampAudit(rec) {
+  const el = document.getElementById('timestamp-audit-panel');
+  const ta = rec.timeAudit;
+  if (!ta || (!ta.warnings.length && ta.timeSource === 'None')) {
+    el.innerHTML = '';
+    return;
+  }
+  const hasWarn = ta.warnings.length > 0;
+  el.innerHTML = `
+    <div class="exif-alert-banner ${hasWarn ? 'exif-alert-warning' : 'exif-alert-success'}">
+      <strong>${hasWarn ? '⚠️ Timestamp &amp; Clock Audit Warnings:' : '✅ Timestamp Consistency Verified:'}</strong>
+      <div style="margin-top:4px;font-size:0.82rem;">Time Reference: ${esc(ta.timeSource)}</div>
+      ${ta.warnings.map((w) => `<div style="margin-top:4px;">• ${esc(w)}</div>`).join('')}
+    </div>
+  `;
+}
+
+function renderOpticsPanel(rec) {
+  const el = document.getElementById('optics-panel');
+  const o = F.calculateOpticsPhysics(rec.exifr, state.subjectDistM);
+  if (!o || (!o.focalLength && o.ev100 === null)) {
+    el.innerHTML = '';
+    return;
+  }
+  const dofFarStr = o.dofFarM === null ? '—' : (o.dofFarM === Infinity ? '∞ (Hyperfocal!)' : o.dofFarM.toFixed(2) + ' m');
+  const dofSpanStr = o.dofNearM !== null && o.dofFarM !== null
+    ? (o.dofFarM === Infinity ? 'Infinite' : (o.dofFarM - o.dofNearM).toFixed(2) + ' m')
+    : '—';
+
+  el.innerHTML = `
+    <div class="exif-panel-card">
+      <div class="exif-panel-title"><span>🔭 Optics, Crop Factor &amp; Depth-of-Field Physics</span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:12px;">
+        <div class="exif-kv-row" style="flex-direction:column;border:1px solid var(--border-color);padding:8px 10px;border-radius:8px;background:var(--surface-card);"><span class="exif-kv-k">Crop Factor</span><span class="exif-kv-v" style="text-align:left;">${o.cropFactor ? o.cropFactor.toFixed(2) + '×' : 'N/A'}</span></div>
+        <div class="exif-kv-row" style="flex-direction:column;border:1px solid var(--border-color);padding:8px 10px;border-radius:8px;background:var(--surface-card);"><span class="exif-kv-k">35mm Eq. Aperture</span><span class="exif-kv-v" style="text-align:left;">${o.eqAperture ? 'f/' + o.eqAperture.toFixed(1) : 'N/A'}</span></div>
+        <div class="exif-kv-row" style="flex-direction:column;border:1px solid var(--border-color);padding:8px 10px;border-radius:8px;background:var(--surface-card);"><span class="exif-kv-k">Horiz / Diag FOV</span><span class="exif-kv-v" style="text-align:left;">${o.horizFovDeg ? o.horizFovDeg.toFixed(1) + '° / ' + o.diagFovDeg.toFixed(1) + '°' : 'N/A'}</span></div>
+        <div class="exif-kv-row" style="flex-direction:column;border:1px solid var(--border-color);padding:8px 10px;border-radius:8px;background:var(--surface-card);"><span class="exif-kv-k">Exposure Value (EV₁₀₀)</span><span class="exif-kv-v" style="text-align:left;">${o.ev100 !== null ? o.ev100.toFixed(2) + ' EV' : 'N/A'}</span></div>
+      </div>
+      ${o.hyperfocalM ? `
+        <div style="background:var(--surface-card);border:1px solid var(--border-color);border-radius:8px;padding:10px 12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+            <label style="font-size:0.82rem;font-weight:700;color:var(--text-heading);">Focus Distance Simulator: <span id="dof-dist-val">${o.subjectDistM.toFixed(1)} m</span> ${o.fromExifDistance ? '(from EXIF)' : '(Adjustable)'}</label>
+            <span style="font-size:0.78rem;color:var(--text-muted);">Hyperfocal: <strong>${o.hyperfocalM.toFixed(2)} m</strong></span>
+          </div>
+          <input type="range" id="dof-dist-slider" min="0.5" max="30" step="0.5" value="${Math.min(30, o.subjectDistM)}" style="width:100%;accent-color:var(--primary);"/>
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:0.8rem;color:var(--text-body);">
+            <span>Near Sharp Limit: <strong>${o.dofNearM.toFixed(2)} m</strong></span>
+            <span>Far Sharp Limit: <strong>${dofFarStr}</strong></span>
+            <span>Total Depth of Field: <strong>${dofSpanStr}</strong></span>
+          </div>
+        </div>` : ''}
+    </div>
+  `;
+  const slider = document.getElementById('dof-dist-slider');
+  if (slider) {
+    slider.addEventListener('input', (e) => {
+      state.subjectDistM = parseFloat(e.target.value);
+      renderOpticsPanel(rec);
+    });
+  }
+}
+
+function renderAllTagsPanel(rec) {
+  const panel = document.getElementById('all-tags-panel');
+  const merged = {};
+  if (rec.exifr) Object.entries(rec.exifr).forEach(([k, v]) => { merged[k] = formatTagValue(k, v); });
+  if (rec.exifReaderExpanded) {
+    ['exif', 'ifd0', 'makerNotes', 'iptc', 'gps', 'icc', 'png'].forEach((grp) => {
+      const obj = rec.exifReaderExpanded[grp];
+      if (!obj || typeof obj !== 'object') return;
+      Object.entries(obj).forEach(([k, v]) => {
+        if (merged[k] === undefined && v && typeof v === 'object' && 'description' in v) {
+          merged[`${grp}:${k}`] = String(v.description);
+        }
+      });
+    });
+  }
+  let entries = Object.entries(merged).sort((a, b) => a[0].localeCompare(b[0]));
+  if (state.tagSearch) {
+    entries = entries.filter(([k, v]) => k.toLowerCase().includes(state.tagSearch) || v.toLowerCase().includes(state.tagSearch));
+  }
+  if (!entries.length) {
+    panel.innerHTML = '';
+    return;
+  }
+  const openByDefault = state.tagCat === 'raw' || Boolean(state.tagSearch);
+  panel.innerHTML = `
+    <details class="exif-panel-card" ${openByDefault ? 'open' : ''}>
+      <summary style="cursor:pointer;font-weight:700;color:var(--text-heading);font-size:0.9rem;">
+        📑 Complete Exhaustive Tag Dump (${entries.length} Total Tags Extracted)
+      </summary>
+      <div style="margin-top:12px;max-height:360px;overflow:auto;">
+        ${entries.map(([k, v]) => `<div class="exif-kv-row"><span class="exif-kv-k">${esc(k)}</span><span class="exif-kv-v">${esc(v.slice(0, 350))}${v.length > 350 ? '…' : ''}</span></div>`).join('')}
+      </div>
+    </details>
+  `;
 }
 
 function storeExifText(exif) {
- allExifText = Object.entries(exif).map(([k,v]) =>`${k}: ${v}`).join('\n');
+  const rec = getActive();
+  const lines = [];
+  if (rec) {
+    lines.push(`=== PixelCraft Forensic EXIF Report ===`);
+    lines.push(`File: ${rec.file.name} (${formatFileSize(rec.file.size)})`);
+    lines.push(`SHA-256: ${rec.hashes.sha256}`);
+    lines.push(`Privacy Risk: ${rec.privacyRisk.score}/100 (${rec.privacyRisk.rating})`);
+    lines.push(`AI Verdict: ${rec.aiInfo.verdict}`);
+    lines.push('');
+  }
+  if (exif) {
+    Object.entries(exif).forEach(([k, v]) => lines.push(`${k}: ${formatTagValue(k, v)}`));
+  }
+  allExifText = lines.join('\n');
 }
 
-document.getElementById('btn-copy-all').addEventListener('click', () =>{
- if(allExifText) {
- navigator.clipboard.writeText(allExifText).then(() =>{
- showToast('EXIF data copied!','success');
- if (window.PixelCraftAnalytics) {
- window.PixelCraftAnalytics.trackDownload('EXIF Data Viewer', 'txt', allExifText.length);
- }
- });
- }
+// =========================================================================
+// TAB 2: OSINT MAP, FOV CONE & SUN-SHADOW LIE DETECTOR
+// =========================================================================
+function destinationPoint(lat, lng, bearingDeg, distMeters) {
+  const R = 6371000;
+  const rad = Math.PI / 180;
+  const br = bearingDeg * rad;
+  const lat1 = lat * rad;
+  const lng1 = lng * rad;
+  const dr = distMeters / R;
+  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(dr) + Math.cos(lat1) * Math.sin(dr) * Math.cos(br));
+  const lng2 = lng1 + Math.atan2(Math.sin(br) * Math.sin(dr) * Math.cos(lat1), Math.cos(dr) - Math.sin(lat1) * Math.sin(lat2));
+  return [lat2 / rad, lng2 / rad];
+}
+
+function renderCompassSvg(solar, camBearing, fovDeg) {
+  const svg = document.getElementById('sun-compass-svg');
+  const cx = 130, cy = 130, r = 95;
+  let content = `
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--surface-card)" stroke="var(--border-color)" stroke-width="2"/>
+    <circle cx="${cx}" cy="${cy}" r="${r * 0.65}" fill="none" stroke="var(--border-color)" stroke-dasharray="3 3"/>
+    <text x="${cx}" y="22" text-anchor="middle" fill="var(--danger)" font-size="12" font-weight="800">N</text>
+    <text x="${cx}" y="248" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="700">S</text>
+    <text x="242" y="${cy + 4}" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="700">E</text>
+    <text x="18" y="${cy + 4}" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="700">W</text>
+  `;
+
+  if (Number.isFinite(camBearing)) {
+    const half = (fovDeg || 50) / 2;
+    const a1 = ((camBearing - half - 90) * Math.PI) / 180;
+    const a2 = ((camBearing + half - 90) * Math.PI) / 180;
+    const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+    const x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+    content += `<path d="M${cx},${cy} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 0,1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="rgba(37,99,235,0.22)" stroke="#2563eb" stroke-width="1.5"/>`;
+  }
+
+  if (solar) {
+    const sunRad = ((solar.azimuth - 90) * Math.PI) / 180;
+    const sx = cx + (r - 8) * Math.cos(sunRad), sy = cy + (r - 8) * Math.sin(sunRad);
+    const shRad = ((solar.shadowAzimuth - 90) * Math.PI) / 180;
+    const hx = cx + (r - 16) * Math.cos(shRad), hy = cy + (r - 16) * Math.sin(shRad);
+
+    content += `
+      <line x1="${cx}" y1="${cy}" x2="${sx.toFixed(1)}" y2="${sy.toFixed(1)}" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="9" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
+      <text x="${sx.toFixed(1)}" y="${(sy + 3).toFixed(1)}" text-anchor="middle" font-size="10">☀</text>
+      <line x1="${cx}" y1="${cy}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}" stroke="#475569" stroke-width="3.5" stroke-dasharray="5 3" stroke-linecap="round"/>
+      <circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="4.5" fill="#1e293b"/>
+    `;
+  }
+  content += `<circle cx="${cx}" cy="${cy}" r="5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>`;
+  svg.innerHTML = content;
+}
+
+function renderMapAndSunPanel(rec) {
+  const lat = state.manualCoords ? state.manualCoords.lat : (Number.isFinite(rec.exifr.latitude) ? rec.exifr.latitude : null);
+  const lng = state.manualCoords ? state.manualCoords.lng : (Number.isFinite(rec.exifr.longitude) ? rec.exifr.longitude : null);
+  const camBearing = Number.isFinite(rec.exifr.GPSImgDirection) ? rec.exifr.GPSImgDirection : null;
+  const fovDeg = rec.optics && rec.optics.horizFovDeg ? rec.optics.horizFovDeg : 52;
+  const audit = F.auditTimestamps(rec.exifr, lat, lng, state.tzOffsetMin);
+
+  const manualBox = document.getElementById('manual-coords-box');
+  if (!Number.isFinite(rec.exifr.latitude)) {
+    manualBox.innerHTML = `
+      <div class="exif-alert-banner exif-alert-info" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <span>No GPS embedded in this photo. Simulate Sun-Shadow angle at a suspected location:</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <input type="number" step="0.0001" id="sim-lat" placeholder="Lat (e.g. 28.6139)" value="${lat ?? ''}" style="width:125px;padding:4px 8px;border-radius:6px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;"/>
+          <input type="number" step="0.0001" id="sim-lng" placeholder="Lng (e.g. 77.2090)" value="${lng ?? ''}" style="width:125px;padding:4px 8px;border-radius:6px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;"/>
+          <button type="button" class="exif-mini-btn active" id="btn-sim-coords">Simulate Sun &amp; Map</button>
+        </div>
+      </div>`;
+    document.getElementById('btn-sim-coords').onclick = () => {
+      const sLat = parseFloat(document.getElementById('sim-lat').value);
+      const sLng = parseFloat(document.getElementById('sim-lng').value);
+      if (Number.isFinite(sLat) && Number.isFinite(sLng)) {
+        state.manualCoords = { lat: sLat, lng: sLng };
+        renderMapAndSunPanel(rec);
+      } else {
+        showToast('Enter valid latitude and longitude values.', 'error');
+      }
+    };
+  } else {
+    manualBox.innerHTML = `<div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:0.84rem;">
+      <span><strong>Coordinates:</strong> ${lat.toFixed(6)}°, ${lng.toFixed(6)}° ${Number.isFinite(rec.exifr.GPSAltitude) ? `• Alt: ${Math.round(rec.exifr.GPSAltitude)}m` : ''} ${camBearing !== null ? `• Bearing: ${camBearing.toFixed(1)}°` : ''}</span>
+      <a href="https://maps.google.com/?q=${lat},${lng}" target="_blank" rel="noopener" class="exif-mini-btn">Open in Google Maps ↗</a>
+    </div>`;
+  }
+
+  renderCompassSvg(audit.solar, camBearing, fovDeg);
+
+  // Solar Telemetry Text Panel
+  const solarPanel = document.getElementById('solar-telemetry-panel');
+  if (audit.solar) {
+    solarPanel.innerHTML = `
+      <div class="exif-panel-title"><span>☀️ Astronomical Sun-Shadow Lie Detector</span></div>
+      <div class="exif-kv-row"><span class="exif-kv-k">Lighting Phase</span><span class="exif-kv-v">${esc(audit.solar.phase)}</span></div>
+      <div class="exif-kv-row"><span class="exif-kv-k">Sun Azimuth (from N)</span><span class="exif-kv-v">${audit.solar.azimuth.toFixed(1)}°</span></div>
+      <div class="exif-kv-row"><span class="exif-kv-k">Sun Elevation</span><span class="exif-kv-v">${audit.solar.elevation.toFixed(1)}°</span></div>
+      <div class="exif-kv-row"><span class="exif-kv-k">Expected Shadow Direction</span><span class="exif-kv-v">${audit.solar.shadowAzimuth.toFixed(1)}°</span></div>
+      <div class="exif-kv-row"><span class="exif-kv-k">1.7m Subject Shadow Len</span><span class="exif-kv-v">${esc(audit.solar.shadowLengthFor170cm)}</span></div>
+      <div class="exif-kv-row"><span class="exif-kv-k">Time Basis</span><span class="exif-kv-v">${esc(audit.timeSource)}</span></div>
+      <div style="margin-top:10px;font-size:0.78rem;color:var(--text-muted);line-height:1.45;">
+        Legend: <span style="color:#f59e0b;font-weight:700;">● Sun Direction</span> • <span style="font-weight:700;">--- Shadow Cast</span> • <span style="color:#2563eb;font-weight:700;">▲ Camera FOV Cone</span>
+      </div>
+    `;
+  } else {
+    solarPanel.innerHTML = `
+      <div class="exif-panel-title"><span>☀️ Astronomical Sun-Shadow Calculator</span></div>
+      <div style="font-size:0.84rem;color:var(--text-muted);line-height:1.5;">Requires both <strong>GPS coordinates</strong> (or simulated lat/lng above) and a <strong>capture timestamp</strong> to compute exact solar azimuth &amp; expected shadow vectors.</div>
+    `;
+  }
+
+  // Render Leaflet Map
+  const mapEl = document.getElementById('osint-map');
+  if (typeof window.L === 'undefined' || !Number.isFinite(lat) || !Number.isFinite(lng)) {
+    if (state.leafletMap) { state.leafletMap.remove(); state.leafletMap = null; }
+    mapEl.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;color:var(--text-muted);font-size:0.88rem;">
+      ${!Number.isFinite(lat) ? 'No GPS coordinates available for map plotting — enter simulated coordinates above or load a geotagged photo.' : 'Interactive map library failed to load (offline mode). Use the Offline Compass Dial below!'}
+    </div>`;
+    return;
+  }
+
+  if (state.leafletMap) { state.leafletMap.remove(); state.leafletMap = null; }
+  mapEl.innerHTML = '';
+  const map = window.L.map(mapEl).setView([lat, lng], 16);
+  state.leafletMap = map;
+
+  const setTiles = () => {
+    if (state.tileLayer) map.removeLayer(state.tileLayer);
+    const url = state.mapLayer === 'sat'
+      ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+      : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    state.tileLayer = window.L.tileLayer(url, { maxZoom: 19, attribution: state.mapLayer === 'sat' ? 'Esri' : '© OpenStreetMap' }).addTo(map);
+  };
+  setTiles();
+
+  window.L.marker([lat, lng]).addTo(map).bindPopup(`<strong>${esc(rec.file.name)}</strong><br/>${lat.toFixed(5)}, ${lng.toFixed(5)}`).openPopup();
+
+  if (camBearing !== null) {
+    const p1 = destinationPoint(lat, lng, camBearing - fovDeg / 2, 160);
+    const p2 = destinationPoint(lat, lng, camBearing + fovDeg / 2, 160);
+    window.L.polygon([[lat, lng], p1, p2], { color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.25, weight: 2 }).addTo(map);
+  }
+  if (audit.solar) {
+    const sunEnd = destinationPoint(lat, lng, audit.solar.azimuth, 180);
+    const shEnd = destinationPoint(lat, lng, audit.solar.shadowAzimuth, 140);
+    window.L.polyline([[lat, lng], sunEnd], { color: '#f59e0b', weight: 3 }).addTo(map);
+    window.L.polyline([[lat, lng], shEnd], { color: '#0f172a', weight: 3, dashArray: '6 5' }).addTo(map);
+  }
+  if (state.activeTab === 'map') setTimeout(() => map.invalidateSize(), 120);
+}
+
+document.getElementById('map-layer-toggle').addEventListener('click', (e) => {
+  state.mapLayer = state.mapLayer === 'street' ? 'sat' : 'street';
+  e.target.textContent = state.mapLayer === 'street' ? 'Switch to Satellite' : 'Switch to Street Map';
+  const rec = getActive();
+  if (rec) renderMapAndSunPanel(rec);
+});
+document.getElementById('tz-override-select').addEventListener('change', (e) => {
+  state.tzOffsetMin = e.target.value === 'auto' ? null : parseInt(e.target.value, 10);
+  const rec = getActive();
+  if (rec) renderMapAndSunPanel(rec);
+});
+
+// =========================================================================
+// TAB 3: GHOST THUMBNAIL, MOTION VIDEO & 3D DEPTH MAP
+// =========================================================================
+function renderHiddenMediaPanel(rec) {
+  const thumbEl = document.getElementById('ghost-thumb-panel');
+  if (rec.thumbUrl) {
+    const diff = rec.thumbDiff;
+    const mismatchBanner = diff && diff.isMismatch
+      ? `<div class="exif-alert-banner exif-alert-danger"><strong>🚨 GHOST THUMBNAIL MISMATCH DETECTED!</strong> The embedded EXIF IFD1 thumbnail differs significantly from the main visible image (Aspect delta: ${diff.aspectDiffPct}%, Perceptual dHash similarity: ${diff.similarityPct}%). An uncropped or uncensored original may be leaking inside this file!</div>`
+      : `<div class="exif-alert-banner exif-alert-success"><strong>✅ Embedded IFD1 Thumbnail Extracted</strong> — Matches main image geometry (Similarity: ${diff ? diff.similarityPct + '%' : 'N/A'}).</div>`;
+
+    thumbEl.innerHTML = `
+      <div class="exif-panel-card">
+        <div class="exif-panel-title">
+          <span>👻 Embedded EXIF IFD1 Thumbnail Recovery</span>
+          <a href="${rec.thumbUrl}" download="recovered-thumbnail-${esc(rec.file.name)}.jpg" class="exif-mini-btn active">Download Thumbnail</a>
+        </div>
+        ${mismatchBanner}
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;align-items:start;">
+          <div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Main Image (${diff ? diff.mainDims : ''})</div>
+            <img src="${rec.previewUrl}" style="width:100%;max-height:220px;object-fit:contain;border-radius:10px;border:1px solid var(--border-color);background:#0b0f19;"/>
+          </div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Hidden EXIF Thumbnail (${diff ? diff.thumbDims : ''})</div>
+            <img src="${rec.thumbUrl}" style="width:100%;max-height:220px;object-fit:contain;border-radius:10px;border:1px solid var(--border-color);background:#0b0f19;"/>
+          </div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Ghost Overlay Blend (<span id="ghost-blend-val">50%</span>)</div>
+            <div style="position:relative;height:220px;border-radius:10px;overflow:hidden;border:1px solid var(--border-color);background:#0b0f19;">
+              <img src="${rec.previewUrl}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;"/>
+              <img id="ghost-overlay-img" src="${rec.thumbUrl}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0.5;"/>
+            </div>
+            <input type="range" id="ghost-blend-slider" min="0" max="100" value="50" style="width:100%;margin-top:6px;accent-color:var(--primary);"/>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('ghost-blend-slider').addEventListener('input', (e) => {
+      document.getElementById('ghost-blend-val').textContent = e.target.value + '%';
+      document.getElementById('ghost-overlay-img').style.opacity = String(Number(e.target.value) / 100);
+    });
+  } else {
+    thumbEl.innerHTML = `<div class="exif-panel-card"><div class="exif-panel-title"><span>👻 Embedded EXIF IFD1 Thumbnail</span></div><div style="font-size:0.85rem;color:var(--text-muted);">No embedded IFD1 preview thumbnail found in this file.</div></div>`;
+  }
+
+  const mvEl = document.getElementById('motion-video-panel');
+  if (rec.motionVideoUrl) {
+    mvEl.innerHTML = `
+      <div class="exif-panel-card">
+        <div class="exif-panel-title">
+          <span>🎬 Hidden Motion Photo MP4 Video Extracted!</span>
+          <a href="${rec.motionVideoUrl}" download="motion-video-${esc(rec.file.name)}.mp4" class="exif-mini-btn active">Download MP4 (${esc(F.formatBytes(rec.embeddedMedia.motionVideoSize))})</a>
+        </div>
+        <div class="exif-alert-banner exif-alert-warning">Found embedded MP4 video at byte offset <code>0x${rec.embeddedMedia.motionVideoOffset.toString(16).toUpperCase()}</code> inside this still image!</div>
+        <video src="${rec.motionVideoUrl}" controls autoplay loop muted playsinline style="width:100%;max-height:320px;border-radius:10px;background:#000;"></video>
+      </div>`;
+  } else {
+    mvEl.innerHTML = `<div class="exif-panel-card"><div class="exif-panel-title"><span>🎬 Motion Photo / Live MP4 Scanner</span></div><div style="font-size:0.85rem;color:var(--text-muted);">No embedded Motion Photo MP4 stream found in this image.</div></div>`;
+  }
+
+  const dmEl = document.getElementById('depth-map-panel');
+  if (rec.embeddedMedia.depthMapDataUrl) {
+    dmEl.innerHTML = `
+      <div class="exif-panel-card">
+        <div class="exif-panel-title"><span>🧊 Portrait GDepth 3D Depth Map &amp; Parallax</span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;">
+          <div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Extracted Grayscale Depth Map</div>
+            <img src="${rec.embeddedMedia.depthMapDataUrl}" style="width:100%;max-height:260px;object-fit:contain;border-radius:10px;border:1px solid var(--border-color);"/>
+          </div>
+          <div>
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Interactive 3D Tilt Preview (Move Cursor)</div>
+            <div class="exif-parallax-wrap" id="parallax-stage">
+              <img src="${rec.previewUrl}" class="exif-parallax-img" id="parallax-img"/>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    const stage = document.getElementById('parallax-stage');
+    const pImg = document.getElementById('parallax-img');
+    stage.addEventListener('mousemove', (e) => {
+      const r = stage.getBoundingClientRect();
+      const rx = ((e.clientY - r.top) / r.height - 0.5) * -14;
+      const ry = ((e.clientX - r.left) / r.width - 0.5) * 14;
+      pImg.style.transform = `scale(1.06) rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg)`;
+    });
+    stage.addEventListener('mouseleave', () => { pImg.style.transform = 'none'; });
+  } else {
+    dmEl.innerHTML = '';
+  }
+}
+
+// =========================================================================
+// TAB 4: AI PROVENANCE X-RAY, XMP TIMELINE & DQT SOFTWARE DNA
+// =========================================================================
+function renderAiAndDqtPanel(rec) {
+  const aiEl = document.getElementById('ai-verdict-panel');
+  const ai = rec.aiInfo;
+  const alertCls = ai.verdictType === 'ai-generated' ? 'exif-alert-danger' : (ai.verdictType === 'ai-edited' ? 'exif-alert-warning' : (ai.verdictType === 'edited' ? 'exif-alert-info' : 'exif-alert-success'));
+
+  let aiDetails = '';
+  if (ai.positivePrompt) {
+    aiDetails += `
+      <div style="margin-top:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <strong style="font-size:0.84rem;color:var(--text-heading);">Extracted Positive Prompt</strong>
+          <button type="button" class="exif-mini-btn" id="btn-copy-prompt">Copy Prompt</button>
+        </div>
+        <div class="exif-code-box">${esc(ai.positivePrompt)}</div>
+      </div>`;
+  }
+  if (ai.negativePrompt) {
+    aiDetails += `<div style="margin-top:10px;"><strong style="font-size:0.84rem;color:var(--text-heading);">Negative Prompt</strong><div class="exif-code-box" style="margin-top:4px;">${esc(ai.negativePrompt)}</div></div>`;
+  }
+  if (ai.generationParams && Object.keys(ai.generationParams).length) {
+    aiDetails += `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+      ${Object.entries(ai.generationParams).map(([k, v]) => `<span style="font-size:0.76rem;padding:4px 8px;border-radius:6px;background:var(--surface-card);border:1px solid var(--border-color);color:var(--text-heading);"><strong>${esc(k)}:</strong> ${esc(v)}</span>`).join('')}
+    </div>`;
+  }
+  if (ai.comfySummary) {
+    const cs = ai.comfySummary;
+    aiDetails += `
+      <div style="margin-top:12px;padding:12px;border-radius:10px;background:var(--surface-card);border:1px solid var(--border-color);">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+          <strong>ComfyUI Graph (${cs.nodeCount} Nodes)</strong>
+          <button type="button" class="exif-mini-btn active" id="btn-dl-comfy">Download Workflow JSON</button>
+        </div>
+        ${cs.checkpoints.length ? `<div style="font-size:0.82rem;margin-bottom:4px;"><strong>Checkpoints:</strong> ${esc(cs.checkpoints.join(', '))}</div>` : ''}
+        ${cs.loras.length ? `<div style="font-size:0.82rem;margin-bottom:4px;"><strong>LoRAs:</strong> ${esc(cs.loras.join(', '))}</div>` : ''}
+        ${cs.samplers.length ? `<div style="font-size:0.82rem;margin-bottom:6px;"><strong>Samplers:</strong> ${esc(cs.samplers.join(' | '))}</div>` : ''}
+        ${cs.prompts.length ? `<div class="exif-code-box">${esc(cs.prompts.join('\n---\n'))}</div>` : ''}
+      </div>`;
+  }
+  if (rec.binaryInfo.pngTextChunks.length && !ai.positivePrompt && !ai.comfySummary) {
+    aiDetails += `<div style="margin-top:10px;"><strong>Embedded Text Chunks (${rec.binaryInfo.pngTextChunks.length})</strong>
+      <div class="exif-code-box" style="margin-top:4px;">${rec.binaryInfo.pngTextChunks.map((c) => `[${esc(c.chunk)}] ${esc(c.keyword)}: ${esc(c.text.slice(0, 600))}`).join('\n\n')}</div>
+    </div>`;
+  }
+
+  aiEl.innerHTML = `
+    <div class="exif-panel-card">
+      <div class="exif-panel-title"><span>🤖 AI Generation, C2PA &amp; Prompt X-Ray</span></div>
+      <div class="exif-alert-banner ${alertCls}">
+        <strong>Verdict: ${esc(ai.verdict)}</strong>
+        ${ai.findings.map((f) => `<div style="margin-top:4px;">• ${esc(f)}</div>`).join('')}
+      </div>
+      ${aiDetails || `<div style="font-size:0.84rem;color:var(--text-muted);">No embedded Stable Diffusion, ComfyUI, Midjourney, or C2PA provenance tokens detected.</div>`}
+    </div>`;
+  const cpBtn = document.getElementById('btn-copy-prompt');
+  if (cpBtn) cpBtn.onclick = () => { navigator.clipboard.writeText(ai.positivePrompt); showToast('AI Prompt copied!', 'success'); };
+  const dlComfy = document.getElementById('btn-dl-comfy');
+  if (dlComfy && ai.comfyWorkflow) {
+    dlComfy.onclick = () => {
+      const blob = new Blob([JSON.stringify(ai.comfyWorkflow, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `comfyui-workflow-${rec.file.name}.json`;
+      a.click();
+      showToast('ComfyUI workflow JSON exported!', 'success');
+    };
+  }
+
+  // XMP Timeline & Lightroom CRS Edits
+  const xmpEl = document.getElementById('xmp-timeline-panel');
+  const xmp = rec.xmpInfo;
+  if (xmp && xmp.hasXmp) {
+    const crsEntries = Object.entries(xmp.crsEdits || {});
+    xmpEl.innerHTML = `
+      <div class="exif-panel-card">
+        <div class="exif-panel-title"><span>📜 Adobe XMP Lineage &amp; Edit History</span></div>
+        ${xmp.creatorTool ? `<div class="exif-kv-row"><span class="exif-kv-k">CreatorTool</span><span class="exif-kv-v">${esc(xmp.creatorTool)}</span></div>` : ''}
+        ${xmp.originalDocumentId ? `<div class="exif-kv-row"><span class="exif-kv-k">OriginalDocumentID</span><span class="exif-kv-v">${esc(xmp.originalDocumentId)}</span></div>` : ''}
+        ${xmp.documentId ? `<div class="exif-kv-row"><span class="exif-kv-k">DocumentID</span><span class="exif-kv-v">${esc(xmp.documentId)}</span></div>` : ''}
+        ${xmp.historyEvents.length ? `
+          <div style="margin-top:10px;font-weight:700;font-size:0.83rem;color:var(--text-heading);">Revision Events (${xmp.historyEvents.length})</div>
+          <div style="margin-top:6px;border-left:2px solid var(--primary);padding-left:12px;">
+            ${xmp.historyEvents.map((ev) => `<div style="margin-bottom:8px;font-size:0.81rem;"><strong>${esc(ev.action || 'event')}</strong> ${ev.when ? `• <code>${esc(ev.when)}</code>` : ''}<br/><span style="color:var(--text-muted);">${esc(ev.softwareAgent || '')} ${ev.changed ? `(${esc(ev.changed)})` : ''}</span></div>`).join('')}
+          </div>` : ''}
+        ${xmp.photoshopHistoryText ? `<div style="margin-top:10px;"><strong style="font-size:0.82rem;">Photoshop Text Log:</strong><div class="exif-code-box" style="margin-top:4px;max-height:140px;">${esc(xmp.photoshopHistoryText)}</div></div>` : ''}
+        ${crsEntries.length ? `<details style="margin-top:10px;"><summary style="cursor:pointer;font-weight:700;font-size:0.83rem;color:var(--primary);">Adobe Camera Raw / Lightroom Sliders (${crsEntries.length} non-zero)</summary><div style="margin-top:6px;">${crsEntries.slice(0, 60).map(([k, v]) => `<div class="exif-kv-row"><span class="exif-kv-k">${esc(k)}</span><span class="exif-kv-v">${esc(v)}</span></div>`).join('')}</div></details>` : ''}
+      </div>`;
+  } else {
+    xmpEl.innerHTML = '';
+  }
+
+  // DQT Software DNA
+  const dqtEl = document.getElementById('dqt-dna-panel');
+  const dqt = rec.binaryInfo.dqtAnalysis;
+  if (dqt) {
+    const renderGrid = (vals) => vals.map((v) => {
+      const heat = Math.min(1, v / 90);
+      const bg = `rgba(${Math.round(59 + heat * 180)}, ${Math.round(130 - heat * 70)}, ${Math.round(246 - heat * 180)}, 0.25)`;
+      return `<div class="exif-dqt-cell" style="background:${bg};">${v}</div>`;
+    }).join('');
+
+    dqtEl.innerHTML = `
+      <div class="exif-panel-card">
+        <div class="exif-panel-title">
+          <span>🧬 JPEG Quantization Table (DQT) Software DNA</span>
+          <span style="font-size:0.78rem;padding:2px 8px;border-radius:6px;background:var(--primary-light);color:var(--primary);font-weight:700;">DNA #${esc(dqt.dqtFingerprint)}</span>
+        </div>
+        <div class="exif-kv-row"><span class="exif-kv-k">Estimated JPEG Quality</span><span class="exif-kv-v">~Q${dqt.estimatedQuality} / 100</span></div>
+        <div class="exif-kv-row"><span class="exif-kv-k">IJG Standard Table Match</span><span class="exif-kv-v">${dqt.ijgMatchScore}%</span></div>
+        <div class="exif-kv-row"><span class="exif-kv-k">Chroma Subsampling</span><span class="exif-kv-v">${esc(dqt.subsampling)}</span></div>
+        <div style="margin:10px 0;font-size:0.82rem;color:var(--text-body);line-height:1.5;">
+          ${dqt.hints.map((h) => `<div>• ${esc(h)}</div>`).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:10px;">
+          <div>
+            <div style="font-size:0.76rem;font-weight:700;color:var(--text-muted);margin-bottom:6px;">Luminance 8×8 Matrix (Table 0)</div>
+            <div class="exif-dqt-grid">${renderGrid(dqt.luminance8x8)}</div>
+          </div>
+          ${dqt.chrominance8x8 ? `<div>
+            <div style="font-size:0.76rem;font-weight:700;color:var(--text-muted);margin-bottom:6px;">Chrominance 8×8 Matrix (Table 1)</div>
+            <div class="exif-dqt-grid">${renderGrid(dqt.chrominance8x8)}</div>
+          </div>` : ''}
+        </div>
+      </div>`;
+  } else {
+    dqtEl.innerHTML = '';
+  }
+}
+
+// =========================================================================
+// TAB 5: ERROR LEVEL ANALYSIS (ELA) & HIGH-PASS NOISE RESIDUAL
+// =========================================================================
+let elaCache = { recId: null, qual: null, origData: null, recompData: null, w: 0, h: 0 };
+
+async function renderElaCanvas(rec) {
+  const canvas = document.getElementById('ela-canvas');
+  if (!rec || !rec.mainImg || !rec.mainImg.naturalWidth) return;
+
+  const amp = parseInt(document.getElementById('ela-amp-slider').value, 10);
+  const qual = parseInt(document.getElementById('ela-qual-slider').value, 10);
+  const wipePct = parseInt(document.getElementById('ela-wipe-slider').value, 10);
+
+  if (elaCache.recId !== rec.id || elaCache.qual !== qual) {
+    const maxDim = 960;
+    let w = rec.mainImg.naturalWidth, h = rec.mainImg.naturalHeight;
+    if (w > maxDim || h > maxDim) {
+      const s = Math.min(maxDim / w, maxDim / h);
+      w = Math.round(w * s);
+      h = Math.round(h * s);
+    }
+    const work = document.createElement('canvas');
+    work.width = w; work.height = h;
+    const wCtx = work.getContext('2d', { willReadFrequently: true });
+    wCtx.drawImage(rec.mainImg, 0, 0, w, h);
+    const origData = wCtx.getImageData(0, 0, w, h);
+
+    const recompUrl = work.toDataURL('image/jpeg', qual / 100);
+    const recompImg = await loadImgElement(recompUrl);
+    if (!recompImg) return;
+    wCtx.clearRect(0, 0, w, h);
+    wCtx.drawImage(recompImg, 0, 0, w, h);
+    const recompData = wCtx.getImageData(0, 0, w, h);
+
+    elaCache = { recId: rec.id, qual, origData, recompData, w, h };
+  }
+
+  const { origData, recompData, w, h } = elaCache;
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  const out = ctx.createImageData(w, h);
+  const od = origData.data, rd = recompData.data, dst = out.data;
+
+  if (state.elaMode === 'orig') {
+    dst.set(od);
+  } else if (state.elaMode === 'noise') {
+    // 3x3 Laplacian high-pass noise residual
+    for (let y = 1; y < h - 1; y++) {
+      for (let x = 1; x < w - 1; x++) {
+        const idx = (y * w + x) * 4;
+        for (let c = 0; c < 3; c++) {
+          const center = od[idx + c] * 4;
+          const neighbors = od[idx - 4 + c] + od[idx + 4 + c] + od[idx - w * 4 + c] + od[idx + w * 4 + c];
+          dst[idx + c] = Math.min(255, Math.abs(center - neighbors) * (amp / 4));
+        }
+        dst[idx + 3] = 255;
+      }
+    }
+  } else {
+    const splitX = Math.round((wipePct / 100) * w);
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4;
+        if (state.elaMode === 'split' && x < splitX) {
+          dst[i] = od[i]; dst[i + 1] = od[i + 1]; dst[i + 2] = od[i + 2]; dst[i + 3] = 255;
+        } else {
+          dst[i] = Math.min(255, Math.abs(od[i] - rd[i]) * amp);
+          dst[i + 1] = Math.min(255, Math.abs(od[i + 1] - rd[i + 1]) * amp);
+          dst[i + 2] = Math.min(255, Math.abs(od[i + 2] - rd[i + 2]) * amp);
+          dst[i + 3] = 255;
+        }
+      }
+    }
+  }
+  ctx.putImageData(out, 0, 0);
+  if (state.elaMode === 'split') {
+    const sx = Math.round((wipePct / 100) * w);
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(sx, 0);
+    ctx.lineTo(sx, h);
+    ctx.stroke();
+  }
+}
+
+document.getElementById('ela-mode-bar').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-elamode]');
+  if (!btn) return;
+  state.elaMode = btn.dataset.elamode;
+  document.querySelectorAll('#ela-mode-bar .exif-mini-btn').forEach((b) => b.classList.toggle('active', b === btn));
+  document.getElementById('ela-wipe-wrap').style.display = state.elaMode === 'split' ? 'flex' : 'none';
+  const rec = getActive();
+  if (rec) renderElaCanvas(rec);
+});
+document.getElementById('ela-amp-slider').addEventListener('input', (e) => {
+  document.getElementById('ela-amp-val').textContent = e.target.value + '×';
+  const rec = getActive(); if (rec) renderElaCanvas(rec);
+});
+document.getElementById('ela-qual-slider').addEventListener('input', (e) => {
+  document.getElementById('ela-qual-val').textContent = e.target.value + '%';
+  const rec = getActive(); if (rec) renderElaCanvas(rec);
+});
+document.getElementById('ela-wipe-slider').addEventListener('input', (e) => {
+  document.getElementById('ela-wipe-val').textContent = e.target.value + '%';
+  const rec = getActive(); if (rec) renderElaCanvas(rec);
+});
+document.getElementById('btn-download-ela').addEventListener('click', () => {
+  const rec = getActive();
+  const c = document.getElementById('ela-canvas');
+  if (!rec || !c.width) return;
+  const a = document.createElement('a');
+  a.href = c.toDataURL('image/png');
+  a.download = `ela-forensics-${rec.file.name}.png`;
+  a.click();
+  if (window.PixelCraftAnalytics) window.PixelCraftAnalytics.trackDownload('EXIF Data Viewer', 'png', c.width * c.height);
+});
+
+// =========================================================================
+// TAB 6: BINARY HEX X-RAY & TRAILING PAYLOAD STEGO SCANNER
+// =========================================================================
+function renderBinaryInspector(rec) {
+  const bin = rec.binaryInfo;
+  const bytes = new Uint8Array(rec.arrayBuffer);
+
+  // Trailing Payload Warning
+  const trEl = document.getElementById('trailing-panel');
+  const dlTrBtn = document.getElementById('btn-download-trailing');
+  if (bin.trailingBytes && bin.trailingBytes.length > 0) {
+    const isMotion = Boolean(rec.embeddedMedia.motionVideoBlob);
+    trEl.innerHTML = `
+      <div class="exif-alert-banner ${isMotion ? 'exif-alert-warning' : 'exif-alert-danger'}">
+        <strong>${isMotion ? '🎬 Appended Motion Photo Stream Detected' : '⚠️ HIDDEN TRAILING DATA / STEGO PAYLOAD DETECTED!'}</strong>
+        <div style="margin-top:4px;">Found <strong>${esc(F.formatBytes(bin.trailingBytes.length))}</strong> appended AFTER true image end (<code>0x${bin.trailingOffset.toString(16).toUpperCase()}</code>).</div>
+        <div style="margin-top:4px;">Signature: <strong>${esc(bin.trailingMagic)}</strong> • Shannon Entropy: <strong>${bin.trailingEntropy.toFixed(2)} / 8.00 bits/byte</strong></div>
+      </div>`;
+    dlTrBtn.style.display = 'inline-block';
+    dlTrBtn.onclick = () => {
+      const b = new Blob([bin.trailingBytes], { type: 'application/octet-stream' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = `trailing-payload-${rec.file.name}.bin`;
+      a.click();
+    };
+  } else {
+    trEl.innerHTML = `<div class="exif-alert-banner exif-alert-success"><strong>✅ Clean Container EOF</strong> — Zero trailing bytes or appended stego payloads detected after image end marker.</div>`;
+    dlTrBtn.style.display = 'none';
+  }
+
+  // Segment Proportional Bar + Table
+  const segColors = ['#2563eb', '#7c3aed', '#059669', '#d97706', '#0ea5e9', '#64748b'];
+  const totalLen = Math.max(1, bytes.length);
+  document.getElementById('seg-bar').innerHTML = bin.segments.map((s, i) => {
+    const pct = Math.max(0.8, (s.length / totalLen) * 100);
+    return `<div class="exif-seg-slice" style="width:${pct.toFixed(2)}%;background:${segColors[i % segColors.length]};" title="${esc(s.name)} (${esc(F.formatBytes(s.length))})"></div>`;
+  }).join('') + (bin.trailingBytes ? `<div class="exif-seg-slice" style="width:${Math.max(2, (bin.trailingBytes.length / totalLen) * 100).toFixed(2)}%;background:#dc2626;" title="Trailing Payload"></div>` : '');
+
+  document.getElementById('seg-table-body').innerHTML = bin.segments.map((s) => `
+    <tr>
+      <td><code>0x${s.offset.toString(16).padStart(6, '0').toUpperCase()}</code></td>
+      <td><code>${esc(s.marker)}</code></td>
+      <td><strong>${esc(s.name)}</strong></td>
+      <td>${esc(F.formatBytes(s.length))}</td>
+      <td>${esc(s.detail)}</td>
+    </tr>
+  `).join('');
+
+  // Hex Jumper
+  const jumpSel = document.getElementById('hex-jump-select');
+  jumpSel.innerHTML = '';
+  const jumpTargets = [{ label: 'File Header (0x000000)', off: 0 }];
+  bin.segments.slice(0, 12).forEach((s) => {
+    if (s.offset > 0) jumpTargets.push({ label: `${s.name} (0x${s.offset.toString(16).toUpperCase()})`, off: s.offset });
+  });
+  if (bin.trailingOffset) jumpTargets.push({ label: `Trailing Data (0x${bin.trailingOffset.toString(16).toUpperCase()})`, off: bin.trailingOffset });
+
+  jumpTargets.forEach((t) => {
+    const opt = document.createElement('option');
+    opt.value = String(t.off);
+    opt.textContent = t.label;
+    jumpSel.appendChild(opt);
+  });
+
+  const renderHexAt = (off) => {
+    const slice = bytes.subarray(off, Math.min(bytes.length, off + 512));
+    document.getElementById('hex-viewer-box').textContent = F.formatHexDump(slice, off, 512);
+  };
+  renderHexAt(0);
+  jumpSel.onchange = (e) => renderHexAt(parseInt(e.target.value, 10) || 0);
+}
+
+// =========================================================================
+// TAB 7: SURGICAL METADATA STRIPPER & MULTI-PHOTO BATCH DIFF / JOURNEY
+// =========================================================================
+async function runStripMode(mode) {
+  const rec = getActive();
+  if (!rec) return;
+  const statusEl = document.getElementById('strip-status-box');
+  try {
+    const res = await F.surgicalStripImage(rec.file, rec.arrayBuffer, mode, rec.mainImg);
+    const dlUrl = URL.createObjectURL(res.blob);
+    const cleanName = rec.file.name.replace(/\.[^.]+$/, '') + `-clean.${res.ext}`;
+    const a = document.createElement('a');
+    a.href = dlUrl;
+    a.download = cleanName;
+    a.click();
+    statusEl.innerHTML = `<div class="exif-alert-banner exif-alert-success"><strong>✅ Cleaned File Downloaded: ${esc(cleanName)}</strong><div>${esc(res.note)}</div><div style="font-size:0.8rem;margin-top:4px;">Original: ${esc(F.formatBytes(rec.file.size))} → Clean: ${esc(F.formatBytes(res.blob.size))}</div></div>`;
+    showToast('Sanitized photo downloaded!', 'success');
+    if (window.PixelCraftAnalytics) window.PixelCraftAnalytics.trackDownload('EXIF Data Viewer', res.ext, res.blob.size);
+  } catch (err) {
+    statusEl.innerHTML = `<div class="exif-alert-banner exif-alert-danger">Strip failed: ${esc(err.message)}</div>`;
+    if (window.PixelCraftAnalytics) window.PixelCraftAnalytics.trackError('EXIF Data Viewer', 'strip_failed');
+  }
+}
+
+document.getElementById('btn-strip-surgical').onclick = () => runStripMode('surgical-keep-camera');
+document.getElementById('btn-strip-lossless').onclick = () => runStripMode('lossless-all');
+document.getElementById('btn-strip-canvas').onclick = () => runStripMode('canvas-reencode');
+
+function renderBatchAndStripPanel() {
+  const corrEl = document.getElementById('batch-correlation-panel');
+  const diffEl = document.getElementById('batch-diff-panel');
+  const routeEl = document.getElementById('batch-route-panel');
+
+  if (state.records.length < 2) {
+    corrEl.innerHTML = `<div class="exif-panel-card"><div class="exif-panel-title"><span>🔗 Multi-Photo Batch Diff &amp; Same-Camera Correlation</span></div><div style="font-size:0.85rem;color:var(--text-muted);">Click <strong>+ Add Photos</strong> (top bar) or drag-drop a second photo onto this workspace to unlock Side-by-Side Tag Diff, Same-Camera Serial Matching, and GPS Travel Route mapping!</div></div>`;
+    diffEl.innerHTML = '';
+    routeEl.innerHTML = '';
+    return;
+  }
+
+  const batch = F.correlateBatch(state.records);
+  const serialMatches = Object.entries(batch.serialGroups).filter(([, list]) => list.length > 1);
+  const dqtMatches = Object.entries(batch.dqtGroups).filter(([, list]) => list.length > 1);
+
+  corrEl.innerHTML = `
+    <div class="exif-panel-card">
+      <div class="exif-panel-title"><span>🔗 Batch Hardware &amp; Encoder Correlation (${state.records.length} Photos)</span></div>
+      ${serialMatches.length ? serialMatches.map(([s, list]) => `<div class="exif-alert-banner exif-alert-danger"><strong>🚨 SAME PHYSICAL CAMERA SERIAL MATCH!</strong> Serial <code>${esc(s)}</code> appears in: ${list.map((x) => esc(x.name)).join(', ')}</div>`).join('') : `<div style="font-size:0.83rem;color:var(--text-muted);margin-bottom:8px;">No matching camera/lens serial numbers shared across batch.</div>`}
+      ${dqtMatches.length ? dqtMatches.map(([fp, list]) => `<div class="exif-alert-banner exif-alert-info"><strong>🧬 Shared JPEG DQT Matrix #${esc(fp)}:</strong> ${list.map((x) => esc(x.name)).join(', ')} (same encoder profile).</div>`).join('') : ''}
+    </div>`;
+
+  // Diff Picker
+  diffEl.innerHTML = `
+    <div class="exif-panel-card">
+      <div class="exif-panel-title">
+        <span>⚖️ Side-by-Side Metadata Diff</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <select id="diff-a" style="padding:4px 8px;border-radius:7px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;"></select>
+          <span style="font-size:0.8rem;">vs</span>
+          <select id="diff-b" style="padding:4px 8px;border-radius:7px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;"></select>
+          <label style="font-size:0.78rem;display:flex;align-items:center;gap:4px;"><input type="checkbox" id="diff-only-chk" checked/> Differences Only</label>
+        </div>
+      </div>
+      <div class="table-responsive" style="max-height:320px;overflow:auto;">
+        <table class="data-table" style="font-size:0.79rem;">
+          <thead><tr><th>Tag</th><th>Photo A</th><th>Photo B</th><th>Status</th></tr></thead>
+          <tbody id="diff-table-body"></tbody>
+        </table>
+      </div>
+    </div>`;
+
+  const selA = document.getElementById('diff-a');
+  const selB = document.getElementById('diff-b');
+  state.records.forEach((r, i) => {
+    selA.add(new Option(`#${i + 1}: ${r.file.name}`, String(i)));
+    selB.add(new Option(`#${i + 1}: ${r.file.name}`, String(i)));
+  });
+  selA.value = '0';
+  selB.value = String(state.records.length - 1);
+
+  const renderDiffRows = () => {
+    const recA = state.records[parseInt(selA.value, 10)];
+    const recB = state.records[parseInt(selB.value, 10)];
+    const onlyDiff = document.getElementById('diff-only-chk').checked;
+    let rows = F.diffMetadataRecords(recA, recB);
+    if (onlyDiff) rows = rows.filter((r) => r.status !== 'same');
+    document.getElementById('diff-table-body').innerHTML = rows.length
+      ? rows.map((r) => `<tr>
+          <td><strong>${esc(r.key)}</strong></td>
+          <td>${esc(r.a.slice(0, 120))}</td>
+          <td>${esc(r.b.slice(0, 120))}</td>
+          <td><span style="font-weight:700;color:${r.status === 'removed' ? 'var(--danger)' : r.status === 'added' ? 'var(--success)' : r.status === 'changed' ? 'var(--warning)' : 'var(--text-muted)'};">${esc(r.status.toUpperCase())}</span></td>
+        </tr>`).join('')
+      : `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Selected files have identical EXIF keys &amp; values.</td></tr>`;
+  };
+  renderDiffRows();
+  selA.onchange = renderDiffRows;
+  selB.onchange = renderDiffRows;
+  document.getElementById('diff-only-chk').onchange = renderDiffRows;
+
+  // GPS Journey Table & Route Map
+  if (state.batchMap) { state.batchMap.remove(); state.batchMap = null; }
+  if (batch.gpsPoints.length >= 2) {
+    routeEl.innerHTML = `
+      <div class="exif-panel-card">
+        <div class="exif-panel-title"><span>🗺️ Chronological GPS Route &amp; Speed Analysis (${batch.gpsPoints.length} Geotagged Stops)</span></div>
+        <div id="batch-route-map" class="exif-map-box" style="height:280px;margin-bottom:12px;"></div>
+        <div class="table-responsive">
+          <table class="data-table" style="font-size:0.8rem;">
+            <thead><tr><th>Leg</th><th>Distance (Haversine)</th><th>Est. Travel Speed</th></tr></thead>
+            <tbody>
+              ${batch.legs.map((l) => `<tr>
+                <td>${esc(l.from)} → ${esc(l.to)}</td>
+                <td><strong>${l.distKm.toFixed(2)} km</strong></td>
+                <td>${l.speedKmh !== null ? `${l.speedKmh.toFixed(1)} km/h` : 'Timestamp gap unavailable'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+    const rMapEl = document.getElementById('batch-route-map');
+    if (typeof window.L !== 'undefined' && rMapEl) {
+      const bMap = window.L.map(rMapEl);
+      state.batchMap = bMap;
+      window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(bMap);
+      const latlngs = batch.gpsPoints.map((p, i) => {
+        window.L.marker([p.lat, p.lng]).addTo(bMap).bindPopup(`<strong>Stop #${i + 1}: ${esc(p.name)}</strong><br/>${esc(p.dateLabel)}`);
+        return [p.lat, p.lng];
+      });
+      window.L.polyline(latlngs, { color: '#2563eb', weight: 3, dashArray: '8 6' }).addTo(bMap);
+      bMap.fitBounds(latlngs, { padding: [28, 28] });
+      if (state.activeTab === 'batch') setTimeout(() => bMap.invalidateSize(), 120);
+    } else if (rMapEl) {
+      rMapEl.style.display = 'none';
+    }
+  } else {
+    routeEl.innerHTML = '';
+  }
+}
+
+// =========================================================================
+// EXPORT / COPY / PRINT / RESET CONTROLS
+// =========================================================================
+document.getElementById('btn-copy-all').addEventListener('click', () => {
+  if (allExifText) {
+    navigator.clipboard.writeText(allExifText).then(() => {
+      showToast('EXIF & Forensic summary copied!', 'success');
+      if (window.PixelCraftAnalytics) {
+        window.PixelCraftAnalytics.trackDownload('EXIF Data Viewer', 'txt', allExifText.length);
+      }
+    });
+  }
+});
+
+document.getElementById('btn-export-json').addEventListener('click', () => {
+  const rec = getActive();
+  if (!rec) return;
+  const payload = {
+    tool: 'PixelCraft AI Forensic EXIF Viewer',
+    exportedAt: new Date().toISOString(),
+    file: { name: rec.file.name, size: rec.file.size, type: rec.file.type, format: rec.binaryInfo.format },
+    hashes: rec.hashes,
+    privacyRisk: rec.privacyRisk,
+    aiProvenance: { verdict: rec.aiInfo.verdict, findings: rec.aiInfo.findings, positivePrompt: rec.aiInfo.positivePrompt, negativePrompt: rec.aiInfo.negativePrompt, generationParams: rec.aiInfo.generationParams },
+    hardwareTelemetry: rec.hwTelemetry,
+    opticsPhysics: rec.optics,
+    timestampAudit: rec.timeAudit,
+    dqtAnalysis: rec.binaryInfo.dqtAnalysis,
+    exif: rec.exifr
+  };
+  const jsonStr = JSON.stringify(payload, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `forensic-report-${rec.file.name}.json`;
+  a.click();
+  showToast('Forensic JSON report exported!', 'success');
+  if (window.PixelCraftAnalytics) window.PixelCraftAnalytics.trackDownload('EXIF Data Viewer', 'json', jsonStr.length);
+});
+
+document.getElementById('btn-export-csv').addEventListener('click', () => {
+  const rec = getActive();
+  if (!rec) return;
+  const csvEsc = (s) => '"' + String(s).replace(/"/g, '""') + '"';
+  const rows = [['Tag', 'Value']];
+  Object.entries(rec.exifr || {}).forEach(([k, v]) => rows.push([csvEsc(k), csvEsc(formatTagValue(k, v))]));
+  const csvStr = rows.map((r) => r.join(',')).join('\n');
+  const blob = new Blob([csvStr], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `exif-tags-${rec.file.name}.csv`;
+  a.click();
+  showToast('EXIF CSV exported!', 'success');
+  if (window.PixelCraftAnalytics) window.PixelCraftAnalytics.trackDownload('EXIF Data Viewer', 'csv', csvStr.length);
+});
+
+document.getElementById('btn-print-dossier').addEventListener('click', () => {
+  const rec = getActive();
+  if (!rec) return;
+  window.print();
+  if (window.PixelCraftAnalytics) window.PixelCraftAnalytics.trackDownload('EXIF Data Viewer', 'pdf-print', rec.file.size);
 });
 
 function resetTool() {
- uploadArea.style.display = 'block'; editor.style.display = 'none'; fileInput.value = '';
+  state.records.forEach((r) => {
+    try {
+      if (r.previewUrl) URL.revokeObjectURL(r.previewUrl);
+      if (r.thumbUrl && r.thumbUrl.startsWith('blob:')) URL.revokeObjectURL(r.thumbUrl);
+      if (r.motionVideoUrl) URL.revokeObjectURL(r.motionVideoUrl);
+    } catch (_) {}
+  });
+  if (state.leafletMap) {
+    state.leafletMap.remove();
+    state.leafletMap = null;
+  }
+  if (state.batchMap) {
+    state.batchMap.remove();
+    state.batchMap = null;
+  }
+  state.records = [];
+  state.activeIdx = -1;
+  elaCache = { recId: null, qual: null, origData: null, recompData: null, w: 0, h: 0 };
+  uploadArea.style.display = 'block';
+  editor.style.display = 'none';
+  fileInput.value = '';
+  addMoreInput.value = '';
 }
 window.resetTool = resetTool;
 </script>

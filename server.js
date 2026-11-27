@@ -21,6 +21,7 @@ const crypto = require('crypto');
 const net = require('net');
 const { sendTelegramAlert } = require('./utils/telegramAlert');
 const { runDailyBackup } = require('./utils/dbBackup');
+const { renderPdfUnavailablePage } = require('./utils/pdfErrorPage');
 const honeytokenTrap = require('./middlewares/honeytokenTrap');
 const app = express();
 app.set('trust proxy', 1); // Trust the Render proxy to fix HTTP/HTTPS mismatch
@@ -1211,7 +1212,7 @@ function aiGenerationLimiterMiddleware(req, res, next) {
   next();
 }
 
-// AI Generation Route (Used for 3D AI QR and other tools)
+// Legacy AI Generation Route (Preserved for API backward compatibility)
 app.post('/api/generate-image', aiGenerationLimiterMiddleware, async (req, res) => {
   const { prompt } = req.body;
 
@@ -2260,43 +2261,51 @@ cleanupExpiredPdfs().catch(err => console.error('Initial PDF cleanup error:', er
 setInterval(() => cleanupExpiredPdfs().catch(err => console.error('Scheduled PDF cleanup error:', err)), 60 * 60 * 1000);
 
 
-app.get('/p/:id', (req, res) => {
-  const fileId = req.params.id;
-  
-  // Apply strict cache-control policy to shared PDF viewer responses
+function setPdfResponsePrivacyHeaders(res) {
   res.setHeader('Cache-Control', 'private, no-cache, no-store');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
+}
+
+app.get(['/p', '/p/'], (req, res) => {
+  setPdfResponsePrivacyHeaders(res);
+  return res.status(404).send(renderPdfUnavailablePage({
+    statusCode: 404,
+    reasonType: 'missing_id',
+    fileId: '',
+    headline: 'No PDF Link ID Provided',
+    message: 'This PDF link is invalid, expired, or has been removed.'
+  }));
+});
+
+app.get('/p/:id', (req, res) => {
+  const fileId = req.params.id;
+
+  // Apply strict cache-control & noindex policy to shared PDF viewer responses
+  setPdfResponsePrivacyHeaders(res);
 
   // Basic path traversal protection
   if (!/^[a-zA-Z0-9_-]+$/.test(fileId)) {
-    return res.status(400).send('Invalid Link');
+    return res.status(400).send(renderPdfUnavailablePage({
+      statusCode: 400,
+      reasonType: 'invalid',
+      fileId: '',
+      headline: 'Invalid PDF Link Format',
+      message: 'This PDF link is invalid, expired, or has been removed.'
+    }));
   }
 
   const filePath = path.join(__dirname, 'public', 'uploads', 'pdf', `${fileId}.pdf`);
-  
+
   if (!fs.existsSync(filePath)) {
-    return res.status(404).send(`
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Expired or Not Found</title>
-    <style>
-        body { background: #09090b; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { text-align: center; background: #18181b; padding: 40px; border-radius: 16px; border: 1px solid #27272a; }
-        h1 { color: #f43f5e; margin-top: 0; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h1>404 - Not Found</h1>
-        <p>This PDF link is invalid, expired, or has been removed.</p>
-    </div>
-</body>
-</html>
-    `);
+    return res.status(404).send(renderPdfUnavailablePage({
+      statusCode: 404,
+      reasonType: 'expired',
+      fileId,
+      headline: '404 — PDF Link Expired or Not Found',
+      message: 'This PDF link is invalid, expired, or has been removed.'
+    }));
   }
 
   const pdfUrl = `/uploads/pdf/${fileId}.pdf`;
@@ -2307,6 +2316,7 @@ app.get('/p/:id', (req, res) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
     <title>Secure PDF Viewer - PixelCraft AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>

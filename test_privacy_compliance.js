@@ -83,13 +83,13 @@ function runPrivacyTests() {
     assert.strictEqual(html.includes('Is there a file size limit for image editing?'), false, 'Boilerplate image FAQ must be removed');
   });
 
-  // 5. QR Generator Distinguishes Local Standard vs AI 3D
-  test('QR Generator distinguishes 100% client-side standard QR from optional AI 3D cloud generation', () => {
+  // 5. QR Studio Pure 100% Client-Side Verification (No 3D AI / No Hugging Face uploads)
+  test('Next-Gen QR Studio operates 100% client-side with zero 3D AI or Hugging Face cloud uploads', () => {
     const htmlPath = path.join(__dirname, 'public', 'tools', 'qr-generator.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
-    assert.ok(html.includes('Standard QR codes remain 100% local in your browser'), 'Must disclose standard QR local execution');
-    assert.ok(html.includes('AI Notice:'), 'Must disclose 3D AI cloud processing');
-    assert.ok(html.includes('Hugging Face (Stable Diffusion XL)'), 'Must disclose Hugging Face API transmission');
+    assert.ok(html.includes('100% Client-Side'), 'Must disclose 100% client-side execution');
+    assert.strictEqual(html.includes('/api/generate-image'), false, 'Legacy /api/generate-image 3D AI hook must be removed');
+    assert.strictEqual(html.includes('Stable Diffusion XL'), false, 'Legacy Stable Diffusion XL 3D AI notice must be removed');
   });
 
   // 6. PDF-to-Link Retention & Public Link Transparency

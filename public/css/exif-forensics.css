@@ -1,0 +1,382 @@
+/* PixelCraft AI — Forensic EXIF & AI Provenance Studio Styles */
+.exif-batch-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--border-color);
+}
+.exif-batch-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-color);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  max-width: 210px;
+}
+.exif-batch-chip img {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.exif-batch-chip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.exif-batch-chip.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+.exif-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.exif-kpi-card {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.exif-kpi-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.exif-kpi-value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  line-height: 1.25;
+  word-break: break-word;
+}
+.exif-kpi-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+.exif-workspace-split {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+.exif-left-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.exif-preview-stage {
+  position: relative;
+  background: var(--surface-subtle);
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+.exif-preview-stage img,
+.exif-preview-stage canvas {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  display: block;
+}
+.exif-overlay-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.exif-pill-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.exif-mini-btn {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.exif-mini-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.exif-mini-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+.exif-tabs-nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  border-bottom: 1.5px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+.exif-tab-btn {
+  padding: 8px 13px;
+  border-radius: 9px;
+  border: 1px solid var(--border-color);
+  background: var(--surface-subtle);
+  color: var(--text-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.exif-tab-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.exif-tab-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px var(--glow-primary);
+}
+.exif-tab-badge {
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  font-weight: 700;
+}
+.exif-tab-btn:not(.active) .exif-tab-badge {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+.exif-panel-card {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.exif-panel-title {
+  font-weight: 700;
+  color: var(--text-heading);
+  font-size: 0.92rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.exif-kv-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.83rem;
+}
+.exif-kv-row:last-child {
+  border-bottom: none;
+}
+.exif-kv-k {
+  color: var(--text-muted);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.exif-kv-v {
+  color: var(--text-heading);
+  font-weight: 600;
+  text-align: right;
+  word-break: break-word;
+}
+.exif-alert-banner {
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 14px;
+  border: 1px solid var(--border-color);
+}
+.exif-alert-danger {
+  background: var(--danger-light);
+  border-color: rgba(220, 38, 38, 0.35);
+  color: var(--danger);
+}
+.exif-alert-warning {
+  background: var(--warning-light);
+  border-color: rgba(217, 119, 6, 0.35);
+  color: var(--warning);
+}
+.exif-alert-success {
+  background: var(--success-light);
+  border-color: var(--success-border);
+  color: var(--success);
+}
+.exif-alert-info {
+  background: var(--primary-light);
+  border-color: var(--primary-border);
+  color: var(--primary);
+}
+[data-theme="dark"] .exif-alert-danger { background: rgba(220, 38, 38, 0.14); color: #fca5a5; }
+[data-theme="dark"] .exif-alert-warning { background: rgba(217, 119, 6, 0.14); color: #fcd34d; }
+[data-theme="dark"] .exif-alert-success { background: rgba(5, 150, 105, 0.14); color: #6ee7b7; }
+[data-theme="dark"] .exif-alert-info { background: rgba(37, 99, 235, 0.15); color: #93c5fd; }
+
+.exif-code-box {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  max-height: 280px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid #334155;
+}
+.exif-dqt-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 3px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+}
+.exif-dqt-cell {
+  text-align: center;
+  padding: 4px 2px;
+  border-radius: 4px;
+  font-weight: 700;
+  color: #0f172a;
+}
+[data-theme="dark"] .exif-dqt-cell {
+  color: #f8fafc;
+}
+.exif-split-compare {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: #0f172a;
+  user-select: none;
+}
+.exif-split-compare canvas,
+.exif-split-compare img {
+  display: block;
+  width: 100%;
+  max-height: 440px;
+  object-fit: contain;
+}
+.exif-map-box {
+  width: 100%;
+  height: 360px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  background: var(--surface-card);
+  z-index: 1;
+}
+.exif-seg-bar {
+  display: flex;
+  height: 22px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  margin-bottom: 12px;
+}
+.exif-seg-slice {
+  height: 100%;
+  min-width: 4px;
+  transition: opacity 0.15s;
+}
+.exif-seg-slice:hover {
+  opacity: 0.8;
+}
+.exif-parallax-wrap {
+  perspective: 900px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: #0b0f19;
+  cursor: crosshair;
+}
+.exif-parallax-img {
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.08s ease-out;
+}
+
+@media (max-width: 960px) {
+  .exif-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .exif-workspace-split {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 520px) {
+  .exif-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .exif-tab-btn {
+    padding: 7px 10px;
+    font-size: 0.78rem;
+  }
+}
+
+/* Print / Save PDF Forensic Dossier Mode */
+@media print {
+  .navbar, .tool-page-header, #upload-area, .exif-tabs-nav,
+  .exif-batch-strip, .next-step-hint, .footer, .tool-guide-section,
+  #quick-start-guide, button, .exif-mini-btn, input[type="range"] {
+    display: none !important;
+  }
+  body, .tool-page, .tool-workspace, .result-area {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .exif-workspace-split {
+    grid-template-columns: 1fr !important;
+  }
+  .exif-tab-pane {
+    display: block !important;
+    page-break-inside: avoid;
+    margin-bottom: 16px;
+  }
+}

@@ -1462,8 +1462,8 @@
  <span class="tcard-env">100% Client-Side In-Browser Execution</span>
  </div>
  <div>
- <div class="tcard-name">Cryptographic & Anti-Quishing Dynamic QR Synthesizer</div>
- <div class="tcard-tags"><span class="tcard-tag">Galois Field GF(2^8)</span><span class="tcard-tag">Reed-Solomon ECC</span><span class="tcard-tag">Anti-Quishing</span></div>
+ <div class="tcard-name">Cryptographic Static QR Studio, Optical Verifier &amp; AES-256 Vault</div>
+ <div class="tcard-tags"><span class="tcard-tag">GF(2^8) ECC</span><span class="tcard-tag">jsQR Verifier</span><span class="tcard-tag">AES-256-GCM</span><span class="tcard-tag">Anti-Quishing</span></div>
  </div>
  <div class="tcard-action">
  <span>Inspect Architecture</span>
@@ -2934,16 +2934,16 @@ $$\text{Brute-force URL discovery is mathematically impossible.}$$</div>
  </article>
 
  <!-- ========================================================
- TOOL 11: CRYPTOGRAPHIC & ANTI-QUISHING DYNAMIC QR SYNTHESIZER
+ TOOL 11: CRYPTOGRAPHIC STATIC QR STUDIO & OPTICAL VERIFIER
  ======================================================== -->
  <article id="tool-qr-generator" class="wp-section tool-detail-pane " data-tool-id="tool-qr-generator">
  <div class="tool-pane-header">
  <div class="tool-pane-title-group">
  <span class="section-tag">TOOL ARCHITECTURE SPECIFICATION / 11</span>
- <h2>Tool 11: Cryptographic & Anti-Quishing Dynamic QR Synthesizer</h2>
+ <h2>Tool 11: Cryptographic Static QR Studio, Optical Verifier &amp; AES-256 Vault</h2>
  <div class="tool-pane-badges">
  <span class="cyber-pill pill-cyan">100% Client-Side In-Browser Execution</span>
- <span class="cyber-pill pill-purple">Document & Media Pipelines</span>
+ <span class="cyber-pill pill-purple">Document &amp; Cryptographic Pipelines</span>
  </div>
  </div>
  <div class="tool-pane-actions">
@@ -2955,7 +2955,7 @@ $$\text{Brute-force URL discovery is mathematically impossible.}$$</div>
  </div>
 
  <p class="wp-lead">
- Custom QR Generator synthesizes high-density, vector-accurate QR codes using <strong>Galois Field $GF(2^8)$ Reed-Solomon Error Correction</strong>. It incorporates anti-quishing visual verification, customizable quiet zone boundaries ($\ge 4$ modules), and central logo alpha-masking without degrading scan fidelity, completely within the browser runtime.
+ Next-Gen QR Code Studio synthesizes permanent, zero-redirect static QR matrices across 15 protocol types (URL + inline UTM Campaign Builder, Wi-Fi, vCard 3.0, Social Profiles, UPI, Geo with optional local-only browser <code>navigator.geolocation</code> or manual entry, iCalendar, and encrypted <code>PCQR1:</code> vaults) using <strong>Galois Field $GF(2^8)$ Reed-Solomon Error Correction</strong>. It combines closed-loop live optical verification (<code>jsQR</code> + WCAG 2.1 luminance ratio checks), procedural Canvas2D scenic art/3D-relief/painting/diagram compositing with luminance-gated modules, local Canvas brand color extraction, Batch ZIP packaging, GIF89a/MediaRecorder motion export, and PBKDF2-HMAC-SHA256 + AES-256-GCM payload encryption completely within volatile browser RAM with zero server uploads.
  </p>
 
  <!-- Pipeline Map -->
@@ -2964,32 +2964,32 @@ $$\text{Brute-force URL discovery is mathematically impossible.}$$</div>
  
  <div class="flow-step">
  <span class="step-number">STAGE 01</span>
- <div class="step-title">Payload Sanitization & Mode Pick</div>
- <div class="step-desc">Encodes input into optimal modes (Numeric, Alphanumeric, Byte, Kanji) with character boundary validation.</div>
+ <div class="step-title">Multi-Protocol &amp; Optional Local GPS</div>
+ <div class="step-desc">Formats URLs + inline UTM query tags, Wi-Fi escaping, vCard 3.0, UPI URIs, optional RAM-only browser geolocation (or manual coords), or AES-256-GCM <code>PCQR1:</code> ciphertext in memory.</div>
  </div>
  
  <div class="flow-step">
  <span class="step-number">STAGE 02</span>
- <div class="step-title">Reed-Solomon ECC Generation</div>
- <div class="step-desc">Calculates error correction codewords over Galois Field $GF(2^8)$ across 4 selectable resilience tiers (L, M, Q, H).</div>
+ <div class="step-title">Reed-Solomon ECC &amp; Masking</div>
+ <div class="step-desc">Computes error-correction codewords over $GF(2^8)$ and minimizes $N_1$–$N_4$ optical penalty across all 8 XOR masks.</div>
  </div>
  
  <div class="flow-step">
  <span class="step-number">STAGE 03</span>
- <div class="step-title">Optimal Mask Evaluation</div>
- <div class="step-desc">Applies 8 standard QR masking patterns, scoring each with penalty formulas ($N_1$ to $N_4$) to select optimal optical contrast.</div>
+ <div class="step-title">Scenic Art, 3D Relief &amp; Visual Frames</div>
+ <div class="step-desc">Applies 82+ presets (Social, 32+ Fantasy scenic worlds, sculpted relief, watercolor/oil paintings, blueprints &amp; Funny styles), 22 illustrated frames (None default), and optional logos on Canvas/SVG.</div>
  </div>
  
  <div class="flow-step">
  <span class="step-number">STAGE 04</span>
- <div class="step-title">Quiet Zone & Logo Protection</div>
- <div class="step-desc">Enforces standard 4-module quiet zone margins and reserves central module matrix for branding without exceeding ECC budget.</div>
+ <div class="step-title">Closed-Loop Optical Audit</div>
+ <div class="step-desc">Runs real-time <code>jsQR</code> decoding + WCAG contrast ratios + optional 50% downscale blur stress testing before export.</div>
  </div>
  
  <div class="flow-step">
  <span class="step-number">STAGE 05</span>
- <div class="step-title">Scalable Vector & Canvas Export</div>
- <div class="step-desc">Exports crisp, resolution-independent SVG vector files or ultra-high DPI PNG rasters directly in browser RAM.</div>
+ <div class="step-title">4K PNG, Vector SVG &amp; Batch ZIP</div>
+ <div class="step-desc">Exports lossless Vector SVG, up to 4096px PNG, 12-up A4 sticker sheets, kinetic WebM loops, or up to 100-item Batch ZIP archives.</div>
  </div>
  
  </div>
@@ -3003,8 +3003,9 @@ $$\text{Brute-force URL discovery is mathematically impossible.}$$</div>
  </div>
  
  <div class="math-card">
- <div class="math-title">Formula 2: Error Correction Recovery Capability</div>
- <div class="math-equation">$$t = \left\lfloor \frac{n - k}{2} \right\rfloor \implies \text{Level H recovers up to } 30\% \text{ corrupted or masked symbols.}$$</div>
+ <div class="math-title">Formula 2: AEAD Vault Encryption (PBKDF2 + AES-256-GCM) &amp; Luminance Contrast</div>
+ <div class="math-equation">$$K = \text{PBKDF2-HMAC-SHA256}(\text{pass}, S_{96}, 120000), \quad C = \text{AES-GCM}_{K}(IV_{96}, M)$$
+$$\text{CR} = \frac{\max(L_{\text{fg}}, L_{\text{bg}}) + 0.05}{\min(L_{\text{fg}}, L_{\text{bg}}) + 0.05} \ge 4.5, \quad L = 0.2126R + 0.7152G + 0.0722B$$</div>
  </div>
  
 
@@ -3014,11 +3015,11 @@ $$\text{Brute-force URL discovery is mathematically impossible.}$$</div>
  <table class="whitepaper-table">
  <thead>
  <tr>
- <th>ECC Tier</th><th>Error Recovery Capacity</th><th>Optimal Use Case</th><th>Central Logo Safe Area</th>
+ <th>ECC Tier</th><th>Error Recovery Capacity</th><th>Optimal Use Case</th><th>Central Logo Safe Visual Area (Empirical)</th>
  </tr>
  </thead>
  <tbody>
- <tr><td>Level L (Low)</td><td>~7% Codeword Recovery</td><td>High-density URLs; maximum data storage.</td><td>Not recommended for central logo overlays.</td></tr><tr><td>Level M (Medium)</td><td>~15% Codeword Recovery</td><td>Standard marketing, print materials, posters.</td><td>Small micro-icons (≤ 10% module area).</td></tr><tr><td>Level Q (Quartile)</td><td>~25% Codeword Recovery</td><td>Industrial scanning, dirty/wear environments.</td><td>Moderate logo integration (≤ 20% area).</td></tr><tr><td>Level H (High)</td><td>~30% Codeword Recovery</td><td>Branded QR codes with custom central logos.</td><td>Full central logo masking (up to 28% area) while maintaining 100% scan fidelity.</td></tr>
+ <tr><td>Level L (Low)</td><td>~7% Codeword Recovery</td><td>High-density URLs; maximum data storage.</td><td>0% (Not recommended for central logo overlays).</td></tr><tr><td>Level M (Medium)</td><td>~15% Codeword Recovery</td><td>Standard marketing, print materials, posters.</td><td>Micro-icons only (&le; 6% area).</td></tr><tr><td>Level Q (Quartile)</td><td>~25% Codeword Recovery</td><td>Industrial scanning, dirty/wear environments.</td><td>Compact icon integration (&le; 10% area).</td></tr><tr><td>Level H (High)</td><td>~30% Codeword Recovery</td><td>Branded QR codes with custom central logos.</td><td>Conservative logo masking (10%–15% area / ~30%–38% width), verified live via <code>jsQR</code>.</td></tr>
  </tbody>
  </table>
  </div>

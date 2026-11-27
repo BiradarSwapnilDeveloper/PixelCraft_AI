@@ -456,20 +456,11 @@
  <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
  </tr>
  <tr>
- <td><strong>QR Generator (Standard)</strong></td>
+ <td><strong>Next-Gen QR Code Studio</strong></td>
  <td><span class="tag tag-local">Local Browser</span></td>
- <td>qrcode.min.js</td>
- <td>None (Client-side SVG/Canvas)</td>
+ <td>qr-code-styling.js, jsQR, GIF89a/Canvas &amp; Web Crypto AES-256-GCM</td>
+ <td>None (0 bytes uploaded; Canvas/SVG/GIF/ZIP/Vault &amp; optional <code>navigator.geolocation</code> GPS fill run strictly in RAM; manual coords allowed without GPS)</td>
  <td>None</td>
- <td>No</td>
- <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
- </tr>
- <tr>
- <td><strong>QR Generator (3D AI Option)</strong></td>
- <td><span class="tag tag-hybrid">Hybrid External</span></td>
- <td>Hugging Face Inference API</td>
- <td>None on PixelCraft servers</td>
- <td>Hugging Face API (Prompt string)</td>
  <td>No</td>
  <td><span class="tag tag-tier">VERIFIED IN CODE</span></td>
  </tr>
@@ -624,52 +615,6 @@
  </div>
  </section>
 
- 
- <!-- Dedicated Tool Deep-Dives for Advanced Decoy and Forensic Sanitizer -->
- <section class="content-section">
- <div class="section-heading" style="color: var(--primary);">
- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
- Tool-Specific Cryptographic &amp; Privacy Architecture Deep-Dive
- </div>
- <p class="section-description">
- Detailed technical audit of the internal data flows, cryptographic mechanisms, execution environments, and operational boundaries for PixelCraft AI's flagship privacy and anti-forensics tools.
- </p>
-
- <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
- 
- <!-- Advanced Decoy Card -->
- <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 14px; padding: 24px;">
- <h3 style="color: var(--text-heading); margin-top: 0; margin-bottom: 12px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
- <span>🛡️</span> Advanced Decoy Steganography
- </h3>
- <ul style="color: var(--text-body); font-size: 0.9rem; padding-left: 20px; line-height: 1.7; margin-bottom: 16px;">
- <li><strong>100% Client-Side Isolation:</strong> Executes exclusively in browser memory. Carrier images, secret text messages, decoy text, and encryption passwords never traverse the network (0 bytes transmitted to PixelCraft AI servers).</li>
- <li><strong>Authenticated Encryption (Encrypt-then-MAC):</strong> Plaintext payloads are encrypted with AES-256-CBC, and an HMAC-SHA256 authentication tag is computed over the ciphertext and IV. The tag is cryptographically verified before decryption, preventing padding oracle and bit-flipping attacks.</li>
- <li><strong>Scale-Invariant Luminance Macro-Grid:</strong> In <em>Social Safe Mode</em>, bits are modulated across an 80×80 macro-grid using normalized relative coordinates and 2D prime stride dispersion (stride S=521) with 3-pixel feathered center transitions, eliminating visible grid lines.</li>
- <li><strong>Capacity Tiers:</strong> Features 3 adaptive redundancy tiers: <em>Ultra-Resilience</em> (R=5, 5x majority voting for up to 30 chars), <em>Balanced</em> (R=3, 3x voting for 31-75 chars), and <em>Extended</em> (R=1 for 76-200 chars). For unbounded text or documents, <em>Ultra-HD Lossless Mode</em> uses spatial LSB bitplanes.</li>
- <li><strong>Plausible Deniability Limitations:</strong> The dual Real and Decoy channel design provides coercion mitigation by yielding different plaintexts based on the supplied password. It does not provide absolute mathematical immunity against sophisticated statistical steganalysis (e.g., chi-square or sample pair analysis).</li>
- <li><strong>External Transmission:</strong> Social media networks (e.g., WhatsApp, Telegram) recompress images to lossy JPEG (Q~65). While Social Safe Mode is engineered to survive this re-encoding, heavy cropping, geometric rotation, or aggressive compression (Q&lt;50) may render embedded data unrecoverable. Users must always retain unencrypted original backups.</li>
- </ul>
- </div>
-
- <!-- Forensic Sanitizer Card -->
- <div style="background: var(--surface-subtle); border: 1px solid var(--border-color); border-radius: 14px; padding: 24px;">
- <h3 style="color: var(--text-heading); margin-top: 0; margin-bottom: 12px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
- <span>🔬</span> Forensic Sanitizer &amp; Cryptographic Scanner
- </h3>
- <ul style="color: var(--text-body); font-size: 0.9rem; padding-left: 20px; line-height: 1.7; margin-bottom: 16px;">
- <li><strong>Server-Assisted Volatile Execution:</strong> Uploaded images are received via <span class="code-chip">POST /api/tools/forensic-sanitize</span> and processed purely in volatile RAM buffers (<span class="code-chip">multer.memoryStorage()</span>, 50MB max limit). Buffers are never written to disk and are garbage-collected upon HTTP response completion.</li>
- <li><strong>Threat &amp; Metadata Inspection:</strong> The engine audits for hidden trailing binary data beyond the standard JPEG (0xFFD9) or PNG (0x49454E44) EOF markers and parses EXIF metadata for camera serial numbers, device models, and GPS coordinates.</li>
- <li><strong>Metadata Deep-Scrubbing:</strong> Images are re-encoded through the high-performance Libvips engine (<span class="code-chip">sharp</span>) to strip all EXIF, XMP, IPTC, and proprietary vendor tags while preserving image dimensions and aspect ratios.</li>
- <li><strong>Dual-Anchor Cryptographic Sealing:</strong> Generates a server-signed HMAC-SHA256 seal. Anchor 1 embeds the seal hash in EXIF <span class="code-chip">ImageDescription</span>. Anchor 2 embeds a resilient watermark directly into the pixel luminance domain via scale-invariant macro-grid modulation.</li>
- <li><strong>Seal Verification Scope &amp; Boundaries:</strong> <span class="code-chip">POST /api/tools/verify-seal</span> checks for valid seal recovery from metadata or pixel domains. <em>Disclosed Limitation:</em> Successfully recovering a seal confirms that an authentic PixelCraft seal was recovered; it does not constitute a legally binding guarantee that unmonitored visual elements were not altered after export.</li>
- <li><strong>Quality Metrics:</strong> Incorporates localized delta modulation maintaining PSNR &ge; 30.0 dB (benchmark: 33.51 dB, max pixel diff &le; 13). Quality scores are technical measurements and do not guarantee identical human visual perception.</li>
- </ul>
- </div>
-
- </div>
- </section>
-
  <!-- User Account, Cookies & Deletion -->
  <section class="content-section">
  <h2 class="section-heading">
@@ -735,24 +680,8 @@
  <div class="notice-card notice-warn">
  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
  <div>
- <strong style="color: var(--text-heading); display: block; margin-bottom: 6px;">Steganography, Plausible Deniability &amp; Social Platform Delivery</strong>
- Advanced Decoy provides dual-password plausible deniability to mitigate coercion. However, steganography is not an absolute mathematical shield against specialized forensic steganalysis tools. When sharing embedded images via third-party messaging services (e.g., WhatsApp, Telegram) or email gateways, platforms independently recompress, resize, or strip file data under their own policies. While <em>Social Safe Mode</em> is engineered for resilience against standard lossy JPEG re-encoding, transmission and extraction are not guaranteed under all arbitrary platform transformations. Always maintain unencrypted original backups.
- </div>
- </div>
-
- <div class="notice-card notice-info">
- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
- <div>
- <strong style="color: var(--text-heading); display: block; margin-bottom: 6px;">Forensic Sanitization &amp; Cryptographic Seal Verification Scope</strong>
- Forensic Sanitizer strips standard metadata tags and embeds a dual-anchor HMAC-SHA256 seal. Successful verification of this seal confirms that a valid PixelCraft seal was recovered from the metadata or pixel domain. Recovering a seal does not constitute a government-certified digital signature, legal non-repudiation attestation, or proof that unmonitored visual elements of the image have never been modified. Furthermore, metadata removal cannot eliminate camera sensor photo-response non-uniformity (PRNU) noise embedded in the optical pixels themselves.
- </div>
- </div>
-
- <div class="notice-card notice-warn">
- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
- <div>
  <strong style="color: var(--text-heading); display: block; margin-bottom: 6px;">Third-Party AI Services (Groq, Google Cloud, Hugging Face)</strong>
- When utilizing AI Dubbing or 3D AI QR generation, audio snippets or text prompts are transmitted to third-party AI APIs (Groq for speech-to-text, Google Cloud for TTS, and Hugging Face for 3D QR diffusion). While PixelCraft AI does not retain this media on its own servers, retention and processing on third-party provider infrastructure is governed by their respective privacy terms and beyond our physical control.
+ When utilizing AI Dubbing or optional Phishing Scanner contextual analysis, transient audio snippets or target URL heuristics may be transmitted to third-party AI APIs (Groq for speech-to-text, Google Cloud for TTS, and Hugging Face when enabled for threat reasoning). Our Next-Gen QR Code Studio operates 100% locally in your browser with zero external AI calls. While PixelCraft AI does not retain media on its own servers, retention and processing on third-party provider infrastructure is governed by their respective privacy terms and beyond our physical control.
  </div>
  </div>
 

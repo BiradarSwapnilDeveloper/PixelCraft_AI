@@ -1,10 +1,14 @@
-const CACHE_NAME = 'pixelcraft-ai-cache-v4';
+const CACHE_NAME = 'pixelcraft-ai-cache-v5';
 const urlsToCache = [
   '/',
   '/index.html',
   '/offline.html',
+  '/tools/qr-generator.html',
   '/css/style.css',
   '/js/utils.js',
+  '/js/vendor/qr-code-styling.js',
+  '/js/vendor/jsQR.min.js',
+  '/js/vendor/jszip.min.js',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'

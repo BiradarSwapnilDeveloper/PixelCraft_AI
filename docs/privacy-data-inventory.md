@@ -92,12 +92,12 @@ The following tools transmit data to the PixelCraft AI backend server or third-p
 * **Retention Mechanism:** Ephemeral; discarded upon response delivery. `[VERIFIED IN CODE]`
 * **Authentication Required:** No. `[VERIFIED IN CODE]`
 
-#### Tool: Advanced QR Generator - 3D AI Feature (`public/tools/qr-generator.html`)
-* **Standard QR Mode:** 100% Client-side browser execution via `qr-code-styling.js`. Zero network traffic. `[VERIFIED IN CODE]`
-* **3D AI Feature Mode:** When user clicks "Generate 3D AI Background", text prompt is posted to `POST /api/generate-image` (`server.js:L986-1021`). `[VERIFIED IN CODE]`
-* **Third-Party Recipients:** Prompt is transmitted to **Hugging Face Inference API** (`models/stabilityai/stable-diffusion-xl-base-1.0`). `[VERIFIED IN CODE]`
-* **Storage Location:** Server memory during proxying. Response delivered as base64 image data URL. `[VERIFIED IN CODE]`
-* **Retention Mechanism:** Ephemeral on PixelCraft server. Discarded immediately. `[VERIFIED IN CODE]`
+#### Tool: Next-Gen QR Code Studio (`public/tools/qr-generator.html`)
+* **Execution Mode:** 100% Client-side browser execution via `qr-code-styling.js`, `jsQR.min.js`, `jszip.min.js`, pure-JS GIF89a encoder, and W3C Web Crypto API (`PBKDF2` + `AES-GCM-256`). Zero server uploads and zero external API calls. `[VERIFIED IN CODE]`
+* **Optional Permission Notice:** In Geo Location mode, clicking *Use Current GPS* requests optional browser geolocation (`navigator.geolocation` with `enableHighAccuracy: true`) strictly in local browser RAM to pre-fill Latitude/Longitude; users can decline permission anytime and enter coordinates manually with zero transmission to any server. `[VERIFIED IN CODE]`
+* **Capabilities Covered:** 15 static payload encoders (URL + inline UTM tags, Wi-Fi, vCard 3.0, Social, PDF link, Multi-URL, App, WhatsApp, SMS, Email, Phone, UPI, Geo, Event, Plain Text), 82+ styles (Social, 32+ Fantasy scenic worlds, sculpted 3D relief, watercolor/oil paintings, blueprints/diagrams, custom uploaded photo scenes & Funny cards), 22 illustrated frames (clean frameless None default), optional uploaded logo dominant color quantization, local camera/image QR decoding, Batch ZIP packaging, GIF/MP4/WebM kinetic export, and encrypted `PCQR1:` secret QR vaults. `[VERIFIED IN CODE]`
+* **Storage Location:** Volatile browser RAM only (optional user style presets saved strictly locally in browser `localStorage`). `[VERIFIED IN CODE]`
+* **Third-Party Recipients:** None. `[VERIFIED IN CODE]`
 * **Authentication Required:** No. `[VERIFIED IN CODE]`
 
 ---
@@ -152,7 +152,7 @@ The following tools transmit data to the PixelCraft AI backend server or third-p
 | :--- | :--- | :--- | :--- |
 | **Groq Inc. (USA)** | Whisper Audio Transcription & LLM Translation | Raw audio media stream and transcript text strings | User consent upon initiating AI Dubbing `[EXTERNAL PROVIDER PRACTICE]` |
 | **Google LLC (USA)** | Text-to-Speech (Google TTS API) | Translated text strings | User consent upon initiating AI Dubbing `[EXTERNAL PROVIDER PRACTICE]` |
-| **Hugging Face Inc. (USA)** | Stable Diffusion XL (3D QR) & AudioLDM2 (SFX) | Prompt text strings and target scan URLs | User consent upon initiating AI Generation `[EXTERNAL PROVIDER PRACTICE]` |
+| **Hugging Face Inc. (USA)** | Optional Phishing Threat Reasoning (`zephyr-7b-beta`) & AudioLDM2 (SFX) | Heuristic URL threat summaries when `HF_API_KEY` is configured | Ephemeral server inference `[EXTERNAL PROVIDER PRACTICE]` |
 | **Direct Email (SMTP)** | Contact form message delivery | Name, email address, message payload | Legitimate interest for responding to inquiries `[VERIFIED IN CODE]` |
 | **Google LLC (USA)** | Google Analytics (GA4) | Aggregated site interaction metrics, anonymized IP | User consent via Cookie Consent Banner `[EXTERNAL PROVIDER PRACTICE]` |
 | **Google LLC (USA)** | Google AdSense | Advertising personalization cookies and device metadata | User consent via Cookie Consent Banner `[EXTERNAL PROVIDER PRACTICE]` |
