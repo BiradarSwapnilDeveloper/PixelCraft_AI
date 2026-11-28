@@ -231,7 +231,6 @@
  <div class="upload-format-chips" style="margin-top:12px;">
  <span class="upload-format-chip">EXIF / MakerNote</span>
  <span class="upload-format-chip">Ghost Thumbnails</span>
- <span class="upload-format-chip">Sun-Shadow Map</span>
  <span class="upload-format-chip">AI / C2PA X-Ray</span>
  <span class="upload-format-chip">ELA Heatmap</span>
  <span class="upload-format-chip">Motion MP4 &amp; Stego</span>
@@ -297,11 +296,10 @@
  <div id="crypto-hashes" class="exif-panel-card" style="margin-bottom:0;font-size:0.78rem;"></div>
  </div>
 
- <!-- RIGHT PANEL: 7-Tab Forensic Command Center -->
+ <!-- RIGHT PANEL: 6-Tab Forensic Command Center -->
  <div>
  <div class="exif-tabs-nav" id="tab-nav">
  <button type="button" class="exif-tab-btn active" data-tab="overview">📋 Overview &amp; Optics</button>
- <button type="button" class="exif-tab-btn" data-tab="map">☀️ GPS &amp; Sun-Shadow <span class="exif-tab-badge" id="badge-gps">—</span></button>
  <button type="button" class="exif-tab-btn" data-tab="hidden">👻 Ghost &amp; Hidden <span class="exif-tab-badge" id="badge-hidden">0</span></button>
  <button type="button" class="exif-tab-btn" data-tab="ai">🤖 AI X-Ray &amp; DQT</button>
  <button type="button" class="exif-tab-btn" data-tab="ela">🔥 ELA &amp; Tampering</button>
@@ -330,39 +328,7 @@
  <div id="all-tags-panel"></div>
  </div>
 
- <!-- TAB 2: GPS, CAMERA FOV CONE & SUN-SHADOW LIE DETECTOR -->
- <div id="tab-map" class="exif-tab-pane" style="display:none;">
- <div class="exif-panel-card">
- <div class="exif-panel-title">
- <span>Interactive OSINT Map, Camera FOV Cone &amp; Solar Shadow Vector</span>
- <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
- <button type="button" class="exif-mini-btn active" id="map-layer-toggle">Switch to Satellite</button>
- <select id="tz-override-select" style="padding:4px 8px;border-radius:7px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;">
- <option value="auto">Timezone: Auto Detect</option>
- <option value="-480">UTC-08:00 (PST)</option>
- <option value="-300">UTC-05:00 (EST)</option>
- <option value="0">UTC+00:00 (GMT)</option>
- <option value="60">UTC+01:00 (CET)</option>
- <option value="240">UTC+04:00 (GST)</option>
- <option value="330">UTC+05:30 (IST)</option>
- <option value="480">UTC+08:00 (CST/SGT)</option>
- <option value="540">UTC+09:00 (JST)</option>
- </select>
- </div>
- </div>
- <div id="manual-coords-box"></div>
- <div id="osint-map" class="exif-map-box"></div>
- </div>
- <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;">
- <div class="exif-panel-card" style="text-align:center;">
- <div class="exif-panel-title" style="justify-content:center;">Offline Sun &amp; Camera Compass Dial</div>
- <svg id="sun-compass-svg" viewBox="0 0 260 260" style="width:230px;height:230px;max-width:100%;margin:0 auto;display:block;"></svg>
- </div>
- <div id="solar-telemetry-panel" class="exif-panel-card"></div>
- </div>
- </div>
-
- <!-- TAB 3: GHOST THUMBNAIL, MOTION VIDEO & 3D DEPTH MAP -->
+ <!-- TAB 2: GHOST THUMBNAIL, MOTION VIDEO & 3D DEPTH MAP -->
  <div id="tab-hidden" class="exif-tab-pane" style="display:none;">
  <div id="ghost-thumb-panel"></div>
  <div id="motion-video-panel"></div>
@@ -486,13 +452,8 @@ const state = {
   activeTab: 'overview',
   overlayMode: 'normal',
   elaMode: 'ela',
-  mapLayer: 'street',
-  leafletMap: null,
   batchMap: null,
-  tileLayer: null,
   subjectDistM: null,
-  tzOffsetMin: null,
-  manualCoords: null,
   tagSearch: '',
   tagCat: 'all'
 };
@@ -624,8 +585,6 @@ async function handleFile(file, appendToBatch = false) {
     state.records.push(record);
     state.activeIdx = state.records.length - 1;
     state.subjectDistM = null;
-    state.tzOffsetMin = null;
-    state.manualCoords = null;
 
     renderActiveRecord();
 
@@ -698,7 +657,6 @@ function renderActiveRecord() {
   renderTimestampAudit(rec);
   renderOpticsPanel(rec);
   renderAllTagsPanel(rec);
-  renderMapAndSunPanel(rec);
   renderHiddenMediaPanel(rec);
   renderAiAndDqtPanel(rec);
   renderElaCanvas(rec);
@@ -724,7 +682,6 @@ function renderBatchStrip() {
     btn.onclick = () => {
       state.activeIdx = idx;
       state.subjectDistM = null;
-      state.tzOffsetMin = null;
       renderActiveRecord();
     };
     pills.appendChild(btn);
@@ -772,8 +729,6 @@ function renderKpiCards(rec) {
 }
 
 function updateTabBadges(rec) {
-  const hasGps = Number.isFinite(rec.exifr.latitude) && Number.isFinite(rec.exifr.longitude);
-  document.getElementById('badge-gps').textContent = hasGps ? 'PIN' : 'NO GPS';
   const hiddenCount =
     (rec.thumbUrl ? 1 : 0) +
     (rec.embeddedMedia.motionVideoBlob ? 1 : 0) +
@@ -942,10 +897,6 @@ document.getElementById('tab-nav').addEventListener('click', (e) => {
   document.querySelectorAll('.exif-tab-pane').forEach((p) => {
     p.style.display = p.id === 'tab-' + tab ? 'block' : 'none';
   });
-  if (tab === 'map') {
-    const rec = getActive();
-    if (rec) setTimeout(() => renderMapAndSunPanel(rec), 60);
-  }
   if (tab === 'batch') {
     setTimeout(() => renderBatchAndStripPanel(), 60);
   }
@@ -1040,6 +991,12 @@ function renderExif(exif) {
       row.innerHTML = `<span class="exif-kv-k">${esc(k)}</span><span class="exif-kv-v">${esc(formatTagValue(k, v))}</span>`;
       section.appendChild(row);
     });
+    if (grp.cat === 'gps' && Number.isFinite(exif.latitude) && Number.isFinite(exif.longitude)) {
+      const mapRow = document.createElement('div');
+      mapRow.style.marginTop = '10px';
+      mapRow.innerHTML = `<a href="https://maps.google.com/?q=${exif.latitude},${exif.longitude}" target="_blank" rel="noopener" class="exif-mini-btn active">View on Google Maps ↗</a>`;
+      section.appendChild(mapRow);
+    }
     container.appendChild(section);
   });
 }
@@ -1160,172 +1117,7 @@ function storeExifText(exif) {
 }
 
 // =========================================================================
-// TAB 2: OSINT MAP, FOV CONE & SUN-SHADOW LIE DETECTOR
-// =========================================================================
-function destinationPoint(lat, lng, bearingDeg, distMeters) {
-  const R = 6371000;
-  const rad = Math.PI / 180;
-  const br = bearingDeg * rad;
-  const lat1 = lat * rad;
-  const lng1 = lng * rad;
-  const dr = distMeters / R;
-  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(dr) + Math.cos(lat1) * Math.sin(dr) * Math.cos(br));
-  const lng2 = lng1 + Math.atan2(Math.sin(br) * Math.sin(dr) * Math.cos(lat1), Math.cos(dr) - Math.sin(lat1) * Math.sin(lat2));
-  return [lat2 / rad, lng2 / rad];
-}
-
-function renderCompassSvg(solar, camBearing, fovDeg) {
-  const svg = document.getElementById('sun-compass-svg');
-  const cx = 130, cy = 130, r = 95;
-  let content = `
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--surface-card)" stroke="var(--border-color)" stroke-width="2"/>
-    <circle cx="${cx}" cy="${cy}" r="${r * 0.65}" fill="none" stroke="var(--border-color)" stroke-dasharray="3 3"/>
-    <text x="${cx}" y="22" text-anchor="middle" fill="var(--danger)" font-size="12" font-weight="800">N</text>
-    <text x="${cx}" y="248" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="700">S</text>
-    <text x="242" y="${cy + 4}" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="700">E</text>
-    <text x="18" y="${cy + 4}" text-anchor="middle" fill="var(--text-muted)" font-size="11" font-weight="700">W</text>
-  `;
-
-  if (Number.isFinite(camBearing)) {
-    const half = (fovDeg || 50) / 2;
-    const a1 = ((camBearing - half - 90) * Math.PI) / 180;
-    const a2 = ((camBearing + half - 90) * Math.PI) / 180;
-    const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
-    const x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
-    content += `<path d="M${cx},${cy} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 0,1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="rgba(37,99,235,0.22)" stroke="#2563eb" stroke-width="1.5"/>`;
-  }
-
-  if (solar) {
-    const sunRad = ((solar.azimuth - 90) * Math.PI) / 180;
-    const sx = cx + (r - 8) * Math.cos(sunRad), sy = cy + (r - 8) * Math.sin(sunRad);
-    const shRad = ((solar.shadowAzimuth - 90) * Math.PI) / 180;
-    const hx = cx + (r - 16) * Math.cos(shRad), hy = cy + (r - 16) * Math.sin(shRad);
-
-    content += `
-      <line x1="${cx}" y1="${cy}" x2="${sx.toFixed(1)}" y2="${sy.toFixed(1)}" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="9" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
-      <text x="${sx.toFixed(1)}" y="${(sy + 3).toFixed(1)}" text-anchor="middle" font-size="10">☀</text>
-      <line x1="${cx}" y1="${cy}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}" stroke="#475569" stroke-width="3.5" stroke-dasharray="5 3" stroke-linecap="round"/>
-      <circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="4.5" fill="#1e293b"/>
-    `;
-  }
-  content += `<circle cx="${cx}" cy="${cy}" r="5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>`;
-  svg.innerHTML = content;
-}
-
-function renderMapAndSunPanel(rec) {
-  const lat = state.manualCoords ? state.manualCoords.lat : (Number.isFinite(rec.exifr.latitude) ? rec.exifr.latitude : null);
-  const lng = state.manualCoords ? state.manualCoords.lng : (Number.isFinite(rec.exifr.longitude) ? rec.exifr.longitude : null);
-  const camBearing = Number.isFinite(rec.exifr.GPSImgDirection) ? rec.exifr.GPSImgDirection : null;
-  const fovDeg = rec.optics && rec.optics.horizFovDeg ? rec.optics.horizFovDeg : 52;
-  const audit = F.auditTimestamps(rec.exifr, lat, lng, state.tzOffsetMin);
-
-  const manualBox = document.getElementById('manual-coords-box');
-  if (!Number.isFinite(rec.exifr.latitude)) {
-    manualBox.innerHTML = `
-      <div class="exif-alert-banner exif-alert-info" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <span>No GPS embedded in this photo. Simulate Sun-Shadow angle at a suspected location:</span>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-          <input type="number" step="0.0001" id="sim-lat" placeholder="Lat (e.g. 28.6139)" value="${lat ?? ''}" style="width:125px;padding:4px 8px;border-radius:6px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;"/>
-          <input type="number" step="0.0001" id="sim-lng" placeholder="Lng (e.g. 77.2090)" value="${lng ?? ''}" style="width:125px;padding:4px 8px;border-radius:6px;border:1px solid var(--border-color);background:var(--surface-card);color:var(--text-heading);font-size:0.78rem;"/>
-          <button type="button" class="exif-mini-btn active" id="btn-sim-coords">Simulate Sun &amp; Map</button>
-        </div>
-      </div>`;
-    document.getElementById('btn-sim-coords').onclick = () => {
-      const sLat = parseFloat(document.getElementById('sim-lat').value);
-      const sLng = parseFloat(document.getElementById('sim-lng').value);
-      if (Number.isFinite(sLat) && Number.isFinite(sLng)) {
-        state.manualCoords = { lat: sLat, lng: sLng };
-        renderMapAndSunPanel(rec);
-      } else {
-        showToast('Enter valid latitude and longitude values.', 'error');
-      }
-    };
-  } else {
-    manualBox.innerHTML = `<div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:0.84rem;">
-      <span><strong>Coordinates:</strong> ${lat.toFixed(6)}°, ${lng.toFixed(6)}° ${Number.isFinite(rec.exifr.GPSAltitude) ? `• Alt: ${Math.round(rec.exifr.GPSAltitude)}m` : ''} ${camBearing !== null ? `• Bearing: ${camBearing.toFixed(1)}°` : ''}</span>
-      <a href="https://maps.google.com/?q=${lat},${lng}" target="_blank" rel="noopener" class="exif-mini-btn">Open in Google Maps ↗</a>
-    </div>`;
-  }
-
-  renderCompassSvg(audit.solar, camBearing, fovDeg);
-
-  // Solar Telemetry Text Panel
-  const solarPanel = document.getElementById('solar-telemetry-panel');
-  if (audit.solar) {
-    solarPanel.innerHTML = `
-      <div class="exif-panel-title"><span>☀️ Astronomical Sun-Shadow Lie Detector</span></div>
-      <div class="exif-kv-row"><span class="exif-kv-k">Lighting Phase</span><span class="exif-kv-v">${esc(audit.solar.phase)}</span></div>
-      <div class="exif-kv-row"><span class="exif-kv-k">Sun Azimuth (from N)</span><span class="exif-kv-v">${audit.solar.azimuth.toFixed(1)}°</span></div>
-      <div class="exif-kv-row"><span class="exif-kv-k">Sun Elevation</span><span class="exif-kv-v">${audit.solar.elevation.toFixed(1)}°</span></div>
-      <div class="exif-kv-row"><span class="exif-kv-k">Expected Shadow Direction</span><span class="exif-kv-v">${audit.solar.shadowAzimuth.toFixed(1)}°</span></div>
-      <div class="exif-kv-row"><span class="exif-kv-k">1.7m Subject Shadow Len</span><span class="exif-kv-v">${esc(audit.solar.shadowLengthFor170cm)}</span></div>
-      <div class="exif-kv-row"><span class="exif-kv-k">Time Basis</span><span class="exif-kv-v">${esc(audit.timeSource)}</span></div>
-      <div style="margin-top:10px;font-size:0.78rem;color:var(--text-muted);line-height:1.45;">
-        Legend: <span style="color:#f59e0b;font-weight:700;">● Sun Direction</span> • <span style="font-weight:700;">--- Shadow Cast</span> • <span style="color:#2563eb;font-weight:700;">▲ Camera FOV Cone</span>
-      </div>
-    `;
-  } else {
-    solarPanel.innerHTML = `
-      <div class="exif-panel-title"><span>☀️ Astronomical Sun-Shadow Calculator</span></div>
-      <div style="font-size:0.84rem;color:var(--text-muted);line-height:1.5;">Requires both <strong>GPS coordinates</strong> (or simulated lat/lng above) and a <strong>capture timestamp</strong> to compute exact solar azimuth &amp; expected shadow vectors.</div>
-    `;
-  }
-
-  // Render Leaflet Map
-  const mapEl = document.getElementById('osint-map');
-  if (typeof window.L === 'undefined' || !Number.isFinite(lat) || !Number.isFinite(lng)) {
-    if (state.leafletMap) { state.leafletMap.remove(); state.leafletMap = null; }
-    mapEl.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;color:var(--text-muted);font-size:0.88rem;">
-      ${!Number.isFinite(lat) ? 'No GPS coordinates available for map plotting — enter simulated coordinates above or load a geotagged photo.' : 'Interactive map library failed to load (offline mode). Use the Offline Compass Dial below!'}
-    </div>`;
-    return;
-  }
-
-  if (state.leafletMap) { state.leafletMap.remove(); state.leafletMap = null; }
-  mapEl.innerHTML = '';
-  const map = window.L.map(mapEl).setView([lat, lng], 16);
-  state.leafletMap = map;
-
-  const setTiles = () => {
-    if (state.tileLayer) map.removeLayer(state.tileLayer);
-    const url = state.mapLayer === 'sat'
-      ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-      : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    state.tileLayer = window.L.tileLayer(url, { maxZoom: 19, attribution: state.mapLayer === 'sat' ? 'Esri' : '© OpenStreetMap' }).addTo(map);
-  };
-  setTiles();
-
-  window.L.marker([lat, lng]).addTo(map).bindPopup(`<strong>${esc(rec.file.name)}</strong><br/>${lat.toFixed(5)}, ${lng.toFixed(5)}`).openPopup();
-
-  if (camBearing !== null) {
-    const p1 = destinationPoint(lat, lng, camBearing - fovDeg / 2, 160);
-    const p2 = destinationPoint(lat, lng, camBearing + fovDeg / 2, 160);
-    window.L.polygon([[lat, lng], p1, p2], { color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.25, weight: 2 }).addTo(map);
-  }
-  if (audit.solar) {
-    const sunEnd = destinationPoint(lat, lng, audit.solar.azimuth, 180);
-    const shEnd = destinationPoint(lat, lng, audit.solar.shadowAzimuth, 140);
-    window.L.polyline([[lat, lng], sunEnd], { color: '#f59e0b', weight: 3 }).addTo(map);
-    window.L.polyline([[lat, lng], shEnd], { color: '#0f172a', weight: 3, dashArray: '6 5' }).addTo(map);
-  }
-  if (state.activeTab === 'map') setTimeout(() => map.invalidateSize(), 120);
-}
-
-document.getElementById('map-layer-toggle').addEventListener('click', (e) => {
-  state.mapLayer = state.mapLayer === 'street' ? 'sat' : 'street';
-  e.target.textContent = state.mapLayer === 'street' ? 'Switch to Satellite' : 'Switch to Street Map';
-  const rec = getActive();
-  if (rec) renderMapAndSunPanel(rec);
-});
-document.getElementById('tz-override-select').addEventListener('change', (e) => {
-  state.tzOffsetMin = e.target.value === 'auto' ? null : parseInt(e.target.value, 10);
-  const rec = getActive();
-  if (rec) renderMapAndSunPanel(rec);
-});
-
-// =========================================================================
-// TAB 3: GHOST THUMBNAIL, MOTION VIDEO & 3D DEPTH MAP
+// TAB 2: GHOST THUMBNAIL, MOTION VIDEO & 3D DEPTH MAP
 // =========================================================================
 function renderHiddenMediaPanel(rec) {
   const thumbEl = document.getElementById('ghost-thumb-panel');
@@ -1949,10 +1741,6 @@ function resetTool() {
       if (r.motionVideoUrl) URL.revokeObjectURL(r.motionVideoUrl);
     } catch (_) {}
   });
-  if (state.leafletMap) {
-    state.leafletMap.remove();
-    state.leafletMap = null;
-  }
   if (state.batchMap) {
     state.batchMap.remove();
     state.batchMap = null;
